@@ -65,7 +65,6 @@ The demonstrative pronoun 'das' retains its form in nominative, accusative, and 
 |------------------|-------|
 | das ist gut (demonstrative) | das ist gut |
 | dessen Haus | deren Haus |
-| dem Mann sein Buch (alternative genitive) | die Mann sein Buch |
 
 
 
