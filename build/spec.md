@@ -54,6 +54,21 @@ All genitive definite articles (des/der) are replaced by 'der', accompanied by e
 
 
 
+#### §1c. Exception: Demonstrative Pronouns
+
+The demonstrative pronoun 'das' retains its form in nominative, accusative, and dative contexts when functioning as a neutral demonstrative ('that'). In genitive constructions, the form 'dessen' is replaced by 'deren' while maintaining the invariant article system.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| das ist gut (demonstrative) | das ist gut |
+| dessen Haus | deren Haus |
+| dem Mann sein Buch (alternative genitive) | die Mann sein Buch |
+
+
+
 ## 3. Nouns
 
 Describes the removal of grammatical gender and all case-based noun endings. Specifies that nouns maintain a single form for nominative, accusative, and dative cases, with a distinct form ("der") for genitive, and explains how plural forms are preserved without additional case-specific modifications.

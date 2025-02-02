@@ -56,6 +56,25 @@
           "alman": "der Kind"
         }
       ]
+    },
+    {
+      "id": "demonstrative-exception",
+      "title": "Exception: Demonstrative Pronouns",
+      "description": "The demonstrative pronoun 'das' retains its form in nominative, accusative, and dative contexts when functioning as a neutral demonstrative ('that'). In genitive constructions, the form 'dessen' is replaced by 'deren' while maintaining the invariant article system.",
+      "examples": [
+        {
+          "standard": "das ist gut (demonstrative)",
+          "alman": "das ist gut"
+        },
+        {
+          "standard": "dessen Haus",
+          "alman": "deren Haus"
+        },
+        {
+          "standard": "dem Mann sein Buch (alternative genitive)",
+          "alman": "die Mann sein Buch"
+        }
+      ]
     }
   ]
 }
