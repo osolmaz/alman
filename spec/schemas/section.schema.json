@@ -5,8 +5,8 @@
   "properties": {
     "id": {
       "type": "string",
-      "pattern": "^section-\\d+$",
-      "description": "Unique identifier for the section"
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Slugified identifier for the section"
     },
     "title": {
       "type": "string",
@@ -24,7 +24,7 @@
         "properties": {
           "paragraphFile": {
             "type": "string",
-            "pattern": "^sections/section-\\d+/paragraphs/paragraph-\\d+-\\d+/paragraph\\.json$",
+            "pattern": "^sections/[a-z0-9-]+/paragraphs/[a-z0-9-]+/paragraph\\.json$",
             "description": "Path to the paragraph file"
           }
         }

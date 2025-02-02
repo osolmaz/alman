@@ -5,8 +5,8 @@
   "properties": {
     "id": {
       "type": "string",
-      "pattern": "^paragraph-\\d+-\\d+$",
-      "description": "Unique identifier for the paragraph"
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Slugified identifier for the paragraph"
     },
     "title": {
       "type": "string",
@@ -20,7 +20,7 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^sections/section-\\d+/paragraphs/paragraph-\\d+-\\d+/rule-\\d+-\\d+-\\d+\\.json$",
+        "pattern": "^sections/[a-z0-9-]+/paragraphs/[a-z0-9-]+/[a-z0-9-]+\\.json$",
         "description": "Path to a rule file"
       }
     }

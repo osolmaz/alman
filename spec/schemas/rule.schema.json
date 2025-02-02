@@ -5,8 +5,8 @@
   "properties": {
     "id": {
       "type": "string",
-      "pattern": "^rule-\\d+-\\d+-\\d+$",
-      "description": "Unique identifier for the rule"
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Slugified identifier for the rule"
     },
     "title": {
       "type": "string",

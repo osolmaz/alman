@@ -21,12 +21,12 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["sectionFile"],
+        "required": ["id"],
         "properties": {
-          "sectionFile": {
+          "id": {
             "type": "string",
-            "pattern": "^sections/section-\\d+/section\\.json$",
-            "description": "Path to the section file"
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Slugified identifier for the section"
           }
         }
       }
