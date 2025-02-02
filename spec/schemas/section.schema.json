@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "title", "body", "paragraphs"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^section-\\d+$",
+      "description": "Unique identifier for the section"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the section"
+    },
+    "body": {
+      "type": "string",
+      "description": "Description or content of the section"
+    },
+    "paragraphs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["paragraphFile"],
+        "properties": {
+          "paragraphFile": {
+            "type": "string",
+            "pattern": "^sections/section-\\d+/paragraphs/paragraph-\\d+-\\d+/paragraph\\.json$",
+            "description": "Path to the paragraph file"
+          }
+        }
+      }
+    }
+  }
+} 
