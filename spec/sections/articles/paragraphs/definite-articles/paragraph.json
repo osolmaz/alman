@@ -1,0 +1,61 @@
+{
+  "id": "definite-articles",
+  "title": "Definite Article Simplification",
+  "body": "The Alman dialect systematically replaces the six case-inflected definite article forms of Standard German through morphological regularization, employing invariant forms for non-genitive and genitive cases while eliminating case-specific noun endings.",
+  "rules": [
+    {
+      "id": "non-genitive-articles",
+      "title": "Invariant 'die' for Non-Genitive Cases",
+      "description": "All nominative, accusative, and dative definite articles (der/die/das/den/dem) are replaced by the invariant form 'die', neutralizing gender and case distinctions.",
+      "examples": [
+        {
+          "standard": "der Mann (Nominative)",
+          "alman": "die Mann"
+        },
+        {
+          "standard": "den Mann (Accusative)",
+          "alman": "die Mann"
+        },
+        {
+          "standard": "dem Mann (Dative)",
+          "alman": "die Mann"
+        },
+        {
+          "standard": "die Frau (Nominative/Accusative)",
+          "alman": "die Frau"
+        },
+        {
+          "standard": "der Frau (Dative)",
+          "alman": "die Frau"
+        },
+        {
+          "standard": "das Kind (Nominative/Accusative)",
+          "alman": "die Kind"
+        },
+        {
+          "standard": "dem Kind (Dative)",
+          "alman": "die Kind"
+        }
+      ]
+    },
+    {
+      "id": "genitive-articles",
+      "title": "Invariant 'der' for Genitive Case",
+      "description": "All genitive definite articles (des/der) are replaced by 'der', accompanied by elimination of genitive noun inflections.",
+      "examples": [
+        {
+          "standard": "des Mannes",
+          "alman": "der Mann"
+        },
+        {
+          "standard": "der Frau",
+          "alman": "der Frau"
+        },
+        {
+          "standard": "des Kindes",
+          "alman": "der Kind"
+        }
+      ]
+    }
+  ]
+}

@@ -20,12 +20,12 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["paragraphFile"],
+        "required": ["id"],
         "properties": {
-          "paragraphFile": {
+          "id": {
             "type": "string",
-            "pattern": "^sections/[a-z0-9-]+/paragraphs/[a-z0-9-]+/paragraph\\.json$",
-            "description": "Path to the paragraph file"
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Slugified identifier for the paragraph"
           }
         }
       }
