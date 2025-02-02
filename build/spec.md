@@ -89,6 +89,22 @@ While interchangeable, 'der' should be retained when translating original geniti
 
 
 
+#### §1e. Contraction Resolution
+
+Preposition-article contractions (e.g., vom, im, zur) must be resolved to their full form prior to applying article replacement rules. The uncontracted preposition and article are then processed according to standard Alman article rules.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| vom Mann (von + dem) | von die Mann |
+| im Garten (in + dem) | in die Garten |
+| fürs Kind (für + das) | für die Kind |
+| zur Frau (zu + der) | zu die Frau |
+
+
+
 ## 3. Nouns
 
 Describes the removal of grammatical gender and all case-based noun endings. Specifies that nouns maintain a single form for nominative, accusative, and dative cases, with a distinct form ("der") for genitive, and explains how plural forms are preserved without additional case-specific modifications.
