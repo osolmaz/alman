@@ -11,3 +11,11 @@ repos:
     - id: ruff
       args: ["check", "--select", "I", "--fix"]
     - id: ruff-format
+
+- repo: local
+  hooks:
+    - id: uv-build
+      name: UV Build
+      entry: uv run build
+      language: system
+      pass_filenames: false
