@@ -75,6 +75,25 @@
           "alman": "die Mann sein Buch"
         }
       ]
+    },
+    {
+      "id": "von-die-usage",
+      "title": "Optional Use of 'von die' for Possession",
+      "description": "The prepositional construction 'von die' may substitute the genitive article 'der' to indicate possession, though 'der' remains preferable in most contexts. This periphrastic construction serves to: \n1. Resolve ambiguity in complex phrases\n2. Provide phonological variety\n3. Mirror colloquial speech patterns\n\nWhile interchangeable, 'der' should be retained when translating original genitive constructions ('des/der') unless contextual factors favor 'von die'.",
+      "examples": [
+        {
+          "standard": "das Haus des Mannes",
+          "alman": "die Haus der Mann / die Haus von die Mann"
+        },
+        {
+          "standard": "die Farbe des Autos",
+          "alman": "die Farbe der Auto / die Farbe von die Auto"
+        },
+        {
+          "standard": "wegen des Wetters",
+          "alman": "wegen der Wetter / wegen von die Wetter"
+        }
+      ]
     }
   ]
 }

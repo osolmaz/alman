@@ -69,6 +69,26 @@ The demonstrative pronoun 'das' retains its form in nominative, accusative, and 
 
 
 
+#### §1d. Optional Use of 'von die' for Possession
+
+The prepositional construction 'von die' may substitute the genitive article 'der' to indicate possession, though 'der' remains preferable in most contexts. This periphrastic construction serves to: 
+1. Resolve ambiguity in complex phrases
+2. Provide phonological variety
+3. Mirror colloquial speech patterns
+
+While interchangeable, 'der' should be retained when translating original genitive constructions ('des/der') unless contextual factors favor 'von die'.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| das Haus des Mannes | die Haus der Mann / die Haus von die Mann |
+| die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |
+| wegen des Wetters | wegen der Wetter / wegen von die Wetter |
+
+
+
 ## 3. Nouns
 
 Describes the removal of grammatical gender and all case-based noun endings. Specifies that nouns maintain a single form for nominative, accusative, and dative cases, with a distinct form ("der") for genitive, and explains how plural forms are preserved without additional case-specific modifications.
