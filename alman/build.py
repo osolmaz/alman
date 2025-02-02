@@ -1,9 +1,11 @@
+import argparse
 import json
 from pathlib import Path
 from typing import Dict, List, Optional
 
 SPEC_DIR = Path("spec")
 OUTPUT_FILE = Path("build/spec.md")
+
 
 def load_json(path: Path) -> dict:
     """Load JSON file with error handling."""
@@ -14,18 +16,17 @@ def load_json(path: Path) -> dict:
         print(f"Error loading {path}: {str(e)}")
         return {}
 
+
 def process_examples(examples: List[Dict]) -> str:
     """Convert examples to markdown table."""
     if not examples:
         return ""
 
-    table = [
-        "| Standard German | Alman |",
-        "|------------------|-------|"
-    ]
+    table = ["| Standard German | Alman |", "|------------------|-------|"]
     for ex in examples:
         table.append(f"| {ex['standard']} | {ex['alman']} |")
     return "\n".join(table)
+
 
 class NumberingSystem:
     def __init__(self):
@@ -33,7 +34,7 @@ class NumberingSystem:
         self.map: dict = {
             "section_numbers": {},
             "paragraph_numbers": {},
-            "rule_letters": {}
+            "rule_letters": {},
         }
 
         # Load existing map if available
@@ -75,15 +76,18 @@ class NumberingSystem:
             return self.map["rule_letters"][key]
 
         # Get existing letters in this paragraph
-        existing = [v for k,v in self.map["rule_letters"].items()
-                  if k.startswith(f"{paragraph_id}/")]
+        existing = [
+            v
+            for k, v in self.map["rule_letters"].items()
+            if k.startswith(f"{paragraph_id}/")
+        ]
 
         # Find next available letter
-        letter = 'a'
+        letter = "a"
         while letter in existing:
             letter = chr(ord(letter) + 1)
-            if letter > 'z':
-                letter = 'a'  # wrap around if needed
+            if letter > "z":
+                letter = "a"  # wrap around if needed
 
         self.map["rule_letters"][key] = letter
         return letter
@@ -93,7 +97,17 @@ class NumberingSystem:
         with open(self.numbering_map_path, "w", encoding="utf-8") as f:
             json.dump(self.map, f, indent=2)
 
+
 def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description="Build Alman documentation")
+    parser.add_argument(
+        "--fill-missing-numbering",
+        action="store_true",
+        help="Save numbering map for missing entries",
+    )
+    args = parser.parse_args()
+
     numbering = NumberingSystem()
     output = []
 
@@ -120,8 +134,14 @@ def main():
         # Process paragraphs
         for para_ref in section.get("paragraphs", []):
             para_id = para_ref["id"]
-            para_path = (SPEC_DIR / "sections" / section_id / "paragraphs"
-                         / para_id / "paragraph.json")
+            para_path = (
+                SPEC_DIR
+                / "sections"
+                / section_id
+                / "paragraphs"
+                / para_id
+                / "paragraph.json"
+            )
             paragraph = load_json(para_path)
 
             if not paragraph:
@@ -147,12 +167,17 @@ def main():
                     output.append(examples_md)
                 output.append("\n")
 
-    # Save numbering map and write output
-    numbering.save()
+    # Save numbering map only if flag is present
+    if args.fill_missing_numbering:
+        numbering.save()
+
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         final_md = "\n".join(output)
-        final_md = final_md.replace("<alman />", "Alman").replace("<sd />", "Standard German")
+        final_md = final_md.replace("<alman />", "Alman").replace(
+            "<sd />", "Standard German"
+        )
         f.write(final_md)
+
 
 if __name__ == "__main__":
     main()
