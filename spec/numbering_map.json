@@ -1,0 +1,16 @@
+{
+  "section_numbers": {
+    "introduction": 1,
+    "articles": 2,
+    "nouns": 3,
+    "adjectives-and-adverbs": 4,
+    "pronouns-and-determiners": 5
+  },
+  "paragraph_numbers": {
+    "definite-articles": 1
+  },
+  "rule_letters": {
+    "definite-articles/non-genitive-articles": "a",
+    "definite-articles/genitive-articles": "b"
+  }
+}

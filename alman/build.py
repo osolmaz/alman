@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 SPEC_DIR = Path("spec")
 OUTPUT_FILE = Path("build/spec.md")
@@ -27,8 +27,74 @@ def process_examples(examples: List[Dict]) -> str:
         table.append(f"| {ex['standard']} | {ex['alman']} |")
     return "\n".join(table)
 
+class NumberingSystem:
+    def __init__(self):
+        self.numbering_map_path = SPEC_DIR / "numbering_map.json"
+        self.map: dict = {
+            "section_numbers": {},
+            "paragraph_numbers": {},
+            "rule_letters": {}
+        }
+
+        # Load existing map if available
+        if self.numbering_map_path.exists():
+            with open(self.numbering_map_path, "r", encoding="utf-8") as f:
+                self.map = json.load(f)
+
+    def get_section_number(self, section_id: str) -> int:
+        """Get or assign a section number"""
+        if section_id in self.map["section_numbers"]:
+            return self.map["section_numbers"][section_id]
+
+        # Find next available number
+        existing_numbers = set(self.map["section_numbers"].values())
+        next_num = 1
+        while next_num in existing_numbers:
+            next_num += 1
+
+        self.map["section_numbers"][section_id] = next_num
+        return next_num
+
+    def get_paragraph_number(self, paragraph_id: str) -> int:
+        """Get or assign a global paragraph number"""
+        if paragraph_id in self.map["paragraph_numbers"]:
+            return self.map["paragraph_numbers"][paragraph_id]
+
+        existing_numbers = set(self.map["paragraph_numbers"].values())
+        next_num = 1
+        while next_num in existing_numbers:
+            next_num += 1
+
+        self.map["paragraph_numbers"][paragraph_id] = next_num
+        return next_num
+
+    def get_rule_letter(self, paragraph_id: str, rule_id: str) -> str:
+        """Get or assign a rule letter within paragraph"""
+        key = f"{paragraph_id}/{rule_id}"
+        if key in self.map["rule_letters"]:
+            return self.map["rule_letters"][key]
+
+        # Get existing letters in this paragraph
+        existing = [v for k,v in self.map["rule_letters"].items()
+                  if k.startswith(f"{paragraph_id}/")]
+
+        # Find next available letter
+        letter = 'a'
+        while letter in existing:
+            letter = chr(ord(letter) + 1)
+            if letter > 'z':
+                letter = 'a'  # wrap around if needed
+
+        self.map["rule_letters"][key] = letter
+        return letter
+
+    def save(self):
+        """Persist numbering map to file"""
+        with open(self.numbering_map_path, "w", encoding="utf-8") as f:
+            json.dump(self.map, f, indent=2)
+
 def main():
-    """Main compilation function."""
+    numbering = NumberingSystem()
     output = []
 
     # Load main document
@@ -39,30 +105,39 @@ def main():
 
     # Process sections
     for section_ref in main_doc.get("sections", []):
-        section_path = SPEC_DIR / "sections" / section_ref["id"] / "section.json"
+        section_id = section_ref["id"]
+        section_path = SPEC_DIR / "sections" / section_id / "section.json"
         section = load_json(section_path)
 
         if not section:
             continue
 
-        output.append(f"\n## {section.get('title', '')}\n")
+        # Get section number
+        section_num = numbering.get_section_number(section_id)
+        output.append(f"\n## {section_num}. {section.get('title', '')}\n")
         output.append(section.get("body", "") + "\n")
 
         # Process paragraphs
         for para_ref in section.get("paragraphs", []):
-            para_path = (SPEC_DIR / "sections" / section_ref["id"] / "paragraphs"
-                         / para_ref["id"] / "paragraph.json")
+            para_id = para_ref["id"]
+            para_path = (SPEC_DIR / "sections" / section_id / "paragraphs"
+                         / para_id / "paragraph.json")
             paragraph = load_json(para_path)
 
             if not paragraph:
                 continue
 
-            output.append(f"\n### {paragraph.get('title', '')}\n")
+            # Get global paragraph number
+            para_num = numbering.get_paragraph_number(para_id)
+            output.append(f"\n### §{para_num}. {paragraph.get('title', '')}\n")
             output.append(paragraph.get("body", "") + "\n")
 
             # Process rules
             for rule in paragraph.get("rules", []):
-                output.append(f"\n#### {rule.get('title', '')}\n")
+                rule_id = rule["id"]
+                letter = numbering.get_rule_letter(para_id, rule_id)
+
+                output.append(f"\n#### §{para_num}{letter}. {rule.get('title', '')}\n")
                 output.append(rule.get("description", "") + "\n")
 
                 # Add examples table
@@ -72,10 +147,10 @@ def main():
                     output.append(examples_md)
                 output.append("\n")
 
-    # Write final output
+    # Save numbering map and write output
+    numbering.save()
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         final_md = "\n".join(output)
-        # Replace placeholders
         final_md = final_md.replace("<alman />", "Alman").replace("<sd />", "Standard German")
         f.write(final_md)
 
