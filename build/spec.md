@@ -125,11 +125,11 @@ The invariant form **ein** replaces all nominative, accusative, and dative indef
 
 
 
-#### §2b. Genitive Case Resolution
+#### §2b. Genitive Case
 
 Indefinite genitive constructions employ either:
 1. Prepositional phrase **von ein** + Noun
-2. Only **ein**, depending on the context, e.g. when used with wegen
+2. Only **ein**, depending on the context, e.g. when used with a genitive prepositions such as **wegen**, **trotz**, **statt**, **innerhalb** and so on.
 
 The periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.
 
@@ -138,22 +138,21 @@ The periphrastic **von ein** construction is preferred when maintaining indefini
 
 | Standard German | Alman |
 |------------------|-------|
-| eines Freundes Buch | die Buch von ein Freund |
+| das Buch eines Freundes | die Buch von ein Freund |
 | wegen eines Problems | wegen ein Problem |
 
 
 
-#### §2c. Contextual Article Omission
+#### §2c. Nominalized Articles
 
-When indefinite articles function as pronouns or quantifiers without nouns, retain the invariant **ein** form regardless of original case/gender.
+The **ein** form persists in nominalized constructions where the article functions independently without a subsequent noun.
 
 
 **Examples:**
 
 | Standard German | Alman |
 |------------------|-------|
-| Das ist einer der Gründe | Das ist ein der Gründe |
-| Ich brauche etwas | Ich brauche ein |
+| Diese Erfindung war eine der wichtigsten Leistungen des 20. Jahrhunderts. | Diese Erfindung war ein der wichtigsten Leistungen der 20. Jahrhundert. |
 
 
 

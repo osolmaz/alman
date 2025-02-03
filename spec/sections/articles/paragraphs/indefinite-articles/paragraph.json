@@ -28,11 +28,11 @@
     },
     {
       "id": "genitive-constructions",
-      "title": "Genitive Case Resolution",
-      "description": "Indefinite genitive constructions employ either:\n1. Prepositional phrase **von ein** + Noun\n2. Only **ein**, depending on the context, e.g. when used with wegen\n\nThe periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.",
+      "title": "Genitive Case",
+      "description": "Indefinite genitive constructions employ either:\n1. Prepositional phrase **von ein** + Noun\n2. Only **ein**, depending on the context, e.g. when used with a genitive prepositions such as **wegen**, **trotz**, **statt**, **innerhalb** and so on.\n\nThe periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.",
       "examples": [
         {
-          "standard": "eines Freundes Buch",
+          "standard": "das Buch eines Freundes",
           "alman": "die Buch von ein Freund"
         },
         {
@@ -42,17 +42,13 @@
       ]
     },
     {
-      "id": "article-less-usage",
-      "title": "Contextual Article Omission",
-      "description": "When indefinite articles function as pronouns or quantifiers without nouns, retain the invariant **ein** form regardless of original case/gender.",
+      "id": "nominalized-usage",
+      "title": "Nominalized Articles",
+      "description": "The **ein** form persists in nominalized constructions where the article functions independently without a subsequent noun.",
       "examples": [
         {
-          "standard": "Das ist einer der Gründe",
-          "alman": "Das ist ein der Gründe"
-        },
-        {
-          "standard": "Ich brauche etwas",
-          "alman": "Ich brauche ein"
+          "standard": "Diese Erfindung war eine der wichtigsten Leistungen des 20. Jahrhunderts.",
+          "alman": "Diese Erfindung war ein der wichtigsten Leistungen der 20. Jahrhundert."
         }
       ]
     }
