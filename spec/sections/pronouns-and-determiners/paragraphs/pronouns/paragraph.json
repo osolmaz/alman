@@ -1,0 +1,75 @@
+{
+  "id": "pronouns",
+  "title": "Personal Pronouns and Natural Gender Attribution",
+  "body": "Maintains Standard German personal pronoun case forms while reorienting referential assignment to natural gender rather than grammatical gender. Preserves case distinctions for referential clarity and mutual intelligibility with Standard German.",
+  "rules": [
+    {
+      "id": "natural-gender-attribution",
+      "title": "Natural Gender Interpretation",
+      "description": "Personal pronouns maintain Standard German case forms but are interpreted through natural gender:\n- **er/ihn/ihm**: Male persons/entities\n- **sie/sie/ihr**: Female persons/entities\n- **es/es/ihm**: Inanimate objects/gender-neutral referents",
+      "examples": [
+        {
+          "standard": "Sie ist Ärztin. (die Frau, f.)",
+          "alman": "Sie ist Ärztin."
+        },
+        {
+          "standard": "Er ist Lehrer. (der Mann, m.)",
+          "alman": "Er ist Lehrer."
+        },
+        {
+          "standard": "Es ist klug. (das Mädchen, n.)",
+          "alman": "Sie ist klug."
+        },
+        {
+          "standard": "Es ist neu. (das Buch, n.)",
+          "alman": "Es ist neu."
+        }
+      ]
+    },
+    {
+      "id": "case-inflection-retention",
+      "title": "Case Form Preservation",
+      "description": "Full case inflection maintained for syntactic precision:\n\n| Case         | Forms                      |\n|--------------|----------------------------|\n| Nominative   | ich, du, er, sie, es, wir  |\n| Accusative   | mich, dich, ihn, sie, es   |\n| Dative       | mir, dir, ihm, ihr, ihnen  |",
+      "examples": [
+        {
+          "standard": "Ich gebe ihm das Buch. (dative)",
+          "alman": "Ich gebe ihm die Buch."
+        },
+        {
+          "standard": "Sie sieht ihn. (accusative)",
+          "alman": "Sie sieht ihn."
+        }
+      ]
+    },
+    {
+      "id": "gender-neutral-referents",
+      "title": "Neutral Referent Handling",
+      "description": "Default gender-neutral usage:\n- Singular: **es** for objects/abstractions\n- Plural: **sie** for mixed/unspecified gender\n- Reflexives: **sich** with natural gender alignment",
+      "examples": [
+        {
+          "standard": "Das Museum? Es ist geschlossen.",
+          "alman": "Die Museum? Es ist geschlossen."
+        },
+        {
+          "standard": "Die Kinder waschen sich.",
+          "alman": "Die Kinder waschen sich."
+        }
+      ]
+    },
+    {
+      "id": "possessive-alignment",
+      "title": "Possessive Pronoun Consistency",
+      "description": "Possessive forms retain case endings but follow natural gender attribution:\n- **sein** for male owners\n- **ihr** for female owners\n- **sein** for inanimate owners",
+      "examples": [
+        {
+          "standard": "Sein Auto (des Mannes)",
+          "alman": "Sein Auto"
+        },
+        {
+          "standard": "Ihr Buch (der Frau)",
+          "alman": "Ihr Buch"
+        }
+      ]
+    }
+  ]
+}

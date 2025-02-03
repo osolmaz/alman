@@ -2,5 +2,9 @@
   "id": "pronouns-and-determiners",
   "title": "Pronouns and Other Determiners",
   "body": "Outlines that personal pronouns retain their standard forms and case inflections but are interpreted according to natural gender. Also covers the consolidation of traditionally gendered determiners (e.g., derjenige, diese, jene) into a single unified form for non-genitive contexts.",
-  "paragraphs": []
-} 
+  "paragraphs": [
+    {
+      "id": "pronouns"
+    }
+  ]
+}

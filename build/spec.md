@@ -299,10 +299,88 @@ Words functioning adverbially retain their base form without receiving the -e en
 |------------------|-------|
 | schnell laufen | schnell laufen |
 | das Auto fährt schnell | die Auto fährt schnell |
-| methodisch verschiedene Beweise | methodisch verschiedene Beweise |
+| frisch kaltes Wasser | frisch kalte Wasser |
 
 
 
 ## Pronouns and Other Determiners
 
 Outlines that personal pronouns retain their standard forms and case inflections but are interpreted according to natural gender. Also covers the consolidation of traditionally gendered determiners (e.g., derjenige, diese, jene) into a single unified form for non-genitive contexts.
+
+
+### §6. Personal Pronouns and Natural Gender Attribution
+
+Maintains Standard German personal pronoun case forms while reorienting referential assignment to natural gender rather than grammatical gender. Preserves case distinctions for referential clarity and mutual intelligibility with Standard German.
+
+
+#### §6a. Natural Gender Interpretation
+
+Personal pronouns maintain Standard German case forms but are interpreted through natural gender:
+- **er/ihn/ihm**: Male persons/entities
+- **sie/sie/ihr**: Female persons/entities
+- **es/es/ihm**: Inanimate objects/gender-neutral referents
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Sie ist Ärztin. (die Frau, f.) | Sie ist Ärztin. |
+| Er ist Lehrer. (der Mann, m.) | Er ist Lehrer. |
+| Es ist klug. (das Mädchen, n.) | Sie ist klug. |
+| Es ist neu. (das Buch, n.) | Es ist neu. |
+
+
+
+#### §6b. Case Form Preservation
+
+Full case inflection maintained for syntactic precision:
+
+| Case         | Forms                      |
+|--------------|----------------------------|
+| Nominative   | ich, du, er, sie, es, wir  |
+| Accusative   | mich, dich, ihn, sie, es   |
+| Dative       | mir, dir, ihm, ihr, ihnen  |
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Ich gebe ihm das Buch. (dative) | Ich gebe ihm die Buch. |
+| Sie sieht ihn. (accusative) | Sie sieht ihn. |
+
+
+
+#### §6c. Neutral Referent Handling
+
+Default gender-neutral usage:
+- Singular: **es** for objects/abstractions
+- Plural: **sie** for mixed/unspecified gender
+- Reflexives: **sich** with natural gender alignment
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Das Museum? Es ist geschlossen. | Die Museum? Es ist geschlossen. |
+| Die Kinder waschen sich. | Die Kinder waschen sich. |
+
+
+
+#### §6d. Possessive Pronoun Consistency
+
+Possessive forms retain case endings but follow natural gender attribution:
+- **sein** for male owners
+- **ihr** for female owners
+- **sein** for inanimate owners
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Sein Auto (des Mannes) | Sein Auto |
+| Ihr Buch (der Frau) | Ihr Buch |
+
