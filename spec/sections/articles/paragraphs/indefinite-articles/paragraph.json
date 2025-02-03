@@ -1,0 +1,60 @@
+{
+  "id": "indefinite-articles",
+  "title": "Indefinite Article Simplification",
+  "body": "The <alman /> dialect regularizes indefinite article usage through morphological simplification, eliminating case and gender distinctions present in <sd /> while maintaining semantic clarity through prepositional constructions.",
+  "rules": [
+    {
+      "id": "non-genitive-forms",
+      "title": "Unified 'ein' for Non-Genitive Cases",
+      "description": "The invariant form **ein** replaces all nominative, accusative, and dative indefinite articles (ein/eine/einen/einem), neutralizing gender and case distinctions.",
+      "examples": [
+        {
+          "standard": "ein Mann (Nominative)",
+          "alman": "ein Mann"
+        },
+        {
+          "standard": "eine Frau (Nominative)",
+          "alman": "ein Frau"
+        },
+        {
+          "standard": "einen Hund (Accusative)",
+          "alman": "ein Hund"
+        },
+        {
+          "standard": "einem Kind (Dative)",
+          "alman": "ein Kind"
+        }
+      ]
+    },
+    {
+      "id": "genitive-constructions",
+      "title": "Genitive Case Resolution",
+      "description": "Indefinite genitive constructions employ either:\n1. Prepositional phrase **von ein** + Noun\n2. Only **ein**, depending on the context, e.g. when used with wegen\n\nThe periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.",
+      "examples": [
+        {
+          "standard": "eines Freundes Buch",
+          "alman": "die Buch von ein Freund"
+        },
+        {
+          "standard": "wegen eines Problems",
+          "alman": "wegen ein Problem"
+        }
+      ]
+    },
+    {
+      "id": "article-less-usage",
+      "title": "Contextual Article Omission",
+      "description": "When indefinite articles function as pronouns or quantifiers without nouns, retain the invariant **ein** form regardless of original case/gender.",
+      "examples": [
+        {
+          "standard": "Das ist einer der Gründe",
+          "alman": "Das ist ein der Gründe"
+        },
+        {
+          "standard": "Ich brauche etwas",
+          "alman": "Ich brauche ein"
+        }
+      ]
+    }
+  ]
+}

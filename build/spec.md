@@ -104,6 +104,59 @@ Preposition-article contractions (e.g., vom, im, zur) must be resolved to their 
 
 
 
+### §2. Indefinite Article Simplification
+
+The Alman dialect regularizes indefinite article usage through morphological simplification, eliminating case and gender distinctions present in Standard German while maintaining semantic clarity through prepositional constructions.
+
+
+#### §2a. Unified 'ein' for Non-Genitive Cases
+
+The invariant form **ein** replaces all nominative, accusative, and dative indefinite articles (ein/eine/einen/einem), neutralizing gender and case distinctions.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| ein Mann (Nominative) | ein Mann |
+| eine Frau (Nominative) | ein Frau |
+| einen Hund (Accusative) | ein Hund |
+| einem Kind (Dative) | ein Kind |
+
+
+
+#### §2b. Genitive Case Resolution
+
+Indefinite genitive constructions employ either:
+1. Prepositional phrase **von ein** + Noun
+2. Only **ein**, depending on the context, e.g. when used with wegen
+
+The periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| eines Freundes Buch | die Buch von ein Freund |
+| wegen eines Problems | wegen ein Problem |
+
+
+
+#### §2c. Contextual Article Omission
+
+When indefinite articles function as pronouns or quantifiers without nouns, retain the invariant **ein** form regardless of original case/gender.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Das ist einer der Gründe | Das ist ein der Gründe |
+| Ich brauche etwas | Ich brauche ein |
+
+
+
 ## 3. Nouns
 
 Describes the removal of grammatical gender and all case-based noun endings. Specifies that nouns maintain a single form for nominative, accusative, and dative cases, with a distinct form ("der") for genitive, and explains how plural forms are preserved without additional case-specific modifications.
