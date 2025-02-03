@@ -133,6 +133,8 @@ Indefinite genitive constructions employ either:
 
 The periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.
 
+This systematizes existing colloquial patterns that use prepositional phrases with dative forms, while replacing them with the invariant **ein**.
+
 
 **Examples:**
 
