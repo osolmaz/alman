@@ -310,15 +310,15 @@ Outlines that personal pronouns retain their standard forms and case inflections
 
 ### §6. Personal Pronouns and Natural Gender Attribution
 
-Maintains Standard German personal pronoun case forms while reorienting referential assignment to natural gender rather than grammatical gender. Preserves case distinctions for referential clarity and mutual intelligibility with Standard German.
+Outlines the retention of Standard German personal pronoun case forms while reorienting referential assignment to natural gender, rather than grammatical gender, preserving case distinctions for referential clarity.
 
 
-#### §6a. Natural Gender Interpretation
+#### §6a. Personal Pronouns: Natural Gender Attribution
 
-Personal pronouns maintain Standard German case forms but are interpreted through natural gender:
-- **er/ihn/ihm**: Male persons/entities
-- **sie/sie/ihr**: Female persons/entities
-- **es/es/ihm**: Inanimate objects/gender-neutral referents
+Personal pronouns maintain their Standard German case forms but are interpreted through natural gender assignment (mirroring English conventions):
+1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities
+2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities
+3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender
 
 
 **Examples:**
@@ -332,55 +332,80 @@ Personal pronouns maintain Standard German case forms but are interpreted throug
 
 
 
-#### §6b. Case Form Preservation
+#### §6b. Case Inflection Retention
 
-Full case inflection maintained for syntactic precision:
+Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with Standard German forms, in order to preserve mutual intelligibility.
 
-| Case         | Forms                      |
-|--------------|----------------------------|
-| Nominative   | ich, du, er, sie, es, wir  |
-| Accusative   | mich, dich, ihn, sie, es   |
-| Dative       | mir, dir, ihm, ihr, ihnen  |
-
-
-**Examples:**
-
-| Standard German | Alman |
-|------------------|-------|
-| Ich gebe ihm das Buch. (dative) | Ich gebe ihm die Buch. |
-| Sie sieht ihn. (accusative) | Sie sieht ihn. |
-
-
-
-#### §6c. Neutral Referent Handling
-
-Default gender-neutral usage:
-- Singular: **es** for objects/abstractions
-- Plural: **sie** for mixed/unspecified gender
-- Reflexives: **sich** with natural gender alignment
+| Person       | Nominative | Accusative | Dative |
+|--------------|------------|------------|--------|
+| 1st Singular | ich        | mich       | mir    |
+| 2nd Singular | du         | dich       | dir    |
+| 3rd Masc.    | er         | ihn        | ihm    |
+| 3rd Fem.     | sie        | sie        | ihr    |
+| 3rd Neut.    | es         | es         | ihm    |
+| 1st Plural   | wir        | uns        | uns    |
+| 2nd Plural   | ihr        | euch       | euch   |
+| 3rd Plural   | sie        | sie        | ihnen  |
 
 
 **Examples:**
 
 | Standard German | Alman |
 |------------------|-------|
-| Das Museum? Es ist geschlossen. | Die Museum? Es ist geschlossen. |
-| Die Kinder waschen sich. | Die Kinder waschen sich. |
+| Ich sehe ihn. (den Mann) | Ich sehe ihn. |
+| Sie gibt ihr das Buch. | Sie gibt ihr das Buch. |
 
 
 
-#### §6d. Possessive Pronoun Consistency
+#### §6c. Gender-Neutral Referents
 
-Possessive forms retain case endings but follow natural gender attribution:
-- **sein** for male owners
-- **ihr** for female owners
-- **sein** for inanimate owners
+For entities without natural gender (objects, abstract concepts, collectives):
+- **es** serves as the default singular pronoun
+- **sie** (3rd plural) for mixed/unspecified gender referents
+- Retains Standard German plural pronoun forms
 
 
 **Examples:**
 
 | Standard German | Alman |
 |------------------|-------|
-| Sein Auto (des Mannes) | Sein Auto |
+| Die Universität? Es ist groß. | Die Universität? Es ist groß. |
+| Ich kaufe das Auto, weil es günstig ist. | Ich kaufe die Auto, weil es günstig ist. |
+| Die Leute sind hier. Sie sind müde. | Die Leute sind hier. Sie sind müde. |
+
+
+
+#### §6d. Reflexive Pronouns
+
+Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents:
+- **Er wäscht sich** (Himself)
+- **Sie hilft sich** (Herself)
+- **Es öffnet sich** (Itself)
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Er wäscht sich. | Er wäscht sich. |
+| Sie hilft sich. | Sie hilft sich. |
+| Es öffnet sich. | Es öffnet sich. |
+
+
+
+#### §6e. Possessive Pronouns
+
+Possessive pronouns retain their case forms but align with natural gender attribution of their referents:
+- **Sein Buch** → Male owner
+- **Ihr Buch** → Female owner
+- **Sein Buch** → Inanimate owner
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Sein Buch (des Mannes) | Sein Buch |
 | Ihr Buch (der Frau) | Ihr Buch |
+| Sein Buch (des Tisches) | Sein Buch |
 

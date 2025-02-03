@@ -1,73 +1,115 @@
 {
   "id": "pronouns",
   "title": "Personal Pronouns and Natural Gender Attribution",
-  "body": "Maintains Standard German personal pronoun case forms while reorienting referential assignment to natural gender rather than grammatical gender. Preserves case distinctions for referential clarity and mutual intelligibility with Standard German.",
+  "body": "Outlines the retention of Standard German personal pronoun case forms while reorienting referential assignment to natural gender, rather than grammatical gender, preserving case distinctions for referential clarity.",
   "rules": [
     {
       "id": "natural-gender-attribution",
-      "title": "Natural Gender Interpretation",
-      "description": "Personal pronouns maintain Standard German case forms but are interpreted through natural gender:\n- **er/ihn/ihm**: Male persons/entities\n- **sie/sie/ihr**: Female persons/entities\n- **es/es/ihm**: Inanimate objects/gender-neutral referents",
+      "title": "Personal Pronouns: Natural Gender Attribution",
+      "description": "Personal pronouns maintain their Standard German case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender",
       "examples": [
         {
           "standard": "Sie ist Ärztin. (die Frau, f.)",
-          "alman": "Sie ist Ärztin."
+          "alman": "Sie ist Ärztin.",
+          "english": "She is a doctor."
         },
         {
           "standard": "Er ist Lehrer. (der Mann, m.)",
-          "alman": "Er ist Lehrer."
+          "alman": "Er ist Lehrer.",
+          "english": "He is a teacher."
         },
         {
           "standard": "Es ist klug. (das Mädchen, n.)",
-          "alman": "Sie ist klug."
+          "alman": "Sie ist klug.",
+          "english": "She is clever."
         },
         {
           "standard": "Es ist neu. (das Buch, n.)",
-          "alman": "Es ist neu."
+          "alman": "Es ist neu.",
+          "english": "It is new."
         }
       ]
     },
     {
       "id": "case-inflection-retention",
-      "title": "Case Form Preservation",
-      "description": "Full case inflection maintained for syntactic precision:\n\n| Case         | Forms                      |\n|--------------|----------------------------|\n| Nominative   | ich, du, er, sie, es, wir  |\n| Accusative   | mich, dich, ihn, sie, es   |\n| Dative       | mir, dir, ihm, ihr, ihnen  |",
+      "title": "Case Inflection Retention",
+      "description": "Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with Standard German forms, in order to preserve mutual intelligibility.\n\n| Person       | Nominative | Accusative | Dative |\n|--------------|------------|------------|--------|\n| 1st Singular | ich        | mich       | mir    |\n| 2nd Singular | du         | dich       | dir    |\n| 3rd Masc.    | er         | ihn        | ihm    |\n| 3rd Fem.     | sie        | sie        | ihr    |\n| 3rd Neut.    | es         | es         | ihm    |\n| 1st Plural   | wir        | uns        | uns    |\n| 2nd Plural   | ihr        | euch       | euch   |\n| 3rd Plural   | sie        | sie        | ihnen  |",
       "examples": [
         {
-          "standard": "Ich gebe ihm das Buch. (dative)",
-          "alman": "Ich gebe ihm die Buch."
+          "standard": "Ich sehe ihn. (den Mann)",
+          "alman": "Ich sehe ihn.",
+          "english": "I see him."
         },
         {
-          "standard": "Sie sieht ihn. (accusative)",
-          "alman": "Sie sieht ihn."
+          "standard": "Sie gibt ihr das Buch.",
+          "alman": "Sie gibt ihr das Buch.",
+          "english": "She gives her the book."
         }
       ]
     },
     {
       "id": "gender-neutral-referents",
-      "title": "Neutral Referent Handling",
-      "description": "Default gender-neutral usage:\n- Singular: **es** for objects/abstractions\n- Plural: **sie** for mixed/unspecified gender\n- Reflexives: **sich** with natural gender alignment",
+      "title": "Gender-Neutral Referents",
+      "description": "For entities without natural gender (objects, abstract concepts, collectives):\n- **es** serves as the default singular pronoun\n- **sie** (3rd plural) for mixed/unspecified gender referents\n- Retains Standard German plural pronoun forms",
       "examples": [
         {
-          "standard": "Das Museum? Es ist geschlossen.",
-          "alman": "Die Museum? Es ist geschlossen."
+          "standard": "Die Universität? Es ist groß.",
+          "alman": "Die Universität? Es ist groß.",
+          "english": "The university? It is large."
         },
         {
-          "standard": "Die Kinder waschen sich.",
-          "alman": "Die Kinder waschen sich."
+          "standard": "Ich kaufe das Auto, weil es günstig ist.",
+          "alman": "Ich kaufe die Auto, weil es günstig ist.",
+          "english": "I buy the car because it is affordable."
+        },
+        {
+          "standard": "Die Leute sind hier. Sie sind müde.",
+          "alman": "Die Leute sind hier. Sie sind müde.",
+          "english": "The people are here. They are tired."
         }
       ]
     },
     {
-      "id": "possessive-alignment",
-      "title": "Possessive Pronoun Consistency",
-      "description": "Possessive forms retain case endings but follow natural gender attribution:\n- **sein** for male owners\n- **ihr** for female owners\n- **sein** for inanimate owners",
+      "id": "reflexive-pronouns",
+      "title": "Reflexive Pronouns",
+      "description": "Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents:\n- **Er wäscht sich** (Himself)\n- **Sie hilft sich** (Herself)\n- **Es öffnet sich** (Itself)",
       "examples": [
         {
-          "standard": "Sein Auto (des Mannes)",
-          "alman": "Sein Auto"
+          "standard": "Er wäscht sich.",
+          "alman": "Er wäscht sich.",
+          "english": "He washes himself."
+        },
+        {
+          "standard": "Sie hilft sich.",
+          "alman": "Sie hilft sich.",
+          "english": "She helps herself."
+        },
+        {
+          "standard": "Es öffnet sich.",
+          "alman": "Es öffnet sich.",
+          "english": "It opens itself."
+        }
+      ]
+    },
+    {
+      "id": "possessive-pronouns",
+      "title": "Possessive Pronouns",
+      "description": "Possessive pronouns retain their case forms but align with natural gender attribution of their referents:\n- **Sein Buch** → Male owner\n- **Ihr Buch** → Female owner\n- **Sein Buch** → Inanimate owner",
+      "examples": [
+        {
+          "standard": "Sein Buch (des Mannes)",
+          "alman": "Sein Buch",
+          "english": "His book"
         },
         {
           "standard": "Ihr Buch (der Frau)",
-          "alman": "Ihr Buch"
+          "alman": "Ihr Buch",
+          "english": "Her book"
+        },
+        {
+          "standard": "Sein Buch (des Tisches)",
+          "alman": "Sein Buch",
+          "english": "Its book"
         }
       ]
     }
