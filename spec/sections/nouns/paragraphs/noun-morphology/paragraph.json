@@ -1,0 +1,41 @@
+{
+  "id": "noun-morphology",
+  "title": "Noun Morphology Simplification",
+  "body": "The <alman /> dialect systematically eliminates grammatical gender distinctions and case-based noun inflections through morphological regularization. Nouns maintain a single invariant form across nominative, accusative, and dative cases, with genitive constructions employing a distinct analytical marker. Plural forms preserve their standard nominative/accusative morphology across all syntactic contexts.",
+  "rules": [
+    {
+      "id": "case-neutralization",
+      "title": "Case Ending Elimination",
+      "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers (des Mannes → der Mann)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns",
+      "examples": [
+        {
+          "standard": "des Hundes (Genitive)",
+          "alman": "der Hund"
+        },
+        {
+          "standard": "den Frauen (Dative Plural)",
+          "alman": "die Frauen"
+        },
+        {
+          "standard": "dem Kinde (Dative, archaic)",
+          "alman": "die Kind"
+        }
+      ]
+    },
+    {
+      "id": "plural-uniformity",
+      "title": "Invariant Plural Forms",
+      "description": "Standard nominative/accusative plural forms serve as universal plural markers, remaining unchanged in dative and genitive contexts. This preserves recognizable plural morphology while eliminating case-based modifications.",
+      "examples": [
+        {
+          "standard": "mit den Kindern (Dative Plural)",
+          "alman": "mit die Kinder"
+        },
+        {
+          "standard": "wegen der Brände (Genitive Plural)",
+          "alman": "wegen die Brände"
+        }
+      ]
+    }
+  ]
+}

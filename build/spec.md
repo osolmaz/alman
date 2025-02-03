@@ -5,12 +5,12 @@
 **Last Updated**: 2025-02-02
 
 
-## 1. Introduction
+## Introduction
 
 Provides background on Alman's purpose, summarizes its core changes from Standard German, and explains the overall goal of simplifying grammar for easier learning and mutual intelligibility.
 
 
-## 2. Articles
+## Articles
 
 Details the treatment of definite and indefinite articles. Explains that all non-genitive forms use "die" (and "ein" for indefinite), while genitive forms use "der" (or "von ein" for indefinites). Also covers exceptions for demonstrative "das" and the use of "von die" to indicate possession, as well as guidelines for uncontracting phrases.
 
@@ -158,16 +158,53 @@ The **ein** form persists in nominalized constructions where the article functio
 
 
 
-## 3. Nouns
+## Nouns
 
 Describes the removal of grammatical gender and all case-based noun endings. Specifies that nouns maintain a single form for nominative, accusative, and dative cases, with a distinct form ("der") for genitive, and explains how plural forms are preserved without additional case-specific modifications.
 
 
-## 4. Adjectives and Adverbs
+### §3. Noun Morphology Simplification
+
+The Alman dialect systematically eliminates grammatical gender distinctions and case-based noun inflections through morphological regularization. Nouns maintain a single invariant form across nominative, accusative, and dative cases, with genitive constructions employing a distinct analytical marker. Plural forms preserve their standard nominative/accusative morphology across all syntactic contexts.
+
+
+#### §3a. Case Ending Elimination
+
+All case-specific noun endings are removed, including:
+- Genitive -s/-es markers (des Mannes → der Mann)
+- Dative plural -n suffixes (den Bränden → die Brände)
+- Weak noun declensional patterns
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| des Hundes (Genitive) | der Hund |
+| den Frauen (Dative Plural) | die Frauen |
+| dem Kinde (Dative, archaic) | die Kind |
+
+
+
+#### §3b. Invariant Plural Forms
+
+Standard nominative/accusative plural forms serve as universal plural markers, remaining unchanged in dative and genitive contexts. This preserves recognizable plural morphology while eliminating case-based modifications.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| mit den Kindern (Dative Plural) | mit die Kinder |
+| wegen der Brände (Genitive Plural) | wegen die Brände |
+
+
+
+## Adjectives and Adverbs
 
 Explains that adjectives preceding a noun always end in -e, eliminating the traditional variety of declensional endings. Clarifies that adjectives functioning as modifiers before nouns are uniformly inflected, while adverbs (or adjectives used non-attributively) remain unchanged.
 
 
-## 5. Pronouns and Other Determiners
+## Pronouns and Other Determiners
 
 Outlines that personal pronouns retain their standard forms and case inflections but are interpreted according to natural gender. Also covers the consolidation of traditionally gendered determiners (e.g., derjenige, diese, jene) into a single unified form for non-genitive contexts.

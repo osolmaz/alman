@@ -127,8 +127,9 @@ def main():
             continue
 
         # Get section number
-        section_num = numbering.get_section_number(section_id)
-        output.append(f"\n## {section_num}. {section.get('title', '')}\n")
+        # section_num = numbering.get_section_number(section_id)
+        # output.append(f"\n## {section_num}. {section.get('title', '')}\n")
+        output.append(f"\n## {section.get('title', '')}\n")
         output.append(section.get("body", "") + "\n")
 
         # Process paragraphs
