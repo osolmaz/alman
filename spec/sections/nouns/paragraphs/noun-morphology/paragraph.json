@@ -36,6 +36,21 @@
           "alman": "wegen die Brände"
         }
       ]
+    },
+    {
+      "id": "optional-plural-marking",
+      "title": "Optional Plural Disambiguation",
+      "description": "To resolve potential ambiguity in nouns with identical singular/plural forms, Alman permits optional plural marking through suffixation. When clarity requires explicit plurality indication, speakers may employ either:\n- The native German -n plural suffix\n- The international -s suffix\n\nThis disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential. Suffix choice follows speaker preference and lexical convention.",
+      "examples": [
+        {
+          "standard": "die Computer (plural)",
+          "alman": "die Computers/die Computern"
+        },
+        {
+          "standard": "der Sessel (singular)/die Sessel (plural)",
+          "alman": "die Sessel (singular)/die Sesseln/die Sessels (plural)"
+        }
+      ]
     }
   ]
 }

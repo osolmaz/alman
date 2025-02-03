@@ -200,6 +200,24 @@ Standard nominative/accusative plural forms serve as universal plural markers, r
 
 
 
+#### §3c. Optional Plural Disambiguation
+
+To resolve potential ambiguity in nouns with identical singular/plural forms, Alman permits optional plural marking through suffixation. When clarity requires explicit plurality indication, speakers may employ either:
+- The native German -n plural suffix
+- The international -s suffix
+
+This disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential. Suffix choice follows speaker preference and lexical convention.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| die Computer (plural) | die Computers/die Computern |
+| der Sessel (singular)/die Sessel (plural) | die Sessel (singular)/die Sesseln/die Sessels (plural) |
+
+
+
 ## Adjectives and Adverbs
 
 Explains that adjectives preceding a noun always end in -e, eliminating the traditional variety of declensional endings. Clarifies that adjectives functioning as modifiers before nouns are uniformly inflected, while adverbs (or adjectives used non-attributively) remain unchanged.
