@@ -378,10 +378,7 @@ For entities without natural gender (objects, abstract concepts, collectives):
 
 #### §6d. Reflexive Pronouns
 
-Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents:
-- **Er wäscht sich** (Himself)
-- **Sie hilft sich** (Herself)
-- **Es öffnet sich** (Itself)
+Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents.
 
 
 **Examples:**
@@ -396,10 +393,7 @@ Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euc
 
 #### §6e. Possessive Pronouns
 
-Possessive pronouns retain their case forms but align with natural gender attribution of their referents:
-- **Sein Buch** → Male owner
-- **Ihr Buch** → Female owner
-- **Sein Buch** → Inanimate owner
+Possessive pronouns retain their case forms but align with natural gender attribution of their referents.
 
 
 **Examples:**

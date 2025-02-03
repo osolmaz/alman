@@ -77,7 +77,7 @@
     {
       "id": "reflexive-pronouns",
       "title": "Reflexive Pronouns",
-      "description": "Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents:\n- **Er wäscht sich** (Himself)\n- **Sie hilft sich** (Herself)\n- **Es öffnet sich** (Itself)",
+      "description": "Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents.",
       "examples": [
         {
           "standard": "Er wäscht sich.",
@@ -99,7 +99,7 @@
     {
       "id": "possessive-pronouns",
       "title": "Possessive Pronouns",
-      "description": "Possessive pronouns retain their case forms but align with natural gender attribution of their referents:\n- **Sein Buch** → Male owner\n- **Ihr Buch** → Female owner\n- **Sein Buch** → Inanimate owner",
+      "description": "Possessive pronouns retain their case forms but align with natural gender attribution of their referents.",
       "examples": [
         {
           "standard": "Sein Buch (des Mannes)",
