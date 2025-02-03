@@ -240,6 +240,46 @@ This disambiguation preserves simplified morphology while accommodating lexical 
 Explains that adjectives preceding a noun always end in -e, eliminating the traditional variety of declensional endings. Clarifies that adjectives functioning as modifiers before nouns are uniformly inflected, while adverbs (or adjectives used non-attributively) remain unchanged.
 
 
+### §4. Adjectival Ending Regularization
+
+The Alman dialect mandates uniform morphological patterns for attributive adjectives, systematically eliminating case- and gender-based declensional variation while maintaining syntactic agreement through invariant forms.
+
+
+#### §4a. Invariant -e Ending
+
+All attributive adjectives preceding nouns receive an -e ending, regardless of:
+- Grammatical gender (masculine/feminine/neuter)
+- Number (singular/plural)
+- Case (nominative/accusative/dative)
+
+This replaces standard German's case-specific endings (-r/-s/-m/-n) with a single invariant form.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| guter Mann (Masculine Nominative) | gute Mann |
+| eine schöne Blume (Feminine Accusative) | ein schöne Blume |
+| dem kleinen Kind (Neutral Dative) | die kleine Kind |
+| die roten Schuhe (Plural) | die rote Schuhe |
+
+
+
+#### §4b. Genitive Construction Handling
+
+Genitive constructions retain the analytical 'der' article while maintaining invariant adjectival -e endings, preserving morphological regularity across all cases.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| des guten Mannes | der gute Mann |
+| der intelligenten Schüler | der intelligente Schüler |
+
+
+
 ## Pronouns and Other Determiners
 
 Outlines that personal pronouns retain their standard forms and case inflections but are interpreted according to natural gender. Also covers the consolidation of traditionally gendered determiners (e.g., derjenige, diese, jene) into a single unified form for non-genitive contexts.
