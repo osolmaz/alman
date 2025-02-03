@@ -1,0 +1,26 @@
+{
+  "id": "adverbs",
+  "title": "Adverbs",
+  "body": "The <alman /> dialect maintains standard German's lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.",
+  "rules": [
+    {
+      "id": "non-inflected-adverbs",
+      "title": "Adverbs Stay the Same",
+      "description": "Words functioning adverbially retain their base form without receiving the -e ending required for attributive adjectives. This applies to:\n- Adverbs modifying verbs\n- Adjectives modifying other adjectives\n- Phrasal modifiers not directly preceding a noun",
+      "examples": [
+        {
+          "standard": "schnell laufen",
+          "alman": "schnell laufen"
+        },
+        {
+          "standard": "das Auto fährt schnell",
+          "alman": "die Auto fährt schnell"
+        },
+        {
+          "standard": "methodisch verschiedene Beweise",
+          "alman": "methodisch verschiedene Beweise"
+        }
+      ]
+    }
+  ]
+}

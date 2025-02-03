@@ -280,6 +280,29 @@ Genitive constructions retain the analytical 'der' article while maintaining inv
 
 
 
+### §5. Adverbs
+
+The Alman dialect maintains standard German's lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.
+
+
+#### §5a. Adverbs Stay the Same
+
+Words functioning adverbially retain their base form without receiving the -e ending required for attributive adjectives. This applies to:
+- Adverbs modifying verbs
+- Adjectives modifying other adjectives
+- Phrasal modifiers not directly preceding a noun
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| schnell laufen | schnell laufen |
+| das Auto fährt schnell | die Auto fährt schnell |
+| methodisch verschiedene Beweise | methodisch verschiedene Beweise |
+
+
+
 ## Pronouns and Other Determiners
 
 Outlines that personal pronouns retain their standard forms and case inflections but are interpreted according to natural gender. Also covers the consolidation of traditionally gendered determiners (e.g., derjenige, diese, jene) into a single unified form for non-genitive contexts.
