@@ -22,9 +22,23 @@ def process_examples(examples: List[Dict]) -> str:
     if not examples:
         return ""
 
-    table = ["| Standard German | Alman |", "|------------------|-------|"]
-    for ex in examples:
-        table.append(f"| {ex['standard']} | {ex['alman']} |")
+    # Check if any example has an English translation
+    has_english = any("english" in ex for ex in examples)
+
+    if has_english:
+        table = [
+            "| Standard German | Alman | English |",
+            "|------------------|--------|---------|",
+        ]
+        for ex in examples:
+            table.append(
+                f"| {ex['standard']} | {ex['alman']} | {ex.get('english', '')} |"
+            )
+    else:
+        table = ["| Standard German | Alman |", "|------------------|-------|"]
+        for ex in examples:
+            table.append(f"| {ex['standard']} | {ex['alman']} |")
+
     return "\n".join(table)
 
 

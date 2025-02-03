@@ -53,7 +53,12 @@
       "description": "For entities without natural gender (objects, abstract concepts, collectives):\n- **es** serves as the default singular pronoun\n- **sie** (3rd plural) for mixed/unspecified gender referents\n- Retains Standard German plural pronoun forms",
       "examples": [
         {
-          "standard": "Die Universität? Es ist groß.",
+          "standard": "Der Computer? Er ist kaputt.",
+          "alman": "Die Computer? Es ist kaputt.",
+          "english": "The computer? It is broken."
+        },
+        {
+          "standard": "Die Universität? Sie ist groß.",
           "alman": "Die Universität? Es ist groß.",
           "english": "The university? It is large."
         },

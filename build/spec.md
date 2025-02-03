@@ -323,12 +323,12 @@ Personal pronouns maintain their Standard German case forms but are interpreted 
 
 **Examples:**
 
-| Standard German | Alman |
-|------------------|-------|
-| Sie ist Ärztin. (die Frau, f.) | Sie ist Ärztin. |
-| Er ist Lehrer. (der Mann, m.) | Er ist Lehrer. |
-| Es ist klug. (das Mädchen, n.) | Sie ist klug. |
-| Es ist neu. (das Buch, n.) | Es ist neu. |
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Sie ist Ärztin. (die Frau, f.) | Sie ist Ärztin. | She is a doctor. |
+| Er ist Lehrer. (der Mann, m.) | Er ist Lehrer. | He is a teacher. |
+| Es ist klug. (das Mädchen, n.) | Sie ist klug. | She is clever. |
+| Es ist neu. (das Buch, n.) | Es ist neu. | It is new. |
 
 
 
@@ -350,10 +350,10 @@ Personal pronouns retain full case inflection to preserve referential clarity an
 
 **Examples:**
 
-| Standard German | Alman |
-|------------------|-------|
-| Ich sehe ihn. (den Mann) | Ich sehe ihn. |
-| Sie gibt ihr das Buch. | Sie gibt ihr das Buch. |
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Ich sehe ihn. (den Mann) | Ich sehe ihn. | I see him. |
+| Sie gibt ihr das Buch. | Sie gibt ihr das Buch. | She gives her the book. |
 
 
 
@@ -367,11 +367,12 @@ For entities without natural gender (objects, abstract concepts, collectives):
 
 **Examples:**
 
-| Standard German | Alman |
-|------------------|-------|
-| Die Universität? Es ist groß. | Die Universität? Es ist groß. |
-| Ich kaufe das Auto, weil es günstig ist. | Ich kaufe die Auto, weil es günstig ist. |
-| Die Leute sind hier. Sie sind müde. | Die Leute sind hier. Sie sind müde. |
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Der Computer? Er ist kaputt. | Die Computer? Es ist kaputt. | The computer? It is broken. |
+| Die Universität? Sie ist groß. | Die Universität? Es ist groß. | The university? It is large. |
+| Ich kaufe das Auto, weil es günstig ist. | Ich kaufe die Auto, weil es günstig ist. | I buy the car because it is affordable. |
+| Die Leute sind hier. Sie sind müde. | Die Leute sind hier. Sie sind müde. | The people are here. They are tired. |
 
 
 
@@ -385,11 +386,11 @@ Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euc
 
 **Examples:**
 
-| Standard German | Alman |
-|------------------|-------|
-| Er wäscht sich. | Er wäscht sich. |
-| Sie hilft sich. | Sie hilft sich. |
-| Es öffnet sich. | Es öffnet sich. |
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Er wäscht sich. | Er wäscht sich. | He washes himself. |
+| Sie hilft sich. | Sie hilft sich. | She helps herself. |
+| Es öffnet sich. | Es öffnet sich. | It opens itself. |
 
 
 
@@ -403,9 +404,9 @@ Possessive pronouns retain their case forms but align with natural gender attrib
 
 **Examples:**
 
-| Standard German | Alman |
-|------------------|-------|
-| Sein Buch (des Mannes) | Sein Buch |
-| Ihr Buch (der Frau) | Ihr Buch |
-| Sein Buch (des Tisches) | Sein Buch |
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Sein Buch (des Mannes) | Sein Buch | His book |
+| Ihr Buch (der Frau) | Ihr Buch | Her book |
+| Sein Buch (des Tisches) | Sein Buch | Its book |
 
