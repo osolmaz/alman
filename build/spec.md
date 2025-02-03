@@ -231,6 +231,7 @@ This disambiguation preserves simplified morphology while accommodating lexical 
 |------------------|-------|
 | die Computer (plural) | die Computers/die Computern |
 | der Sessel (singular)/die Sessel (plural) | die Sessel (singular)/die Sesseln/die Sessels (plural) |
+| die Mädchen (plural) | die Mädchens |
 
 
 
