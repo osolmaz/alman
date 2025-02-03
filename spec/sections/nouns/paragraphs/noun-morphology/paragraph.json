@@ -38,6 +38,29 @@
       ]
     },
     {
+      "id": "no-plural-morphology-regularization",
+      "title": "No Regularization of Plural Morphology",
+      "description": "Alman preserves standard German plural morphology without systematic regularization, maintaining existing plural forms in all non-conflicting contexts. The dialect only intervenes in plural formation when its grammatical simplifications create morphological ambiguity between singular and plural forms, as described in the next rule.",
+      "examples": [
+        {
+          "standard": "die Blumen (plural)",
+          "alman": "die Blumen"
+        },
+        {
+          "standard": "die Hunde (plural)",
+          "alman": "die Hunde"
+        },
+        {
+          "standard": "die Bücher (plural)",
+          "alman": "die Bücher"
+        },
+        {
+          "standard": "die Autos (plural)",
+          "alman": "die Autos"
+        }
+      ]
+    },
+    {
       "id": "optional-plural-marking",
       "title": "Optional Plural Disambiguation",
       "description": "To resolve potential ambiguity in nouns with identical singular/plural forms, Alman permits optional plural marking through suffixation. When clarity requires explicit plurality indication, speakers may employ either:\n- The native German -n plural suffix\n- The international -s suffix\n\nThis disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential. Suffix choice follows speaker preference and lexical convention.",

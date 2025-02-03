@@ -200,7 +200,23 @@ Standard nominative/accusative plural forms serve as universal plural markers, r
 
 
 
-#### §3c. Optional Plural Disambiguation
+#### §3c. No Regularization of Plural Morphology
+
+Alman preserves standard German plural morphology without systematic regularization, maintaining existing plural forms in all non-conflicting contexts. The dialect only intervenes in plural formation when its grammatical simplifications create morphological ambiguity between singular and plural forms, as described in the next rule.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| die Blumen (plural) | die Blumen |
+| die Hunde (plural) | die Hunde |
+| die Bücher (plural) | die Bücher |
+| die Autos (plural) | die Autos |
+
+
+
+#### §3d. Optional Plural Disambiguation
 
 To resolve potential ambiguity in nouns with identical singular/plural forms, Alman permits optional plural marking through suffixation. When clarity requires explicit plurality indication, speakers may employ either:
 - The native German -n plural suffix
