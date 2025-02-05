@@ -1,0 +1,73 @@
+{
+  "id": "determiners",
+  "title": "Determiners and Demonstratives",
+  "body": "Describes the simplification of determiner and demonstrative forms in Alman through gender neutralization and case reduction, while maintaining clarity through context and word order.",
+  "rules": [
+    {
+      "id": "unified-non-genitive-forms",
+      "title": "Unified Forms for Non-Genitive Contexts",
+      "description": "In non-genitive contexts, determiners and pronouns that vary by gender and case in Standard German are unified by adopting the invariant feminine \"die...\" form. Thus, forms such as **diejenige, diese, jene, welche** (and analogous variants) are employed regardless of the gender or case of the referent.",
+      "examples": [
+        {
+          "standard": "dieser, diese, dieses, diesen, diesem (Nominativ, Akkusativ, Dativ)",
+          "alman": "diese"
+        },
+        {
+          "standard": "derjenige (Nominativ, Dativ), diejenige (Nominativ, Akkusativ), dasjenige (Nominativ), denjenigen (Akkusativ), demjenigen (Dativ)",
+          "alman": "diejenige"
+        },
+        {
+          "standard": "derselbe (Nominativ, Dativ), dieselbe (Nominativ, Akkusativ), dasselbe (Nominativ), denselben (Akkusativ), demselben (Dativ)",
+          "alman": "dieselbe"
+        },
+        {
+          "standard": "derjenige Mann, der kommt",
+          "alman": "diejenige Mann, die kommt"
+        },
+        {
+          "standard": "dieser Weg",
+          "alman": "diese Weg"
+        },
+        {
+          "standard": "jener Tag",
+          "alman": "jene Tag"
+        },
+        {
+          "standard": "welches Buch",
+          "alman": "welche Buch"
+        },
+        {
+          "standard": "demjenigen Weg",
+          "alman": "diejenige Weg"
+        },
+        {
+          "standard": "dasselbe Buch",
+          "alman": "dieselbe Buch"
+        }
+      ]
+    },
+    {
+      "id": "genitive-handling",
+      "title": "Handling of Genitive Forms in Gendered Determiners",
+      "description": "When a genitive construction is required, speakers of Alman may either adopt the corresponding \"derjenige\" form or rephrase the expression to avoid the genitive altogether by employing a periphrastic construction with **von jene**, **von dieselbe** and so on. In the latter case, the invariant non-genitive form is retained following the preposition. The genitive *derjenigen* and *desjenigen* can be substituted with either *von diejenige* or *von jene* for simplicity.",
+      "examples": [
+        {
+          "standard": "derselben (Genitiv), desselben (Genitiv)",
+          "alman": "von dieselbe"
+        },
+        {
+          "standard": "dieser, dieses (Genitiv)",
+          "alman": "von diese"
+        },
+        {
+          "standard": "das Urteil desjenigen Mannes ",
+          "alman": "die Urteil von diejenige Mann / die Urteil von jene Mann / die Urteil derjenige Mann"
+        },
+        {
+          "standard": "die Meinung derselben Frau",
+          "alman": "die Meinung von dieselbe Frau"
+        }
+      ]
+    }
+  ]
+}

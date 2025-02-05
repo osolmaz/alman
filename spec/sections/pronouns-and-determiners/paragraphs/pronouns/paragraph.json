@@ -117,6 +117,44 @@
           "english": "Its book"
         }
       ]
+    },
+    {
+      "id": "interrogative-pronouns",
+      "title": "Retention of Standard Interrogative Pronouns",
+      "description": "The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their standard German forms without modification. These pronouns function as in Standard German in all contexts.",
+      "examples": [
+        {
+          "standard": "Wer bist du?",
+          "alman": "Wer bist du?"
+        },
+        {
+          "standard": "Was möchtest du essen?",
+          "alman": "Was möchtest du essen?"
+        },
+        {
+          "standard": "Wen siehst du?",
+          "alman": "Wen siehst du?"
+        }
+      ]
+    },
+    {
+      "id": "prepositional-interrogatives",
+      "title": "Preferred Use of Prepositional Interrogative Constructions",
+      "description": "In interrogative constructions involving prepositions, the Alman dialect favors the use of an uncontracted preposition preceding **was** rather than employing the compound forms. Thus, constructions such as **zu was, von was, mit was, über was, durch was**, and similar variants, are preferred over the corresponding *wo-* forms. This mirrors the usage of preposition + *what* in in English, like *to what*, *from what*, and so on.",
+      "examples": [
+        {
+          "standard": "Womit hilfst du mir?",
+          "alman": "Mit was hilfst du mir?"
+        },
+        {
+          "standard": "Wovon träumst du?",
+          "alman": "Von was träumst du?"
+        },
+        {
+          "standard": "Worüber freust du dich?",
+          "alman": "Über was freust du dich?"
+        }
+      ]
     }
   ]
 }

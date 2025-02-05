@@ -404,3 +404,75 @@ Possessive pronouns retain their case forms but align with natural gender attrib
 | Ihr Buch (der Frau) | Ihr Buch | Her book |
 | Sein Buch (des Tisches) | Sein Buch | Its book |
 
+
+
+#### §6f. Retention of Standard Interrogative Pronouns
+
+The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their standard German forms without modification. These pronouns function as in Standard German in all contexts.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Wer bist du? | Wer bist du? |
+| Was möchtest du essen? | Was möchtest du essen? |
+| Wen siehst du? | Wen siehst du? |
+
+
+
+#### §6g. Preferred Use of Prepositional Interrogative Constructions
+
+In interrogative constructions involving prepositions, the Alman dialect favors the use of an uncontracted preposition preceding **was** rather than employing the compound forms. Thus, constructions such as **zu was, von was, mit was, über was, durch was**, and similar variants, are preferred over the corresponding *wo-* forms. This mirrors the usage of preposition + *what* in in English, like *to what*, *from what*, and so on.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Womit hilfst du mir? | Mit was hilfst du mir? |
+| Wovon träumst du? | Von was träumst du? |
+| Worüber freust du dich? | Über was freust du dich? |
+
+
+
+### §7. Determiners and Demonstratives
+
+Describes the simplification of determiner and demonstrative forms in Alman through gender neutralization and case reduction, while maintaining clarity through context and word order.
+
+
+#### §7a. Unified Forms for Non-Genitive Contexts
+
+In non-genitive contexts, determiners and pronouns that vary by gender and case in Standard German are unified by adopting the invariant feminine "die..." form. Thus, forms such as **diejenige, diese, jene, welche** (and analogous variants) are employed regardless of the gender or case of the referent.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| dieser, diese, dieses, diesen, diesem (Nominativ, Akkusativ, Dativ) | diese |
+| derjenige (Nominativ, Dativ), diejenige (Nominativ, Akkusativ), dasjenige (Nominativ), denjenigen (Akkusativ), demjenigen (Dativ) | diejenige |
+| derselbe (Nominativ, Dativ), dieselbe (Nominativ, Akkusativ), dasselbe (Nominativ), denselben (Akkusativ), demselben (Dativ) | dieselbe |
+| derjenige Mann, der kommt | diejenige Mann, die kommt |
+| dieser Weg | diese Weg |
+| jener Tag | jene Tag |
+| welches Buch | welche Buch |
+| demjenigen Weg | diejenige Weg |
+| dasselbe Buch | dieselbe Buch |
+
+
+
+#### §7b. Handling of Genitive Forms in Gendered Determiners
+
+When a genitive construction is required, speakers of Alman may either adopt the corresponding "derjenige" form or rephrase the expression to avoid the genitive altogether by employing a periphrastic construction with **von jene**, **von dieselbe** and so on. In the latter case, the invariant non-genitive form is retained following the preposition. The genitive *derjenigen* and *desjenigen* can be substituted with either *von diejenige* or *von jene* for simplicity.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| derselben (Genitiv), desselben (Genitiv) | von dieselbe |
+| dieser, dieses (Genitiv) | von diese |
+| das Urteil desjenigen Mannes  | die Urteil von diejenige Mann / die Urteil von jene Mann / die Urteil derjenige Mann |
+| die Meinung derselben Frau | die Meinung von dieselbe Frau |
+
