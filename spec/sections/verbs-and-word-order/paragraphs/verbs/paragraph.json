@@ -21,6 +21,25 @@
           "alman": "ich bin, du bist, er ist, wir sind, ihr seid, sie sind"
         }
       ]
+    },
+    {
+      "id": "nominalized-verbs",
+      "title": "Nominalized Verbs",
+      "description": "In Standard German, nominalized verbs are assigned neuter gender. In Alman, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.\n\nThis rule ensures consistency in the treatment of nominalized forms throughout Alman, aligning them with the broader system of gender collapsing.",
+      "examples": [
+        {
+          "standard": "Das Lernen fällt mir leicht.",
+          "alman": "Die Lernen fällt mir leicht."
+        },
+        {
+          "standard": "Ich finde das Lernen spannend.",
+          "alman": "Ich finde die Lernen spannend."
+        },
+        {
+          "standard": "Ich gehe in die Bibliothek zum Lernen.",
+          "alman": "Ich gehe in die Bibliothek zum Lernen."
+        }
+      ]
     }
   ]
 }

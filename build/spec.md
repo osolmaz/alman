@@ -521,6 +521,23 @@ The Alman dialect retains the full complexity of Standard German verb conjugatio
 
 
 
+#### §8b. Nominalized Verbs
+
+In Standard German, nominalized verbs are assigned neuter gender. In Alman, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.
+
+This rule ensures consistency in the treatment of nominalized forms throughout Alman, aligning them with the broader system of gender collapsing.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Das Lernen fällt mir leicht. | Die Lernen fällt mir leicht. |
+| Ich finde das Lernen spannend. | Ich finde die Lernen spannend. |
+| Ich gehe in die Bibliothek zum Lernen. | Ich gehe in die Bibliothek zum Lernen. |
+
+
+
 ### §9. Word Order and Syntax
 
 Details the preservation of Standard German word order patterns in Alman, maintaining both V2 in main clauses and verb-final position in subordinate clauses.
