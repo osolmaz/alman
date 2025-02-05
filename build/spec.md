@@ -476,3 +476,51 @@ When a genitive construction is required, speakers of Alman may either adopt the
 | das Urteil desjenigen Mannes  | die Urteil von diejenige Mann / die Urteil von jene Mann / die Urteil derjenige Mann |
 | die Meinung derselben Frau | die Meinung von dieselbe Frau |
 
+
+
+## Unchanged Aspects
+
+This section outlines the grammatical features that remain identical between Standard German and Alman. While Alman introduces various simplifications in areas like gender and case marking, it deliberately preserves certain core aspects of German grammar to maintain mutual intelligibility and structural clarity. The retention of these features ensures that Alman remains recognizably German while selectively implementing reforms in other areas.
+
+
+### §8. Verb Conjugations and Forms
+
+Details the retention of Standard German verb conjugation patterns in Alman, preserving both regular and irregular forms.
+
+
+#### §8a. Verb Conjugations
+
+The Alman dialect retains the full complexity of Standard German verb conjugations. Both regular and irregular verb forms remain unaltered, and no further simplification or regularization is introduced. All conjugated forms are used exactly as in Standard German.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| ich gehe, du gehst, er geht, wir gehen, ihr geht, sie gehen | ich gehe, du gehst, er geht, wir gehen, ihr geht, sie gehen |
+| ich esse, du isst, er isst, wir essen, ihr esst, sie essen | ich esse, du isst, er isst, wir essen, ihr esst, sie essen |
+| ich bin, du bist, er ist, wir sind, ihr seid, sie sind | ich bin, du bist, er ist, wir sind, ihr seid, sie sind |
+
+
+
+### §9. Word Order and Syntax
+
+Details the preservation of Standard German word order patterns in Alman, maintaining both V2 in main clauses and verb-final position in subordinate clauses.
+
+
+#### §9a. Word Order
+
+The syntactic structure of sentences in Alman adheres to the conventional word order of Standard German. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).
+
+These rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with Standard German.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Ich gehe heute ins Kino. | Ich gehe heute ins Kino. |
+| Er hat gestern einen Brief geschrieben. | Er hat gestern einen Brief geschrieben. |
+| weil ich heute ins Kino gehe | weil ich heute ins Kino gehe |
+| dass er gestern einen Brief geschrieben hat | dass er gestern einen Brief geschrieben hat |
+
