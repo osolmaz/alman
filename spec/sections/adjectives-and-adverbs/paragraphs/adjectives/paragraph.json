@@ -40,6 +40,29 @@
           "alman": "der intelligente Schüler"
         }
       ]
+    },
+    {
+      "id": "nominalized-adjectives",
+      "title": "Nominalized Adjectives",
+      "description": "Nominalized adjectives, when functioning as nouns, are to be modified in the same manner as attributive adjectives. They receive the invariant **-e** ending irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms. \n\nThis rule ensures that nominalized adjectives are treated uniformly with attributive adjectives, thereby simplifying the overall adjectival system in Alman.",
+      "examples": [
+        {
+          "standard": "Das Gute im Menschen",
+          "alman": "Die Gute in die Menschen"
+        },
+        {
+          "standard": "An die Schönen (Dative, plural)",
+          "alman": "An die Schönen (-n ending kept to keep plural meaning)"
+        },
+        {
+          "standard": "Wegen des Bekanntes",
+          "alman": "Wegen die Bekannte"
+        },
+        {
+          "standard": "unter anderem",
+          "alman": "unter andere"
+        }
+      ]
     }
   ]
 }

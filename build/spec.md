@@ -280,6 +280,24 @@ Genitive constructions retain the analytical 'der' article while maintaining inv
 
 
 
+#### §4c. Nominalized Adjectives
+
+Nominalized adjectives, when functioning as nouns, are to be modified in the same manner as attributive adjectives. They receive the invariant **-e** ending irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms. 
+
+This rule ensures that nominalized adjectives are treated uniformly with attributive adjectives, thereby simplifying the overall adjectival system in Alman.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Das Gute im Menschen | Die Gute in die Menschen |
+| An die Schönen (Dative, plural) | An die Schönen (-n ending kept to keep plural meaning) |
+| Wegen des Bekanntes | Wegen die Bekannte |
+| unter anderem | unter andere |
+
+
+
 ### §5. Adverbs
 
 The Alman dialect maintains standard German's lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.
@@ -478,9 +496,9 @@ When a genitive construction is required, speakers of Alman may either adopt the
 
 
 
-## Unchanged Aspects
+## Verbs and Word Order
 
-This section outlines the grammatical features that remain identical between Standard German and Alman. While Alman introduces various simplifications in areas like gender and case marking, it deliberately preserves certain core aspects of German grammar to maintain mutual intelligibility and structural clarity. The retention of these features ensures that Alman remains recognizably German while selectively implementing reforms in other areas.
+This section describes the verbal system and syntactic structure of Alman, which maintains full fidelity to Standard German patterns. While other aspects of the grammar may be simplified, verb conjugations and word order rules remain unchanged to preserve the essential character of German syntax and ensure clear communication.
 
 
 ### §8. Verb Conjugations and Forms
