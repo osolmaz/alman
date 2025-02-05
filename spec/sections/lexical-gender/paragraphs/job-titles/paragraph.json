@@ -1,0 +1,29 @@
+{
+  "id": "job-titles",
+  "title": "Uniformity of Occupational Titles",
+  "body": "Describes the elimination of gender-specific forms in occupational titles, adopting a simplified system that uses the base form with the invariant article.",
+  "rules": [
+    {
+      "id": "occupational-titles",
+      "title": "Uniformity of Occupational Titles",
+      "description": "In Standard German, occupational titles are frequently marked for gender (e.g., *der Lehrer* versus *die Lehrerin*). In Alman, such distinctions are eliminated. All job or occupation titles are rendered without gender-specific modifications; the feminine suffix is omitted, and the masculine form is universally employed. Consequently, occupational titles are treated analogously to other nouns by employing the invariant definite article **die** and the indefinite article **ein**.\n\nThis rule ensures a uniform treatment of occupational titles, reflecting the broader commitment within Alman to reduce gender differentiation in lexical items.",
+      "examples": [
+        {
+          "standard": "der Lehrer / die Lehrerin",
+          "alman": "die Lehrer",
+          "english": "teacher"
+        },
+        {
+          "standard": "der Bäcker / die Bäckerin",
+          "alman": "die Bäcker",
+          "english": "baker"
+        },
+        {
+          "standard": "der Arzt / die Ärztin",
+          "alman": "die Arzt",
+          "english": "doctor"
+        }
+      ]
+    }
+  ]
+}

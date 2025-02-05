@@ -559,3 +559,30 @@ These rules ensure that while morphological aspects of nouns and determiners may
 | weil ich heute ins Kino gehe | weil ich heute ins Kino gehe |
 | dass er gestern einen Brief geschrieben hat | dass er gestern einen Brief geschrieben hat |
 
+
+
+## Lexical Gender Simplifications
+
+
+
+
+### §10. Uniformity of Occupational Titles
+
+Describes the elimination of gender-specific forms in occupational titles, adopting a simplified system that uses the base form with the invariant article.
+
+
+#### §10a. Uniformity of Occupational Titles
+
+In Standard German, occupational titles are frequently marked for gender (e.g., *der Lehrer* versus *die Lehrerin*). In Alman, such distinctions are eliminated. All job or occupation titles are rendered without gender-specific modifications; the feminine suffix is omitted, and the masculine form is universally employed. Consequently, occupational titles are treated analogously to other nouns by employing the invariant definite article **die** and the indefinite article **ein**.
+
+This rule ensures a uniform treatment of occupational titles, reflecting the broader commitment within Alman to reduce gender differentiation in lexical items.
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| der Lehrer / die Lehrerin | die Lehrer | teacher |
+| der Bäcker / die Bäckerin | die Bäcker | baker |
+| der Arzt / die Ärztin | die Arzt | doctor |
+
