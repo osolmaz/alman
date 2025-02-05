@@ -168,11 +168,21 @@ def main():
             output.append(paragraph.get("body", "") + "\n")
 
             # Process rules
-            for rule in paragraph.get("rules", []):
+            rules = paragraph.get("rules", [])
+            for rule in rules:
                 rule_id = rule["id"]
-                letter = numbering.get_rule_letter(para_id, rule_id)
 
-                output.append(f"\n#### §{para_num}{letter}. {rule.get('title', '')}\n")
+                # Skip rule number/letter if there's only one rule
+                if len(rules) == 1:
+                    # If rule title matches paragraph title, don't show rule title
+                    if rule.get("title") != paragraph.get("title"):
+                        output.append(f"\n#### {rule.get('title', '')}\n")
+                else:
+                    letter = numbering.get_rule_letter(para_id, rule_id)
+                    output.append(
+                        f"\n#### §{para_num}{letter}. {rule.get('title', '')}\n"
+                    )
+
                 output.append(rule.get("description", "") + "\n")
 
                 # Add examples table

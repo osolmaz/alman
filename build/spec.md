@@ -303,7 +303,7 @@ This rule ensures that nominalized adjectives are treated uniformly with attribu
 The Alman dialect maintains standard German's lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.
 
 
-#### §5a. Adverbs Stay the Same
+#### Adverbs Stay the Same
 
 Words functioning adverbially retain their base form without receiving the -e ending required for attributive adjectives. This applies to:
 - Adverbs modifying verbs
@@ -326,7 +326,7 @@ Words functioning adverbially retain their base form without receiving the -e en
 Outlines that personal pronouns retain their standard forms and case inflections but are interpreted according to natural gender. Also covers the consolidation of traditionally gendered determiners (e.g., derjenige, diese, jene) into a single unified form for non-genitive contexts.
 
 
-### §6. Personal Pronouns and Natural Gender Attribution
+### §6. Pronouns
 
 Outlines the retention of Standard German personal pronoun case forms while reorienting referential assignment to natural gender, rather than grammatical gender, preserving case distinctions for referential clarity.
 
@@ -543,7 +543,7 @@ This rule ensures consistency in the treatment of nominalized forms throughout A
 Details the preservation of Standard German word order patterns in Alman, maintaining both V2 in main clauses and verb-final position in subordinate clauses.
 
 
-#### §9a. Word Order
+#### Word Order
 
 The syntactic structure of sentences in Alman adheres to the conventional word order of Standard German. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).
 
@@ -563,15 +563,12 @@ These rules ensure that while morphological aspects of nouns and determiners may
 
 ## Lexical Gender Simplifications
 
-
+This section outlines the systematic elimination of gender-specific lexical forms in Alman, particularly focusing on occupational titles and similar role descriptions. It describes how traditionally gendered word pairs are consolidated into a single form, using the historically masculine base form with the invariant article system to denote all referents regardless of gender.
 
 
 ### §10. Uniformity of Occupational Titles
 
 Describes the elimination of gender-specific forms in occupational titles, adopting a simplified system that uses the base form with the invariant article.
-
-
-#### §10a. Uniformity of Occupational Titles
 
 In Standard German, occupational titles are frequently marked for gender (e.g., *der Lehrer* versus *die Lehrerin*). In Alman, such distinctions are eliminated. All job or occupation titles are rendered without gender-specific modifications; the feminine suffix is omitted, and the masculine form is universally employed. Consequently, occupational titles are treated analogously to other nouns by employing the invariant definite article **die** and the indefinite article **ein**.
 
