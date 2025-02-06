@@ -1,0 +1,10 @@
+{
+  "id": "nouns",
+  "title": "Nouns",
+  "body": "Describes the removal of grammatical gender and all case-based noun endings. Specifies that nouns maintain a single form for nominative, accusative, and dative cases, with a distinct form (\"der\") for genitive, and explains how plural forms are preserved without additional case-specific modifications.",
+  "paragraphs": [
+    {
+      "id": "noun-morphology"
+    }
+  ]
+}

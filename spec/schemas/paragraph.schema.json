@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["id", "title", "body", "ruleFiles"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Slugified identifier for the paragraph"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the paragraph"
+    },
+    "body": {
+      "type": "string",
+      "description": "Description or content of the paragraph"
+    },
+    "ruleFiles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^sections/[a-z0-9-]+/paragraphs/[a-z0-9-]+/[a-z0-9-]+\\.json$",
+        "description": "Path to a rule file"
+      }
+    }
+  }
+} 

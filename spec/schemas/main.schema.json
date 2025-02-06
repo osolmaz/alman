@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["documentTitle", "documentVersion", "lastUpdated", "sections"],
+  "properties": {
+    "documentTitle": {
+      "type": "string",
+      "description": "The title of the Alman grammar rules document"
+    },
+    "documentVersion": {
+      "type": "string",
+      "pattern": "^v?\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the document"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of last update in YYYY-MM-DD format"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "description": "Slugified identifier for the section"
+          }
+        }
+      }
+    }
+  }
+}

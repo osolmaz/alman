@@ -1,0 +1,56 @@
+{
+  "id": "indefinite-articles",
+  "title": "Indefinite Article Simplification",
+  "body": "The <alman /> dialect regularizes indefinite article usage through morphological simplification, eliminating case and gender distinctions present in <sd /> while maintaining semantic clarity through prepositional constructions.",
+  "rules": [
+    {
+      "id": "non-genitive-forms",
+      "title": "Unified 'ein' for Non-Genitive Cases",
+      "description": "The invariant form **ein** replaces all nominative, accusative, and dative indefinite articles (ein/eine/einen/einem), neutralizing gender and case distinctions.",
+      "examples": [
+        {
+          "standard": "ein Mann (Nominative)",
+          "alman": "ein Mann"
+        },
+        {
+          "standard": "eine Frau (Nominative)",
+          "alman": "ein Frau"
+        },
+        {
+          "standard": "einen Hund (Accusative)",
+          "alman": "ein Hund"
+        },
+        {
+          "standard": "einem Kind (Dative)",
+          "alman": "ein Kind"
+        }
+      ]
+    },
+    {
+      "id": "genitive-constructions",
+      "title": "Genitive Case",
+      "description": "Indefinite genitive constructions employ either:\n1. Prepositional phrase **von ein** + Noun\n2. Only **ein**, depending on the context, e.g. when used with a genitive prepositions such as **wegen**, **trotz**, **statt**, **innerhalb** and so on.\n\nThe periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.\n\nThis systematizes existing colloquial patterns that use prepositional phrases with dative forms, while replacing them with the invariant **ein**.",
+      "examples": [
+        {
+          "standard": "das Buch eines Freundes",
+          "alman": "die Buch von ein Freund"
+        },
+        {
+          "standard": "wegen eines Problems",
+          "alman": "wegen ein Problem"
+        }
+      ]
+    },
+    {
+      "id": "nominalized-usage",
+      "title": "Nominalized Articles",
+      "description": "The **ein** form persists in nominalized constructions where the article functions independently without a subsequent noun.",
+      "examples": [
+        {
+          "standard": "Diese Erfindung war eine der wichtigsten Leistungen des 20. Jahrhunderts.",
+          "alman": "Diese Erfindung war ein der wichtigsten Leistungen der 20. Jahrhundert."
+        }
+      ]
+    }
+  ]
+}

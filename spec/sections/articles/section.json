@@ -1,0 +1,13 @@
+{
+  "id": "articles",
+  "title": "Articles",
+  "body": "Details the treatment of definite and indefinite articles. Explains that all non-genitive forms use \"die\" (and \"ein\" for indefinite), while genitive forms use \"der\" (or \"von ein\" for indefinites). Also covers exceptions for demonstrative \"das\" and the use of \"von die\" to indicate possession, as well as guidelines for uncontracting phrases.",
+  "paragraphs": [
+    {
+      "id": "definite-articles"
+    },
+    {
+      "id": "indefinite-articles"
+    }
+  ]
+}

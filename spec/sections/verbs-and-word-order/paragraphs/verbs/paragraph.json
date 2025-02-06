@@ -1,0 +1,45 @@
+{
+  "id": "verbs",
+  "title": "Verb Conjugations and Forms",
+  "body": "Details the retention of Standard German verb conjugation patterns in Alman, preserving both regular and irregular forms.",
+  "rules": [
+    {
+      "id": "verb-conjugations",
+      "title": "Verb Conjugations",
+      "description": "The Alman dialect retains the full complexity of Standard German verb conjugations. Both regular and irregular verb forms remain unaltered, and no further simplification or regularization is introduced. All conjugated forms are used exactly as in Standard German.",
+      "examples": [
+        {
+          "standard": "ich gehe, du gehst, er geht, wir gehen, ihr geht, sie gehen",
+          "alman": "ich gehe, du gehst, er geht, wir gehen, ihr geht, sie gehen"
+        },
+        {
+          "standard": "ich esse, du isst, er isst, wir essen, ihr esst, sie essen",
+          "alman": "ich esse, du isst, er isst, wir essen, ihr esst, sie essen"
+        },
+        {
+          "standard": "ich bin, du bist, er ist, wir sind, ihr seid, sie sind",
+          "alman": "ich bin, du bist, er ist, wir sind, ihr seid, sie sind"
+        }
+      ]
+    },
+    {
+      "id": "nominalized-verbs",
+      "title": "Nominalized Verbs",
+      "description": "In Standard German, nominalized verbs are assigned neuter gender. In Alman, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.\n\nThis rule ensures consistency in the treatment of nominalized forms throughout Alman, aligning them with the broader system of gender collapsing.",
+      "examples": [
+        {
+          "standard": "Das Lernen fällt mir leicht.",
+          "alman": "Die Lernen fällt mir leicht."
+        },
+        {
+          "standard": "Ich finde das Lernen spannend.",
+          "alman": "Ich finde die Lernen spannend."
+        },
+        {
+          "standard": "Ich gehe in die Bibliothek zum Lernen.",
+          "alman": "Ich gehe in die Bibliothek zum Lernen."
+        }
+      ]
+    }
+  ]
+}

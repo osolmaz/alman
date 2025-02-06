@@ -1,0 +1,160 @@
+{
+  "id": "pronouns",
+  "title": "Pronouns",
+  "body": "Outlines the retention of Standard German personal pronoun case forms while reorienting referential assignment to natural gender, rather than grammatical gender, preserving case distinctions for referential clarity.",
+  "rules": [
+    {
+      "id": "natural-gender-attribution",
+      "title": "Personal Pronouns: Natural Gender Attribution",
+      "description": "Personal pronouns maintain their Standard German case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender",
+      "examples": [
+        {
+          "standard": "Sie ist Ärztin. (die Frau, f.)",
+          "alman": "Sie ist Ärztin.",
+          "english": "She is a doctor."
+        },
+        {
+          "standard": "Er ist Lehrer. (der Mann, m.)",
+          "alman": "Er ist Lehrer.",
+          "english": "He is a teacher."
+        },
+        {
+          "standard": "Es ist klug. (das Mädchen, n.)",
+          "alman": "Sie ist klug.",
+          "english": "She is clever."
+        },
+        {
+          "standard": "Es ist neu. (das Buch, n.)",
+          "alman": "Es ist neu.",
+          "english": "It is new."
+        }
+      ]
+    },
+    {
+      "id": "case-inflection-retention",
+      "title": "Case Inflection Retention",
+      "description": "Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with Standard German forms, in order to preserve mutual intelligibility.\n\n| Person       | Nominative | Accusative | Dative |\n|--------------|------------|------------|--------|\n| 1st Singular | ich        | mich       | mir    |\n| 2nd Singular | du         | dich       | dir    |\n| 3rd Masc.    | er         | ihn        | ihm    |\n| 3rd Fem.     | sie        | sie        | ihr    |\n| 3rd Neut.    | es         | es         | ihm    |\n| 1st Plural   | wir        | uns        | uns    |\n| 2nd Plural   | ihr        | euch       | euch   |\n| 3rd Plural   | sie        | sie        | ihnen  |",
+      "examples": [
+        {
+          "standard": "Ich sehe ihn. (den Mann)",
+          "alman": "Ich sehe ihn.",
+          "english": "I see him."
+        },
+        {
+          "standard": "Sie gibt ihr das Buch.",
+          "alman": "Sie gibt ihr das Buch.",
+          "english": "She gives her the book."
+        }
+      ]
+    },
+    {
+      "id": "gender-neutral-referents",
+      "title": "Gender-Neutral Referents",
+      "description": "For entities without natural gender (objects, abstract concepts, collectives):\n- **es** serves as the default singular pronoun\n- **sie** (3rd plural) for mixed/unspecified gender referents\n- Retains Standard German plural pronoun forms",
+      "examples": [
+        {
+          "standard": "Der Computer? Er ist kaputt.",
+          "alman": "Die Computer? Es ist kaputt.",
+          "english": "The computer? It is broken."
+        },
+        {
+          "standard": "Die Universität? Sie ist groß.",
+          "alman": "Die Universität? Es ist groß.",
+          "english": "The university? It is large."
+        },
+        {
+          "standard": "Ich kaufe das Auto, weil es günstig ist.",
+          "alman": "Ich kaufe die Auto, weil es günstig ist.",
+          "english": "I buy the car because it is affordable."
+        },
+        {
+          "standard": "Die Leute sind hier. Sie sind müde.",
+          "alman": "Die Leute sind hier. Sie sind müde.",
+          "english": "The people are here. They are tired."
+        }
+      ]
+    },
+    {
+      "id": "reflexive-pronouns",
+      "title": "Reflexive Pronouns",
+      "description": "Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents.",
+      "examples": [
+        {
+          "standard": "Er wäscht sich.",
+          "alman": "Er wäscht sich.",
+          "english": "He washes himself."
+        },
+        {
+          "standard": "Sie hilft sich.",
+          "alman": "Sie hilft sich.",
+          "english": "She helps herself."
+        },
+        {
+          "standard": "Es öffnet sich.",
+          "alman": "Es öffnet sich.",
+          "english": "It opens itself."
+        }
+      ]
+    },
+    {
+      "id": "possessive-pronouns",
+      "title": "Possessive Pronouns",
+      "description": "Possessive pronouns retain their case forms but align with natural gender attribution of their referents.",
+      "examples": [
+        {
+          "standard": "Sein Buch (des Mannes)",
+          "alman": "Sein Buch",
+          "english": "His book"
+        },
+        {
+          "standard": "Ihr Buch (der Frau)",
+          "alman": "Ihr Buch",
+          "english": "Her book"
+        },
+        {
+          "standard": "Sein Buch (des Tisches)",
+          "alman": "Sein Buch",
+          "english": "Its book"
+        }
+      ]
+    },
+    {
+      "id": "interrogative-pronouns",
+      "title": "Retention of Standard Interrogative Pronouns",
+      "description": "The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their standard German forms without modification. These pronouns function as in Standard German in all contexts.",
+      "examples": [
+        {
+          "standard": "Wer bist du?",
+          "alman": "Wer bist du?"
+        },
+        {
+          "standard": "Was möchtest du essen?",
+          "alman": "Was möchtest du essen?"
+        },
+        {
+          "standard": "Wen siehst du?",
+          "alman": "Wen siehst du?"
+        }
+      ]
+    },
+    {
+      "id": "prepositional-interrogatives",
+      "title": "Preferred Use of Prepositional Interrogative Constructions",
+      "description": "In interrogative constructions involving prepositions, the Alman dialect favors the use of an uncontracted preposition preceding **was** rather than employing the compound forms. Thus, constructions such as **zu was, von was, mit was, über was, durch was**, and similar variants, are preferred over the corresponding *wo-* forms. This mirrors the usage of preposition + *what* in in English, like *to what*, *from what*, and so on.",
+      "examples": [
+        {
+          "standard": "Womit hilfst du mir?",
+          "alman": "Mit was hilfst du mir?"
+        },
+        {
+          "standard": "Wovon träumst du?",
+          "alman": "Von was träumst du?"
+        },
+        {
+          "standard": "Worüber freust du dich?",
+          "alman": "Über was freust du dich?"
+        }
+      ]
+    }
+  ]
+}

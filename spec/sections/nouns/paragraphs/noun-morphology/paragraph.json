@@ -1,0 +1,83 @@
+{
+  "id": "noun-morphology",
+  "title": "Noun Morphology Simplification",
+  "body": "The <alman /> dialect systematically eliminates grammatical gender distinctions and case-based noun inflections through morphological regularization. Nouns maintain a single invariant form across nominative, accusative, and dative cases, with genitive constructions employing a distinct analytical marker. Plural forms preserve their standard nominative/accusative morphology across all syntactic contexts.",
+  "rules": [
+    {
+      "id": "case-neutralization",
+      "title": "Case Ending Elimination",
+      "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers (des Mannes → der Mann)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns",
+      "examples": [
+        {
+          "standard": "des Hundes (Genitive)",
+          "alman": "der Hund"
+        },
+        {
+          "standard": "den Frauen (Dative Plural)",
+          "alman": "die Frauen"
+        },
+        {
+          "standard": "dem Kinde (Dative, archaic)",
+          "alman": "die Kind"
+        }
+      ]
+    },
+    {
+      "id": "plural-uniformity",
+      "title": "Invariant Plural Forms",
+      "description": "Standard nominative/accusative plural forms serve as universal plural markers, remaining unchanged in dative and genitive contexts. This preserves recognizable plural morphology while eliminating case-based modifications.",
+      "examples": [
+        {
+          "standard": "mit den Kindern (Dative Plural)",
+          "alman": "mit die Kinder"
+        },
+        {
+          "standard": "wegen der Brände (Genitive Plural)",
+          "alman": "wegen die Brände"
+        }
+      ]
+    },
+    {
+      "id": "no-plural-morphology-regularization",
+      "title": "No Regularization of Plural Morphology",
+      "description": "Alman preserves standard German plural morphology without systematic regularization, maintaining existing plural forms in all non-conflicting contexts. The dialect only intervenes in plural formation when its grammatical simplifications create morphological ambiguity between singular and plural forms, as described in the next rule.",
+      "examples": [
+        {
+          "standard": "die Blumen (plural)",
+          "alman": "die Blumen"
+        },
+        {
+          "standard": "die Hunde (plural)",
+          "alman": "die Hunde"
+        },
+        {
+          "standard": "die Bücher (plural)",
+          "alman": "die Bücher"
+        },
+        {
+          "standard": "die Autos (plural)",
+          "alman": "die Autos"
+        }
+      ]
+    },
+    {
+      "id": "optional-plural-marking",
+      "title": "Optional Plural Disambiguation",
+      "description": "To resolve potential ambiguity in nouns with identical singular/plural forms, Alman permits optional plural marking through suffixation. When clarity requires explicit plurality indication, speakers may employ either:\n- The native German -n plural suffix\n- The international -s suffix\n\nThis disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential. Suffix choice follows speaker preference and lexical convention.",
+      "examples": [
+        {
+          "standard": "die Computer (plural)",
+          "alman": "die Computers/die Computern"
+        },
+        {
+          "standard": "der Sessel (singular)/die Sessel (plural)",
+          "alman": "die Sessel (singular)/die Sesseln/die Sessels (plural)"
+        },
+        {
+          "standard": "die Mädchen (plural)",
+          "alman": "die Mädchens"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "word-order",
+  "title": "Word Order and Syntax",
+  "body": "Details the preservation of Standard German word order patterns in Alman, maintaining both V2 in main clauses and verb-final position in subordinate clauses.",
+  "rules": [
+    {
+      "id": "word-order-rules",
+      "title": "Word Order",
+      "description": "The syntactic structure of sentences in Alman adheres to the conventional word order of Standard German. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).\n\nThese rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with Standard German.",
+      "examples": [
+        {
+          "standard": "Ich gehe heute ins Kino.",
+          "alman": "Ich gehe heute ins Kino."
+        },
+        {
+          "standard": "Er hat gestern einen Brief geschrieben.",
+          "alman": "Er hat gestern einen Brief geschrieben."
+        },
+        {
+          "standard": "weil ich heute ins Kino gehe",
+          "alman": "weil ich heute ins Kino gehe"
+        },
+        {
+          "standard": "dass er gestern einen Brief geschrieben hat",
+          "alman": "dass er gestern einen Brief geschrieben hat"
+        }
+      ]
+    }
+  ]
+}

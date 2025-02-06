@@ -1,0 +1,68 @@
+{
+  "id": "adjectives",
+  "title": "Adjectival Ending Regularization",
+  "body": "The <alman /> dialect mandates uniform morphological patterns for attributive adjectives, systematically eliminating case- and gender-based declensional variation while maintaining syntactic agreement through invariant forms.",
+  "rules": [
+    {
+      "id": "morphological-regularization",
+      "title": "Invariant -e Ending",
+      "description": "All attributive adjectives preceding nouns receive an -e ending, regardless of:\n- Grammatical gender (masculine/feminine/neuter)\n- Number (singular/plural)\n- Case (nominative/accusative/dative)\n\nThis replaces standard German's case-specific endings (-r/-s/-m/-n) with a single invariant form.",
+      "examples": [
+        {
+          "standard": "guter Mann (Masculine Nominative)",
+          "alman": "gute Mann"
+        },
+        {
+          "standard": "eine schöne Blume (Feminine Accusative)",
+          "alman": "ein schöne Blume"
+        },
+        {
+          "standard": "dem kleinen Kind (Neutral Dative)",
+          "alman": "die kleine Kind"
+        },
+        {
+          "standard": "die roten Schuhe (Plural)",
+          "alman": "die rote Schuhe"
+        }
+      ]
+    },
+    {
+      "id": "genitive-consistency",
+      "title": "Genitive Construction Handling",
+      "description": "Genitive constructions retain the analytical 'der' article while maintaining invariant adjectival -e endings, preserving morphological regularity across all cases.",
+      "examples": [
+        {
+          "standard": "des guten Mannes",
+          "alman": "der gute Mann"
+        },
+        {
+          "standard": "der intelligenten Schüler",
+          "alman": "der intelligente Schüler"
+        }
+      ]
+    },
+    {
+      "id": "nominalized-adjectives",
+      "title": "Nominalized Adjectives",
+      "description": "Nominalized adjectives, when functioning as nouns, are to be modified in the same manner as attributive adjectives. They receive the invariant **-e** ending irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms. \n\nThis rule ensures that nominalized adjectives are treated uniformly with attributive adjectives, thereby simplifying the overall adjectival system in Alman.",
+      "examples": [
+        {
+          "standard": "Das Gute im Menschen",
+          "alman": "Die Gute in die Menschen"
+        },
+        {
+          "standard": "An die Schönen (Dative, plural)",
+          "alman": "An die Schönen (-n ending kept to keep plural meaning)"
+        },
+        {
+          "standard": "Wegen des Bekanntes",
+          "alman": "Wegen die Bekannte"
+        },
+        {
+          "standard": "unter anderem",
+          "alman": "unter andere"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "documentTitle": "Alman: A Simplified Dialect of the German Language",
+  "documentVersion": "0.4.0",
+  "lastUpdated": "2025-02-06",
+  "sections": [
+    {
+      "id": "introduction"
+    },
+    {
+      "id": "articles"
+    },
+    {
+      "id": "nouns"
+    },
+    {
+      "id": "adjectives-and-adverbs"
+    },
+    {
+      "id": "pronouns-and-determiners"
+    },
+    {
+      "id": "verbs-and-word-order"
+    },
+    {
+      "id": "lexical-gender"
+    }
+  ]
+}
