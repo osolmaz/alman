@@ -7,7 +7,13 @@
 
 ## Introduction
 
-Provides background on Alman's purpose, summarizes its core changes from Standard German, and explains the overall goal of simplifying grammar for easier learning and mutual intelligibility.
+The noun gender system of the German language, colloquially referred to as “der/die/das,” is notoriously difficult for those who learn German as an additional language (L2). We advocate that correct usage of noun genders is not crucial for most L2 learners in order to function in German society. To this end, we construct a dialect, called **Alman**, that unifies the masculine, feminine, and neuter genders into a single category and eliminates gender- and case-specific inflections. The resulting gender loss is akin to that experienced by English during the Middle English period. We present a formal description of Alman grammar and discuss its implications for L2 learners.
+
+The concept of **Alman** stems from the recognition that linguistic complexity—especially in morphological systems like noun gender—can slow down language acquisition and impede functional fluency. Studies on language economics have shown that higher grammatical complexity often comes with real-world costs, including delayed workforce integration and diminished productivity for migrants. By removing the necessity to memorize or deploy multiple gender markers, Alman seeks to mitigate these challenges without compromising the fundamental structure of German syntax and vocabulary.
+
+Beyond its practical benefits for newcomers, Alman remains mutually intelligible with Standard German. The dialect is designed to preserve essential word order (verb-second in main clauses and verb-final in subordinate clauses), retain well-known verb conjugations, and maintain overall lexical clarity. Rather than overhauling the entire grammar, it strategically reduces complexity where it matters most—namely in article usage, noun inflection, and adjective endings—allowing L2 learners to communicate more confidently at an earlier stage.
+
+This specification provides a formal account of Alman grammar, detailing the rules for article simplification, noun morphology, adjectival endings, and other core linguistic elements. By illustrating these changes with numerous examples, we aim to offer both instructors and learners a clear roadmap for adopting this streamlined dialect. The aspiration is not to replace Standard German but to introduce an accessible variant that addresses persistent pain points for adult learners, ultimately fostering more inclusive and efficient language acquisition.
 
 
 ## Articles
