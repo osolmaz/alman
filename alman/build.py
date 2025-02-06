@@ -124,6 +124,7 @@ def main():
 
     numbering = NumberingSystem()
     output = []
+    toc = []
 
     # Load main document
     main_doc = load_json(SPEC_DIR / "main.json")
@@ -131,8 +132,75 @@ def main():
     output.append(f"**Version**: {main_doc.get('documentVersion', '')}  \n")
     output.append(f"**Last Updated**: {main_doc.get('lastUpdated', '')}\n")
 
-    # Process sections
-    for section_ref in main_doc.get("sections", []):
+    # Collect all sections for TOC
+    all_sections = main_doc.get("sections", [])
+    for section_ref in all_sections:
+        section_id = section_ref["id"]
+        section_path = SPEC_DIR / "sections" / section_id / "section.json"
+        section = load_json(section_path)
+
+        if section:
+            # Start section list item
+            section_item = [
+                f'<li><a href="#{section_id}">{section.get("title", "")}</a>'
+            ]
+            para_items = []
+
+            # Process paragraphs
+            for para_ref in section.get("paragraphs", []):
+                para_id = para_ref["id"]
+                para_path = (
+                    SPEC_DIR
+                    / "sections"
+                    / section_id
+                    / "paragraphs"
+                    / para_id
+                    / "paragraph.json"
+                )
+                paragraph = load_json(para_path)
+
+                if paragraph:
+                    para_num = numbering.get_paragraph_number(para_id)
+                    para_items.append(
+                        f'<li><a href="#{para_id}">§{para_num} {paragraph.get("title", "")}</a></li>'
+                    )
+
+            # Add paragraphs if any
+            if para_items:
+                section_item.append(
+                    '<ul style="list-style: none; padding-left: 20px; margin-left: 0;">\n'
+                    + "\n".join(para_items)
+                    + "\n</ul>"
+                )
+
+            section_item.append("</li>")
+            toc.append("\n".join(section_item))
+
+    # Process Introduction first
+    if all_sections:
+        intro_ref = all_sections[0]
+        section_id = intro_ref["id"]
+        section_path = SPEC_DIR / "sections" / section_id / "section.json"
+        section = load_json(section_path)
+
+        if section:
+            output.append(f"\n## {section.get('title', '')} {{#{section_id}}}\n")
+            output.append(section.get("body", "") + "\n")
+
+    # Add TOC after Introduction
+    output.append("\n## Table of Contents\n")
+    output.append("""<div class="toc-container" style="
+        list-style: none;
+        padding-left: 0;
+        margin-left: 0;
+    ">\n""")
+    output.append('<ul style="list-style: none; padding-left: 0; margin-left: 0;">\n')
+    output.append("\n".join(toc))
+    output.append("</ul>\n")
+    output.append("</div>\n")
+
+    # Process remaining sections
+    for section_ref in all_sections[1:]:
         section_id = section_ref["id"]
         section_path = SPEC_DIR / "sections" / section_id / "section.json"
         section = load_json(section_path)
@@ -140,10 +208,7 @@ def main():
         if not section:
             continue
 
-        # Get section number
-        # section_num = numbering.get_section_number(section_id)
-        # output.append(f"\n## {section_num}. {section.get('title', '')}\n")
-        output.append(f"\n## {section.get('title', '')}\n")
+        output.append(f"\n## {section.get('title', '')} {{#{section_id}}}\n")
         output.append(section.get("body", "") + "\n")
 
         # Process paragraphs
@@ -164,7 +229,9 @@ def main():
 
             # Get global paragraph number
             para_num = numbering.get_paragraph_number(para_id)
-            output.append(f"\n### §{para_num}. {paragraph.get('title', '')}\n")
+            output.append(
+                f"\n### §{para_num}. {paragraph.get('title', '')} {{#{para_id}}}\n"
+            )
             output.append(paragraph.get("body", "") + "\n")
 
             # Process rules
@@ -198,8 +265,8 @@ def main():
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         final_md = "\n".join(output)
-        final_md = final_md.replace("<alman />", "Alman").replace(
-            "<sd />", "Standard German"
+        final_md = final_md.replace("<alman />", "**Alman**").replace(
+            "<sd />", "**Standard German**"
         )
         f.write(final_md)
 
