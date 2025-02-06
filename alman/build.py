@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 SPEC_DIR = Path("spec")
-OUTPUT_FILE = Path("build/spec.md")
+OUTPUT_FILE = Path("_includes/spec.md")
 
 
 def load_json(path: Path) -> dict:

@@ -10,3 +10,4 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+build/spec.md

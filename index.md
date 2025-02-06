@@ -3,7 +3,7 @@ layout: home
 title: Specification
 ---
 
-{% include_relative build/spec.md %}
+{% include spec.md %}
 
 ---
 
