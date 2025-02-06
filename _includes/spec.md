@@ -141,7 +141,7 @@ While interchangeable, 'der' should be retained when translating original geniti
 |------------------|-------|
 | das Haus des Mannes | die Haus der Mann / die Haus von die Mann |
 | die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |
-| wegen des Wetters | wegen der Wetter / wegen von die Wetter |
+| wegen des Wetters | wegen der Wetter / wegen die Wetter |
 
 
 
@@ -198,7 +198,7 @@ This systematizes existing colloquial patterns that use prepositional phrases wi
 | Standard German | Alman |
 |------------------|-------|
 | das Buch eines Freundes | die Buch von ein Freund |
-| wegen eines Problems | wegen ein Problem / wegen von ein Problem |
+| wegen eines Problems | wegen ein Problem |
 
 
 
@@ -253,7 +253,7 @@ Standard nominative/accusative plural forms serve as universal plural markers, r
 | Standard German | Alman |
 |------------------|-------|
 | mit den Kindern (Dative Plural) | mit die Kinder |
-| wegen der Brände (Genitive Plural) | wegen der Brände / wegen von die Brände |
+| wegen der Brände (Genitive Plural) | wegen der Brände / wegen die Brände |
 
 
 
@@ -350,7 +350,7 @@ This rule ensures that nominalized adjectives are treated uniformly with attribu
 |------------------|-------|
 | Das Gute im Menschen | Die Gute in die Menschen |
 | An die Schönen (Dative, plural) | An die Schönen (-n ending kept to keep plural meaning) |
-| Wegen des Bekanntes | Wegen der Bekannte / Wegen von die Bekannte |
+| Wegen des Bekanntes | Wegen der Bekannte / Wegen die Bekannte |
 | unter anderem | unter andere |
 
 
