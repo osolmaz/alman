@@ -1,0 +1,10 @@
+title: Alman
+description: A simplified German dialect
+baseurl: ""
+url: "https://alman.ai"
+
+# Build settings
+markdown: kramdown
+theme: minima
+plugins:
+  - jekyll-feed

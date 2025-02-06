@@ -4,3 +4,9 @@ __pycache__/
 *.pyd
 *.pyw
 *.pyz
+
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
