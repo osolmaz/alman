@@ -20,12 +20,19 @@ While Alman reduces grammatical complexity, it preserves:
 
 This makes Alman easier to learn while remaining fully comprehensible to Standard German speakers.
 
-## Project Goals
+## Goals
 
-1. Reduce learning barriers for German language acquisition
-2. Maintain full mutual intelligibility with Standard German
-3. Preserve the essential character of German syntax
-4. Systematically simplify grammar without loss of expressiveness
+The main goal of this project is to enshrine and formalize a German dialect that is as easy to learn as English or Spanish, and to eventually get it recognized by the German state.
+
+We are developing under the following constraints:
+
+- Maintain full mutual intelligibility with Standard German
+- Preserve the essential character of German syntax
+- Systematically simplify grammar without loss of expressiveness
+
+## Language of this website
+
+The specification and related documentation are primarily written in English, because the target audience is non-native speakers of German. German and Alman versions of the specification are currently under development.
 
 ---
 

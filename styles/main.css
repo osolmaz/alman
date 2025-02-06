@@ -1,0 +1,109 @@
+/* Import Merriweather font from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap");
+
+/* Add local Helvetica Neue fonts */
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/assets/fonts/helvetica-neue/HelveticaNeueRoman.otf")
+    format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/assets/fonts/helvetica-neue/HelveticaNeueItalic.ttf")
+    format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/assets/fonts/helvetica-neue/HelveticaNeueBold.otf")
+    format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/assets/fonts/helvetica-neue/HelveticaNeueBoldItalic.otf")
+    format("opentype");
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/assets/fonts/helvetica-neue/HelveticaNeueLight.otf")
+    format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/assets/fonts/helvetica-neue/HelveticaNeueLightItalic.otf")
+    format("opentype");
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/assets/fonts/helvetica-neue/HelveticaNeueMedium.otf")
+    format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("/assets/fonts/helvetica-neue/HelveticaNeueMediumItalic.otf")
+    format("opentype");
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* Override font family while keeping other styles */
+body {
+  font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  font-size: 20px;
+  /* font-weight: 300; */
+  /* line-height: 1.8; */
+}
+
+/* Make site title bolder */
+.site-title {
+  font-family: "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+  /* font-size: 2em; */
+  font-weight: 500; /* Using the Medium weight we defined */
+}
+
+/* Use normal weight (400) for headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Merriweather", serif;
+  font-weight: 700;
+  /* line-height: 1.4; */
+}
+
+/* Specific heading sizes */
+/* h1 { font-size: 2.5em; }
+h2 { font-size: 2em; }
+h3 { font-size: 1.5em; }
+h4 { font-size: 1.25em; } */
+
+/* Use normal weight for strong and b elements */
+strong,
+b {
+  font-weight: 900;
+}
+

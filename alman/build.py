@@ -198,8 +198,8 @@ def main():
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         final_md = "\n".join(output)
-        final_md = final_md.replace("<alman />", "Alman").replace(
-            "<sd />", "Standard German"
+        final_md = final_md.replace("<alman />", "**Alman**").replace(
+            "<sd />", "**Standard German**"
         )
         f.write(final_md)
 

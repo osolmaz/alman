@@ -7,13 +7,13 @@
 
 ## Introduction
 
-The noun gender system of the German language, colloquially referred to as “der/die/das,” is notoriously difficult for those who learn German as an additional language (L2). We advocate that correct usage of noun genders is not crucial for most L2 learners in order to function in German society. To this end, we construct a dialect, called **Alman**, that unifies the masculine, feminine, and neuter genders into a single category and eliminates gender- and case-specific inflections. The resulting gender loss is akin to that experienced by English during the Middle English period. We present a formal description of Alman grammar.
+The noun gender system of the German language, colloquially referred to as “der/die/das,” is notoriously difficult for those who learn German as an additional language (L2). We advocate that correct usage of noun genders is not crucial for most L2 learners in order to function in the German society. To this end, we construct a dialect, called **Alman**, that unifies the masculine, feminine, and neuter genders into a single category and eliminates gender- and case-specific inflections. The resulting gender loss is akin to that experienced by English during the Middle English period. We present a formal description of **Alman** grammar.
 
-The concept of **Alman** stems from the recognition that linguistic complexity—especially in morphological systems like noun gender—can slow down language acquisition and impede functional fluency. Studies on language economics have shown that higher grammatical complexity often comes with real-world costs, including delayed workforce integration and diminished productivity for migrants. By removing the necessity to memorize or deploy multiple gender markers, Alman seeks to mitigate these challenges without compromising the fundamental structure of German syntax and vocabulary.
+The idea of **Alman** came out of the recognition that language complexity—especially in morphological systems like noun gender—can slow down language learning and hinder a foreigner's integration into the society. We claim that higher grammatical complexity comes with real-world costs, including delayed workforce integration and diminished productivity for migrants. By removing the necessity to memorize or deploy multiple gender markers, **Alman** seeks to mitigate these challenges without compromising the fundamental structure of German syntax and vocabulary.
 
-Beyond its practical benefits for newcomers, Alman remains mutually intelligible with Standard German. The dialect is designed to preserve essential word order (verb-second in main clauses and verb-final in subordinate clauses), retain well-known verb conjugations, and maintain overall lexical clarity. Rather than overhauling the entire grammar, it strategically reduces complexity where it matters most—namely in article usage, noun inflection, and adjective endings—allowing L2 learners to communicate more confidently at an earlier stage.
+Beyond its practical benefits for newcomers, **Alman** remains mutually intelligible with **Standard German**. The dialect is designed to preserve essential word order (verb-second in main clauses and verb-final in subordinate clauses), retain well-known verb conjugations, and maintain overall lexical clarity. Rather than overhauling the entire grammar, it strategically reduces complexity where it matters most—namely in article usage, noun inflection, and adjective endings—allowing L2 learners to communicate more confidently at an earlier stage.
 
-This specification provides a formal account of Alman grammar, detailing the rules for article simplification, noun morphology, adjectival endings, and other core linguistic elements. By illustrating these changes with numerous examples, we aim to offer both instructors and learners a clear roadmap for adopting this streamlined dialect. The aspiration is not to replace Standard German but to introduce an accessible variant that addresses persistent pain points for adult learners, ultimately fostering more inclusive and efficient language acquisition.
+This specification provides a formal account of **Alman** grammar, detailing the rules for article simplification, noun morphology, adjectival endings, and other core linguistic elements. By illustrating these changes with numerous examples, we aim to offer both instructors and learners a clear roadmap for adopting this dialect. The goal is not to replace **Standard German** but to introduce an accessible version that addresses pain points for adult learners, ultimately fostering a more inclusive and efficient language learning.
 
 
 ## Articles
@@ -23,7 +23,7 @@ Details the treatment of definite and indefinite articles. Explains that all non
 
 ### §1. Definite Article Simplification
 
-The Alman dialect systematically replaces the six case-inflected definite article forms of Standard German through morphological regularization, employing invariant forms for non-genitive and genitive cases while eliminating case-specific noun endings. All surface realizations of definite articles in non-genitive contexts (regardless of grammatical gender, number, or case) are replaced by **die**. Genitive contexts exclusively employ **der**, accompanied by elimination of genitive noun inflections.
+The **Alman** dialect systematically replaces the six case-inflected definite article forms of **Standard German** through morphological regularization, employing invariant forms for non-genitive and genitive cases while eliminating case-specific noun endings. All surface realizations of definite articles in non-genitive contexts (regardless of grammatical gender, number, or case) are replaced by **die**. Genitive contexts exclusively employ **der**, accompanied by elimination of genitive noun inflections.
 
 
 #### §1a. Invariant 'die' for Non-Genitive Cases
@@ -90,13 +90,13 @@ While interchangeable, 'der' should be retained when translating original geniti
 |------------------|-------|
 | das Haus des Mannes | die Haus der Mann / die Haus von die Mann |
 | die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |
-| wegen des Wetters | wegen der Wetter / wegen die Wetter |
+| wegen des Wetters | wegen der Wetter / wegen von die Wetter |
 
 
 
 #### §1e. Contraction Resolution
 
-Preposition-article contractions (e.g., vom, im, zur) must be resolved to their full form prior to applying article replacement rules. The uncontracted preposition and article are then processed according to standard Alman article rules.
+Preposition-article contractions (e.g., vom, im, zur) must be resolved to their full form prior to applying article replacement rules. The uncontracted preposition and article are then processed according to standard **Alman** article rules.
 
 
 **Examples:**
@@ -112,7 +112,7 @@ Preposition-article contractions (e.g., vom, im, zur) must be resolved to their 
 
 ### §2. Indefinite Article Simplification
 
-The Alman dialect regularizes indefinite article usage through morphological simplification, eliminating case and gender distinctions present in Standard German while maintaining semantic clarity through prepositional constructions.
+The **Alman** dialect regularizes indefinite article usage through morphological simplification, eliminating case and gender distinctions present in **Standard German** while maintaining semantic clarity through prepositional constructions.
 
 
 #### §2a. Unified 'ein' for Non-Genitive Cases
@@ -171,7 +171,7 @@ Describes the removal of grammatical gender and all case-based noun endings. Spe
 
 ### §3. Noun Morphology Simplification
 
-The Alman dialect systematically eliminates grammatical gender distinctions and case-based noun inflections through morphological regularization. Nouns maintain a single invariant form across nominative, accusative, and dative cases, with genitive constructions employing a distinct analytical marker. Plural forms preserve their standard nominative/accusative morphology across all syntactic contexts.
+The **Alman** dialect systematically eliminates grammatical gender distinctions and case-based noun inflections through morphological regularization. Nouns maintain a single invariant form across nominative, accusative, and dative cases, with genitive constructions employing a distinct analytical marker. Plural forms preserve their standard nominative/accusative morphology across all syntactic contexts.
 
 
 #### §3a. Case Ending Elimination
@@ -248,7 +248,7 @@ Explains that adjectives preceding a noun always end in -e, eliminating the trad
 
 ### §4. Adjectival Ending Regularization
 
-The Alman dialect mandates uniform morphological patterns for attributive adjectives, systematically eliminating case- and gender-based declensional variation while maintaining syntactic agreement through invariant forms.
+The **Alman** dialect mandates uniform morphological patterns for attributive adjectives, systematically eliminating case- and gender-based declensional variation while maintaining syntactic agreement through invariant forms.
 
 
 #### §4a. Invariant -e Ending
@@ -306,7 +306,7 @@ This rule ensures that nominalized adjectives are treated uniformly with attribu
 
 ### §5. Adverbs
 
-The Alman dialect maintains standard German's lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.
+The **Alman** dialect maintains standard German's lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.
 
 
 #### Adverbs Stay the Same
