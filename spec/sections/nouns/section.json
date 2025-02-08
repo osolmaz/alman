@@ -1,7 +1,7 @@
 {
   "id": "nouns",
   "title": "Nouns",
-  "body": "Describes the removal of grammatical gender and all case-based noun endings. Specifies that nouns maintain a single form for nominative, accusative, and dative cases, with a distinct form (\"der\") for genitive, and explains how plural forms are preserved without additional case-specific modifications.",
+  "body": "This section details <alman />'s elimination of grammatical gender and case inflections in nouns. All nouns adopt a single invariant form across nominative, accusative, and dative cases, with genitive contexts marked by **der** instead of case endings. Plural forms retain their standard nominative/accusative morphology in all cases, while optional suffixes (-n/-s) resolve ambiguity for nouns with identical singular/plural forms. Weak noun declensions and archaic dative endings are abolished.",
   "paragraphs": [
     {
       "id": "noun-morphology"

@@ -1,12 +1,12 @@
 {
   "id": "determiners",
   "title": "Determiners and Demonstratives",
-  "body": "Describes the simplification of determiner and demonstrative forms in Alman through gender neutralization and case reduction, while maintaining clarity through context and word order.",
+  "body": "This paragraph describes the simplification of determiner and demonstrative forms in <alman /> through gender neutralization and case reduction, while maintaining clarity through context and word order.",
   "rules": [
     {
       "id": "unified-non-genitive-forms",
       "title": "Unified Forms for Non-Genitive Contexts",
-      "description": "In non-genitive contexts, determiners and pronouns that vary by gender and case in Standard German are unified by adopting the invariant feminine \"die...\" form. Thus, forms such as **diejenige, diese, jene, welche** (and analogous variants) are employed regardless of the gender or case of the referent.",
+      "description": "In non-genitive contexts, determiners and pronouns that vary by gender and case in <sd /> are unified by adopting the invariant feminine \"die...\" form. Thus, forms such as **diejenige, diese, jene, welche** (and analogous variants) are employed regardless of the gender or case of the referent.",
       "examples": [
         {
           "standard": "dieser, diese, dieses, diesen, diesem (Nominativ, Akkusativ, Dativ)",
@@ -49,7 +49,7 @@
     {
       "id": "genitive-handling",
       "title": "Handling of Genitive Forms in Gendered Determiners",
-      "description": "When a genitive construction is required, speakers of Alman may either adopt the corresponding \"derjenige\" form or rephrase the expression to avoid the genitive altogether by employing a periphrastic construction with **von jene**, **von dieselbe** and so on. In the latter case, the invariant non-genitive form is retained following the preposition. The genitive *derjenigen* and *desjenigen* can be substituted with either *von diejenige* or *von jene* for simplicity.",
+      "description": "When a genitive construction is required, speakers of <alman /> may either adopt the corresponding \"derjenige\" form or rephrase the expression to avoid the genitive altogether by employing a periphrastic construction with **von jene**, **von dieselbe** and so on. In the latter case, the invariant non-genitive form is retained following the preposition. The genitive *derjenigen* and *desjenigen* can be substituted with either *von diejenige* or *von jene* for simplicity.",
       "examples": [
         {
           "standard": "derselben (Genitiv), desselben (Genitiv)",
@@ -66,6 +66,45 @@
         {
           "standard": "die Meinung derselben Frau",
           "alman": "die Meinung von dieselbe Frau"
+        }
+      ]
+    },
+    {
+      "id": "indefinite-negative-quantifiers",
+      "title": "Exception for Certain Indefinite and Negative Quantifiers",
+      "description": "While <alman /> consolidates and simplifies most determiners, some **indefinite** or **negative** quantifiers that appear as **paired words** in <sd /> are **retained in their original forms**. In these cases, **alle** vs. **alles**, **viel** vs. **viele**, **wenig** vs. **wenige**, and **nicht** vs. **nichts**, among others, are **not** reanalyzed or merged into a single form. Instead, they follow <sd /> usage:\n\n1. **alle/alles**\n   - **alle** → used for plural indefinite references (\"all [people/things]\").\n   - **alles** → used for singular, abstract \"everything.\"\n\n2. **viel/viele**\n   - **viel** → used with **uncountable** nouns or adverbially (\"much,\" \"a lot [of something uncountable]\").\n   - **viele** → used with **countable plural** nouns (\"many\").\n\n3. **wenig/wenige**\n   - **wenig** → used for **uncountable** references (\"little [uncountable amount]\").\n   - **wenige** → used for **countable plural** references (\"few\").\n\n4. **nicht/nichts**\n   - **nicht** → the standard **negation** particle (\"not\").\n   - **nichts** → the indefinite pronoun meaning \"nothing.\"\n\nSince <sd /> treats these pairs as **separate lexical items** rather than mere inflectional variants, <alman /> preserves them **unchanged** for clarity and mutual intelligibility. Speakers should continue to employ each pair according to established <sd /> conventions. This rule overrides other determiner simplifications described in other rules.",
+      "examples": [
+        {
+          "standard": "**Alle** Menschen sind eingeladen.",
+          "alman": "**Alle** Menschen sind eingeladen."
+        },
+        {
+          "standard": "**Alles** hat seinen Preis.",
+          "alman": "**Alles** hat sein Preis."
+        },
+        {
+          "standard": "**Viel** Wasser ist im Glas.",
+          "alman": "**Viel** Wasser ist in die Glas."
+        },
+        {
+          "standard": "**Viele** Gäste kamen zur Feier.",
+          "alman": "**Viele** Gäste kamen zu die Feier."
+        },
+        {
+          "standard": "**Wenig** Zeit bleibt übrig.",
+          "alman": "**Wenig** Zeit bleibt übrig."
+        },
+        {
+          "standard": "**Wenige** verstehen diese Regel.",
+          "alman": "**Wenige** verstehen diese Regel."
+        },
+        {
+          "standard": "Er sagt **nicht**, was er denkt.",
+          "alman": "Er sagt **nicht**, was er denkt."
+        },
+        {
+          "standard": "Ich sehe **nichts**.",
+          "alman": "Ich sehe **nichts**."
         }
       ]
     }

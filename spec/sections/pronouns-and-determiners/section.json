@@ -1,7 +1,7 @@
 {
   "id": "pronouns-and-determiners",
-  "title": "Pronouns and Other Determiners",
-  "body": "Outlines that personal pronouns retain their standard forms and case inflections but are interpreted according to natural gender. Also covers the consolidation of traditionally gendered determiners (e.g., derjenige, diese, jene) into a single unified form for non-genitive contexts.",
+  "title": "Pronouns and Determiners",
+  "body": "This section outlines modifications to <sd />'s pronominal system that prioritize natural gender attribution while maintaining case distinctions for referential clarity. Personal pronouns retain <sd /> case forms but reference biological/social gender rather than grammatical gender. Determiners undergo simplification through gender-neutral forms in non-genitive contexts, with preserved case inflection only in personal pronouns.",
   "paragraphs": [
     {
       "id": "pronouns"

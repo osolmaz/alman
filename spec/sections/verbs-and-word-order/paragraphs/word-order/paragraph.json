@@ -1,12 +1,12 @@
 {
   "id": "word-order",
   "title": "Word Order and Syntax",
-  "body": "Details the preservation of Standard German word order patterns in Alman, maintaining both V2 in main clauses and verb-final position in subordinate clauses.",
+  "body": "This paragraph details the preservation of <sd /> word order patterns in <alman />, maintaining both V2 in main clauses and verb-final position in subordinate clauses.",
   "rules": [
     {
       "id": "word-order-rules",
       "title": "Word Order",
-      "description": "The syntactic structure of sentences in Alman adheres to the conventional word order of Standard German. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).\n\nThese rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with Standard German.",
+      "description": "The syntactic structure of sentences in <alman /> adheres to the conventional word order of <sd />. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).\n\nThese rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with <sd />.",
       "examples": [
         {
           "standard": "Ich gehe heute ins Kino.",
