@@ -1,8 +1,8 @@
 # Alman: A Simplified Dialect of the German Language
 
-**Version**: 0.4.0  
+**Version**: 0.4.1  
 
-**Last Updated**: 2025-02-06
+**Last Updated**: 2025-02-08
 
 
 ## Introduction {#introduction}
@@ -518,7 +518,7 @@ Describes the simplification of determiner and demonstrative forms in Alman thro
 
 #### §7a. Unified Forms for Non-Genitive Contexts
 
-In non-genitive contexts, determiners and pronouns that vary by gender and case in Standard German are unified by adopting the invariant feminine "die..." form. Thus, forms such as **diejenige, diese, jene, welche** (and analogous variants) are employed regardless of the gender or case of the referent.
+In non-genitive contexts, determiners and pronouns that vary by gender and case in **Standard German** are unified by adopting the invariant feminine "die..." form. Thus, forms such as **diejenige, diese, jene, welche** (and analogous variants) are employed regardless of the gender or case of the referent.
 
 
 **Examples:**
@@ -539,7 +539,7 @@ In non-genitive contexts, determiners and pronouns that vary by gender and case 
 
 #### §7b. Handling of Genitive Forms in Gendered Determiners
 
-When a genitive construction is required, speakers of Alman may either adopt the corresponding "derjenige" form or rephrase the expression to avoid the genitive altogether by employing a periphrastic construction with **von jene**, **von dieselbe** and so on. In the latter case, the invariant non-genitive form is retained following the preposition. The genitive *derjenigen* and *desjenigen* can be substituted with either *von diejenige* or *von jene* for simplicity.
+When a genitive construction is required, speakers of **Alman** may either adopt the corresponding "derjenige" form or rephrase the expression to avoid the genitive altogether by employing a periphrastic construction with **von jene**, **von dieselbe** and so on. In the latter case, the invariant non-genitive form is retained following the preposition. The genitive *derjenigen* and *desjenigen* can be substituted with either *von diejenige* or *von jene* for simplicity.
 
 
 **Examples:**
@@ -550,6 +550,40 @@ When a genitive construction is required, speakers of Alman may either adopt the
 | dieser, dieses (Genitiv) | von diese |
 | das Urteil desjenigen Mannes  | die Urteil von diejenige Mann / die Urteil von jene Mann / die Urteil derjenige Mann |
 | die Meinung derselben Frau | die Meinung von dieselbe Frau |
+
+
+
+#### §7c. Exception for Certain Indefinite and Negative Quantifiers
+
+While **Alman** consolidates and simplifies most determiners, some **indefinite** or **negative** quantifiers that appear as **paired words** in **Standard German** are **retained in their original forms**. In these cases, **alle** vs. **alles**, **viel** vs. **viele**, **wenig** vs. **wenige**, and **nicht** vs. **nichts**, among others, are **not** reanalyzed or merged into a single form. Instead, they follow **Standard German** usage:
+
+1. **alle/alles**
+   - **alle** → used for plural indefinite references ("all [people/things]").
+   - **alles** → used for singular, abstract "everything."
+
+2. **viel/viele**
+   - **viel** → used with **uncountable** nouns or adverbially ("much," "a lot [of something uncountable]").
+   - **viele** → used with **countable plural** nouns ("many").
+
+3. **wenig/wenige**
+   - **wenig** → used for **uncountable** references ("little [uncountable amount]").
+   - **wenige** → used for **countable plural** references ("few").
+
+4. **nicht/nichts**
+   - **nicht** → the standard **negation** particle ("not").
+   - **nichts** → the indefinite pronoun meaning "nothing."
+
+Since **Standard German** treats these pairs as **separate lexical items** rather than mere inflectional variants, **Alman** preserves them **unchanged** for clarity and mutual intelligibility. Speakers should continue to employ each pair according to established **Standard German** conventions. This rule overrides other determiner simplifications described in other rules.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Er hat alles gesehen. / Alle kommen zur Feier. | Er hat alles gesehen. / Alle kommen zur Feier. |
+| Viel Wasser ist hier. / Viele Leute sind müde. | Viel Wasser ist hier. / Viele Leute sind müde. |
+| Ich habe wenig Zeit. / Wenige Tage sind übrig. | Ich habe wenig Zeit. / Wenige Tage sind übrig. |
+| Ich singe nicht. / Ich höre nichts. | Ich singe nicht. / Ich höre nichts. |
 
 
 
