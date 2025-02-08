@@ -580,10 +580,14 @@ Since **Standard German** treats these pairs as **separate lexical items** rathe
 
 | Standard German | Alman |
 |------------------|-------|
-| Er hat alles gesehen. / Alle kommen zur Feier. | Er hat alles gesehen. / Alle kommen zur Feier. |
-| Viel Wasser ist hier. / Viele Leute sind müde. | Viel Wasser ist hier. / Viele Leute sind müde. |
-| Ich habe wenig Zeit. / Wenige Tage sind übrig. | Ich habe wenig Zeit. / Wenige Tage sind übrig. |
-| Ich singe nicht. / Ich höre nichts. | Ich singe nicht. / Ich höre nichts. |
+| **Alle** Menschen sind eingeladen. | **Alle** Menschen sind eingeladen. |
+| **Alles** hat seinen Preis. | **Alles** hat sein Preis. |
+| **Viel** Wasser ist im Glas. | **Viel** Wasser ist in die Glas. |
+| **Viele** Gäste kamen zur Feier. | **Viele** Gäste kamen zu die Feier. |
+| **Wenig** Zeit bleibt übrig. | **Wenig** Zeit bleibt übrig. |
+| **Wenige** verstehen diese Regel. | **Wenige** verstehen diese Regel. |
+| Er sagt **nicht**, was er denkt. | Er sagt **nicht**, was er denkt. |
+| Ich sehe **nichts**. | Ich sehe **nichts**. |
 
 
 
