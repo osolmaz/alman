@@ -8,3 +8,6 @@ markdown: kramdown
 theme: minima
 plugins:
   - jekyll-feed
+
+# Set the permalink for posts so they render under /blog/
+permalink: /blog/:title/
