@@ -1,7 +1,7 @@
 {
   "id": "adverbs",
   "title": "Adverbs",
-  "body": "The <alman /> dialect maintains standard German's lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.",
+  "body": "The <alman /> dialect maintains <sd />'s lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.",
   "rules": [
     {
       "id": "non-inflected-adverbs",

@@ -1,12 +1,12 @@
 {
   "id": "verbs",
   "title": "Verb Conjugations and Forms",
-  "body": "Details the retention of Standard German verb conjugation patterns in Alman, preserving both regular and irregular forms.",
+  "body": "This paragraph details the retention of <sd /> verb conjugation patterns in <alman />, preserving both regular and irregular forms.",
   "rules": [
     {
       "id": "verb-conjugations",
       "title": "Verb Conjugations",
-      "description": "The Alman dialect retains the full complexity of Standard German verb conjugations. Both regular and irregular verb forms remain unaltered, and no further simplification or regularization is introduced. All conjugated forms are used exactly as in Standard German.",
+      "description": "The <alman /> dialect retains the full complexity of <sd /> verb conjugations. Both regular and irregular verb forms remain unaltered, and no further simplification or regularization is introduced. All conjugated forms are used exactly as in <sd />.",
       "examples": [
         {
           "standard": "ich gehe, du gehst, er geht, wir gehen, ihr geht, sie gehen",
@@ -25,7 +25,7 @@
     {
       "id": "nominalized-verbs",
       "title": "Nominalized Verbs",
-      "description": "In Standard German, nominalized verbs are assigned neuter gender. In Alman, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.\n\nThis rule ensures consistency in the treatment of nominalized forms throughout Alman, aligning them with the broader system of gender collapsing.",
+      "description": "In <sd />, nominalized verbs are assigned neuter gender. In <alman />, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.\n\nThis rule ensures consistency in the treatment of nominalized forms throughout <alman />, aligning them with the broader system of gender collapsing.",
       "examples": [
         {
           "standard": "Das Lernen fällt mir leicht.",

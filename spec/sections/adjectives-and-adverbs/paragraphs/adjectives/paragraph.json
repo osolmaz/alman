@@ -6,7 +6,7 @@
     {
       "id": "morphological-regularization",
       "title": "Invariant -e Ending",
-      "description": "All attributive adjectives preceding nouns receive an -e ending, regardless of:\n- Grammatical gender (masculine/feminine/neuter)\n- Number (singular/plural)\n- Case (nominative/accusative/dative)\n\nThis replaces standard German's case-specific endings (-r/-s/-m/-n) with a single invariant form.",
+      "description": "All attributive adjectives preceding nouns receive an -e ending, regardless of:\n- Grammatical gender (masculine/feminine/neuter)\n- Number (singular/plural)\n- Case (nominative/accusative/dative)\n\nThis replaces <sd />'s case-specific endings (-r/-s/-m/-n) with a single invariant form.",
       "examples": [
         {
           "standard": "guter Mann (Masculine Nominative)",
@@ -44,7 +44,7 @@
     {
       "id": "nominalized-adjectives",
       "title": "Nominalized Adjectives",
-      "description": "Nominalized adjectives, when functioning as nouns, are to be modified in the same manner as attributive adjectives. They receive the invariant **-e** ending irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms. \n\nThis rule ensures that nominalized adjectives are treated uniformly with attributive adjectives, thereby simplifying the overall adjectival system in Alman.",
+      "description": "Nominalized adjectives, when functioning as nouns, are to be modified in the same manner as attributive adjectives. They receive the invariant **-e** ending irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms. \n\nThis rule ensures that nominalized adjectives are treated uniformly with attributive adjectives, thereby simplifying the overall adjectival system in <alman />.",
       "examples": [
         {
           "standard": "Das Gute im Menschen",

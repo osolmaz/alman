@@ -1,7 +1,7 @@
 {
   "id": "determiners",
   "title": "Determiners and Demonstratives",
-  "body": "Describes the simplification of determiner and demonstrative forms in Alman through gender neutralization and case reduction, while maintaining clarity through context and word order.",
+  "body": "This paragraph describes the simplification of determiner and demonstrative forms in <alman /> through gender neutralization and case reduction, while maintaining clarity through context and word order.",
   "rules": [
     {
       "id": "unified-non-genitive-forms",

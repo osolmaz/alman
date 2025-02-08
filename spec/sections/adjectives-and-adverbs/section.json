@@ -1,7 +1,7 @@
 {
   "id": "adjectives-and-adverbs",
   "title": "Adjectives and Adverbs",
-  "body": "Explains that adjectives preceding a noun always end in -e, eliminating the traditional variety of declensional endings. Clarifies that adjectives functioning as modifiers before nouns are uniformly inflected, while adverbs (or adjectives used non-attributively) remain unchanged.",
+  "body": "This section details <alman />'s regularization of adjective endings and preservation of adverbial forms. Attributive adjectives uniformly adopt an -e ending regardless of gender, number, or case, eliminating traditional declensional patterns. Adverbs and non-attributive adjectives retain their base form without inflection.",
   "paragraphs": [
     {
       "id": "adjectives"

@@ -1,12 +1,12 @@
 {
   "id": "pronouns",
   "title": "Pronouns",
-  "body": "Outlines the retention of Standard German personal pronoun case forms while reorienting referential assignment to natural gender, rather than grammatical gender, preserving case distinctions for referential clarity.",
+  "body": "This paragraph outlines the retention of <sd /> personal pronoun case forms while reorienting referential assignment to natural gender, rather than grammatical gender, preserving case distinctions for referential clarity.",
   "rules": [
     {
       "id": "natural-gender-attribution",
       "title": "Personal Pronouns: Natural Gender Attribution",
-      "description": "Personal pronouns maintain their Standard German case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender",
+      "description": "Personal pronouns maintain their <sd /> case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender",
       "examples": [
         {
           "standard": "Sie ist Ärztin. (die Frau, f.)",
@@ -33,7 +33,7 @@
     {
       "id": "case-inflection-retention",
       "title": "Case Inflection Retention",
-      "description": "Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with Standard German forms, in order to preserve mutual intelligibility.\n\n| Person       | Nominative | Accusative | Dative |\n|--------------|------------|------------|--------|\n| 1st Singular | ich        | mich       | mir    |\n| 2nd Singular | du         | dich       | dir    |\n| 3rd Masc.    | er         | ihn        | ihm    |\n| 3rd Fem.     | sie        | sie        | ihr    |\n| 3rd Neut.    | es         | es         | ihm    |\n| 1st Plural   | wir        | uns        | uns    |\n| 2nd Plural   | ihr        | euch       | euch   |\n| 3rd Plural   | sie        | sie        | ihnen  |",
+      "description": "Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with <sd /> forms, in order to preserve mutual intelligibility.\n\n| Person       | Nominative | Accusative | Dative |\n|--------------|------------|------------|--------|\n| 1st Singular | ich        | mich       | mir    |\n| 2nd Singular | du         | dich       | dir    |\n| 3rd Masc.    | er         | ihn        | ihm    |\n| 3rd Fem.     | sie        | sie        | ihr    |\n| 3rd Neut.    | es         | es         | ihm    |\n| 1st Plural   | wir        | uns        | uns    |\n| 2nd Plural   | ihr        | euch       | euch   |\n| 3rd Plural   | sie        | sie        | ihnen  |",
       "examples": [
         {
           "standard": "Ich sehe ihn. (den Mann)",
@@ -50,7 +50,7 @@
     {
       "id": "gender-neutral-referents",
       "title": "Gender-Neutral Referents",
-      "description": "For entities without natural gender (objects, abstract concepts, collectives):\n- **es** serves as the default singular pronoun\n- **sie** (3rd plural) for mixed/unspecified gender referents\n- Retains Standard German plural pronoun forms",
+      "description": "For entities without natural gender (objects, abstract concepts, collectives):\n- **es** serves as the default singular pronoun\n- **sie** (3rd plural) for mixed/unspecified gender referents\n- Retains <sd /> plural pronoun forms",
       "examples": [
         {
           "standard": "Der Computer? Er ist kaputt.",
@@ -77,7 +77,7 @@
     {
       "id": "reflexive-pronouns",
       "title": "Reflexive Pronouns",
-      "description": "Reflexive pronouns follow Standard German case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents.",
+      "description": "Reflexive pronouns follow <sd /> case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents.",
       "examples": [
         {
           "standard": "Er wäscht sich.",
@@ -121,7 +121,7 @@
     {
       "id": "interrogative-pronouns",
       "title": "Retention of Standard Interrogative Pronouns",
-      "description": "The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their standard German forms without modification. These pronouns function as in Standard German in all contexts.",
+      "description": "The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their <sd /> forms without modification. These pronouns function as in <sd /> in all contexts.",
       "examples": [
         {
           "standard": "Wer bist du?",
@@ -140,7 +140,7 @@
     {
       "id": "prepositional-interrogatives",
       "title": "Preferred Use of Prepositional Interrogative Constructions",
-      "description": "In interrogative constructions involving prepositions, the Alman dialect favors the use of an uncontracted preposition preceding **was** rather than employing the compound forms. Thus, constructions such as **zu was, von was, mit was, über was, durch was**, and similar variants, are preferred over the corresponding *wo-* forms. This mirrors the usage of preposition + *what* in in English, like *to what*, *from what*, and so on.",
+      "description": "In interrogative constructions involving prepositions, the <alman /> dialect favors the use of an uncontracted preposition preceding **was** rather than employing the compound forms. Thus, constructions such as **zu was, von was, mit was, über was, durch was**, and similar variants, are preferred over the corresponding *wo-* forms. This mirrors the usage of preposition + *what* in in English, like *to what*, *from what*, and so on.",
       "examples": [
         {
           "standard": "Womit hilfst du mir?",
