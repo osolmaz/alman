@@ -39,27 +39,25 @@ But even if you learn the articles for each case perfectly, you will still encou
 
 Here is the bitter truth: **If German was not your native language or your primary foreign language since primary school, you will likely always have problems with der/die/das.**[^1] The problems might decrease, but they will always be there.[^2]
 
-
-
 So eventually, you accept that you will never be perfect at noun genders. That will bring you to a second realization: when you don't know the gender of a noun, what will you do? You have to choose something, since there is no "I don't know" article.
 
-Here is where everybody lands on something different. Some people will just guess randomly, according to what "feels right" at the moment. Some will come up with a rule, like choosing a fallback-gender (for example, *der*) when they are not sure. Yet others will make use of statistics, and fall back on *dem* for dative and *des* for genitive, because approximately 66% of the time, they would be correct.
+Here is where everybody lands on something different. Some people will just guess randomly, according to what "feels right" at the moment. Some will come up with a rule, like choosing a fallback-gender (for example, *der*) when they are not sure. Yet others will make use of statistics, and fall back on *dem* for dative and *des* for genitive, because they would be correct approximately 55-60% of the time.
 
 In practice, everybody develops their own heuristics independent of each other, because such rules are not part of the official curriculum. The official German curriculum, prepared by language institutes such as the Goethe Institut, cannot teach a student "half-measures". They need to be exemplary and teach 100% correct German. For that reason, simplification heuristics have an "illegal" feeling: you should not be doing it, but you have to do it to function in society.
 
 These isolated heuristics are essentially [idiolects](https://en.wikipedia.org/wiki/Idiolect) of German---minor dialects of the language that are unique to the individual. This happens because when the brain encounters something too complex to process, it simplifies it in its own unique way, based on its past experiences.
 
-After analyzing my own usage of German, I have realized that my fallback gender is *die*, maybe because it sounds similar to the English *the*. Or maybe my brain picked up the fact that it is the statistically most common article[^3], because I also realized that I have a tendency to use *dem* for dative, especially when using certain prepositions like "in dem" or "zu dem".
+After analyzing my own usage of German, I have realized that my fallback gender is *die*, maybe because it sounds similar to the English *the*. Or maybe my brain picked up the fact that it is the statistically most common article[^3]. I also had a tendency to use *dem* for dative, when using certain prepositions like "in dem" or "zu dem".
 
-The realization of my own heuristics came together with the realization that literally almost every foreigner who speaks German is doing this, a pain point shared by millions of migrants.
+The realization of my own heuristics came together with the realization that almost every foreigner who speaks German is doing this, a pain point shared by millions of migrants.
 
 After this realization, I immediately got to work by writing down the first set of rules. As of writing this, the spec is at version 0.4, meaning it is the fourth major iteration of the ruleset. In the last two years, I have run experiments, trained machine learning models, surveyed people and spent a lot of time thinking about this shared pain point.
 
-Alman aims to address this pain point by, first of all, acknowledging this as a problem, unlike, say, the Goethe Institut. There have been attempts in the past to legitimize ethnolects, such as Feridun Zaimoglu's [Kanak Sprak](https://de.wikipedia.org/wiki/Kanak_Sprak_%E2%80%93_24_Mi%C3%9Ft%C3%B6ne_vom_Rande_der_Gesellschaft). But to my knowledge, nobody tried to legitimize a simplified dialect with a success and academic rigor that will leave no choice but to be taken seriously.
+Alman aims to address this pain point by, first of all, acknowledging this as a problem, unlike, say, the Goethe Institut. There have been attempts in the past to legitimize ethnolects, such as Feridun Zaimoglu's [Kanak Sprak](https://de.wikipedia.org/wiki/Kanak_Sprak_%E2%80%93_24_Mi%C3%9Ft%C3%B6ne_vom_Rande_der_Gesellschaft). But to my knowledge, nobody tried to legitimize a simplified dialect with a success and academic rigor that left people with no choice but to take it seriously.
 
 Alman is not an ethnolect, nor it has been inspired by one. Its rules have been meticulously selected to minimize divergence from Standard High German, while still being super easy to learn. It does not impose a certain slang, argot or accent. It is ethnicity-less, race-less and class-less. Even native speakers are welcome to use it, though they might have a hard time overcoming the feeling of "being wrong".
 
-My hope is that Alman will save countless hours of confusion and show an alternative path to fluency for the millions that are learning German.
+I hope that Alman will save countless hours of confusion and show an alternative path to fluency for the millions that are learning German.
 
 ---
 
