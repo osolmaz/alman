@@ -1076,3 +1076,7 @@ Germans use genitive much less when speaking compared to writing. Surprisingly, 
 All of this point out to a trend of simplification in declension patterns of spoken German. Considering Old High German---the language German once---was even more complicated in that regard, the findings above don't surprise me.
 
 > I might update this post with more findings or refutations of above conclusions later on, if future data shows that they are false.
+
+---
+
+Originally posted at [solmaz.io](https://solmaz.io/frequencies-german-definite-articles).
