@@ -11,3 +11,7 @@ plugins:
 
 # Set the permalink for posts so they render under /blog/
 permalink: /blog/:title/
+
+kramdown:
+  parse_block_html: true
+
