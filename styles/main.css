@@ -130,15 +130,6 @@ caption {
 hr {
   margin: 1em 0;
   border: none;
-  border-top: 1px solid #ddd;
+  border-top: 2px solid #ddd;
 }
 
-/* Add spacing after figures when followed by hr */
-figure + hr {
-  margin-top: 2em;
-}
-
-/* Add spacing before figures when preceded by hr */
-hr + figure {
-  margin-top: 2em;
-}

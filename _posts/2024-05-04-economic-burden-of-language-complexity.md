@@ -195,13 +195,13 @@ Should an immigrant take a language curriculum at face value, if the majority of
 
 *No.*
 
+---
+
+Originally posted at [solmaz.io](https://solmaz.io/economic-burden-of-language-complexity).
+
 ### References
 
 [^1]: [How long does it take to learn German?](https://web.archive.org/web/20231030173211/https://www.goethe.de/ins/gb/en/sta/lon/kur/faq.html#accordion_toggle_6206750_2), FAQ Page, Goethe Institut
 [^2]: [How Long Does It Take to Learn a Language?](https://web.archive.org/web/20231201001021/https://www.babbelforbusiness.com/us/blog/how-long-does-it-take-to-learn-a-language/), Anika Wegner, Babbel for Business Blog, 2023-09-01
 [^3]: [Earnings by economic branch and occupation](https://web.archive.org/web/20230621075721/https://www.destatis.de/EN/Themes/Labour/Earnings/Branch-Occupation/_node.html), German Federal Statistical Office (Destatis), 2023-06-21
 [^4]: [Sharp rise in labour migration in 2022](https://web.archive.org/web/20240221153647/https://www.destatis.de/EN/Press/2023/04/PE23_165_125.html), German Federal Statistical Office (Destatis), 2023-04-27
-
----
-
-Originally posted at [solmaz.io](https://solmaz.io/economic-burden-of-language-complexity).
