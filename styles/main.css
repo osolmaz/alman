@@ -130,6 +130,6 @@ caption {
 hr {
   margin: 1em 0;
   border: none;
-  border-top: 2px solid #ddd;
+  border-top: 2px solid;
 }
 
