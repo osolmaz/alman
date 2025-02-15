@@ -11,21 +11,19 @@ permalink: /blog/
 
   <div class="post-list">
     {%- for post in site.posts -%}
-      <article class="post-preview">
-        <h2 class="post-title">
-          <a href="{{ post.url }}">{{ post.title }}</a>
-        </h2>
-        <div class="post-meta">
-          <time datetime="{{ post.date | date_to_xmlschema }}">
-            {{ post.date | date: "%B %-d, %Y" }}
-          </time>
-        </div>
-        {%- if post.description -%}
-          <div class="post-excerpt">
-            {{ post.description }}
-          </div>
-        {%- endif -%}
-      </article>
+    <article class="post-preview">
+      <h2 class="post-title">
+        <a href="{{ post.url }}">{{ post.title }}</a>
+      </h2>
+      <div class="post-meta">
+        <time datetime="{{ post.date | date_to_xmlschema }}">
+          {{ post.date | date: "%B %-d, %Y" }}
+        </time>
+      </div>
+      {%- if post.description -%}
+      <div class="post-excerpt">{{ post.description }}</div>
+      {%- endif -%}
+    </article>
     {%- endfor -%}
   </div>
 </div>
@@ -50,12 +48,12 @@ permalink: /blog/
     display: grid;
     gap: 2.5rem;
   }
-
+  /*
   .post-preview {
     padding-bottom: 2.5rem;
     border-bottom: 1px solid #eee;
   }
-
+  */
   .post-preview:last-child {
     border-bottom: none;
   }

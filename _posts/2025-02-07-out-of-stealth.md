@@ -49,7 +49,7 @@ These isolated heuristics are essentially [idiolects](https://en.wikipedia.org/w
 
 After analyzing my own usage of German, I have realized that my fallback gender is *die*, maybe because it sounds similar to the English *the*. Or maybe my brain picked up the fact that it is the statistically most common article[^3]. I also had a tendency to use *dem* for dative, when using certain prepositions like "in dem" or "zu dem".
 
-The realization of my own heuristics came together with the realization that almost every foreigner who speaks German is doing this, a pain point shared by millions of migrants.
+The realization of my own heuristics came together with the realization that almost every foreigner who speaks German is doing this, a pain point shared by millions of migrants. German wanted to be simpler---it could be simpler. But nobody had seriously tried it before, at least successfully enough that it is remembered by anyone.
 
 After this realization, I immediately got to work by writing down the first set of rules. As of writing this, the spec is at version 0.4, meaning it is the fourth major iteration of the ruleset. In the last two years, I have run experiments, trained machine learning models, surveyed people and spent a lot of time thinking about this shared pain point.
 
