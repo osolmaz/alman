@@ -6,23 +6,45 @@
     {
       "id": "word-order-rules",
       "title": "Word Order",
-      "description": "The syntactic structure of sentences in <alman /> adheres to the conventional word order of <sd />. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).\n\nThese rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with <sd />.",
+      "description": "The syntactic structure of sentences in <alman /> adheres to the conventional word order of <sd />. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).\n\nThese rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with <sd />. Note that while word order patterns are preserved, the article and inflection rules of <alman /> still apply within these sentences.",
       "examples": [
         {
           "standard": "Ich gehe heute ins Kino.",
-          "alman": "Ich gehe heute ins Kino."
+          "alman": "Ich gehe heute in die Kino."
         },
         {
           "standard": "Er hat gestern einen Brief geschrieben.",
-          "alman": "Er hat gestern einen Brief geschrieben."
+          "alman": "Er hat gestern ein Brief geschrieben."
         },
         {
           "standard": "weil ich heute ins Kino gehe",
-          "alman": "weil ich heute ins Kino gehe"
+          "alman": "weil ich heute in die Kino gehe"
         },
         {
           "standard": "dass er gestern einen Brief geschrieben hat",
-          "alman": "dass er gestern einen Brief geschrieben hat"
+          "alman": "dass er gestern ein Brief geschrieben hat"
+        }
+      ]
+    },
+    {
+      "id": "subject-object-order",
+      "title": "Subject-Before-Object Order for Full Noun Phrases",
+      "description": "In <sd />, case marking on articles allows flexible constituent order: an object may be fronted (e.g., *Den Mann beißt der Hund*) because the accusative article identifies it unambiguously. Since <alman /> eliminates case marking on articles and nouns, this disambiguation is lost.\n\nTherefore, when both the subject and the object of a clause are full noun phrases, the subject must precede the object. Object-fronting remains available when at least one argument is a personal pronoun (which retains case marking, see the section on pronouns) or when context makes the roles unambiguous.\n\nThis compensates for the loss of morphological case marking through fixed constituent order, paralleling the historical development of English.",
+      "examples": [
+        {
+          "standard": "Der Hund beißt den Mann.",
+          "alman": "Die Hund beißt die Mann.",
+          "english": "The dog bites the man."
+        },
+        {
+          "standard": "Den Mann beißt der Hund.",
+          "alman": "Die Hund beißt die Mann. (subject first, since object fronting would be ambiguous)",
+          "english": "The dog bites the man."
+        },
+        {
+          "standard": "Ihn beißt der Hund.",
+          "alman": "Ihn beißt die Hund. (allowed: pronoun case marks the object)",
+          "english": "The dog bites him."
         }
       ]
     }
