@@ -69,7 +69,7 @@ This specification provides a formal account of **Alman** grammar, detailing the
 
 ## Articles {#articles}
 
-This section outlines the simplification of **Standard German** articles in **Alman**, eliminating grammatical gender and case distinctions. Definite articles use **die** for all non-genitive contexts and **der** for genitive, with **das** retained as a neutral demonstrative. Possession may alternatively use **von die** instead of genitive constructions. Indefinite articles adopt **ein** universally in non-genitive cases, while genitive employs **von ein** or retains **ein** with prepositions. Preposition-article contractions are resolved to full forms (e.g., *vom* → *von die*), except in lexicalized fixed expressions, and nominalized articles preserve **ein** as standalone forms. The case distinction after two-way prepositions is abolished for noun phrases.
+This section outlines the simplification of **Standard German** articles in **Alman**, eliminating grammatical gender and case distinctions. Definite articles use **die** for all non-genitive contexts and **der** for genitive, with **das** retained as a neutral demonstrative. Possession may alternatively use **von die** instead of genitive constructions. Indefinite articles adopt **ein** universally in non-genitive cases, while genitive employs **von ein** or retains **ein** with prepositions. Preposition-article contractions are resolved to full forms without exception (e.g., *vom* → *von die*), and nominalized articles preserve **ein** as standalone forms. The case distinction after two-way prepositions is abolished for noun phrases.
 
 
 ### §1. Definite Article Simplification {#definite-articles}
@@ -151,7 +151,7 @@ While interchangeable, 'der' should be retained when translating original geniti
 
 Preposition-article contractions (e.g., vom, im, zur) must be resolved to their full form prior to applying article replacement rules. The uncontracted preposition and article are then processed according to standard **Alman** article rules.
 
-This rule applies only to productive, compositional preposition-article combinations; lexicalized fixed expressions are exempt, as described in the next rule.
+This rule applies without exception, including to contractions in fixed expressions such as **zum Beispiel**, **am besten**, and **zum** + nominalized infinitive. Uniform application keeps the article system fully regular and spares learners from memorizing a list of exempt expressions.
 
 
 **Examples:**
@@ -162,31 +162,13 @@ This rule applies only to productive, compositional preposition-article combinat
 | im Garten (in + dem) | in die Garten |
 | fürs Kind (für + das) | für die Kind |
 | zur Frau (zu + der) | zu die Frau |
+| zum Beispiel (zu + dem) | zu die Beispiel |
+| am besten (an + dem) | an die beste |
+| zum Lernen (zu + dem) | zu die Lernen |
 
 
 
-#### §1f. Exception: Lexicalized Contractions and Fixed Expressions
-
-Contractions that form part of lexicalized, non-compositional expressions are retained in their contracted form and are not subject to contraction resolution or article replacement. This includes:
-- The adverbial superlative construction **am + -sten** (am besten, am schnellsten)
-- Fixed idiomatic expressions such as **zum Beispiel**, **zum ersten Mal**, **im Allgemeinen**, **im Voraus**
-- **zum** + nominalized infinitive expressing purpose (zum Lernen, zum Essen)
-
-These expressions function as indivisible lexical units rather than productive preposition-article-noun combinations. Preserving them maintains mutual intelligibility with **Standard German** at no cost to learners, who acquire them as fixed vocabulary items.
-
-
-**Examples:**
-
-| Standard German | Alman |
-|------------------|-------|
-| am besten | am besten |
-| zum Beispiel | zum Beispiel |
-| Ich gehe in die Bibliothek zum Lernen. | Ich gehe in die Bibliothek zum Lernen. |
-| im Allgemeinen | im Allgemeinen |
-
-
-
-#### §1g. Two-Way Prepositions
+#### §1f. Two-Way Prepositions
 
 In **Standard German**, the two-way prepositions (**in, an, auf, über, unter, vor, hinter, neben, zwischen**) govern the accusative to express motion toward a goal and the dative to express static location. Since **Alman** collapses accusative and dative articles into the invariant **die**, this case-based distinction is abolished for noun phrases: *in die Kino* covers both "into the cinema" and "in the cinema."
 
@@ -726,7 +708,7 @@ The **Alman** dialect retains the full complexity of **Standard German** verb co
 
 In **Standard German**, nominalized verbs are assigned neuter gender. In **Alman**, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.
 
-This rule ensures consistency in the treatment of nominalized forms throughout **Alman**, aligning them with the broader system of gender collapsing. Note that lexicalized **zum** + infinitive constructions expressing purpose (e.g., *zum Lernen*) are retained as fixed expressions, per the exception for lexicalized contractions in the section on articles.
+This rule ensures consistency in the treatment of nominalized forms throughout **Alman**, aligning them with the broader system of gender collapsing. Contractions involving nominalized verbs (e.g., *zum Lernen*) are resolved and simplified like any other contraction, per the contraction resolution rule in the section on articles.
 
 
 **Examples:**
@@ -735,7 +717,7 @@ This rule ensures consistency in the treatment of nominalized forms throughout *
 |------------------|-------|
 | Das Lernen fällt mir leicht. | Die Lernen fällt mir leicht. |
 | Ich finde das Lernen spannend. | Ich finde die Lernen spannend. |
-| Ich gehe in die Bibliothek zum Lernen. | Ich gehe in die Bibliothek zum Lernen. |
+| Ich gehe in die Bibliothek zum Lernen. | Ich gehe in die Bibliothek zu die Lernen. |
 
 
 
