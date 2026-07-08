@@ -6,17 +6,17 @@
     {
       "id": "natural-gender-attribution",
       "title": "Personal Pronouns: Natural Gender Attribution",
-      "description": "Personal pronouns maintain their <sd /> case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender",
+      "description": "Personal pronouns maintain their <sd /> case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender\n\nNote that when the referent is described by an occupational title, the title itself follows the uniformity rules described in the section on lexical gender simplifications, while the pronoun follows natural gender.",
       "examples": [
         {
-          "standard": "Sie ist Ärztin. (die Frau, f.)",
-          "alman": "Sie ist Ärztin.",
-          "english": "She is a doctor."
+          "standard": "Sie ist nett. (die Frau, f.)",
+          "alman": "Sie ist nett.",
+          "english": "She is nice."
         },
         {
-          "standard": "Er ist Lehrer. (der Mann, m.)",
-          "alman": "Er ist Lehrer.",
-          "english": "He is a teacher."
+          "standard": "Er ist nett. (der Mann, m.)",
+          "alman": "Er ist nett.",
+          "english": "He is nice."
         },
         {
           "standard": "Es ist klug. (das Mädchen, n.)",
@@ -42,7 +42,7 @@
         },
         {
           "standard": "Sie gibt ihr das Buch.",
-          "alman": "Sie gibt ihr das Buch.",
+          "alman": "Sie gibt ihr die Buch.",
           "english": "She gives her the book."
         }
       ]
@@ -119,6 +119,43 @@
       ]
     },
     {
+      "id": "relative-pronouns",
+      "title": "Relative Pronouns",
+      "description": "Relative pronouns follow the same simplification as definite articles. All non-genitive relative pronoun forms (der/die/das/den/dem) are replaced by the invariant form **die**, regardless of the gender, number, or case role of the referent within the relative clause. The genitive relative pronouns **dessen** and **deren** are both replaced by **deren**, consistent with the treatment of genitive demonstratives in the section on articles.\n\nSince the invariant **die** no longer marks the case role of the relativized element, ambiguity between subject and object relative clauses is resolved by verb agreement and context; where genuine ambiguity arises, speakers may rephrase using a personal pronoun in the relative clause or a periphrastic construction.",
+      "examples": [
+        {
+          "standard": "der Mann, der dort steht",
+          "alman": "die Mann, die dort steht",
+          "english": "the man who is standing there"
+        },
+        {
+          "standard": "der Mann, den ich sehe",
+          "alman": "die Mann, die ich sehe",
+          "english": "the man whom I see"
+        },
+        {
+          "standard": "der Mann, dem ich helfe",
+          "alman": "die Mann, die ich helfe",
+          "english": "the man whom I help"
+        },
+        {
+          "standard": "das Kind, das spielt",
+          "alman": "die Kind, die spielt",
+          "english": "the child who is playing"
+        },
+        {
+          "standard": "die Frau, deren Auto kaputt ist",
+          "alman": "die Frau, deren Auto kaputt ist",
+          "english": "the woman whose car is broken"
+        },
+        {
+          "standard": "der Mann, dessen Haus groß ist",
+          "alman": "die Mann, deren Haus groß ist",
+          "english": "the man whose house is large"
+        }
+      ]
+    },
+    {
       "id": "interrogative-pronouns",
       "title": "Retention of Standard Interrogative Pronouns",
       "description": "The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their <sd /> forms without modification. These pronouns function as in <sd /> in all contexts.",
@@ -153,6 +190,25 @@
         {
           "standard": "Worüber freust du dich?",
           "alman": "Über was freust du dich?"
+        }
+      ]
+    },
+    {
+      "id": "pronominal-adverbs",
+      "title": "Pronominal Adverbs (da- Compounds)",
+      "description": "Parallel to the treatment of interrogative *wo-* forms, the pronominal adverbs formed with *da-* (**damit, davon, darüber, dafür, daran**, and similar variants) may be replaced by the uncontracted preposition followed by the demonstrative **das** (e.g., **mit das, von das, über das**), consistent with the retention of the neutral demonstrative described in the section on articles.\n\nThe <sd /> *da-* compounds remain fully acceptable, as they carry no gender or case inflection and pose no additional learning burden. Both variants may be used interchangeably.",
+      "examples": [
+        {
+          "standard": "Ich bin damit einverstanden.",
+          "alman": "Ich bin mit das einverstanden. / Ich bin damit einverstanden."
+        },
+        {
+          "standard": "Davon habe ich gehört.",
+          "alman": "Von das habe ich gehört. / Davon habe ich gehört."
+        },
+        {
+          "standard": "Er freut sich darüber.",
+          "alman": "Er freut sich über das. / Er freut sich darüber."
         }
       ]
     }

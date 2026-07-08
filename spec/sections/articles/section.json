@@ -1,7 +1,7 @@
 {
   "id": "articles",
   "title": "Articles",
-  "body": "This section outlines the simplification of <sd /> articles in <alman />, eliminating grammatical gender and case distinctions. Definite articles use **die** for all non-genitive contexts and **der** for genitive, with **das** retained as a neutral demonstrative. Possession may alternatively use **von die** instead of genitive constructions. Indefinite articles adopt **ein** universally in non-genitive cases, while genitive employs **von ein** or retains **ein** with prepositions. Preposition-article contractions are resolved to full forms (e.g., *vom* → *von die*), and nominalized articles preserve **ein** as standalone forms.",
+  "body": "This section outlines the simplification of <sd /> articles in <alman />, eliminating grammatical gender and case distinctions. Definite articles use **die** for all non-genitive contexts and **der** for genitive, with **das** retained as a neutral demonstrative. Possession may alternatively use **von die** instead of genitive constructions. Indefinite articles adopt **ein** universally in non-genitive cases, while genitive employs **von ein** or retains **ein** with prepositions. Preposition-article contractions are resolved to full forms (e.g., *vom* → *von die*), except in lexicalized fixed expressions, and nominalized articles preserve **ein** as standalone forms. The case distinction after two-way prepositions is abolished for noun phrases.",
   "paragraphs": [
     {
       "id": "definite-articles"

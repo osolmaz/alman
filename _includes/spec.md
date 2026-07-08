@@ -1,8 +1,8 @@
 # Alman: A Simplified Dialect of the German Language
 
-**Version**: 0.4.1  
+**Version**: 0.5.0  
 
-**Last Updated**: 2025-02-08
+**Last Updated**: 2026-07-08
 
 
 ## Introduction {#introduction}
@@ -69,12 +69,12 @@ This specification provides a formal account of **Alman** grammar, detailing the
 
 ## Articles {#articles}
 
-This section outlines the simplification of **Standard German** articles in **Alman**, eliminating grammatical gender and case distinctions. Definite articles use **die** for all non-genitive contexts and **der** for genitive, with **das** retained as a neutral demonstrative. Possession may alternatively use **von die** instead of genitive constructions. Indefinite articles adopt **ein** universally in non-genitive cases, while genitive employs **von ein** or retains **ein** with prepositions. Preposition-article contractions are resolved to full forms (e.g., *vom* → *von die*), and nominalized articles preserve **ein** as standalone forms.
+This section outlines the simplification of **Standard German** articles in **Alman**, eliminating grammatical gender and case distinctions. Definite articles use **die** for all non-genitive contexts and **der** for genitive, with **das** retained as a neutral demonstrative. Possession may alternatively use **von die** instead of genitive constructions. Indefinite articles adopt **ein** universally in non-genitive cases, while genitive employs **von ein** or retains **ein** with prepositions. Preposition-article contractions are resolved to full forms (e.g., *vom* → *von die*), except in lexicalized fixed expressions, and nominalized articles preserve **ein** as standalone forms. The case distinction after two-way prepositions is abolished for noun phrases.
 
 
 ### §1. Definite Article Simplification {#definite-articles}
 
-The **Alman** dialect systematically replaces the six case-inflected definite article forms of **Standard German** through morphological regularization, employing invariant forms for non-genitive and genitive cases while eliminating case-specific noun endings. All surface realizations of definite articles in non-genitive contexts (regardless of grammatical gender, number, or case) are replaced by **die**. Genitive contexts exclusively employ **der**, accompanied by elimination of genitive noun inflections.
+The **Alman** dialect systematically replaces the six case-inflected definite article forms of **Standard German** through morphological regularization, employing invariant forms for non-genitive and genitive cases while eliminating case-specific noun endings. All surface realizations of definite articles in non-genitive contexts (regardless of grammatical gender, number, or case) are replaced by **die**. Genitive contexts employ **der** by default, accompanied by elimination of genitive noun inflections.
 
 
 #### §1a. Invariant 'die' for Non-Genitive Cases
@@ -100,6 +100,8 @@ All nominative, accusative, and dative definite articles (der/die/das/den/dem) a
 
 All genitive definite articles (des/der) are replaced by 'der', accompanied by elimination of genitive noun inflections.
 
+After genitive prepositions such as **wegen**, **trotz**, **statt**, **während**, and **innerhalb**, the genitive article **der** is preferred, but the invariant non-genitive **die** is also acceptable, mirroring colloquial usage. This parallels the treatment of indefinite articles after genitive prepositions.
+
 
 **Examples:**
 
@@ -108,6 +110,7 @@ All genitive definite articles (des/der) are replaced by 'der', accompanied by e
 | des Mannes (Genitive) | der Mann |
 | der Frau (Genitive) | der Frau |
 | des Kindes (Genitive) | der Kind |
+| wegen des Wetters | wegen der Wetter / wegen die Wetter |
 
 
 
@@ -141,13 +144,14 @@ While interchangeable, 'der' should be retained when translating original geniti
 |------------------|-------|
 | das Haus des Mannes | die Haus der Mann / die Haus von die Mann |
 | die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |
-| wegen des Wetters | wegen der Wetter / wegen die Wetter |
 
 
 
 #### §1e. Contraction Resolution
 
 Preposition-article contractions (e.g., vom, im, zur) must be resolved to their full form prior to applying article replacement rules. The uncontracted preposition and article are then processed according to standard **Alman** article rules.
+
+This rule applies only to productive, compositional preposition-article combinations; lexicalized fixed expressions are exempt, as described in the next rule.
 
 
 **Examples:**
@@ -158,6 +162,47 @@ Preposition-article contractions (e.g., vom, im, zur) must be resolved to their 
 | im Garten (in + dem) | in die Garten |
 | fürs Kind (für + das) | für die Kind |
 | zur Frau (zu + der) | zu die Frau |
+
+
+
+#### §1f. Exception: Lexicalized Contractions and Fixed Expressions
+
+Contractions that form part of lexicalized, non-compositional expressions are retained in their contracted form and are not subject to contraction resolution or article replacement. This includes:
+- The adverbial superlative construction **am + -sten** (am besten, am schnellsten)
+- Fixed idiomatic expressions such as **zum Beispiel**, **zum ersten Mal**, **im Allgemeinen**, **im Voraus**
+- **zum** + nominalized infinitive expressing purpose (zum Lernen, zum Essen)
+
+These expressions function as indivisible lexical units rather than productive preposition-article-noun combinations. Preserving them maintains mutual intelligibility with **Standard German** at no cost to learners, who acquire them as fixed vocabulary items.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| am besten | am besten |
+| zum Beispiel | zum Beispiel |
+| Ich gehe in die Bibliothek zum Lernen. | Ich gehe in die Bibliothek zum Lernen. |
+| im Allgemeinen | im Allgemeinen |
+
+
+
+#### §1g. Two-Way Prepositions
+
+In **Standard German**, the two-way prepositions (**in, an, auf, über, unter, vor, hinter, neben, zwischen**) govern the accusative to express motion toward a goal and the dative to express static location. Since **Alman** collapses accusative and dative articles into the invariant **die**, this case-based distinction is abolished for noun phrases: *in die Kino* covers both "into the cinema" and "in the cinema."
+
+Where the direction/location distinction is communicatively essential, it is expressed lexically, e.g., through directional adverbs (**hinein, hinaus, hin**) or locative adverbs (**drinnen, drin, dort**), or resolved by the semantics of the verb.
+
+Note that personal pronouns retain case marking (see the section on pronouns), so the distinction remains available in pronominal constructions (*auf ihn* vs. *auf ihm*).
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Ich gehe ins Kino. (Accusative, motion) | Ich gehe in die Kino. | I go to the cinema. |
+| Ich bin im Kino. (Dative, location) | Ich bin in die Kino. | I am at the cinema. |
+| Er legt das Buch auf den Tisch. | Er legt die Buch auf die Tisch. | He puts the book on the table. |
+| Das Buch liegt auf dem Tisch. | Die Buch liegt auf die Tisch. | The book lies on the table. |
 
 
 
@@ -211,7 +256,7 @@ The **ein** form persists in nominalized constructions where the article functio
 
 | Standard German | Alman |
 |------------------|-------|
-| Diese Erfindung war eine der wichtigsten Leistungen des 20. Jahrhunderts. | Diese Erfindung war ein der wichtigsten Leistungen der 20. Jahrhundert. |
+| Diese Erfindung war eine der wichtigsten Leistungen des 20. Jahrhunderts. | Diese Erfindung war ein der wichtigste Leistungen der 20. Jahrhundert. |
 
 
 
@@ -339,9 +384,9 @@ Genitive constructions retain the analytical 'der' article while maintaining inv
 
 #### §4c. Nominalized Adjectives
 
-Nominalized adjectives, when functioning as nouns, are to be modified in the same manner as attributive adjectives. They receive the invariant **-e** ending irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms. 
+Nominalized adjectives, when functioning as nouns, receive the invariant **-e** ending in the singular, irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms.
 
-This rule ensures that nominalized adjectives are treated uniformly with attributive adjectives, thereby simplifying the overall adjectival system in **Alman**.
+In the plural, nominalized adjectives behave as nouns: consistent with the preservation of noun plural morphology described in the section on nouns, they retain the **-en** ending as a plural marker (not a case marker). This distinguishes *die Schöne* (singular) from *die Schönen* (plural).
 
 
 **Examples:**
@@ -349,7 +394,7 @@ This rule ensures that nominalized adjectives are treated uniformly with attribu
 | Standard German | Alman |
 |------------------|-------|
 | Das Gute im Menschen | Die Gute in die Menschen |
-| An die Schönen (Dative, plural) | An die Schönen (-n ending kept to keep plural meaning) |
+| An die Schönen (Dative, plural) | An die Schönen (-en retained as plural marker) |
 | Wegen des Bekanntes | Wegen der Bekannte / Wegen die Bekannte |
 | unter anderem | unter andere |
 
@@ -380,7 +425,7 @@ Words functioning adverbially retain their base form without receiving the -e en
 
 ## Pronouns and Determiners {#pronouns-and-determiners}
 
-This section outlines modifications to **Standard German**'s pronominal system that prioritize natural gender attribution while maintaining case distinctions for referential clarity. Personal pronouns retain **Standard German** case forms but reference biological/social gender rather than grammatical gender. Determiners undergo simplification through gender-neutral forms in non-genitive contexts, with preserved case inflection only in personal pronouns.
+This section outlines modifications to **Standard German**'s pronominal system that prioritize natural gender attribution while maintaining case distinctions for referential clarity. Personal pronouns retain **Standard German** case forms but reference biological/social gender rather than grammatical gender. Relative pronouns collapse to the invariant **die** (genitive **deren**), following the article system. Determiners, possessive determiners, and the negative article **kein** undergo simplification through invariant forms in non-genitive contexts, with preserved case inflection only in personal pronouns.
 
 
 ### §6. Pronouns {#pronouns}
@@ -395,13 +440,15 @@ Personal pronouns maintain their **Standard German** case forms but are interpre
 2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities
 3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender
 
+Note that when the referent is described by an occupational title, the title itself follows the uniformity rules described in the section on lexical gender simplifications, while the pronoun follows natural gender.
+
 
 **Examples:**
 
 | Standard German | Alman | English |
 |------------------|--------|---------|
-| Sie ist Ärztin. (die Frau, f.) | Sie ist Ärztin. | She is a doctor. |
-| Er ist Lehrer. (der Mann, m.) | Er ist Lehrer. | He is a teacher. |
+| Sie ist nett. (die Frau, f.) | Sie ist nett. | She is nice. |
+| Er ist nett. (der Mann, m.) | Er ist nett. | He is nice. |
 | Es ist klug. (das Mädchen, n.) | Sie ist klug. | She is clever. |
 | Es ist neu. (das Buch, n.) | Es ist neu. | It is new. |
 
@@ -428,7 +475,7 @@ Personal pronouns retain full case inflection to preserve referential clarity an
 | Standard German | Alman | English |
 |------------------|--------|---------|
 | Ich sehe ihn. (den Mann) | Ich sehe ihn. | I see him. |
-| Sie gibt ihr das Buch. | Sie gibt ihr das Buch. | She gives her the book. |
+| Sie gibt ihr das Buch. | Sie gibt ihr die Buch. | She gives her the book. |
 
 
 
@@ -481,7 +528,27 @@ Possessive pronouns retain their case forms but align with natural gender attrib
 
 
 
-#### §6f. Retention of Standard Interrogative Pronouns
+#### §6f. Relative Pronouns
+
+Relative pronouns follow the same simplification as definite articles. All non-genitive relative pronoun forms (der/die/das/den/dem) are replaced by the invariant form **die**, regardless of the gender, number, or case role of the referent within the relative clause. The genitive relative pronouns **dessen** and **deren** are both replaced by **deren**, consistent with the treatment of genitive demonstratives in the section on articles.
+
+Since the invariant **die** no longer marks the case role of the relativized element, ambiguity between subject and object relative clauses is resolved by verb agreement and context; where genuine ambiguity arises, speakers may rephrase using a personal pronoun in the relative clause or a periphrastic construction.
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| der Mann, der dort steht | die Mann, die dort steht | the man who is standing there |
+| der Mann, den ich sehe | die Mann, die ich sehe | the man whom I see |
+| der Mann, dem ich helfe | die Mann, die ich helfe | the man whom I help |
+| das Kind, das spielt | die Kind, die spielt | the child who is playing |
+| die Frau, deren Auto kaputt ist | die Frau, deren Auto kaputt ist | the woman whose car is broken |
+| der Mann, dessen Haus groß ist | die Mann, deren Haus groß ist | the man whose house is large |
+
+
+
+#### §6g. Retention of Standard Interrogative Pronouns
 
 The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their **Standard German** forms without modification. These pronouns function as in **Standard German** in all contexts.
 
@@ -496,7 +563,7 @@ The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their 
 
 
 
-#### §6g. Preferred Use of Prepositional Interrogative Constructions
+#### §6h. Preferred Use of Prepositional Interrogative Constructions
 
 In interrogative constructions involving prepositions, the **Alman** dialect favors the use of an uncontracted preposition preceding **was** rather than employing the compound forms. Thus, constructions such as **zu was, von was, mit was, über was, durch was**, and similar variants, are preferred over the corresponding *wo-* forms. This mirrors the usage of preposition + *what* in in English, like *to what*, *from what*, and so on.
 
@@ -508,6 +575,23 @@ In interrogative constructions involving prepositions, the **Alman** dialect fav
 | Womit hilfst du mir? | Mit was hilfst du mir? |
 | Wovon träumst du? | Von was träumst du? |
 | Worüber freust du dich? | Über was freust du dich? |
+
+
+
+#### §6i. Pronominal Adverbs (da- Compounds)
+
+Parallel to the treatment of interrogative *wo-* forms, the pronominal adverbs formed with *da-* (**damit, davon, darüber, dafür, daran**, and similar variants) may be replaced by the uncontracted preposition followed by the demonstrative **das** (e.g., **mit das, von das, über das**), consistent with the retention of the neutral demonstrative described in the section on articles.
+
+The **Standard German** *da-* compounds remain fully acceptable, as they carry no gender or case inflection and pose no additional learning burden. Both variants may be used interchangeably.
+
+
+**Examples:**
+
+| Standard German | Alman |
+|------------------|-------|
+| Ich bin damit einverstanden. | Ich bin mit das einverstanden. / Ich bin damit einverstanden. |
+| Davon habe ich gehört. | Von das habe ich gehört. / Davon habe ich gehört. |
+| Er freut sich darüber. | Er freut sich über das. / Er freut sich darüber. |
 
 
 
@@ -553,7 +637,29 @@ When a genitive construction is required, speakers of **Alman** may either adopt
 
 
 
-#### §7c. Exception for Certain Indefinite and Negative Quantifiers
+#### §7c. Possessive Determiners and the Negative Article
+
+Possessive determiners (**mein, dein, sein, ihr, unser, euer, Ihr**) and the negative article **kein** follow the same pattern as the indefinite article **ein**: the invariant base form is used in all non-genitive contexts, eliminating the gender- and case-specific endings of **Standard German** (meine/meinen/meinem/meiner, keine/keinen/keinem/keiner).
+
+Genitive constructions employ either the periphrastic **von** + base form, or the bare base form after genitive prepositions such as **wegen**, **trotz**, and **statt**, paralleling the treatment of the indefinite article.
+
+The choice among **mein, dein, sein, ihr**, etc. follows natural gender attribution of the possessor, as described in the section on pronouns.
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Ich sehe meinen Hund. | Ich sehe mein Hund. | I see my dog. |
+| mit meiner Frau | mit mein Frau | with my wife |
+| Ich habe keine Zeit. | Ich habe kein Zeit. | I have no time. |
+| mit keinem Wort | mit kein Wort | with not a single word |
+| das Auto meines Vaters | die Auto von mein Vater | my father's car |
+| wegen keines Geldes | wegen kein Geld | for lack of money |
+
+
+
+#### §7d. Exception for Certain Indefinite and Negative Quantifiers
 
 While **Alman** consolidates and simplifies most determiners, some **indefinite** or **negative** quantifiers that appear as **paired words** in **Standard German** are **retained in their original forms**. In these cases, **alle** vs. **alles**, **viel** vs. **viele**, **wenig** vs. **wenige**, and **nicht** vs. **nichts**, among others, are **not** reanalyzed or merged into a single form. Instead, they follow **Standard German** usage:
 
@@ -593,7 +699,7 @@ Since **Standard German** treats these pairs as **separate lexical items** rathe
 
 ## Verbs and Word Order {#verbs-and-word-order}
 
-This section describes the verbal system and syntactic structure of **Alman**, which maintains full fidelity to **Standard German** patterns. While other aspects of the grammar may be simplified, verb conjugations and word order rules remain unchanged to preserve the essential character of German syntax and ensure clear communication.
+This section describes the verbal system and syntactic structure of **Alman**, which maintains full fidelity to **Standard German** patterns. While other aspects of the grammar may be simplified, verb conjugations and word order rules remain unchanged to preserve the essential character of German syntax and ensure clear communication. One addition compensates for the loss of case marking: when both subject and object are full noun phrases, the subject must precede the object.
 
 
 ### §8. Verb Conjugations and Forms {#verbs}
@@ -620,7 +726,7 @@ The **Alman** dialect retains the full complexity of **Standard German** verb co
 
 In **Standard German**, nominalized verbs are assigned neuter gender. In **Alman**, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.
 
-This rule ensures consistency in the treatment of nominalized forms throughout **Alman**, aligning them with the broader system of gender collapsing.
+This rule ensures consistency in the treatment of nominalized forms throughout **Alman**, aligning them with the broader system of gender collapsing. Note that lexicalized **zum** + infinitive constructions expressing purpose (e.g., *zum Lernen*) are retained as fixed expressions, per the exception for lexicalized contractions in the section on articles.
 
 
 **Examples:**
@@ -638,21 +744,40 @@ This rule ensures consistency in the treatment of nominalized forms throughout *
 This paragraph details the preservation of **Standard German** word order patterns in **Alman**, maintaining both V2 in main clauses and verb-final position in subordinate clauses.
 
 
-#### Word Order
+#### §9a. Word Order
 
 The syntactic structure of sentences in **Alman** adheres to the conventional word order of **Standard German**. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).
 
-These rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with **Standard German**.
+These rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with **Standard German**. Note that while word order patterns are preserved, the article and inflection rules of **Alman** still apply within these sentences.
 
 
 **Examples:**
 
 | Standard German | Alman |
 |------------------|-------|
-| Ich gehe heute ins Kino. | Ich gehe heute ins Kino. |
-| Er hat gestern einen Brief geschrieben. | Er hat gestern einen Brief geschrieben. |
-| weil ich heute ins Kino gehe | weil ich heute ins Kino gehe |
-| dass er gestern einen Brief geschrieben hat | dass er gestern einen Brief geschrieben hat |
+| Ich gehe heute ins Kino. | Ich gehe heute in die Kino. |
+| Er hat gestern einen Brief geschrieben. | Er hat gestern ein Brief geschrieben. |
+| weil ich heute ins Kino gehe | weil ich heute in die Kino gehe |
+| dass er gestern einen Brief geschrieben hat | dass er gestern ein Brief geschrieben hat |
+
+
+
+#### §9b. Subject-Before-Object Order for Full Noun Phrases
+
+In **Standard German**, case marking on articles allows flexible constituent order: an object may be fronted (e.g., *Den Mann beißt der Hund*) because the accusative article identifies it unambiguously. Since **Alman** eliminates case marking on articles and nouns, this disambiguation is lost.
+
+Therefore, when both the subject and the object of a clause are full noun phrases, the subject must precede the object. Object-fronting remains available when at least one argument is a personal pronoun (which retains case marking, see the section on pronouns) or when context makes the roles unambiguous.
+
+This compensates for the loss of morphological case marking through fixed constituent order, paralleling the historical development of English.
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Der Hund beißt den Mann. | Die Hund beißt die Mann. | The dog bites the man. |
+| Den Mann beißt der Hund. | Die Hund beißt die Mann. (subject first, since object fronting would be ambiguous) | The dog bites the man. |
+| Ihn beißt der Hund. | Ihn beißt die Hund. (allowed: pronoun case marks the object) | The dog bites him. |
 
 
 

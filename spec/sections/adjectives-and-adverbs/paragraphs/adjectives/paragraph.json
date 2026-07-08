@@ -44,7 +44,7 @@
     {
       "id": "nominalized-adjectives",
       "title": "Nominalized Adjectives",
-      "description": "Nominalized adjectives, when functioning as nouns, are to be modified in the same manner as attributive adjectives. They receive the invariant **-e** ending irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms. \n\nThis rule ensures that nominalized adjectives are treated uniformly with attributive adjectives, thereby simplifying the overall adjectival system in <alman />.",
+      "description": "Nominalized adjectives, when functioning as nouns, receive the invariant **-e** ending in the singular, irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms.\n\nIn the plural, nominalized adjectives behave as nouns: consistent with the preservation of noun plural morphology described in the section on nouns, they retain the **-en** ending as a plural marker (not a case marker). This distinguishes *die Schöne* (singular) from *die Schönen* (plural).",
       "examples": [
         {
           "standard": "Das Gute im Menschen",
@@ -52,7 +52,7 @@
         },
         {
           "standard": "An die Schönen (Dative, plural)",
-          "alman": "An die Schönen (-n ending kept to keep plural meaning)"
+          "alman": "An die Schönen (-en retained as plural marker)"
         },
         {
           "standard": "Wegen des Bekanntes",

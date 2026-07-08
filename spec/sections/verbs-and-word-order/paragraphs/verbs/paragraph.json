@@ -25,7 +25,7 @@
     {
       "id": "nominalized-verbs",
       "title": "Nominalized Verbs",
-      "description": "In <sd />, nominalized verbs are assigned neuter gender. In <alman />, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.\n\nThis rule ensures consistency in the treatment of nominalized forms throughout <alman />, aligning them with the broader system of gender collapsing.",
+      "description": "In <sd />, nominalized verbs are assigned neuter gender. In <alman />, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.\n\nThis rule ensures consistency in the treatment of nominalized forms throughout <alman />, aligning them with the broader system of gender collapsing. Note that lexicalized **zum** + infinitive constructions expressing purpose (e.g., *zum Lernen*) are retained as fixed expressions, per the exception for lexicalized contractions in the section on articles.",
       "examples": [
         {
           "standard": "Das Lernen fällt mir leicht.",
