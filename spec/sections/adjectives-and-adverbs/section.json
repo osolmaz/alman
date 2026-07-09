@@ -1,7 +1,7 @@
 {
   "id": "adjectives-and-adverbs",
   "title": "Adjectives and Adverbs",
-  "body": "This section details <alman />'s regularization of adjective endings and preservation of adverbial forms. Attributive adjectives uniformly adopt an -e ending regardless of gender, number, or case, eliminating traditional declensional patterns. Adverbs and non-attributive adjectives retain their base form without inflection.",
+  "body": "This section details <alman />'s regularization of adjective endings and preservation of adverbial forms. Attributive adjectives uniformly adopt an -e ending regardless of gender, number, or case, eliminating traditional declensional patterns. Adverbs and non-attributive adjectives retain their base form without inflection, and adverbial superlatives replace the <sd /> **am** + superlative construction with the bare superlative stem (am besten → best).",
   "paragraphs": [
     {
       "id": "adjectives"

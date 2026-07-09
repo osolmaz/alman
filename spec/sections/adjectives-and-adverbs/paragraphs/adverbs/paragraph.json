@@ -1,7 +1,7 @@
 {
   "id": "adverbs",
   "title": "Adverbs",
-  "body": "The <alman /> dialect maintains <sd />'s lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.",
+  "body": "The <alman /> dialect maintains <sd />'s lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors. The sole innovation concerns the adverbial superlative, where the case-marked construction **am** + superlative is replaced by the bare superlative stem.",
   "rules": [
     {
       "id": "non-inflected-adverbs",
@@ -19,6 +19,33 @@
         {
           "standard": "frisch kaltes Wasser",
           "alman": "frisch kalte Wasser"
+        }
+      ]
+    },
+    {
+      "id": "adverbial-superlatives",
+      "title": "Bare-Stem Adverbial Superlatives",
+      "description": "The <sd /> adverbial superlative construction **am** + superlative (am besten, am schnellsten) is replaced by the bare superlative stem: **best**, **schnellst**, and so on. This mirrors the English adverbial superlative (\"I swim best\") and removes the case-marked contraction **am** (an + dem) from the construction entirely, consistent with the elimination of case-marked articles elsewhere in <alman />.\n\nThe variant **an** + bare stem (e.g., **an best**) is also acceptable, preserving the prepositional rhythm of the <sd /> construction for speakers who prefer it. The bare stem is the preferred form.\n\nThis rule takes precedence over the contraction resolution rule in the section on articles: **am** in adverbial superlatives is not expanded to **an die**. Attributive superlatives are unaffected and follow the regular invariant -e ending rule (die beste Schwimmer).",
+      "examples": [
+        {
+          "standard": "Ich schwimme am besten.",
+          "alman": "Ich schwimme best. / Ich schwimme an best.",
+          "english": "I swim best."
+        },
+        {
+          "standard": "Er läuft am schnellsten.",
+          "alman": "Er läuft schnellst. / Er läuft an schnellst.",
+          "english": "He runs fastest."
+        },
+        {
+          "standard": "Am liebsten esse ich Pizza.",
+          "alman": "Liebst esse ich Pizza. / An liebst esse ich Pizza.",
+          "english": "I like eating pizza most."
+        },
+        {
+          "standard": "Dieses Auto gefällt mir am meisten.",
+          "alman": "Diese Auto gefällt mir meist. / Diese Auto gefällt mir an meist.",
+          "english": "I like this car the most."
         }
       ]
     }
