@@ -6,7 +6,7 @@
     {
       "id": "case-neutralization",
       "title": "Case Ending Elimination",
-      "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers (des Mannes → der Mann)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.",
+      "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers on common nouns (des Mannes → der Mann); the prenominal genitive -s of proper names is exempt and retained (see the rule on the proper-name genitive)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.",
       "examples": [
         {
           "standard": "des Hundes (Genitive)",
@@ -35,6 +35,33 @@
         {
           "standard": "die Kollegen (Plural)",
           "alman": "die Kollegen (-en retained as plural marker)"
+        }
+      ]
+    },
+    {
+      "id": "proper-name-genitive",
+      "title": "Retention of the Proper-Name Genitive -s",
+      "description": "The prenominal genitive -s of proper names is exempt from case ending elimination and is retained unchanged, mirroring the English possessive *'s* (*Annas Buch* \"Anna's book\"). Since proper names take no article, the analytical genitive marker **der** cannot apply to them; the name-final -s is therefore not part of the article-and-case system that <alman /> eliminates, and it carries no additional learning burden for speakers familiar with the English construction.\n\nThis applies to personal names as well as place names and other proper nouns used possessively. The <sd /> orthographic convention for names ending in an s-sound — a bare apostrophe in place of -s (*Hans' Fahrrad*) — is likewise retained.\n\nAs with other possessive constructions, the periphrastic **von** construction remains available as an alternative (see the rule on the optional use of 'von die' for possession in the section on articles).",
+      "examples": [
+        {
+          "standard": "Annas Buch",
+          "alman": "Annas Buch",
+          "english": "Anna's book"
+        },
+        {
+          "standard": "Peters Auto",
+          "alman": "Peters Auto / die Auto von Peter",
+          "english": "Peter's car"
+        },
+        {
+          "standard": "Hans' Fahrrad",
+          "alman": "Hans' Fahrrad",
+          "english": "Hans's bicycle"
+        },
+        {
+          "standard": "Deutschlands Hauptstadt",
+          "alman": "Deutschlands Hauptstadt / die Hauptstadt von Deutschland",
+          "english": "Germany's capital"
         }
       ]
     },
@@ -79,15 +106,15 @@
     {
       "id": "optional-plural-marking",
       "title": "Optional Plural Disambiguation",
-      "description": "To resolve potential ambiguity in nouns with identical singular/plural forms, <alman /> permits optional plural marking through suffixation. When clarity requires explicit plurality indication, speakers may employ either:\n- The native German -n plural suffix\n- The international -s suffix\n\nThis disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential. Suffix choice follows speaker preference and lexical convention.",
+      "description": "To resolve potential ambiguity in nouns with identical singular/plural forms, <alman /> permits optional plural marking with the suffix **-s**, mirroring the English plural. When clarity requires explicit plurality indication, the -s suffix is appended to the invariant form.\n\nThe -s suffix is the sole disambiguation marker. The -n suffix is not used for this purpose: since case ending elimination abolishes the <sd /> dative plural -n, reusing -n as a plural marker would give the same ending two different meanings across the two languages.\n\nThis disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential.",
       "examples": [
         {
           "standard": "die Computer (plural)",
-          "alman": "die Computers/die Computern"
+          "alman": "die Computers"
         },
         {
           "standard": "der Sessel (singular)/die Sessel (plural)",
-          "alman": "die Sessel (singular)/die Sesseln/die Sessels (plural)"
+          "alman": "die Sessel (singular)/die Sessels (plural)"
         },
         {
           "standard": "die Mädchen (plural)",

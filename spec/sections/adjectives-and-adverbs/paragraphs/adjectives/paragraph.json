@@ -6,7 +6,7 @@
     {
       "id": "morphological-regularization",
       "title": "Invariant -e for All Declensional Endings",
-      "description": "Whenever an adjective carries a declensional ending in <sd /> — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in <alman />. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically.\n\nAdjectives that carry no declensional ending in <sd /> — predicative adjectives and forms used adverbially — remain unchanged; no ending is added (see the section on adverbs).\n\nComparison suffixes (**-er**, **-st**) are word formation rather than declension and are preserved: *schneller laufen* remains *schneller laufen*. Likewise, lexicalized adverbs such as **anders** or **meistens** carry no declensional ending and remain unchanged.\n\nThe sole exception to this principle is the adverbial superlative **am** + superlative, which is replaced by the bare superlative stem (see the section on adverbs).",
+      "description": "Whenever an adjective carries a declensional ending in <sd /> — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in <alman />. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, adjectives nominalized after **etwas**, **nichts**, and **alles** (*etwas Gutes*, *nichts Neues*), and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically.\n\nAdjectives that carry no declensional ending in <sd /> — predicative adjectives and forms used adverbially — remain unchanged; no ending is added (see the section on adverbs).\n\nComparison suffixes (**-er**, **-st**) are word formation rather than declension and are preserved: *schneller laufen* remains *schneller laufen*. Likewise, lexicalized adverbs such as **anders** or **meistens** carry no declensional ending and remain unchanged.\n\nThe sole exception to this principle is the adverbial superlative **am** + superlative, which is replaced by the bare superlative stem (see the section on adverbs).",
       "examples": [
         {
           "standard": "guter Mann (Masculine Nominative)",
@@ -31,6 +31,18 @@
         {
           "standard": "vor kurzem (fixed expression)",
           "alman": "vor kurze"
+        },
+        {
+          "standard": "etwas Gutes",
+          "alman": "etwas Gute"
+        },
+        {
+          "standard": "nichts Neues",
+          "alman": "nichts Neue"
+        },
+        {
+          "standard": "alles Gute (already ends in -e)",
+          "alman": "alles Gute"
         },
         {
           "standard": "Das Auto ist schnell. (predicative, no ending)",
