@@ -1,7 +1,7 @@
 {
   "id": "word-order",
   "title": "Word Order and Syntax",
-  "body": "This paragraph details the preservation of <sd /> word order patterns in <alman />, maintaining both V2 in main clauses and verb-final position in subordinate clauses.",
+  "body": "This paragraph details the preservation of <sd /> word order patterns in <alman />, maintaining both V2 in main clauses and verb-final position in subordinate clauses. It also describes how constituent order conventions compensate for the loss of case marking in clauses with full-noun-phrase arguments.",
   "rules": [
     {
       "id": "word-order-rules",
@@ -45,6 +45,33 @@
           "standard": "Ihn beißt der Hund.",
           "alman": "Ihn beißt die Hund. (allowed: pronoun case marks the object)",
           "english": "The dog bites him."
+        }
+      ]
+    },
+    {
+      "id": "ditransitive-order",
+      "title": "Ditransitive Constructions",
+      "description": "With ditransitive verbs such as **geben**, **zeigen**, and **schicken**, <sd /> distinguishes the indirect object (dative) from the direct object (accusative) through case marking, while also placing the indirect object before the direct object by default when both are full noun phrases. <alman /> retains this default order, and the loss of case marking is accepted: in a sequence of two full-noun-phrase objects, the first is interpreted as the recipient and the second as the theme.\n\nThis mirrors the English double-object construction (\"I give the woman the book\"), which likewise functions without case marking. No strict rule is imposed; verb semantics and context resolve the roles in practice, and residual ambiguity is tolerated as it is in English.\n\nWhere explicit marking is desired, or when the theme is to precede the recipient, the recipient may instead be expressed with the preposition **an** (paralleling English \"to\"), and personal pronouns retain their case forms as usual (see the section on pronouns).",
+      "examples": [
+        {
+          "standard": "Ich gebe der Frau das Buch.",
+          "alman": "Ich gebe die Frau die Buch.",
+          "english": "I give the woman the book."
+        },
+        {
+          "standard": "Er zeigt dem Kind die Stadt.",
+          "alman": "Er zeigt die Kind die Stadt.",
+          "english": "He shows the child the city."
+        },
+        {
+          "standard": "Ich gebe das Buch der Frau.",
+          "alman": "Ich gebe die Buch an die Frau. (theme first, recipient marked with 'an')",
+          "english": "I give the book to the woman."
+        },
+        {
+          "standard": "Ich gebe ihr das Buch.",
+          "alman": "Ich gebe ihr die Buch. (pronoun case marks the recipient)",
+          "english": "I give her the book."
         }
       ]
     }
