@@ -1,11 +1,11 @@
 {
   "id": "job-titles",
-  "title": "Uniformity of Person-Denoting Nouns",
-  "body": "This paragraph describes the elimination of gender-specific forms in person-denoting nouns, adopting a simplified system that uses the base form with the invariant article.",
+  "title": "Uniformity of Occupational and Person-Denoting Nouns",
+  "body": "This paragraph describes the elimination of gender-specific forms in occupational and person-denoting nouns, adopting a simplified system that uses the base form with the invariant article.",
   "rules": [
     {
       "id": "occupational-titles",
-      "title": "Uniformity of Person-Denoting Nouns",
+      "title": "Uniformity of Occupational and Person-Denoting Nouns",
       "description": "In <sd />, person-denoting nouns are frequently marked for gender with the suffix **-in**: occupations (*der Lehrer* versus *die Lehrerin*), nationalities and origins (*der Türke* versus *die Türkin*), and roles (*der Kollege* versus *die Kollegin*). In <alman />, such distinctions are eliminated. All person-denoting nouns are rendered without gender-specific modifications; the feminine suffix is omitted, and the masculine base form is universally employed. Consequently, person-denoting nouns are treated analogously to other nouns by employing the invariant definite article **die** and the indefinite article **ein**.\n\nNatural gender, where communicatively relevant, is conveyed by pronouns (see the section on pronouns) or by context. Relationship senses that <sd /> carries through the suffix (*Freundin* \"girlfriend\") are expressed as in colloquial usage, e.g., **feste Freund**, with pronouns marking gender.\n\nThis rule ensures a uniform treatment of person-denoting nouns, reflecting the broader commitment within <alman /> to reduce gender differentiation in lexical items.",
       "examples": [
         {

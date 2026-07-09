@@ -59,7 +59,7 @@ This specification provides a formal account of **Alman** grammar, detailing the
 </li>
 <li><a href="#lexical-gender">Lexical Gender Simplifications</a>
 <ul style="list-style: none; padding-left: 20px; margin-left: 0;">
-<li><a href="#job-titles">§10 Uniformity of Person-Denoting Nouns</a></li>
+<li><a href="#job-titles">§10 Uniformity of Occupational and Person-Denoting Nouns</a></li>
 </ul>
 </li>
 </ul>
@@ -768,9 +768,9 @@ This compensates for the loss of morphological case marking through fixed consti
 This section outlines the systematic elimination of gender-specific lexical forms in **Alman**, covering person-denoting nouns such as occupational titles, nationalities, and role descriptions. It describes how traditionally gendered word pairs are consolidated into a single form, using the historically masculine base form with the invariant article system to denote all referents regardless of gender.
 
 
-### §10. Uniformity of Person-Denoting Nouns {#job-titles}
+### §10. Uniformity of Occupational and Person-Denoting Nouns {#job-titles}
 
-This paragraph describes the elimination of gender-specific forms in person-denoting nouns, adopting a simplified system that uses the base form with the invariant article.
+This paragraph describes the elimination of gender-specific forms in occupational and person-denoting nouns, adopting a simplified system that uses the base form with the invariant article.
 
 In **Standard German**, person-denoting nouns are frequently marked for gender with the suffix **-in**: occupations (*der Lehrer* versus *die Lehrerin*), nationalities and origins (*der Türke* versus *die Türkin*), and roles (*der Kollege* versus *die Kollegin*). In **Alman**, such distinctions are eliminated. All person-denoting nouns are rendered without gender-specific modifications; the feminine suffix is omitted, and the masculine base form is universally employed. Consequently, person-denoting nouns are treated analogously to other nouns by employing the invariant definite article **die** and the indefinite article **ein**.
 
