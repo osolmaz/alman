@@ -6,7 +6,7 @@
     {
       "id": "case-neutralization",
       "title": "Case Ending Elimination",
-      "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers (des Mannes → der Mann)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns",
+      "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers (des Mannes → der Mann)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.",
       "examples": [
         {
           "standard": "des Hundes (Genitive)",
@@ -19,6 +19,22 @@
         {
           "standard": "dem Kinde (Dative, archaic)",
           "alman": "die Kind"
+        },
+        {
+          "standard": "den Kollegen (Accusative, weak noun)",
+          "alman": "die Kollege"
+        },
+        {
+          "standard": "dem Studenten (Dative, weak noun)",
+          "alman": "die Student"
+        },
+        {
+          "standard": "im Menschen (Dative, weak noun)",
+          "alman": "in die Mensch"
+        },
+        {
+          "standard": "die Kollegen (Plural)",
+          "alman": "die Kollegen (-en retained as plural marker)"
         }
       ]
     },
