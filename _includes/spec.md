@@ -245,7 +245,7 @@ The **ein** form persists in nominalized constructions where the article functio
 
 ## Nouns {#nouns}
 
-This section details **Alman**'s elimination of grammatical gender and case inflections in nouns. All nouns adopt a single invariant form across nominative, accusative, and dative cases, with genitive contexts marked by **der** instead of case endings. Plural forms retain their standard nominative/accusative morphology in all cases, while optional suffixes (-n/-s) resolve ambiguity for nouns with identical singular/plural forms. Weak noun declensions and archaic dative endings are abolished.
+This section details **Alman**'s elimination of grammatical gender and case inflections in nouns. All nouns adopt a single invariant form across nominative, accusative, and dative cases, with genitive contexts marked by **der** instead of case endings. The prenominal genitive -s of proper names (*Annas Buch*) is exempt and retained, mirroring the English possessive *'s*. Plural forms retain their standard nominative/accusative morphology in all cases, while optional suffixes (-n/-s) resolve ambiguity for nouns with identical singular/plural forms. Weak noun declensions and archaic dative endings are abolished.
 
 
 ### §3. Noun Morphology Simplification {#noun-morphology}
@@ -256,7 +256,7 @@ The **Alman** dialect systematically eliminates grammatical gender distinctions 
 #### §3a. Case Ending Elimination
 
 All case-specific noun endings are removed, including:
-- Genitive -s/-es markers (des Mannes → der Mann)
+- Genitive -s/-es markers on common nouns (des Mannes → der Mann); the prenominal genitive -s of proper names is exempt and retained (see the rule on the proper-name genitive)
 - Dative plural -n suffixes (den Bränden → die Brände)
 - Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.
 
@@ -275,7 +275,27 @@ All case-specific noun endings are removed, including:
 
 
 
-#### §3b. Invariant Plural Forms
+#### §3b. Retention of the Proper-Name Genitive -s
+
+The prenominal genitive -s of proper names is exempt from case ending elimination and is retained unchanged, mirroring the English possessive *'s* (*Annas Buch* "Anna's book"). Since proper names take no article, the analytical genitive marker **der** cannot apply to them; the name-final -s is therefore not part of the article-and-case system that **Alman** eliminates, and it carries no additional learning burden for speakers familiar with the English construction.
+
+This applies to personal names as well as place names and other proper nouns used possessively. The **Standard German** orthographic convention for names ending in an s-sound — a bare apostrophe in place of -s (*Hans' Fahrrad*) — is likewise retained.
+
+As with other possessive constructions, the periphrastic **von** construction remains available as an alternative (see the rule on the optional use of 'von die' for possession in the section on articles).
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Annas Buch | Annas Buch | Anna's book |
+| Peters Auto | Peters Auto / die Auto von Peter | Peter's car |
+| Hans' Fahrrad | Hans' Fahrrad | Hans's bicycle |
+| Deutschlands Hauptstadt | Deutschlands Hauptstadt / die Hauptstadt von Deutschland | Germany's capital |
+
+
+
+#### §3c. Invariant Plural Forms
 
 Standard nominative/accusative plural forms serve as universal plural markers, remaining unchanged in dative and genitive contexts. This preserves recognizable plural morphology while eliminating case-based modifications.
 
@@ -289,7 +309,7 @@ Standard nominative/accusative plural forms serve as universal plural markers, r
 
 
 
-#### §3c. No Regularization of Plural Morphology
+#### §3d. No Regularization of Plural Morphology
 
 **Alman** preserves **Standard German** plural morphology without systematic regularization, maintaining existing plural forms in all non-conflicting contexts. The dialect only intervenes in plural formation when its grammatical simplifications create morphological ambiguity between singular and plural forms, as described in the next rule.
 
@@ -305,7 +325,7 @@ Standard nominative/accusative plural forms serve as universal plural markers, r
 
 
 
-#### §3d. Optional Plural Disambiguation
+#### §3e. Optional Plural Disambiguation
 
 To resolve potential ambiguity in nouns with identical singular/plural forms, **Alman** permits optional plural marking through suffixation. When clarity requires explicit plurality indication, speakers may employ either:
 - The native German -n plural suffix
