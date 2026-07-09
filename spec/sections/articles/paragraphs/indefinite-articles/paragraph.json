@@ -6,7 +6,7 @@
     {
       "id": "non-genitive-forms",
       "title": "Unified 'ein' for Non-Genitive Cases",
-      "description": "The invariant form **ein** replaces all nominative, accusative, and dative indefinite articles (ein/eine/einen/einem), neutralizing gender and case distinctions.",
+      "description": "The invariant form **ein** replaces all nominative, accusative, and dative indefinite articles (ein/eine/einen/einem), neutralizing gender and case distinctions.\n\nThis rule applies to the indefinite article only. The homographic oblique forms of the indefinite pronoun **man** (*Das ärgert einen*) are pronouns, retain their case marking, and are described in the section on pronouns.",
       "examples": [
         {
           "standard": "ein Mann (Nominative)",

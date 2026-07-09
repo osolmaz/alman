@@ -6,7 +6,7 @@
     {
       "id": "word-order-rules",
       "title": "Word Order",
-      "description": "The syntactic structure of sentences in <alman /> adheres to the conventional word order of <sd />. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).\n\nThese rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with <sd />. Note that while word order patterns are preserved, the article and inflection rules of <alman /> still apply within these sentences.",
+      "description": "The syntactic structure of sentences in <alman /> adheres to the conventional word order of <sd />. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).\n\nVerb-first patterns are likewise retained exactly as in <sd />: yes/no questions (*Gehst du in die Kino?*), imperatives (*Gib mir die Buch!*), and conjunction-less conditionals (*Kommt er, so gehen wir*).\n\nThese rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with <sd />. Note that while word order patterns are preserved, the article and inflection rules of <alman /> still apply within these sentences.",
       "examples": [
         {
           "standard": "Ich gehe heute ins Kino.",
@@ -23,6 +23,14 @@
         {
           "standard": "dass er gestern einen Brief geschrieben hat",
           "alman": "dass er gestern ein Brief geschrieben hat"
+        },
+        {
+          "standard": "Gehst du heute ins Kino?",
+          "alman": "Gehst du heute in die Kino?"
+        },
+        {
+          "standard": "Gib mir das Buch!",
+          "alman": "Gib mir die Buch!"
         }
       ]
     },

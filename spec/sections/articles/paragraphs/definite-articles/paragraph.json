@@ -64,7 +64,7 @@
     {
       "id": "demonstrative-exception",
       "title": "Exception: Demonstrative Pronouns",
-      "description": "The demonstrative pronoun 'das' retains its form in nominative, accusative, and dative contexts when functioning as a neutral demonstrative ('that'). In genitive constructions, the form 'dessen' is replaced by 'deren' while maintaining the invariant article system.",
+      "description": "The demonstrative pronoun 'das' retains its form in nominative, accusative, and dative contexts when functioning as a neutral demonstrative ('that'). In genitive constructions, the form 'dessen' is replaced by 'deren' while maintaining the invariant article system.\n\nThis exception is strictly positional: it applies only when 'das' stands alone, without a following noun. Directly before a noun, the article rules always apply and every definite article form becomes **die**, regardless of stress or demonstrative intent. Demonstrative force before a noun is expressed with **diese** or **jene** (see the section on determiners), mirroring English *this/that* + noun. Likewise, the <sd /> demonstrative pronouns 'der', 'den', and 'dem' used standalone (*Der war's!*) are replaced by the invariant **die**, consistent with the treatment of relative pronouns.",
       "examples": [
         {
           "standard": "das ist gut (demonstrative)",
@@ -73,6 +73,14 @@
         {
           "standard": "dessen Haus",
           "alman": "deren Haus"
+        },
+        {
+          "standard": "DAS Buch will ich! (stressed, attributive)",
+          "alman": "Diese Buch will ich!"
+        },
+        {
+          "standard": "Der war's! (standalone demonstrative)",
+          "alman": "Die war's!"
         }
       ]
     },

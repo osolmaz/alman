@@ -120,6 +120,8 @@ The genitive **der** is the single case-marked article form that **Alman** retai
 
 The demonstrative pronoun 'das' retains its form in nominative, accusative, and dative contexts when functioning as a neutral demonstrative ('that'). In genitive constructions, the form 'dessen' is replaced by 'deren' while maintaining the invariant article system.
 
+This exception is strictly positional: it applies only when 'das' stands alone, without a following noun. Directly before a noun, the article rules always apply and every definite article form becomes **die**, regardless of stress or demonstrative intent. Demonstrative force before a noun is expressed with **diese** or **jene** (see the section on determiners), mirroring English *this/that* + noun. Likewise, the **Standard German** demonstrative pronouns 'der', 'den', and 'dem' used standalone (*Der war's!*) are replaced by the invariant **die**, consistent with the treatment of relative pronouns.
+
 
 **Examples:**
 
@@ -127,6 +129,8 @@ The demonstrative pronoun 'das' retains its form in nominative, accusative, and 
 |------------------|-------|
 | das ist gut (demonstrative) | das ist gut |
 | dessen Haus | deren Haus |
+| DAS Buch will ich! (stressed, attributive) | Diese Buch will ich! |
+| Der war's! (standalone demonstrative) | Die war's! |
 
 
 
@@ -198,6 +202,8 @@ The **Alman** dialect regularizes indefinite article usage through morphological
 
 The invariant form **ein** replaces all nominative, accusative, and dative indefinite articles (ein/eine/einen/einem), neutralizing gender and case distinctions.
 
+This rule applies to the indefinite article only. The homographic oblique forms of the indefinite pronoun **man** (*Das ärgert einen*) are pronouns, retain their case marking, and are described in the section on pronouns.
+
 
 **Examples:**
 
@@ -245,7 +251,7 @@ The **ein** form persists in nominalized constructions where the article functio
 
 ## Nouns {#nouns}
 
-This section details **Alman**'s elimination of grammatical gender and case inflections in nouns. All nouns adopt a single invariant form across nominative, accusative, and dative cases, with genitive contexts marked by **der** instead of case endings. The prenominal genitive -s of proper names (*Annas Buch*) is exempt and retained, mirroring the English possessive *'s*. Plural forms retain their standard nominative/accusative morphology in all cases, while optional suffixes (-n/-s) resolve ambiguity for nouns with identical singular/plural forms. Weak noun declensions and archaic dative endings are abolished.
+This section details **Alman**'s elimination of grammatical gender and case inflections in nouns. All nouns adopt a single invariant form across nominative, accusative, and dative cases, with genitive contexts marked by **der** instead of case endings. The prenominal genitive -s of proper names (*Annas Buch*) is exempt and retained, mirroring the English possessive *'s*. Plural forms retain their standard nominative/accusative morphology in all cases, while an optional -s suffix resolves ambiguity for nouns with identical singular/plural forms. Weak noun declensions and archaic dative endings are abolished.
 
 
 ### §3. Noun Morphology Simplification {#noun-morphology}
@@ -327,19 +333,19 @@ Standard nominative/accusative plural forms serve as universal plural markers, r
 
 #### §3e. Optional Plural Disambiguation
 
-To resolve potential ambiguity in nouns with identical singular/plural forms, **Alman** permits optional plural marking through suffixation. When clarity requires explicit plurality indication, speakers may employ either:
-- The native German -n plural suffix
-- The international -s suffix
+To resolve potential ambiguity in nouns with identical singular/plural forms, **Alman** permits optional plural marking with the suffix **-s**, mirroring the English plural. When clarity requires explicit plurality indication, the -s suffix is appended to the invariant form.
 
-This disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential. Suffix choice follows speaker preference and lexical convention.
+The -s suffix is the sole disambiguation marker. The -n suffix is not used for this purpose: since case ending elimination abolishes the **Standard German** dative plural -n, reusing -n as a plural marker would give the same ending two different meanings across the two languages.
+
+This disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential.
 
 
 **Examples:**
 
 | Standard German | Alman |
 |------------------|-------|
-| die Computer (plural) | die Computers/die Computern |
-| der Sessel (singular)/die Sessel (plural) | die Sessel (singular)/die Sesseln/die Sessels (plural) |
+| die Computer (plural) | die Computers |
+| der Sessel (singular)/die Sessel (plural) | die Sessel (singular)/die Sessels (plural) |
 | die Mädchen (plural) | die Mädchens |
 
 
@@ -356,7 +362,7 @@ The **Alman** dialect governs adjective morphology through a single form-based p
 
 #### §4a. Invariant -e for All Declensional Endings
 
-Whenever an adjective carries a declensional ending in **Standard German** — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in **Alman**. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically.
+Whenever an adjective carries a declensional ending in **Standard German** — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in **Alman**. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, adjectives nominalized after **etwas**, **nichts**, and **alles** (*etwas Gutes*, *nichts Neues*), and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically.
 
 Adjectives that carry no declensional ending in **Standard German** — predicative adjectives and forms used adverbially — remain unchanged; no ending is added (see the section on adverbs).
 
@@ -375,6 +381,9 @@ The sole exception to this principle is the adverbial superlative **am** + super
 | die roten Schuhe (Plural) | die rote Schuhe |
 | unter anderem (fixed expression) | unter andere |
 | vor kurzem (fixed expression) | vor kurze |
+| etwas Gutes | etwas Gute |
+| nichts Neues | nichts Neue |
+| alles Gute (already ends in -e) | alles Gute |
 | Das Auto ist schnell. (predicative, no ending) | Die Auto ist schnell. |
 
 
@@ -505,6 +514,8 @@ Personal pronouns retain full case inflection to preserve referential clarity an
 
 The formal address pronoun **Sie** (with dative **Ihnen** and possessive **Ihr**) is retained exactly as in **Standard German**, including its capitalization.
 
+The indefinite pronoun **man** likewise retains its full **Standard German** paradigm, including its oblique forms **einen** (accusative) and **einem** (dative). These are pronoun forms, not articles, and are therefore not affected by the indefinite article simplification described in the section on articles.
+
 
 **Examples:**
 
@@ -514,6 +525,8 @@ The formal address pronoun **Sie** (with dative **Ihnen** and possessive **Ihr**
 | Sie gibt ihr das Buch. | Sie gibt ihr die Buch. | She gives her the book. |
 | Können Sie mir helfen? | Können Sie mir helfen? | Can you help me? (formal) |
 | Ich danke Ihnen für das Geschenk. | Ich danke Ihnen für die Geschenk. | I thank you for the gift. (formal) |
+| Das ärgert einen. | Das ärgert einen. | That annoys one. |
+| Das hilft einem sehr. | Das hilft einem sehr. | That helps one a lot. |
 
 
 
@@ -642,7 +655,9 @@ This paragraph describes the simplification of determiner and demonstrative form
 
 #### §7a. Unified Forms for Non-Genitive Contexts
 
-In non-genitive contexts, determiners and pronouns that vary by gender and case in **Standard German** are unified by adopting the invariant feminine "die..." form. Thus, forms such as **diejenige, diese, jene, welche** (and analogous variants) are employed regardless of the gender or case of the referent.
+In non-genitive contexts, any determiner or pronoun that inflects for gender or case in **Standard German** adopts the invariant feminine "die..." form, i.e. the form ending in -e. This is a general principle covering the entire class: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe**, and all analogous items are employed regardless of the gender or case of the referent. Determiners that already end in -e and do not inflect for gender in the relevant contexts (**beide, einige, mehrere**) remain unchanged.
+
+The paired quantifiers described in the rule on indefinite and negative quantifiers (**alle/alles, viel/viele, wenig/wenige, nicht/nichts**) are exempt and follow their own rule.
 
 
 **Examples:**
@@ -655,6 +670,9 @@ In non-genitive contexts, determiners and pronouns that vary by gender and case 
 | derjenige Mann, der kommt | diejenige Mann, die kommt |
 | dieser Weg | diese Weg |
 | jener Tag | jene Tag |
+| jeder Tag, jeden Tag, jedem Tag | jede Tag |
+| mancher Politiker | manche Politiker |
+| solches Wetter | solche Wetter |
 | welches Buch | welche Buch |
 | demjenigen Weg | diejenige Weg |
 | dasselbe Buch | dieselbe Buch |
@@ -685,6 +703,8 @@ Genitive constructions employ either the periphrastic **von** + base form, or th
 
 The choice among **mein, dein, sein, ihr**, etc. follows natural gender attribution of the possessor, as described in the section on pronouns.
 
+The same invariant base form is used in pronominal (standalone) use, where **Standard German** employs inflected forms such as *meins*, *deiner*, *keins*, and *keiner*. This parallels the retention of bare **ein** in nominalized constructions, as described in the section on articles: *Das ist mein* ("That is mine"), *Kein hat es gesehen* ("None saw it").
+
 
 **Examples:**
 
@@ -696,6 +716,9 @@ The choice among **mein, dein, sein, ihr**, etc. follows natural gender attribut
 | mit keinem Wort | mit kein Wort | with not a single word |
 | das Auto meines Vaters | die Auto von mein Vater | my father's car |
 | wegen keines Geldes | wegen kein Geld | for lack of money |
+| Das ist meins. | Das ist mein. | That is mine. |
+| Keiner hat es gesehen. | Kein hat es gesehen. | None saw it. |
+| Ich nehme deins. | Ich nehme dein. | I take yours. |
 
 
 
@@ -721,6 +744,8 @@ While **Alman** consolidates and simplifies most determiners, some **indefinite*
 
 Since **Standard German** treats these pairs as **separate lexical items** rather than mere inflectional variants, **Alman** preserves them **unchanged** for clarity and mutual intelligibility. Speakers should continue to employ each pair according to established **Standard German** conventions. This rule overrides other determiner simplifications described in other rules.
 
+The case-inflected forms that these quantifiers take in **Standard German** (**vielen, vielem, vieler, allen, allem, aller, wenigen, wenigem**) are handled by dropping the case ending: the result is whichever member of the retained pair fits the context (uncountable or adverbial → **viel**, countable plural → **viele**, and so on). Thus *vielen Dank* becomes *viel Dank* and *in allen Fällen* becomes *in alle Fälle*, mirroring the invariant English quantifiers *much*, *many*, *all*, *little*, and *few*. Because the distinction within each pair is lexical rather than declensional, these quantifiers never take the invariant -e ending described in the section on adjectives.
+
 
 **Examples:**
 
@@ -734,6 +759,9 @@ Since **Standard German** treats these pairs as **separate lexical items** rathe
 | **Wenige** verstehen diese Regel. | **Wenige** verstehen diese Regel. |
 | Er sagt **nicht**, was er denkt. | Er sagt **nicht**, was er denkt. |
 | Ich sehe **nichts**. | Ich sehe **nichts**. |
+| **Vielen** Dank! | **Viel** Dank! |
+| in **allen** Fällen | in **alle** Fälle |
+| mit **wenigem** zufrieden | mit **wenig** zufrieden |
 
 
 
@@ -788,6 +816,8 @@ This paragraph details the preservation of **Standard German** word order patter
 
 The syntactic structure of sentences in **Alman** adheres to the conventional word order of **Standard German**. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).
 
+Verb-first patterns are likewise retained exactly as in **Standard German**: yes/no questions (*Gehst du in die Kino?*), imperatives (*Gib mir die Buch!*), and conjunction-less conditionals (*Kommt er, so gehen wir*).
+
 These rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with **Standard German**. Note that while word order patterns are preserved, the article and inflection rules of **Alman** still apply within these sentences.
 
 
@@ -799,6 +829,8 @@ These rules ensure that while morphological aspects of nouns and determiners may
 | Er hat gestern einen Brief geschrieben. | Er hat gestern ein Brief geschrieben. |
 | weil ich heute ins Kino gehe | weil ich heute in die Kino gehe |
 | dass er gestern einen Brief geschrieben hat | dass er gestern ein Brief geschrieben hat |
+| Gehst du heute ins Kino? | Gehst du heute in die Kino? |
+| Gib mir das Buch! | Gib mir die Buch! |
 
 
 
