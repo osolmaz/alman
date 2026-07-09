@@ -1,12 +1,12 @@
 {
   "id": "adverbs",
   "title": "Adverbs",
-  "body": "The <alman /> dialect maintains <sd />'s lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors. The sole innovation concerns the adverbial superlative, where the case-marked construction **am** + superlative is replaced by the bare superlative stem.",
+  "body": "The <alman /> dialect maintains <sd />'s lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors. Two constructions receive special treatment: the adverbial superlative, where the case-marked construction **am** + superlative is replaced by the bare superlative stem, and fixed adverbial expressions of the form preposition + nominalized adjective, whose frozen case endings are replaced by the invariant -e.",
   "rules": [
     {
       "id": "non-inflected-adverbs",
       "title": "Adverbs Stay the Same",
-      "description": "Words functioning adverbially retain their base form without receiving the -e ending required for attributive adjectives. This applies to:\n- Adverbs modifying verbs\n- Adjectives modifying other adjectives\n- Phrasal modifiers not directly preceding a noun",
+      "description": "Words functioning adverbially retain their base form without receiving the -e ending required for attributive adjectives. This applies to:\n- Adverbs modifying verbs\n- Adjectives modifying other adjectives\n- Phrasal modifiers not directly preceding a noun\n\nThis rule covers bare adjectives and adverbs. It does not apply to the adverbial superlative construction or to fixed adverbial expressions of the form preposition + nominalized adjective, which are governed by the following rules.",
       "examples": [
         {
           "standard": "schnell laufen",
@@ -46,6 +46,43 @@
           "standard": "Dieses Auto gefällt mir am meisten.",
           "alman": "Diese Auto gefällt mir meist. / Diese Auto gefällt mir an meist.",
           "english": "I like this car the most."
+        }
+      ]
+    },
+    {
+      "id": "fixed-adverbial-expressions",
+      "title": "Fixed Adverbial Expressions with Nominalized Adjectives",
+      "description": "<sd /> contains a family of fixed adverbial expressions built from a preposition and a nominalized adjective carrying a frozen case ending: **unter anderem**, **vor kurzem**, **seit langem**, **bei weitem**, **von neuem**, **ohne weiteres**, and similar variants. In <alman />, these expressions are treated as nominalized adjectives rather than as adverbs: the frozen case ending is replaced by the invariant **-e**, consistent with the rule on nominalized adjectives in the section on adjectives.\n\nThis rule takes precedence over the rule that adverbs stay the same: although these expressions function adverbially, their adjective component is inflected with the invariant -e like any other nominalized adjective. Note the contrast with the adverbial superlative: **am** + superlative contains a case-marked article contraction and is replaced by the bare stem, whereas these article-less fixed expressions retain their prepositional structure and take the regular -e ending.",
+      "examples": [
+        {
+          "standard": "unter anderem",
+          "alman": "unter andere",
+          "english": "among other things"
+        },
+        {
+          "standard": "vor kurzem",
+          "alman": "vor kurze",
+          "english": "recently"
+        },
+        {
+          "standard": "seit langem",
+          "alman": "seit lange",
+          "english": "for a long time"
+        },
+        {
+          "standard": "von neuem",
+          "alman": "von neue",
+          "english": "anew"
+        },
+        {
+          "standard": "bei weitem",
+          "alman": "bei weite",
+          "english": "by far"
+        },
+        {
+          "standard": "ohne weiteres",
+          "alman": "ohne weitere",
+          "english": "without further ado"
         }
       ]
     }
