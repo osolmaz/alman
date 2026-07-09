@@ -59,7 +59,7 @@ This specification provides a formal account of **Alman** grammar, detailing the
 </li>
 <li><a href="#lexical-gender">Lexical Gender Simplifications</a>
 <ul style="list-style: none; padding-left: 20px; margin-left: 0;">
-<li><a href="#job-titles">§10 Uniformity of Occupational Titles</a></li>
+<li><a href="#job-titles">§10 Uniformity of Occupational and Person-Denoting Nouns</a></li>
 </ul>
 </li>
 </ul>
@@ -377,7 +377,7 @@ In the plural, nominalized adjectives behave as nouns: consistent with the prese
 |------------------|-------|
 | Das Gute im Menschen | Die Gute in die Menschen |
 | An die Schönen (Dative, plural) | An die Schönen (-en retained as plural marker) |
-| Wegen des Bekanntes | Wegen der Bekannte / Wegen die Bekannte |
+| Wegen des Bekannten | Wegen der Bekannte / Wegen die Bekannte |
 | unter anderem | unter andere |
 
 
@@ -497,7 +497,7 @@ Reflexive pronouns follow **Standard German** case forms (mich, dich, sich, uns,
 
 #### §6e. Possessive Pronouns
 
-Possessive pronouns retain their case forms but align with natural gender attribution of their referents.
+The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, Ihr**) follows natural gender attribution of the possessor. Their endings follow the determiner rules: the invariant base form is used in all non-genitive contexts (see the section on determiners).
 
 
 **Examples:**
@@ -765,16 +765,18 @@ This compensates for the loss of morphological case marking through fixed consti
 
 ## Lexical Gender Simplifications {#lexical-gender}
 
-This section outlines the systematic elimination of gender-specific lexical forms in **Alman**, particularly focusing on occupational titles and similar role descriptions. It describes how traditionally gendered word pairs are consolidated into a single form, using the historically masculine base form with the invariant article system to denote all referents regardless of gender.
+This section outlines the systematic elimination of gender-specific lexical forms in **Alman**, covering person-denoting nouns such as occupational titles, nationalities, and role descriptions. It describes how traditionally gendered word pairs are consolidated into a single form, using the historically masculine base form with the invariant article system to denote all referents regardless of gender.
 
 
-### §10. Uniformity of Occupational Titles {#job-titles}
+### §10. Uniformity of Occupational and Person-Denoting Nouns {#job-titles}
 
-This paragraph describes the elimination of gender-specific forms in occupational titles, adopting a simplified system that uses the base form with the invariant article.
+This paragraph describes the elimination of gender-specific forms in occupational and person-denoting nouns, adopting a simplified system that uses the base form with the invariant article.
 
-In **Standard German**, occupational titles are frequently marked for gender (e.g., *der Lehrer* versus *die Lehrerin*). In **Alman**, such distinctions are eliminated. All job or occupation titles are rendered without gender-specific modifications; the feminine suffix is omitted, and the masculine form is universally employed. Consequently, occupational titles are treated analogously to other nouns by employing the invariant definite article **die** and the indefinite article **ein**.
+In **Standard German**, person-denoting nouns are frequently marked for gender with the suffix **-in**: occupations (*der Lehrer* versus *die Lehrerin*), nationalities and origins (*der Türke* versus *die Türkin*), and roles (*der Kollege* versus *die Kollegin*). In **Alman**, such distinctions are eliminated. All person-denoting nouns are rendered without gender-specific modifications; the feminine suffix is omitted, and the masculine base form is universally employed. Consequently, person-denoting nouns are treated analogously to other nouns by employing the invariant definite article **die** and the indefinite article **ein**.
 
-This rule ensures a uniform treatment of occupational titles, reflecting the broader commitment within **Alman** to reduce gender differentiation in lexical items.
+Natural gender, where communicatively relevant, is conveyed by pronouns (see the section on pronouns) or by context. Relationship senses that **Standard German** carries through the suffix (*Freundin* "girlfriend") are expressed as in colloquial usage, e.g., **feste Freund**, with pronouns marking gender.
+
+This rule ensures a uniform treatment of person-denoting nouns, reflecting the broader commitment within **Alman** to reduce gender differentiation in lexical items.
 
 
 **Examples:**
@@ -784,4 +786,7 @@ This rule ensures a uniform treatment of occupational titles, reflecting the bro
 | der Lehrer / die Lehrerin | die Lehrer | teacher |
 | der Bäcker / die Bäckerin | die Bäcker | baker |
 | der Arzt / die Ärztin | die Arzt | doctor |
+| der Türke / die Türkin | die Türke | Turk |
+| der Kollege / die Kollegin | die Kollege | colleague |
+| meine Freundin | mein feste Freund | my girlfriend |
 

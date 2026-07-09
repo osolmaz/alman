@@ -99,7 +99,7 @@
     {
       "id": "possessive-pronouns",
       "title": "Possessive Pronouns",
-      "description": "Possessive pronouns retain their case forms but align with natural gender attribution of their referents.",
+      "description": "The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, Ihr**) follows natural gender attribution of the possessor. Their endings follow the determiner rules: the invariant base form is used in all non-genitive contexts (see the section on determiners).",
       "examples": [
         {
           "standard": "Sein Buch (des Mannes)",
