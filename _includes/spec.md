@@ -1,6 +1,6 @@
 # Alman: A Simplified Dialect of the German Language
 
-**Version**: 0.5.0  
+**Version**: 0.4.2  
 
 **Last Updated**: 2026-07-08
 
