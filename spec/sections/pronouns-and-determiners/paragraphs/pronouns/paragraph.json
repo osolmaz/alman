@@ -186,20 +186,20 @@
     },
     {
       "id": "prepositional-interrogatives",
-      "title": "Preferred Use of Prepositional Interrogative Constructions",
-      "description": "In interrogative constructions involving prepositions, the <alman /> dialect favors the use of an uncontracted preposition preceding **was** rather than employing the compound forms. Thus, constructions such as **zu was, von was, mit was, über was, durch was**, and similar variants, are preferred over the corresponding *wo-* forms. This mirrors the usage of preposition + *what* in in English, like *to what*, *from what*, and so on.",
+      "title": "Prepositional Interrogative Constructions",
+      "description": "In interrogative constructions involving prepositions, an uncontracted preposition preceding **was** may be used in place of the compound *wo-* forms: **zu was, von was, mit was, über was, durch was**, and similar variants. This mirrors the usage of preposition + *what* in English, like *to what*, *from what*, and so on.\n\nThe <sd /> *wo-* compounds remain fully acceptable, as they carry no gender or case inflection and pose no additional learning burden. Both variants may be used interchangeably, exactly as with the pronominal *da-* compounds described in the following rule.",
       "examples": [
         {
           "standard": "Womit hilfst du mir?",
-          "alman": "Mit was hilfst du mir?"
+          "alman": "Mit was hilfst du mir? / Womit hilfst du mir?"
         },
         {
           "standard": "Wovon träumst du?",
-          "alman": "Von was träumst du?"
+          "alman": "Von was träumst du? / Wovon träumst du?"
         },
         {
           "standard": "Worüber freust du dich?",
-          "alman": "Über was freust du dich?"
+          "alman": "Über was freust du dich? / Worüber freust du dich?"
         }
       ]
     },

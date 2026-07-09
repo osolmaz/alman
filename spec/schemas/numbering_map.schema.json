@@ -1,29 +1,41 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": ["paragraphIdMapping", "ruleIdMapping"],
+  "required": ["section_numbers", "paragraph_numbers", "rule_letters"],
   "properties": {
-    "paragraphIdMapping": {
+    "section_numbers": {
       "type": "object",
+      "description": "Maps section ids to their stable section numbers",
       "patternProperties": {
-        "^paragraph-\\d+-\\d+$": {
-          "type": "string",
-          "pattern": "^\\d+$",
-          "description": "Legal numbering for paragraphs"
+        "^[a-z0-9-]+$": {
+          "type": "integer",
+          "minimum": 1
         }
       },
       "additionalProperties": false
     },
-    "ruleIdMapping": {
+    "paragraph_numbers": {
       "type": "object",
+      "description": "Maps paragraph ids to their stable global paragraph numbers",
       "patternProperties": {
-        "^rule-\\d+-\\d+-\\d+$": {
+        "^[a-z0-9-]+$": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "rule_letters": {
+      "type": "object",
+      "description": "Maps 'paragraph-id/rule-id' keys to their stable rule letters within the paragraph",
+      "patternProperties": {
+        "^[a-z0-9-]+/[a-z0-9-]+$": {
           "type": "string",
-          "pattern": "^[a-z0-9]+$",
-          "description": "Legal numbering for rules"
+          "pattern": "^[a-z]$"
         }
       },
       "additionalProperties": false
     }
-  }
+  },
+  "additionalProperties": false
 }
