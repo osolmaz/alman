@@ -33,7 +33,7 @@
     {
       "id": "case-inflection-retention",
       "title": "Case Inflection Retention",
-      "description": "Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with <sd /> forms, in order to preserve mutual intelligibility.\n\n| Person       | Nominative | Accusative | Dative |\n|--------------|------------|------------|--------|\n| 1st Singular | ich        | mich       | mir    |\n| 2nd Singular | du         | dich       | dir    |\n| 3rd Masc.    | er         | ihn        | ihm    |\n| 3rd Fem.     | sie        | sie        | ihr    |\n| 3rd Neut.    | es         | es         | ihm    |\n| 1st Plural   | wir        | uns        | uns    |\n| 2nd Plural   | ihr        | euch       | euch   |\n| 3rd Plural   | sie        | sie        | ihnen  |",
+      "description": "Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with <sd /> forms, in order to preserve mutual intelligibility.\n\n| Person        | Nominative | Accusative | Dative |\n|---------------|------------|------------|--------|\n| 1st Singular  | ich        | mich       | mir    |\n| 2nd Singular  | du         | dich       | dir    |\n| 3rd Masc.     | er         | ihn        | ihm    |\n| 3rd Fem.      | sie        | sie        | ihr    |\n| 3rd Neut.     | es         | es         | ihm    |\n| 1st Plural    | wir        | uns        | uns    |\n| 2nd Plural    | ihr        | euch       | euch   |\n| 3rd Plural    | sie        | sie        | ihnen  |\n| Formal (2nd)  | Sie        | Sie        | Ihnen  |\n\nThe formal address pronoun **Sie** (with dative **Ihnen** and possessive **Ihr**) is retained exactly as in <sd />, including its capitalization.",
       "examples": [
         {
           "standard": "Ich sehe ihn. (den Mann)",
@@ -44,6 +44,16 @@
           "standard": "Sie gibt ihr das Buch.",
           "alman": "Sie gibt ihr die Buch.",
           "english": "She gives her the book."
+        },
+        {
+          "standard": "Können Sie mir helfen?",
+          "alman": "Können Sie mir helfen?",
+          "english": "Can you help me? (formal)"
+        },
+        {
+          "standard": "Ich danke Ihnen für das Geschenk.",
+          "alman": "Ich danke Ihnen für die Geschenk.",
+          "english": "I thank you for the gift. (formal)"
         }
       ]
     },
