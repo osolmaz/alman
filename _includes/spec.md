@@ -102,6 +102,8 @@ All genitive definite articles (des/der) are replaced by 'der', accompanied by e
 
 After genitive prepositions such as **wegen**, **trotz**, **statt**, **während**, and **innerhalb**, the genitive article **der** is preferred, but the invariant non-genitive **die** is also acceptable, mirroring colloquial usage. This parallels the treatment of indefinite articles after genitive prepositions.
 
+The genitive **der** is the single case-marked article form that **Alman** retains. This is a deliberate exception to the otherwise complete elimination of case-specific inflection: it keeps adnominal genitive constructions (*die Haus der Mann*) recognizable and mutually intelligible with **Standard German**. Indefinite articles, possessive determiners, and **kein** instead eliminate genitive marking entirely through periphrasis, as described in their respective rules.
+
 
 **Examples:**
 
@@ -151,7 +153,7 @@ While interchangeable, 'der' should be retained when translating original geniti
 
 Preposition-article contractions (e.g., vom, im, zur) must be resolved to their full form prior to applying article replacement rules. The uncontracted preposition and article are then processed according to standard **Alman** article rules.
 
-This rule applies without exception, including to contractions in fixed expressions such as **zum Beispiel**, **am besten**, and **zum** + nominalized infinitive. Uniform application keeps the article system fully regular and spares learners from memorizing a list of exempt expressions.
+This rule applies uniformly, including to contractions in fixed expressions such as **zum Beispiel** and **zum** + nominalized infinitive, sparing learners from memorizing a list of exempt expressions. The single exception is the adverbial superlative construction **am** + superlative (e.g., **am besten**, **am schnellsten**): it is not treated as a preposition-article contraction, but is instead replaced by the bare superlative stem, as described in the section on adjectives and adverbs.
 
 
 **Examples:**
@@ -163,7 +165,6 @@ This rule applies without exception, including to contractions in fixed expressi
 | fürs Kind (für + das) | für die Kind |
 | zur Frau (zu + der) | zu die Frau |
 | zum Beispiel (zu + dem) | zu die Beispiel |
-| am besten (an + dem) | an die beste |
 | zum Lernen (zu + dem) | zu die Lernen |
 
 
@@ -257,7 +258,7 @@ The **Alman** dialect systematically eliminates grammatical gender distinctions 
 All case-specific noun endings are removed, including:
 - Genitive -s/-es markers (des Mannes → der Mann)
 - Dative plural -n suffixes (den Bränden → die Brände)
-- Weak noun declensional patterns
+- Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.
 
 
 **Examples:**
@@ -267,6 +268,10 @@ All case-specific noun endings are removed, including:
 | des Hundes (Genitive) | der Hund |
 | den Frauen (Dative Plural) | die Frauen |
 | dem Kinde (Dative, archaic) | die Kind |
+| den Kollegen (Accusative, weak noun) | die Kollege |
+| dem Studenten (Dative, weak noun) | die Student |
+| im Menschen (Dative, weak noun) | in die Mensch |
+| die Kollegen (Plural) | die Kollegen (-en retained as plural marker) |
 
 
 
@@ -321,22 +326,23 @@ This disambiguation preserves simplified morphology while accommodating lexical 
 
 ## Adjectives and Adverbs {#adjectives-and-adverbs}
 
-This section details **Alman**'s regularization of adjective endings and preservation of adverbial forms. Attributive adjectives uniformly adopt an -e ending regardless of gender, number, or case, eliminating traditional declensional patterns. Adverbs and non-attributive adjectives retain their base form without inflection.
+This section details **Alman**'s single form-based principle for adjective and adverb morphology: every declensional adjective ending of **Standard German** is replaced by the invariant -e, and forms without declensional endings remain unchanged. The principle applies by surface form, not syntactic function — attributive adjectives (gute Mann), nominalized adjectives (die Gute), and fixed adverbial expressions (unter anderem → unter andere) all take -e, while predicative adjectives and adverbs stay as they are. The sole exception is the adverbial superlative, which replaces the **Standard German** **am** + superlative construction with the bare superlative stem (am besten → best).
 
 
 ### §4. Adjectival Ending Regularization {#adjectives}
 
-The **Alman** dialect mandates uniform morphological patterns for attributive adjectives, systematically eliminating case- and gender-based declensional variation while maintaining syntactic agreement through invariant forms.
+The **Alman** dialect governs adjective morphology through a single form-based principle: every declensional adjective ending of **Standard German** is replaced by the invariant -e, and forms that carry no declensional ending remain unchanged. The learner never needs to classify an adjective by its syntactic function; the surface form alone determines the outcome.
 
 
-#### §4a. Invariant -e Ending
+#### §4a. Invariant -e for All Declensional Endings
 
-All attributive adjectives preceding nouns receive an -e ending, regardless of:
-- Grammatical gender (masculine/feminine/neuter)
-- Number (singular/plural)
-- Case (nominative/accusative/dative)
+Whenever an adjective carries a declensional ending in **Standard German** — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in **Alman**. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically.
 
-This replaces **Standard German**'s case-specific endings (-r/-s/-m/-n) with a single invariant form.
+Adjectives that carry no declensional ending in **Standard German** — predicative adjectives and forms used adverbially — remain unchanged; no ending is added (see the section on adverbs).
+
+Comparison suffixes (**-er**, **-st**) are word formation rather than declension and are preserved: *schneller laufen* remains *schneller laufen*. Likewise, lexicalized adverbs such as **anders** or **meistens** carry no declensional ending and remain unchanged.
+
+The sole exception to this principle is the adverbial superlative **am** + superlative, which is replaced by the bare superlative stem (see the section on adverbs).
 
 
 **Examples:**
@@ -347,6 +353,9 @@ This replaces **Standard German**'s case-specific endings (-r/-s/-m/-n) with a s
 | eine schöne Blume (Feminine Accusative) | ein schöne Blume |
 | dem kleinen Kind (Neutral Dative) | die kleine Kind |
 | die roten Schuhe (Plural) | die rote Schuhe |
+| unter anderem (fixed expression) | unter andere |
+| vor kurzem (fixed expression) | vor kurze |
+| Das Auto ist schnell. (predicative, no ending) | Die Auto ist schnell. |
 
 
 
@@ -375,7 +384,7 @@ In the plural, nominalized adjectives behave as nouns: consistent with the prese
 
 | Standard German | Alman |
 |------------------|-------|
-| Das Gute im Menschen | Die Gute in die Menschen |
+| Das Gute im Menschen | Die Gute in die Mensch |
 | An die Schönen (Dative, plural) | An die Schönen (-en retained as plural marker) |
 | Wegen des Bekannten | Wegen der Bekannte / Wegen die Bekannte |
 | unter anderem | unter andere |
@@ -384,15 +393,17 @@ In the plural, nominalized adjectives behave as nouns: consistent with the prese
 
 ### §5. Adverbs {#adverbs}
 
-The **Alman** dialect maintains **Standard German**'s lack of adjectival inflection in adverbial usage, preserving unmodified forms for words functioning as verb or adjective modifiers rather than direct noun descriptors.
+Adverbs carry no declensional endings in **Standard German** and therefore remain unchanged in **Alman**. This is a direct consequence of the form-based principle in the section on adjectives — endings become -e, ending-less forms stay as they are — rather than a separate mechanism. The one special construction is the adverbial superlative, where the case-marked construction **am** + superlative is replaced by the bare superlative stem.
 
 
-#### Adverbs Stay the Same
+#### §5a. Adverbs Stay the Same
 
-Words functioning adverbially retain their base form without receiving the -e ending required for attributive adjectives. This applies to:
+Words functioning adverbially carry no declensional ending in **Standard German** and therefore remain unchanged in **Alman**. This follows directly from the form-based principle in the section on adjectives: only existing declensional endings are replaced by -e, and where there is no ending, nothing changes. This applies to:
 - Adverbs modifying verbs
 - Adjectives modifying other adjectives
 - Phrasal modifiers not directly preceding a noun
+
+Fixed adverbial expressions that do contain a declined adjective (**unter anderem**, **vor kurzem**, and similar) are not exempt: their endings become the invariant -e (unter andere, vor kurze) per the same principle.
 
 
 **Examples:**
@@ -402,6 +413,26 @@ Words functioning adverbially retain their base form without receiving the -e en
 | schnell laufen | schnell laufen |
 | das Auto fährt schnell | die Auto fährt schnell |
 | frisch kaltes Wasser | frisch kalte Wasser |
+
+
+
+#### §5b. Bare-Stem Adverbial Superlatives
+
+The **Standard German** adverbial superlative construction **am** + superlative (am besten, am schnellsten) is replaced by the bare superlative stem: **best**, **schnellst**, and so on. This mirrors the English adverbial superlative ("I swim best") and removes the case-marked contraction **am** (an + dem) from the construction entirely, consistent with the elimination of case-marked articles elsewhere in **Alman**.
+
+The variant **an** + bare stem (e.g., **an best**) is also acceptable, preserving the prepositional rhythm of the **Standard German** construction for speakers who prefer it. The bare stem is the preferred form.
+
+This rule takes precedence over the contraction resolution rule in the section on articles: **am** in adverbial superlatives is not expanded to **an die**. Attributive superlatives are unaffected and follow the regular invariant -e ending rule (die beste Schwimmer).
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Ich schwimme am besten. | Ich schwimme best. / Ich schwimme an best. | I swim best. |
+| Er läuft am schnellsten. | Er läuft schnellst. / Er läuft an schnellst. | He runs fastest. |
+| Am liebsten esse ich Pizza. | Liebst esse ich Pizza. / An liebst esse ich Pizza. | I like eating pizza most. |
+| Dieses Auto gefällt mir am meisten. | Diese Auto gefällt mir meist. / Diese Auto gefällt mir an meist. | I like this car the most. |
 
 
 
@@ -440,16 +471,19 @@ Note that when the referent is described by an occupational title, the title its
 
 Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with **Standard German** forms, in order to preserve mutual intelligibility.
 
-| Person       | Nominative | Accusative | Dative |
-|--------------|------------|------------|--------|
-| 1st Singular | ich        | mich       | mir    |
-| 2nd Singular | du         | dich       | dir    |
-| 3rd Masc.    | er         | ihn        | ihm    |
-| 3rd Fem.     | sie        | sie        | ihr    |
-| 3rd Neut.    | es         | es         | ihm    |
-| 1st Plural   | wir        | uns        | uns    |
-| 2nd Plural   | ihr        | euch       | euch   |
-| 3rd Plural   | sie        | sie        | ihnen  |
+| Person        | Nominative | Accusative | Dative |
+|---------------|------------|------------|--------|
+| 1st Singular  | ich        | mich       | mir    |
+| 2nd Singular  | du         | dich       | dir    |
+| 3rd Masc.     | er         | ihn        | ihm    |
+| 3rd Fem.      | sie        | sie        | ihr    |
+| 3rd Neut.     | es         | es         | ihm    |
+| 1st Plural    | wir        | uns        | uns    |
+| 2nd Plural    | ihr        | euch       | euch   |
+| 3rd Plural    | sie        | sie        | ihnen  |
+| Formal (2nd)  | Sie        | Sie        | Ihnen  |
+
+The formal address pronoun **Sie** (with dative **Ihnen** and possessive **Ihr**) is retained exactly as in **Standard German**, including its capitalization.
 
 
 **Examples:**
@@ -458,6 +492,8 @@ Personal pronouns retain full case inflection to preserve referential clarity an
 |------------------|--------|---------|
 | Ich sehe ihn. (den Mann) | Ich sehe ihn. | I see him. |
 | Sie gibt ihr das Buch. | Sie gibt ihr die Buch. | She gives her the book. |
+| Können Sie mir helfen? | Können Sie mir helfen? | Can you help me? (formal) |
+| Ich danke Ihnen für das Geschenk. | Ich danke Ihnen für die Geschenk. | I thank you for the gift. (formal) |
 
 
 
@@ -545,18 +581,20 @@ The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their 
 
 
 
-#### §6h. Preferred Use of Prepositional Interrogative Constructions
+#### §6h. Prepositional Interrogative Constructions
 
-In interrogative constructions involving prepositions, the **Alman** dialect favors the use of an uncontracted preposition preceding **was** rather than employing the compound forms. Thus, constructions such as **zu was, von was, mit was, über was, durch was**, and similar variants, are preferred over the corresponding *wo-* forms. This mirrors the usage of preposition + *what* in in English, like *to what*, *from what*, and so on.
+In interrogative constructions involving prepositions, an uncontracted preposition preceding **was** may be used in place of the compound *wo-* forms: **zu was, von was, mit was, über was, durch was**, and similar variants. This mirrors the usage of preposition + *what* in English, like *to what*, *from what*, and so on.
+
+The **Standard German** *wo-* compounds remain fully acceptable, as they carry no gender or case inflection and pose no additional learning burden. Both variants may be used interchangeably, exactly as with the pronominal *da-* compounds described in the following rule.
 
 
 **Examples:**
 
 | Standard German | Alman |
 |------------------|-------|
-| Womit hilfst du mir? | Mit was hilfst du mir? |
-| Wovon träumst du? | Von was träumst du? |
-| Worüber freust du dich? | Über was freust du dich? |
+| Womit hilfst du mir? | Mit was hilfst du mir? / Womit hilfst du mir? |
+| Wovon träumst du? | Von was träumst du? / Wovon träumst du? |
+| Worüber freust du dich? | Über was freust du dich? / Worüber freust du dich? |
 
 
 
@@ -681,7 +719,7 @@ Since **Standard German** treats these pairs as **separate lexical items** rathe
 
 ## Verbs and Word Order {#verbs-and-word-order}
 
-This section describes the verbal system and syntactic structure of **Alman**, which maintains full fidelity to **Standard German** patterns. While other aspects of the grammar may be simplified, verb conjugations and word order rules remain unchanged to preserve the essential character of German syntax and ensure clear communication. One addition compensates for the loss of case marking: when both subject and object are full noun phrases, the subject must precede the object.
+This section describes the verbal system and syntactic structure of **Alman**, which maintains full fidelity to **Standard German** patterns. While other aspects of the grammar may be simplified, verb conjugations and word order rules remain unchanged to preserve the essential character of German syntax and ensure clear communication. One addition compensates for the loss of case marking: when both subject and object are full noun phrases, the subject must precede the object. In ditransitive constructions, the **Standard German** default of recipient before theme is retained as an interpretation convention, mirroring the English double-object construction.
 
 
 ### §8. Verb Conjugations and Forms {#verbs}
@@ -723,7 +761,7 @@ This rule ensures consistency in the treatment of nominalized forms throughout *
 
 ### §9. Word Order and Syntax {#word-order}
 
-This paragraph details the preservation of **Standard German** word order patterns in **Alman**, maintaining both V2 in main clauses and verb-final position in subordinate clauses.
+This paragraph details the preservation of **Standard German** word order patterns in **Alman**, maintaining both V2 in main clauses and verb-final position in subordinate clauses. It also describes how constituent order conventions compensate for the loss of case marking in clauses with full-noun-phrase arguments.
 
 
 #### §9a. Word Order
@@ -760,6 +798,26 @@ This compensates for the loss of morphological case marking through fixed consti
 | Der Hund beißt den Mann. | Die Hund beißt die Mann. | The dog bites the man. |
 | Den Mann beißt der Hund. | Die Hund beißt die Mann. (subject first, since object fronting would be ambiguous) | The dog bites the man. |
 | Ihn beißt der Hund. | Ihn beißt die Hund. (allowed: pronoun case marks the object) | The dog bites him. |
+
+
+
+#### §9c. Ditransitive Constructions
+
+With ditransitive verbs such as **geben**, **zeigen**, and **schicken**, **Standard German** distinguishes the indirect object (dative) from the direct object (accusative) through case marking, while also placing the indirect object before the direct object by default when both are full noun phrases. **Alman** retains this default order, and the loss of case marking is accepted: in a sequence of two full-noun-phrase objects, the first is interpreted as the recipient and the second as the theme.
+
+This mirrors the English double-object construction ("I give the woman the book"), which likewise functions without case marking. No strict rule is imposed; verb semantics and context resolve the roles in practice, and residual ambiguity is tolerated as it is in English.
+
+Where explicit marking is desired, or when the theme is to precede the recipient, the recipient may instead be expressed with the preposition **an** (paralleling English "to"), and personal pronouns retain their case forms as usual (see the section on pronouns).
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Ich gebe der Frau das Buch. | Ich gebe die Frau die Buch. | I give the woman the book. |
+| Er zeigt dem Kind die Stadt. | Er zeigt die Kind die Stadt. | He shows the child the city. |
+| Ich gebe das Buch der Frau. | Ich gebe die Buch an die Frau. (theme first, recipient marked with 'an') | I give the book to the woman. |
+| Ich gebe ihr das Buch. | Ich gebe ihr die Buch. (pronoun case marks the recipient) | I give her the book. |
 
 
 
