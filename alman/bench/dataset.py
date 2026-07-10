@@ -23,7 +23,10 @@ Besides the spec-derived items there is a second, hand-curated tier under
 ``curated/``: full sentences (mostly literary German from Kafka and Hesse)
 whose targets were re-derived under the current spec from the seed data in
 the ``alman-research`` repo. These exercise many rules at once and carry
-acceptance sets inline, so no override machinery is needed.
+acceptance sets inline, so no override machinery is needed. An item states
+its acceptance set either as an explicit ``accepted`` list or as a compact
+``pattern`` (see :mod:`alman.bench.pattern`) that is expanded at load time;
+in both representations the first/canonical rendering comes first.
 """
 
 from __future__ import annotations
@@ -33,6 +36,8 @@ import re
 from pathlib import Path
 
 from pydantic import BaseModel
+
+from alman.bench.pattern import PatternError, expand_pattern
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SPEC_DIR = REPO_ROOT / "spec"
@@ -58,6 +63,8 @@ class BenchItem(BaseModel):
     english: str | None = None
     provenance: str | None = None
     """Where the item came from, for curated (non-spec) items."""
+    pattern: str | None = None
+    """The compact pattern the acceptance set was expanded from, if any."""
 
 
 def _split_variants(text: str) -> list[str]:
@@ -191,16 +198,29 @@ def load_curated_items(curated_dir: Path = CURATED_DIR) -> list[BenchItem]:
         data = _load_json(path)
         collection = data["collection"]
         for index, entry in enumerate(data["items"]):
+            item_id = f"curated/{collection}/{index}"
+            if ("pattern" in entry) == ("accepted" in entry):
+                raise ValueError(
+                    f"{item_id}: provide exactly one of 'pattern' or 'accepted'"
+                )
+            if "pattern" in entry:
+                try:
+                    accepted = expand_pattern(entry["pattern"])
+                except PatternError as err:
+                    raise ValueError(f"{item_id}: {err}") from err
+            else:
+                accepted = list(entry["accepted"])
             items.append(
                 BenchItem(
-                    id=f"curated/{collection}/{index}",
+                    id=item_id,
                     source=entry["source"],
-                    accepted=list(entry["accepted"]),
+                    accepted=accepted,
                     section="curated",
                     paragraph=collection,
                     rule=entry.get("rule", "mixed"),
                     note=entry.get("note"),
                     provenance=data.get("provenance"),
+                    pattern=entry.get("pattern"),
                 )
             )
     return items

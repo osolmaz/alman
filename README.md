@@ -49,3 +49,17 @@ The extraction and scoring logic is framework-independent
 (`alman.bench.dataset`, `alman.bench.scoring`) so it can be reused for
 training-data filtering. `alman/bench/overrides.json` patches items whose
 spec presentation is not a literal translation pair (e.g. paradigm listings).
+
+Curated items with several independent choice points (e.g. every adnominal
+genitive `der` may also be `von die`) state their acceptance set as a compact
+pattern instead of enumerating the cross product:
+
+```text
+Die Buch {der|von die}@1d Schüler liegt auf die Tisch.
+```
+
+`{a|b}` is an alternation (first branch canonical), `[x]` an optional
+element, `{g:...}` a linked group whose occurrences must covary (e.g. an
+apposition agreeing with the construction chosen for its head), and `@1d`
+names the spec rule licensing the alternation. Patterns are expanded at load
+time by `alman.bench.pattern.expand_pattern`.

@@ -1,6 +1,9 @@
+import json
+
 import pytest
 
 from alman.bench.dataset import load_curated_items, load_items
+from alman.bench.pattern import PatternError, expand_pattern
 from alman.bench.scoring import is_accepted, lint, normalize
 
 
@@ -92,6 +95,68 @@ class TestExtraction:
         assert "diese, diese, diese, diese, diese" in item.accepted
 
 
+class TestPattern:
+    def test_plain_text(self):
+        assert expand_pattern("die Mann") == ["die Mann"]
+
+    def test_alternation_canonical_first(self):
+        assert expand_pattern("Die Buch {der|von die} Schüler") == [
+            "Die Buch der Schüler",
+            "Die Buch von die Schüler",
+        ]
+
+    def test_independent_groups_cross_product(self):
+        assert expand_pattern("{a|b} und {c|d}") == [
+            "a und c",
+            "a und d",
+            "b und c",
+            "b und d",
+        ]
+
+    def test_optional_omitted_in_canonical(self):
+        assert expand_pattern("die Sessel[s]") == ["die Sessel", "die Sessels"]
+
+    def test_linked_groups_covary(self):
+        assert expand_pattern(
+            "die Name {g:Gotamas|von Gotama}, {g:der|die} Buddha"
+        ) == [
+            "die Name Gotamas, der Buddha",
+            "die Name von Gotama, die Buddha",
+        ]
+
+    def test_rule_annotation_ignored(self):
+        assert expand_pattern("wegen {der|die}@1b Wetter") == [
+            "wegen der Wetter",
+            "wegen die Wetter",
+        ]
+
+    def test_nested_groups(self):
+        assert expand_pattern("{a {b|c}|d}") == ["a b", "a c", "d"]
+
+    def test_escapes(self):
+        assert expand_pattern(r"kein \{Muster\} \| hier") == ["kein {Muster} | hier"]
+
+    def test_duplicates_removed(self):
+        assert expand_pattern("{a|a} x") == ["a x"]
+
+    def test_linked_branch_count_mismatch(self):
+        with pytest.raises(PatternError):
+            expand_pattern("{g:a|b} {g:c|d|e}")
+
+    def test_unclosed_group(self):
+        with pytest.raises(PatternError):
+            expand_pattern("die {der|von die Mann")
+
+    def test_stray_closer(self):
+        with pytest.raises(PatternError):
+            expand_pattern("die } Mann")
+
+    def test_variant_cap(self):
+        pattern = " ".join("{a|b}" for _ in range(20))
+        with pytest.raises(PatternError):
+            expand_pattern(pattern, max_variants=100)
+
+
 class TestCurated:
     def test_item_count(self, curated_items):
         assert len(curated_items) == 50
@@ -129,7 +194,45 @@ class TestCurated:
     def test_ditransitive_acceptance_set(self, curated_items):
         by_id = {item.id: item for item in curated_items}
         item = by_id["curated/deutsch-alman/4"]
-        assert len(item.accepted) == 2
+        assert item.accepted == [
+            "Ich gebe die Arzt die Medikament.",
+            "Ich gebe die Medikament an die Arzt.",
+        ]
+
+    def test_pattern_expands_genitive_variants(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+        item = by_id["curated/siddhartha/0"]
+        assert item.pattern is not None
+        # 5 independent {der|von die} choice points -> 2^5 variants.
+        assert len(item.accepted) == 32
+        assert item.accepted[0].startswith("In die Schatten der Haus")
+        assert any("von die Salwald" in variant for variant in item.accepted)
+
+    def test_linked_apposition_covaries(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+        item = by_id["curated/siddhartha/15"]
+        assert any("Gotamas, der Buddha" in variant for variant in item.accepted)
+        assert any("von Gotama, die Buddha" in variant for variant in item.accepted)
+        assert not any("von Gotama, der Buddha" in variant for variant in item.accepted)
+        assert not any("Gotamas, die Buddha" in variant for variant in item.accepted)
+
+    def test_apposition_follows_von_construction(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+        item = by_id["curated/siddhartha/2"]
+        assert "von sein Vater, die Gelehrte" in item.accepted[0]
+
+    def test_exactly_one_of_pattern_or_accepted(self, tmp_path):
+        (tmp_path / "x.json").write_text(
+            json.dumps(
+                {
+                    "collection": "x",
+                    "items": [{"source": "a", "accepted": ["b"], "pattern": "b"}],
+                }
+            ),
+            encoding="utf-8",
+        )
+        with pytest.raises(ValueError, match="exactly one"):
+            load_curated_items(tmp_path)
 
     def test_all_curated_targets_pass_lint(self, curated_items):
         """Self-consistency: no accepted curated rendering violates the linter."""
