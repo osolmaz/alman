@@ -1,0 +1,26 @@
+{
+  "pronouns-and-determiners/determiners/unified-non-genitive-forms/0": {
+    "comment": "Paradigm listing (5 forms -> 1 invariant form); also accept the form repeated per input item.",
+    "accept_also": ["diese, diese, diese, diese, diese"]
+  },
+  "pronouns-and-determiners/determiners/unified-non-genitive-forms/1": {
+    "comment": "Paradigm listing (5 forms -> 1 invariant form); also accept the form repeated per input item.",
+    "accept_also": ["diejenige, diejenige, diejenige, diejenige, diejenige"]
+  },
+  "pronouns-and-determiners/determiners/unified-non-genitive-forms/2": {
+    "comment": "Paradigm listing (5 forms -> 1 invariant form); also accept the form repeated per input item.",
+    "accept_also": ["dieselbe, dieselbe, dieselbe, dieselbe, dieselbe"]
+  },
+  "pronouns-and-determiners/determiners/unified-non-genitive-forms/6": {
+    "comment": "Paradigm listing (3 forms -> 1 invariant form); also accept the form repeated per input item.",
+    "accept_also": ["jede Tag, jede Tag, jede Tag"]
+  },
+  "pronouns-and-determiners/determiners/genitive-handling/0": {
+    "comment": "Paradigm listing (2 forms -> 1 invariant form); also accept the form repeated per input item.",
+    "accept_also": ["von dieselbe, von dieselbe"]
+  },
+  "pronouns-and-determiners/determiners/genitive-handling/1": {
+    "comment": "Paradigm listing (2 forms -> 1 invariant form); also accept the form repeated per input item.",
+    "accept_also": ["von diese, von diese"]
+  }
+}

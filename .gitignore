@@ -12,3 +12,6 @@ _site
 vendor
 build/spec.md
 .DS_Store
+
+# Inspect AI eval logs
+logs/
