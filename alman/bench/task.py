@@ -11,10 +11,10 @@ the task):
 Task options (pass with -T):
 
     -T include_spec=false     evaluate without the spec in context
-    -T dataset=spec           only spec-derived items (default: all)
-    -T dataset=curated        only curated sentence-level items
-    -T section=articles       only items from one spec section
-    -T paragraph=determiners  only items from one spec paragraph
+    -T dataset=spec -T include_spec=false
+                              diagnostic run on spec examples
+    -T dataset=spec -T include_spec=false -T section=articles
+                              diagnostic for one spec section
 """
 
 from __future__ import annotations
@@ -135,19 +135,22 @@ def compliance():
 @task
 def alman_bench(
     include_spec: bool = True,
-    dataset: str = "all",
+    dataset: str = "curated",
     section: str | None = None,
     paragraph: str | None = None,
 ) -> Task:
-    """Translate Standard German to Alman: spec examples plus curated sentences."""
+    """Translate unseen Standard German sentences to Alman."""
     if dataset == "spec":
+        if include_spec:
+            raise ValueError(
+                "dataset='spec' leaks its answers when include_spec=true; "
+                "set include_spec=false"
+            )
         items = load_items()
     elif dataset == "curated":
         items = load_curated_items()
-    elif dataset == "all":
-        items = load_items() + load_curated_items()
     else:
-        raise ValueError(f"unknown dataset {dataset!r}; use 'spec', 'curated' or 'all'")
+        raise ValueError(f"unknown dataset {dataset!r}; use 'spec' or 'curated'")
     if section is not None:
         items = [item for item in items if item.section == section]
     if paragraph is not None:

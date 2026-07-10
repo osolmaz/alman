@@ -6,111 +6,98 @@ translation benchmark (`alman/bench/`, built on
 
 ## What is being measured
 
-The benchmark has two tiers (223 items total):
+The benchmark contains 50 curated, hand-translated sentences under
+`alman/bench/curated/`. They are mostly literary German from Kafka and Hesse,
+re-derived from the `alman-research` seed data under the current spec. Each
+sentence exercises several rules at once.
 
-- **Spec examples** (173 examples, expanding to ~180 items): extracted
-  directly from the JSON files under `spec/`. Mostly short phrases, each
-  targeting one rule.
-- **Curated sentences** (50 items, `alman/bench/curated/`): hand-translated
-  full sentences, mostly literary German (Kafka, Hesse), re-derived from the
-  `alman-research` seed data under the current spec. These exercise many
-  rules at once.
+The 179 examples embedded in the spec are not benchmark rows when the spec is
+provided to the model. Their source text and answers both appear verbatim in
+the prompt, so scoring them would measure lookup rather than rule application.
+They remain available through `dataset=spec` for extraction validation and
+no-spec contamination diagnostics, but their scores must not be mixed into a
+benchmark headline.
 
 Each run reports two metrics:
 
 - **acceptance** — normalized exact match against the item's acceptance set
-  (all spec-valid renderings, enumerated or expanded from a pattern),
-  grouped per spec paragraph and per curated collection.
+  (all spec-valid renderings, enumerated or expanded from a pattern), grouped
+  per curated collection.
 - **compliance** — a linter that flags Standard German surface forms that
   Alman eliminates (unresolved contractions, case-inflected articles, etc.).
   This catches "fluent but non-Alman" output independently of the reference.
 
-The canonical rendering is always the first entry of the acceptance set, so
-a stricter canonical-match scorer can be added without touching the data.
+Acceptance is the primary metric; compliance is a minimum quality floor. The
+canonical rendering is always the first entry of the acceptance set, so a
+stricter canonical-match scorer can be added without changing the data.
 
 ## Credentials and model lanes
 
-1. **Direct API (preferred).** Set the provider key and use Inspect's
-   built-in providers. For OpenAI:
+1. **Direct API (preferred).** Set the provider key and use Inspect's built-in
+   providers. Reasoning effort is passed with the dedicated
+   `--reasoning-effort` flag, not with `-M`.
 
-   ```bash
-   set -a; source ~/offline/secrets/elwood_openai_api_key.env; set +a
-   ```
-
-   Reasoning effort is passed with the dedicated flag (`--reasoning-effort
-   xhigh`), not with `-M` (the `-M` form is forwarded to the client
-   constructor and fails on current Inspect versions).
-
-2. **Subscription credentials (Codex / Cursor).** Not implemented yet.
-   There is no official raw-completions endpoint for ChatGPT-plan or Cursor
-   auth; if needed, the plan is a custom Inspect model provider that wraps
-   `codex exec` (supports `model_reasoning_effort=xhigh`) or `cursor-agent`
-   one invocation per sample. Scores from agent-harness lanes are not
-   strictly comparable to direct API runs and must be tagged as such.
+2. **Subscription credentials (Codex / Cursor).** Not implemented yet. A
+   future custom Inspect provider may wrap `codex exec` or `cursor-agent`, one
+   invocation per sample. Agent-harness scores are not strictly comparable to
+   direct API runs and must be tagged as such.
 
 ## Run protocol
 
-1. **Smoke test** (2 items, verifies auth, model id, and effort flag):
+1. **Smoke test** (2 curated items, verifying auth, model id, and effort):
 
    ```bash
    uv run inspect eval alman/bench/task.py --model openai/gpt-5.5 \
      --reasoning-effort xhigh --max-connections 1 --limit 2
    ```
 
-2. **Full run** (all 223 items, strictly sequential):
+2. **Full run** (all 50 curated items, strictly sequential):
 
    ```bash
    uv run inspect eval alman/bench/task.py --model openai/gpt-5.5 \
      --reasoning-effort xhigh --max-connections 1
    ```
 
-   Runs are sequential (`--max-connections 1`) by policy: it keeps rate-limit
-   behaviour predictable, makes per-item latency visible, and the prompt
-   cache (the spec is ~12k tokens of shared prefix) still applies.
+   Runs are sequential (`--max-connections 1`) by policy: this keeps
+   rate-limit behavior predictable, exposes per-item latency, and still allows
+   prompt caching for the roughly 12k-token shared spec prefix.
 
 3. **Standard variants:**
 
    ```bash
-   -T dataset=curated        # curated tier only (50 items, good shakedown)
-   -T dataset=spec           # spec examples only
-   -T include_spec=false     # ablation: translate without the spec in context
-   -T section=articles       # drill into one spec section
+   -T include_spec=false                       # curated no-spec ablation
+   -T dataset=spec -T include_spec=false       # diagnostic only; never headline
    ```
 
-4. **Inspect results:** logs land in `logs/` (gitignored); browse with
+4. **Inspect results:** logs land in `logs/` (gitignored); browse them with
    `uv run inspect view`.
 
 ## What to record per run
 
-For every run that is kept, record: model id (exact, e.g.
-`gpt-5.5-2026-04-23`), reasoning effort, `include_spec` setting, dataset
-tier, date, the git commit of the spec/benchmark, and the two headline
-metrics plus the per-group acceptance table. The `.eval` log file contains
-all of this; keep the file.
+For every retained run, record the exact returned model id, reasoning effort,
+`include_spec` setting, date, git commit, acceptance and compliance scores,
+per-collection acceptance table, duration, token usage, and `.eval` log path.
+Report the evaluated item count explicitly. Never combine spec-example rows
+with curated rows in headline metrics.
 
 ## Planned comparisons
 
-- **gpt-5.5 xhigh, spec in context** — the "informed ceiling": how well a
-  frontier model applies the spec when given it verbatim.
-- **Same model, `include_spec=false`** — measures how much Alman knowledge
-  is latent vs. spec-derived; also the contamination baseline to re-check
-  as the spec spreads.
-- **Smaller/cheaper models with spec** — the practical translation-engine
+- **GPT-5.5 xhigh, spec in context** — the informed ceiling on the 50 unseen
+  curated sentences.
+- **Same model, `include_spec=false`** — measures latent Alman knowledge and
+  provides a contamination baseline.
+- **Smaller or cheaper models with the spec** — practical translation-engine
   candidates.
-- **Fine-tuned models** (via `--model vllm/local -M model_path=...`) — the
-  eventual target of the training pipeline; compare against the informed
-  ceiling.
+- **Fine-tuned models** — the eventual training-pipeline target, compared with
+  the curated informed ceiling.
 
 ## Known caveats
 
-- Acceptance sets on curated genitive-heavy items are pattern-expanded
-  (`{der|von die}`), but a few underspecified areas remain judgment calls
-  (documented in the items' `note` fields): institutional possessors,
-  adverbial genitives, postnominal name genitives, generic *der Mensch*
-  pronominalization.
+- Acceptance sets on genitive-heavy items are pattern-expanded (`{der|von
+  die}`), but a few underspecified areas remain judgment calls, documented in
+  item `note` fields: institutional possessors, adverbial genitives,
+  postnominal name genitives, and generic *der Mensch* pronominalization.
 - Compliance lint is surface-form based; it catches eliminated Standard
-  German forms but not semantic errors. Acceptance is the primary metric;
-  compliance is the floor.
-- No sampling controls are pinned (temperature defaults); reasoning models
-  are not deterministic across runs. Treat small per-group deltas (< a few
-  points) as noise, especially in groups with few items.
+  German forms but not semantic errors.
+- Sampling controls are not pinned and reasoning models are not deterministic.
+  Treat small per-collection changes as noise, especially for small groups.

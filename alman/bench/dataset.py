@@ -48,7 +48,7 @@ _TRAILING_NOTE_RE = re.compile(r"\s*\(([^()]*)\)\s*$")
 
 
 class BenchItem(BaseModel):
-    """One scoreable translation item derived from a spec example."""
+    """One scoreable translation item."""
 
     id: str
     source: str
@@ -162,7 +162,7 @@ def _apply_overrides(items: list[BenchItem]) -> list[BenchItem]:
 
 
 def load_items(spec_dir: Path = SPEC_DIR) -> list[BenchItem]:
-    """Load all benchmark items from the spec, in document order."""
+    """Load all spec-example fixtures in document order."""
     main = _load_json(spec_dir / "main.json")
     items: list[BenchItem] = []
 

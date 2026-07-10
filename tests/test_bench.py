@@ -5,6 +5,7 @@ import pytest
 from alman.bench.dataset import load_curated_items, load_items
 from alman.bench.pattern import PatternError, expand_pattern
 from alman.bench.scoring import is_accepted, lint, normalize
+from alman.bench.task import alman_bench
 
 
 @pytest.fixture(scope="module")
@@ -158,6 +159,20 @@ class TestPattern:
 
 
 class TestCurated:
+    def test_task_uses_curated_items_by_default(self):
+        task = alman_bench()
+        assert task.dataset.name == "alman-bench-curated"
+        assert len(task.dataset) == 50
+
+    def test_task_rejects_spec_examples_with_spec_in_prompt(self):
+        with pytest.raises(ValueError, match="leaks its answers"):
+            alman_bench(dataset="spec")
+
+    def test_task_allows_no_spec_diagnostic(self, items):
+        task = alman_bench(dataset="spec", include_spec=False)
+        assert task.dataset.name == "alman-bench-spec"
+        assert len(task.dataset) == len(items)
+
     def test_item_count(self, curated_items):
         assert len(curated_items) == 50
 
