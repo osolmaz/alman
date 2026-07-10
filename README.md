@@ -4,10 +4,17 @@ Currently under development. Deployed at [alman.ai](https://alman.ai).
 
 ## Translation benchmark
 
-The spec's curated example pairs double as a Standard German → Alman
-translation benchmark, built on [Inspect AI](https://inspect.aisi.org.uk/).
-Items are extracted directly from the JSON files under `spec/` (the source of
-truth), so spec edits propagate to the benchmark automatically.
+A Standard German → Alman translation benchmark, built on
+[Inspect AI](https://inspect.aisi.org.uk/), with two tiers of items:
+
+- **Spec examples** — extracted directly from the JSON files under `spec/`
+  (the source of truth), so spec edits propagate to the benchmark
+  automatically. Mostly short phrases, each targeting one rule.
+- **Curated sentences** (`alman/bench/curated/`) — hand-translated full
+  sentences, mostly literary German (Kafka's *Die Verwandlung*, Hesse's
+  *Siddhartha* and *Der Steppenwolf*), that exercise many rules at once:
+  genitives, contractions, weak nouns, dative plurals, adjective chains.
+  Each file records its provenance.
 
 Run it against any model supported by Inspect — the model is a drop-in
 parameter:
@@ -27,6 +34,8 @@ Task options (passed with `-T`):
 
 ```bash
 -T include_spec=false      # translate without the spec in the system prompt
+-T dataset=spec            # only spec-derived items (default: all)
+-T dataset=curated         # only curated sentence-level items
 -T section=articles        # only items from one spec section
 -T paragraph=determiners   # only items from one spec paragraph
 ```

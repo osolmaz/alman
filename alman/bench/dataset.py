@@ -18,6 +18,12 @@ them into scoreable items:
 ``overrides.json`` patches individual items where the spec's presentation
 does not translate mechanically (e.g. paradigm listings such as
 ``dieser, diese, dieses, ... -> diese``).
+
+Besides the spec-derived items there is a second, hand-curated tier under
+``curated/``: full sentences (mostly literary German from Kafka and Hesse)
+whose targets were re-derived under the current spec from the seed data in
+the ``alman-research`` repo. These exercise many rules at once and carry
+acceptance sets inline, so no override machinery is needed.
 """
 
 from __future__ import annotations
@@ -31,6 +37,7 @@ from pydantic import BaseModel
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SPEC_DIR = REPO_ROOT / "spec"
 OVERRIDES_PATH = Path(__file__).with_name("overrides.json")
+CURATED_DIR = Path(__file__).with_name("curated")
 
 _TRAILING_NOTE_RE = re.compile(r"\s*\(([^()]*)\)\s*$")
 
@@ -49,6 +56,8 @@ class BenchItem(BaseModel):
     rule: str
     note: str | None = None
     english: str | None = None
+    provenance: str | None = None
+    """Where the item came from, for curated (non-spec) items."""
 
 
 def _split_variants(text: str) -> list[str]:
@@ -173,3 +182,25 @@ def load_items(spec_dir: Path = SPEC_DIR) -> list[BenchItem]:
                     )
 
     return _apply_overrides(items)
+
+
+def load_curated_items(curated_dir: Path = CURATED_DIR) -> list[BenchItem]:
+    """Load the hand-curated sentence-level items (tier 2 of the benchmark)."""
+    items: list[BenchItem] = []
+    for path in sorted(curated_dir.glob("*.json")):
+        data = _load_json(path)
+        collection = data["collection"]
+        for index, entry in enumerate(data["items"]):
+            items.append(
+                BenchItem(
+                    id=f"curated/{collection}/{index}",
+                    source=entry["source"],
+                    accepted=list(entry["accepted"]),
+                    section="curated",
+                    paragraph=collection,
+                    rule=entry.get("rule", "mixed"),
+                    note=entry.get("note"),
+                    provenance=data.get("provenance"),
+                )
+            )
+    return items

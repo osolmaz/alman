@@ -1,0 +1,80 @@
+{
+  "collection": "deutsch-alman",
+  "provenance": "Re-derived under spec v0.4.2 from alman-research data/seed/deutsch_alman1.json (originally authored for the v0.1 case-preserving ruleset).",
+  "items": [
+    {
+      "source": "Der Hund läuft schnell.",
+      "accepted": ["Die Hund läuft schnell."],
+      "rule": "articles"
+    },
+    {
+      "source": "Ein Mann und eine Frau sahen das Auto.",
+      "accepted": ["Ein Mann und ein Frau sahen die Auto."],
+      "rule": "articles"
+    },
+    {
+      "source": "Die Kinder spielen im Garten.",
+      "accepted": ["Die Kinder spielen in die Garten."],
+      "rule": "contraction"
+    },
+    {
+      "source": "Das Buch des Schülers liegt auf dem Tisch.",
+      "accepted": [
+        "Die Buch der Schüler liegt auf die Tisch.",
+        "Die Buch von die Schüler liegt auf die Tisch."
+      ],
+      "rule": "genitive"
+    },
+    {
+      "source": "Ich gebe dem Arzt das Medikament.",
+      "accepted": [
+        "Ich gebe die Arzt die Medikament.",
+        "Ich gebe die Medikament an die Arzt."
+      ],
+      "rule": "ditransitive"
+    },
+    {
+      "source": "Die Regierung hat ihre Entscheidung bekannt gegeben.",
+      "accepted": [
+        "Die Regierung hat sein Entscheidung bekannt gegeben.",
+        "Die Regierung hat ihr Entscheidung bekannt gegeben."
+      ],
+      "rule": "possessive",
+      "note": "Possessor is an institution: strict natural-gender attribution gives 'sein' (its); 'ihr' accepted since the spec leaves collective possessors underspecified."
+    },
+    {
+      "source": "Der neue Wagen ist schneller als der alte.",
+      "accepted": ["Die neue Wagen ist schneller als die alte."],
+      "rule": "adjectives"
+    },
+    {
+      "source": "Während des Amerikanischen Unabhängigkeitskriegs diente er nach Abbruch seines Studiums als Offizier in der Kontinentalarmee.",
+      "accepted": [
+        "Während der Amerikanische Unabhängigkeitskrieg diente er nach Abbruch von sein Studium als Offizier in die Kontinentalarmee.",
+        "Während die Amerikanische Unabhängigkeitskrieg diente er nach Abbruch von sein Studium als Offizier in die Kontinentalarmee."
+      ],
+      "rule": "genitive"
+    },
+    {
+      "source": "James Monroe wurde in Monroe Hall in der Kolonie Virginia als Sohn des Zimmermanns Spence Monroe und seiner Frau Elizabeth Jones geboren.",
+      "accepted": [
+        "James Monroe wurde in Monroe Hall in die Kolonie Virginia als Sohn der Zimmermann Spence Monroe und von sein Frau Elizabeth Jones geboren.",
+        "James Monroe wurde in Monroe Hall in die Kolonie Virginia als Sohn von die Zimmermann Spence Monroe und von sein Frau Elizabeth Jones geboren.",
+        "James Monroe wurde in Monroe Hall in die Kolonie Virginia als Sohn von die Zimmermann Spence Monroe und sein Frau Elizabeth Jones geboren."
+      ],
+      "rule": "genitive"
+    },
+    {
+      "source": "Die deutsche Nationalmannschaft hat zum ersten Mal die U-17-Fußball-Weltmeisterschaft gewonnen.",
+      "accepted": [
+        "Die deutsche Nationalmannschaft hat zu die erste Mal die U-17-Fußball-Weltmeisterschaft gewonnen."
+      ],
+      "rule": "contraction"
+    },
+    {
+      "source": "Er kauft Milch fürs Frühstück.",
+      "accepted": ["Er kauft Milch für die Frühstück."],
+      "rule": "contraction"
+    }
+  ]
+}

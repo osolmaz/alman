@@ -11,6 +11,8 @@ the task):
 Task options (pass with -T):
 
     -T include_spec=false     evaluate without the spec in context
+    -T dataset=spec           only spec-derived items (default: all)
+    -T dataset=curated        only curated sentence-level items
     -T section=articles       only items from one spec section
     -T paragraph=determiners  only items from one spec paragraph
 """
@@ -32,7 +34,7 @@ from inspect_ai.scorer import (
 )
 from inspect_ai.solver import Generate, TaskState, generate, solver
 
-from alman.bench.dataset import REPO_ROOT, BenchItem, load_items
+from alman.bench.dataset import REPO_ROOT, BenchItem, load_curated_items, load_items
 from alman.bench.scoring import is_accepted, lint
 
 SPEC_MARKDOWN = REPO_ROOT / "_includes" / "spec.md"
@@ -93,6 +95,7 @@ def _sample(item: BenchItem) -> Sample:
             "rule": item.rule,
             "note": item.note,
             "english": item.english,
+            "provenance": item.provenance,
         },
     )
 
@@ -132,11 +135,19 @@ def compliance():
 @task
 def alman_bench(
     include_spec: bool = True,
+    dataset: str = "all",
     section: str | None = None,
     paragraph: str | None = None,
 ) -> Task:
-    """Translate the spec's curated example pairs from Standard German to Alman."""
-    items = load_items()
+    """Translate Standard German to Alman: spec examples plus curated sentences."""
+    if dataset == "spec":
+        items = load_items()
+    elif dataset == "curated":
+        items = load_curated_items()
+    elif dataset == "all":
+        items = load_items() + load_curated_items()
+    else:
+        raise ValueError(f"unknown dataset {dataset!r}; use 'spec', 'curated' or 'all'")
     if section is not None:
         items = [item for item in items if item.section == section]
     if paragraph is not None:
@@ -147,7 +158,7 @@ def alman_bench(
     return Task(
         dataset=MemoryDataset(
             samples=[_sample(item) for item in items],
-            name="alman-spec-examples",
+            name=f"alman-bench-{dataset}",
         ),
         solver=[translator_system_message(include_spec), generate()],
         scorer=[acceptance(), compliance()],

@@ -9,7 +9,14 @@ scoring logic is framework-independent so it can be reused for training-data
 filtering and regression tests.
 """
 
-from alman.bench.dataset import BenchItem, load_items
+from alman.bench.dataset import BenchItem, load_curated_items, load_items
 from alman.bench.scoring import is_accepted, lint, normalize
 
-__all__ = ["BenchItem", "load_items", "is_accepted", "lint", "normalize"]
+__all__ = [
+    "BenchItem",
+    "load_items",
+    "load_curated_items",
+    "is_accepted",
+    "lint",
+    "normalize",
+]

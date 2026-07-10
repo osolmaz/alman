@@ -1,6 +1,6 @@
 import pytest
 
-from alman.bench.dataset import load_items
+from alman.bench.dataset import load_curated_items, load_items
 from alman.bench.scoring import is_accepted, lint, normalize
 
 
@@ -12,6 +12,11 @@ def items():
 @pytest.fixture(scope="module")
 def items_by_id(items):
     return {item.id: item for item in items}
+
+
+@pytest.fixture(scope="module")
+def curated_items():
+    return load_curated_items()
 
 
 class TestExtraction:
@@ -85,6 +90,56 @@ class TestExtraction:
         ]
         assert "diese" in item.accepted
         assert "diese, diese, diese, diese, diese" in item.accepted
+
+
+class TestCurated:
+    def test_item_count(self, curated_items):
+        assert len(curated_items) == 50
+
+    def test_collections(self, curated_items):
+        collections = {item.paragraph for item in curated_items}
+        assert collections == {
+            "ablaut",
+            "berufe",
+            "deutsch-alman",
+            "die-verwandlung",
+            "siddhartha",
+            "starke-flexion",
+            "steppenwolf",
+        }
+
+    def test_ids_unique_across_tiers(self, items, curated_items):
+        ids = [item.id for item in items] + [item.id for item in curated_items]
+        assert len(ids) == len(set(ids))
+
+    def test_every_item_has_provenance(self, curated_items):
+        assert all(item.provenance for item in curated_items)
+
+    def test_dative_adjective_collapsed(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+        item = by_id["curated/starke-flexion/4"]
+        assert item.source == "großem Mann (Dative)"
+        assert item.accepted == ["große Mann"]
+
+    def test_possessive_base_form(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+        item = by_id["curated/berufe/5"]
+        assert item.accepted == ["Die Anwalt vertritt ihr Mandanten vor Gericht."]
+
+    def test_ditransitive_acceptance_set(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+        item = by_id["curated/deutsch-alman/4"]
+        assert len(item.accepted) == 2
+
+    def test_all_curated_targets_pass_lint(self, curated_items):
+        """Self-consistency: no accepted curated rendering violates the linter."""
+        failures = [
+            (item.id, variant, violations)
+            for item in curated_items
+            for variant in item.accepted
+            if (violations := lint(variant))
+        ]
+        assert failures == []
 
 
 class TestNormalize:
