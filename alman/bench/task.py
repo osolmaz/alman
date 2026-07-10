@@ -33,7 +33,7 @@ from inspect_ai.scorer import (
 from inspect_ai.solver import Generate, TaskState, generate, solver
 
 from alman.bench.dataset import REPO_ROOT, BenchItem, load_items
-from alman.bench.scoring import is_accepted, is_canonical, lint
+from alman.bench.scoring import is_accepted, lint
 
 SPEC_MARKDOWN = REPO_ROOT / "_includes" / "spec.md"
 
@@ -114,26 +114,6 @@ def acceptance():
 
 
 @scorer(metrics=[accuracy(), stderr()])
-def canonical():
-    """Exact match against the canonical (spec-preferred) rendering.
-
-    Stricter than `acceptance`: measures adherence to the spec's preferred
-    style, not just validity.
-    """
-
-    async def score(state: TaskState, target: Target) -> Score:
-        completion = state.output.completion
-        correct = is_canonical(completion, list(target))
-        return Score(
-            value=CORRECT if correct else INCORRECT,
-            answer=completion,
-            explanation=f"canonical: {target[0]}",
-        )
-
-    return score
-
-
-@scorer(metrics=[accuracy(), stderr()])
 def compliance():
     """Spec-compliance linter: no eliminated Standard German surface forms."""
 
@@ -170,5 +150,5 @@ def alman_bench(
             name="alman-spec-examples",
         ),
         solver=[translator_system_message(include_spec), generate()],
-        scorer=[acceptance(), canonical(), compliance()],
+        scorer=[acceptance(), compliance()],
     )

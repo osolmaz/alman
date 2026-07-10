@@ -10,13 +10,6 @@ filtering and regression tests.
 """
 
 from alman.bench.dataset import BenchItem, load_items
-from alman.bench.scoring import is_accepted, is_canonical, lint, normalize
+from alman.bench.scoring import is_accepted, lint, normalize
 
-__all__ = [
-    "BenchItem",
-    "load_items",
-    "is_accepted",
-    "is_canonical",
-    "lint",
-    "normalize",
-]
+__all__ = ["BenchItem", "load_items", "is_accepted", "lint", "normalize"]

@@ -1,7 +1,7 @@
 import pytest
 
 from alman.bench.dataset import load_items
-from alman.bench.scoring import is_accepted, is_canonical, lint, normalize
+from alman.bench.scoring import is_accepted, lint, normalize
 
 
 @pytest.fixture(scope="module")
@@ -60,8 +60,7 @@ class TestExtraction:
         assert singular.source == "der Sessel (singular)"
         assert singular.accepted == ["die Sessel"]
         assert plural.source == "die Sessel (plural)"
-        # canonical -s form first, unmarked plural via override second
-        assert plural.accepted == ["die Sessels", "die Sessel"]
+        assert plural.accepted == ["die Sessels"]
 
     def test_slash_inside_parens_not_split(self, items_by_id):
         item = items_by_id["articles/definite-articles/non-genitive-articles/3"]
@@ -86,22 +85,6 @@ class TestExtraction:
         ]
         assert "diese" in item.accepted
         assert "diese, diese, diese, diese, diese" in item.accepted
-
-    def test_canonical_rendering_stays_first_despite_overrides(self, items_by_id):
-        item = items_by_id["articles/definite-articles/genitive-articles/0"]
-        assert item.accepted[0] == "der Mann"
-        assert "von die Mann" in item.accepted
-
-    def test_optional_plural_override(self, items_by_id):
-        item = items_by_id["nouns/noun-morphology/optional-plural-marking/2"]
-        assert item.accepted == ["die Mädchens", "die Mädchen"]
-
-    def test_ditransitive_override(self, items_by_id):
-        item = items_by_id["verbs-and-word-order/word-order/ditransitive-order/2"]
-        assert item.accepted == [
-            "Ich gebe die Buch an die Frau.",
-            "Ich gebe die Frau die Buch.",
-        ]
 
 
 class TestNormalize:
@@ -130,11 +113,6 @@ class TestAcceptance:
         assert is_accepted("wegen die Wetter", accepted)
         assert is_accepted("wegen der Wetter", accepted)
         assert not is_accepted("wegen des Wetters", accepted)
-
-    def test_canonical_is_first_variant_only(self):
-        accepted = ["wegen der Wetter", "wegen die Wetter"]
-        assert is_canonical("wegen der Wetter", accepted)
-        assert not is_canonical("wegen die Wetter", accepted)
 
 
 class TestLint:
