@@ -47,6 +47,15 @@ def is_accepted(output: str, accepted: list[str]) -> bool:
     return any(normalized == normalize(a) for a in accepted)
 
 
+def is_canonical(output: str, accepted: list[str]) -> bool:
+    """True if the output matches the canonical (spec-preferred) rendering.
+
+    The first entry of an item's acceptance set is always the rendering the
+    spec lists first, which is its preferred form.
+    """
+    return normalize(output) == normalize(accepted[0])
+
+
 _FORBIDDEN: dict[str, str] = {}
 
 for _token in (

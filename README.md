@@ -31,12 +31,17 @@ Task options (passed with `-T`):
 -T paragraph=determiners   # only items from one spec paragraph
 ```
 
-Two metrics are reported per run: **acceptance** (normalized match against
-each item's set of spec-valid renderings, grouped per spec paragraph) and
-**compliance** (a linter that flags Standard German surface forms eliminated
-by Alman, e.g. unresolved contractions or case-inflected articles).
+Three metrics are reported per run: **acceptance** (normalized match against
+each item's set of spec-valid renderings, grouped per spec paragraph),
+**canonical** (exact match against the spec-preferred rendering only, i.e.
+style adherence), and **compliance** (a linter that flags Standard German
+surface forms eliminated by Alman, e.g. unresolved contractions or
+case-inflected articles).
 
 The extraction and scoring logic is framework-independent
 (`alman.bench.dataset`, `alman.bench.scoring`) so it can be reused for
 training-data filtering. `alman/bench/overrides.json` patches items whose
-spec presentation is not a literal translation pair (e.g. paradigm listings).
+spec presentation is not a literal translation pair (e.g. paradigm listings)
+and widens acceptance sets with renderings the spec text licenses but the
+example tables omit (periphrastic `von die` genitives, optional plural `-s`,
+ditransitive order alternatives).
