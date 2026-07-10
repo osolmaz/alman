@@ -1,0 +1,19 @@
+{
+  "collection": "steppenwolf",
+  "provenance": "Re-derived under spec v0.4.2 from alman-research data/seed/steppenwolf.json. Source text: Hermann Hesse, Der Steppenwolf.",
+  "items": [
+    {
+      "source": "Der Mensch ist ja keine feste und dauernde Gestaltung (dies war, trotz entgegengesetzter Ahnungen ihrer Weisen, das Ideal der Antike), er ist vielmehr ein Versuch und Übergang, er ist nichts anderes als die schmale, gefährliche Brücke zwischen Natur und Geist.",
+      "pattern": "Die Mensch ist ja kein feste und dauernde Gestaltung (diese war, trotz entgegengesetzte Ahnungen von {sein|ihr}@6e Weisen, die Ideal {der|von die}@1d Antike), er ist vielmehr ein Versuch und Übergang, er ist nichts andere als die schmale, gefährliche Brücke zwischen Natur und Geist.",
+      "rule": "mixed",
+      "note": "Possessor of 'ihrer Weisen' is the (inanimate) Antike: strict natural-gender attribution gives 'sein'; 'ihr' accepted since a collective reading is defensible."
+    },
+    {
+      "source": "Nach dem Geiste hin, zu Gott hin treibt ihn die innerste Bestimmung—nach der Natur, zur Mutter zurück zieht ihn die innigste Sehnsucht: zwischen beiden Mächten schwankt angstvoll bebend sein Leben.",
+      "accepted": [
+        "Nach die Geist hin, zu Gott hin treibt ihn die innerste Bestimmung—nach die Natur, zu die Mutter zurück zieht ihn die innigste Sehnsucht: zwischen beide Mächte schwankt angstvoll bebend sein Leben."
+      ],
+      "rule": "mixed"
+    }
+  ]
+}

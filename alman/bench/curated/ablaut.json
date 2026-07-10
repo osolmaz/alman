@@ -1,0 +1,16 @@
+{
+  "collection": "ablaut",
+  "provenance": "Re-derived under spec v0.4.2 from alman-research data/seed/ablaut_test_1.json. Tests adjective stem alternation under the invariant -e rule.",
+  "items": [
+    {
+      "source": "hoher Turm",
+      "accepted": ["hohe Turm"],
+      "rule": "adjectives"
+    },
+    {
+      "source": "größerer Turm",
+      "accepted": ["größere Turm"],
+      "rule": "adjectives"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "collection": "siddhartha",
+  "provenance": "Re-derived under spec v0.4.2 from alman-research data/seed/siddhartha.json (which also had a JSON syntax error and two commented-out entries; the two commented-out sentences are omitted here). Source text: Hermann Hesse, Siddhartha (Project Gutenberg #2499).",
+  "items": [
+    {
+      "source": "Im Schatten des Hauses, in der Sonne des Flußufers bei den Booten, im Schatten des Salwaldes, im Schatten des Feigenbaumes wuchs Siddhartha auf, der schöne Sohn des Brahmanen, der junge Falke, zusammen mit Govinda, seinem Freunde, dem Brahmanensohn.",
+      "pattern": "In die Schatten {der|von die}@1d Haus, in die Sonne {der|von die} Flußufer bei die Boote, in die Schatten {der|von die} Salwald, in die Schatten {der|von die} Feigenbaum wuchs Siddhartha auf, die schöne Sohn {der|von die} Brahmane, die junge Falke, zusammen mit Govinda, sein Freund, die Brahmanensohn.",
+      "rule": "mixed"
+    },
+    {
+      "source": "Sonne bräunte seine lichten Schultern am Flußufer, beim Bade, bei den heiligen Waschungen, bei den heiligen Opfern.",
+      "accepted": [
+        "Sonne bräunte sein lichte Schultern an die Flußufer, bei die Bad, bei die heilige Waschungen, bei die heilige Opfer."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Schatten floß in seine schwarzen Augen im Mangohain, bei den Knabenspielen, beim Gesang der Mutter, bei den heiligen Opfern, bei den Lehren seines Vaters, des Gelehrten, beim Gespräch der Weisen.",
+      "pattern": "Schatten floß in sein schwarze Augen in die Mangohain, bei die Knabenspiele, bei die Gesang {der|von die}@1d Mutter, bei die heilige Opfer, bei die Lehren von sein Vater, die Gelehrte, bei die Gespräch {der|von die} Weisen.",
+      "rule": "mixed",
+      "note": "The apposition 'des Gelehrten' follows its head into the von-construction ('von sein Vater, die Gelehrte'), since the possessive genitive has no der-form and must be periphrastic."
+    },
+    {
+      "source": "Lange schon nahm Siddhartha am Gespräch der Weisen teil, übte sich mit Govinda im Redekampf, übte sich mit Govinda in der Kunst der Betrachtung, im Dienst der Versenkung.",
+      "pattern": "Lange schon nahm Siddhartha an die Gespräch {der|von die}@1d Weisen teil, übte sich mit Govinda in die Redekampf, übte sich mit Govinda in die Kunst {der|von die} Betrachtung, in die Dienst {der|von die} Versenkung.",
+      "rule": "mixed"
+    },
+    {
+      "source": "Schon verstand er, lautlos das Om zu sprechen, das Wort der Worte, es lautlos in sich hinein zu sprechen mit dem Einhauch, es lautlos aus sich heraus zu sprechen mit dem Aushauch, mit gesammelter Seele, die Stirn umgeben vom Glanz des klardenkenden Geistes.",
+      "pattern": "Schon verstand er, lautlos die Om zu sprechen, die Wort {der|von die}@1d Worte, es lautlos in sich hinein zu sprechen mit die Einhauch, es lautlos aus sich heraus zu sprechen mit die Aushauch, mit gesammelte Seele, die Stirn umgeben von die Glanz {der|von die} klardenkende Geist.",
+      "rule": "mixed"
+    },
+    {
+      "source": "Schon verstand er, im Innern seines Wesens Atman zu wissen, unzerstörbar, eins mit dem Weltall.",
+      "accepted": [
+        "Schon verstand er, in die Innere von sein Wesen Atman zu wissen, unzerstörbar, eins mit die Weltall."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Freude sprang in seines Vaters Herzen über den Sohn, den Gelehrigen, den Wissensdurstigen, einen großen Weisen und Priester sah er in ihm heranwachsen, einen Fürsten unter den Brahmanen.",
+      "accepted": [
+        "Freude sprang in die Herz von sein Vater über die Sohn, die Gelehrige, die Wissensdurstige, ein große Weise und Priester sah er in ihm heranwachsen, ein Fürst unter die Brahmanen."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Wonne sprang in seiner Mutter Brust, wenn sie ihn sah, wenn sie ihn schreiten, wenn sie ihn niedersitzen und aufstehen sah, Siddhartha, den Starken, den Schönen, den auf schlanken Beinen Schreitenden, den mit vollkommenem Anstand sie Begrüßenden.",
+      "accepted": [
+        "Wonne sprang in die Brust von sein Mutter, wenn sie ihn sah, wenn sie ihn schreiten, wenn sie ihn niedersitzen und aufstehen sah, Siddhartha, die Starke, die Schöne, die auf schlanke Beine Schreitende, die mit vollkommene Anstand sie Begrüßende."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Liebe rührte sich in den Herzen der jungen Brahmanentöchter, wenn Siddhartha durch die Gassen der Stadt ging, mit der leuchtenden Stirn, mit dem Königsauge, mit den schmalen Hüften.",
+      "pattern": "Liebe rührte sich in die Herzen {der|von die}@1d junge Brahmanentöchter, wenn Siddhartha durch die Gassen {der|von die} Stadt ging, mit die leuchtende Stirn, mit die Königsauge, mit die schmale Hüften.",
+      "rule": "mixed"
+    },
+    {
+      "source": "Mehr als sie alle aber liebte ihn Govinda, sein Freund, der Brahmanensohn.",
+      "accepted": [
+        "Mehr als sie alle aber liebte ihn Govinda, sein Freund, die Brahmanensohn."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Er liebte Siddharthas Auge und holde Stimme, er liebte seinen Gang und den vollkommenen Anstand seiner Bewegungen, er liebte alles, was Siddhartha tat und sagte, und am meisten liebte er seinen Geist, seine hohen, feurigen Gedanken, seinen glühenden Willen, seine hohe Berufung.",
+      "pattern": "Er liebte Siddharthas Auge und holde Stimme, er liebte sein Gang und die vollkommene Anstand von sein Bewegungen, er liebte alles, was Siddhartha tat und sagte, und {meist|an meist}@5b liebte er sein Geist, sein hohe, feurige Gedanken, sein glühende Wille, sein hohe Berufung.",
+      "rule": "mixed",
+      "note": "Both the bare-stem superlative (meist) and the 'an' + stem variant are spec-valid."
+    },
+    {
+      "source": "Am Abend dieses Tages holten sie die Asketen ein, die dürren Samanas, und boten ihnen Begleitschaft und Gehorsam an. Sie wurden angenommen.",
+      "accepted": [
+        "An die Abend von diese Tag holten sie die Asketen ein, die dürre Samanas, und boten ihnen Begleitschaft und Gehorsam an. Sie wurden angenommen."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Siddhartha schenkte sein Gewand einem armen Brahmanen auf der Straße.",
+      "pattern": "Siddhartha schenkte {sein Gewand an ein arme Brahmane|ein arme Brahmane sein Gewand}@9c auf die Straße.",
+      "rule": "ditransitive",
+      "note": "Standard German places the theme first here, so the 'an' construction is canonical; the reordered recipient-first variant is also spec-valid."
+    },
+    {
+      "source": "Heiße Träume flackerten aus seinen vergrößerten Augen, an seinen dorrenden Fingern wuchsen lang die Nägel und am Kinn der trockne, struppige Bart.",
+      "accepted": [
+        "Heiße Träume flackerten aus sein vergrößerte Augen, an sein dorrende Finger wuchsen lang die Nägel und an die Kinn die trockne, struppige Bart."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "War es also gut, war es richtig, war es ein sinnvolles und höchstes Tun, den Göttern zu opfern?",
+      "accepted": [
+        "War es also gut, war es richtig, war es ein sinnvolle und höchste Tun, die Götter zu opfern?"
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Diese Sage, dies Gerücht, dies Märchen klang auf, duftete empor, hier und dort, in den Städten sprachen die Brahmanen davon, im Wald die Samanas, immer wieder drang der Name Gotamas, des Buddha, zu den Ohren der Jünglinge, im Guten und im Bösen, in Lobpreisung und in Schmähung.",
+      "pattern": "Diese Sage, diese Gerücht, diese Märchen klang auf, duftete empor, hier und dort, in die Städte sprachen die Brahmanen davon, in die Wald die Samanas, immer wieder drang die Name {g:Gotamas|von Gotama}@3b, {g:der|die} Buddha, zu die Ohren {der|von die}@1d Jünglinge, in die Gute und in die Böse, in Lobpreisung und in Schmähung.",
+      "rule": "mixed",
+      "note": "The apposition 'des Buddha' covaries with the rendering of the name genitive (linked group): genitive 'der Buddha' after retained 'Gotamas', non-genitive 'die Buddha' after the von-construction."
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "collection": "starke-flexion",
+  "provenance": "Re-derived under spec v0.4.2 from alman-research data/seed/starke_flexion1.json. The original targets kept per-case adjective endings (v0.1 ruleset); the current spec collapses all declensional endings to -e.",
+  "items": [
+    {
+      "source": "großer Mann (Nominative)",
+      "accepted": ["große Mann"],
+      "rule": "adjectives",
+      "note": "Nominative"
+    },
+    {
+      "source": "starke Frau (Nominative)",
+      "accepted": ["starke Frau"],
+      "rule": "adjectives",
+      "note": "Nominative"
+    },
+    {
+      "source": "nettes Kind (Nominative)",
+      "accepted": ["nette Kind"],
+      "rule": "adjectives",
+      "note": "Nominative"
+    },
+    {
+      "source": "großen Mann (Accusative)",
+      "accepted": ["große Mann"],
+      "rule": "adjectives",
+      "note": "Accusative"
+    },
+    {
+      "source": "großem Mann (Dative)",
+      "accepted": ["große Mann"],
+      "rule": "adjectives",
+      "note": "Dative"
+    },
+    {
+      "source": "starker Frau (Dative)",
+      "accepted": ["starke Frau"],
+      "rule": "adjectives",
+      "note": "Dative"
+    },
+    {
+      "source": "nettem Kind (Dative)",
+      "accepted": ["nette Kind"],
+      "rule": "adjectives",
+      "note": "Dative"
+    },
+    {
+      "source": "netten Kind (Genitive)",
+      "accepted": ["nette Kind"],
+      "rule": "adjectives",
+      "note": "Genitive"
+    }
+  ]
+}

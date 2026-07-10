@@ -1,0 +1,41 @@
+{
+  "collection": "berufe",
+  "provenance": "Re-derived under spec v0.4.2 from alman-research data/seed/beruf_test_1.json.",
+  "items": [
+    {
+      "source": "die Ärztin",
+      "accepted": ["die Arzt"],
+      "rule": "occupational"
+    },
+    {
+      "source": "der Arzt",
+      "accepted": ["die Arzt"],
+      "rule": "occupational"
+    },
+    {
+      "source": "Die Lehrerin unterrichtet Mathematik in der Schule.",
+      "accepted": ["Die Lehrer unterrichtet Mathematik in die Schule."],
+      "rule": "occupational"
+    },
+    {
+      "source": "Der Polizist patrouilliert in der Nachbarschaft.",
+      "accepted": ["Die Polizist patrouilliert in die Nachbarschaft."],
+      "rule": "occupational"
+    },
+    {
+      "source": "Die Polizistin patrouilliert in der Nachbarschaft.",
+      "accepted": ["Die Polizist patrouilliert in die Nachbarschaft."],
+      "rule": "occupational"
+    },
+    {
+      "source": "Die Anwältin vertritt ihre Mandanten vor Gericht.",
+      "accepted": ["Die Anwalt vertritt ihr Mandanten vor Gericht."],
+      "rule": "occupational"
+    },
+    {
+      "source": "Die Köchin bereitet ein köstliches Abendessen vor.",
+      "accepted": ["Die Koch bereitet ein köstliche Abendessen vor."],
+      "rule": "occupational"
+    }
+  ]
+}

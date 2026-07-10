@@ -1,0 +1,33 @@
+{
+  "collection": "die-verwandlung",
+  "provenance": "Re-derived under spec v0.4.2 from alman-research data/seed/die_verwandlung.json. Source text: Franz Kafka, Die Verwandlung (Project Gutenberg #22367).",
+  "items": [
+    {
+      "source": "Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt.",
+      "pattern": "Als Gregor Samsa ein Morgen aus unruhige Träume erwachte, fand er sich in sein Bett zu ein {ungeheure|ungeheuere}@4a Ungeziefer verwandelt.",
+      "rule": "mixed",
+      "note": "The adverbial genitive 'eines Morgens' is not covered explicitly by the spec; rendered with the invariant 'ein'. Both elided (ungeheure) and unelided (ungeheuere) adjective stems are accepted since the spec does not regulate stem elision."
+    },
+    {
+      "source": "Erst in der Abenddämmerung erwachte Gregor aus seinem schweren ohnmachtähnlichen Schlaf.",
+      "accepted": [
+        "Erst in die Abenddämmerung erwachte Gregor aus sein schwere ohnmachtähnliche Schlaf."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Auf diese Weise bekam nun Gregor täglich sein Essen, einmal am Morgen, wenn die Eltern und das Dienstmädchen noch schliefen, das zweite Mal nach dem allgemeinen Mittagessen, denn dann schliefen die Eltern gleichfalls noch ein Weilchen, und das Dienstmädchen wurde von der Schwester mit irgendeiner Besorgung weggeschickt.",
+      "accepted": [
+        "Auf diese Weise bekam nun Gregor täglich sein Essen, einmal an die Morgen, wenn die Eltern und die Dienstmädchen noch schliefen, die zweite Mal nach die allgemeine Mittagessen, denn dann schliefen die Eltern gleichfalls noch ein Weilchen, und die Dienstmädchen wurde von die Schwester mit irgendein Besorgung weggeschickt."
+      ],
+      "rule": "mixed"
+    },
+    {
+      "source": "Erst bei der Tür merkte er, was ihn dorthin eigentlich gelockt hatte; es war der Geruch von etwas Eßbarem gewesen.",
+      "accepted": [
+        "Erst bei die Tür merkte er, was ihn dorthin eigentlich gelockt hatte; es war die Geruch von etwas Eßbare gewesen."
+      ],
+      "rule": "mixed"
+    }
+  ]
+}
