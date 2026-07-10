@@ -9,9 +9,11 @@ theme: minima
 plugins:
   - jekyll-feed
 
+exclude:
+  - AGENTS.md
+
 # Set the permalink for posts so they render under /blog/
 permalink: /blog/:title/
 
 kramdown:
   parse_block_html: true
-
