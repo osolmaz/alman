@@ -16,7 +16,7 @@ from alman.bench.local_run import (
     _serve_args,
     guarded_command,
 )
-from alman.bench.hf_run import _aggregate, _response_data
+from alman.bench.hf_run import _aggregate, _response_data, validate_hosted_result
 from alman.bench.results import (
     DEFAULT_SCHEMA,
     _has_reasoning_content,
@@ -640,3 +640,22 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
     assert result["model"]["thinking"]["max_reported_reasoning_tokens"] == 12
     assert result["model"]["thinking"]["max_thinking_call_completion_tokens"] == 20
     assert result["model"]["served_revision_pinned"] is False
+
+    invalid = copy.deepcopy(result)
+    invalid["results"]["acceptance"]["total"] = 47
+    invalid["results"]["acceptance"]["rate"] = 24 / 47
+    invalid["results"]["acceptance"]["stderr"] = (24 / 47 * 23 / 47 / 47) ** 0.5
+    with pytest.raises(ValueError, match="headline score totals"):
+        validate_hosted_result(invalid)
+
+    invalid = copy.deepcopy(result)
+    invalid["results"]["acceptance"]["stderr"] = 0.5
+    with pytest.raises(ValueError, match="stderr"):
+        validate_hosted_result(invalid)
+
+    invalid = copy.deepcopy(result)
+    invalid["results"]["groups"]["example"]["correct"] = 23
+    invalid["results"]["groups"]["example"]["rate"] = 23 / 48
+    invalid["results"]["groups"]["example"]["stderr"] = (23 / 48 * 25 / 48 / 48) ** 0.5
+    with pytest.raises(ValueError, match="group correct counts"):
+        validate_hosted_result(invalid)

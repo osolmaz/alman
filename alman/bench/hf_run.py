@@ -358,8 +358,18 @@ def validate_hosted_result(result: dict[str, Any]) -> None:
         expected = score["correct"] / score["total"]
         if not math.isclose(score["rate"], expected, abs_tol=1e-12):
             raise ValueError("score rate does not match its counts")
-    if sum(group["total"] for group in result["results"]["groups"].values()) != sample_count:
+        expected_stderr = math.sqrt(expected * (1 - expected) / score["total"])
+        if not math.isclose(score["stderr"], expected_stderr, abs_tol=1e-12):
+            raise ValueError("score stderr does not match its counts")
+    acceptance = result["results"]["acceptance"]
+    compliance = result["results"]["compliance"]
+    groups = result["results"]["groups"].values()
+    if acceptance["total"] != sample_count or compliance["total"] != sample_count:
+        raise ValueError("headline score totals must match the sample count")
+    if sum(group["total"] for group in groups) != sample_count:
         raise ValueError("group totals must match the sample count")
+    if sum(group["correct"] for group in result["results"]["groups"].values()) != acceptance["correct"]:
+        raise ValueError("group correct counts must match headline acceptance")
     if result["model"]["thinking"]["samples_with_reasoning"] < 1:
         raise ValueError("thinking must be observed")
     if (
