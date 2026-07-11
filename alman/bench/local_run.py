@@ -48,20 +48,32 @@ class RecipeProfile(StrictModel):
     deviations: list[str]
 
 
+class ServeProfile(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+    max_model_len: int = Field(gt=0)
+    max_num_seqs: int = Field(gt=0)
+    max_num_batched_tokens: int = Field(gt=0)
+    kv_cache_dtype: str
+    attention_backend: str
+    moe_backend: str
+    enable_prefix_caching: bool
+
+
 class RuntimeProfile(StrictModel):
     engine: str = "vllm"
     version: str
     executable: Path
     manifest: Path
     env: dict[str, str] = Field(default_factory=dict)
-    serve_args: dict[str, Any]
+    serve_args: ServeProfile
     recipe: RecipeProfile
 
     @model_validator(mode="after")
     def keep_credentials_out_of_process_arguments(self) -> RuntimeProfile:
         sensitive = [
             name
-            for name in self.serve_args
+            for name in self.serve_args.model_dump()
             if _is_credential_flag("--" + name.replace("_", "-"))
         ]
         if sensitive:
@@ -116,7 +128,7 @@ class HardwareProfile(StrictModel):
 
 
 class LocalBenchmarkProfile(StrictModel):
-    name: str
+    name: str = Field(pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
     model: ModelProfile
     runtime: RuntimeProfile
     endpoint: EndpointProfile
@@ -203,7 +215,7 @@ def _serve_args(profile: LocalBenchmarkProfile) -> list[str]:
         "--api-key",
         profile.endpoint.api_key,
     ]
-    for name, value in profile.runtime.serve_args.items():
+    for name, value in profile.runtime.serve_args.model_dump().items():
         if isinstance(value, bool):
             args.append(_flag(name) if value else _flag(f"no_{name}"))
         elif isinstance(value, (dict, list)):
@@ -421,13 +433,13 @@ def _metadata(
             "recipe": profile.runtime.recipe.model_dump(),
             "server": {
                 "arguments": _redact_server_args(server_args),
-                "max_model_len": serve["max_model_len"],
-                "max_num_seqs": serve["max_num_seqs"],
-                "max_num_batched_tokens": serve["max_num_batched_tokens"],
-                "kv_cache_dtype": serve["kv_cache_dtype"],
-                "attention_backend": serve["attention_backend"],
-                "moe_backend": serve["moe_backend"],
-                "prefix_caching": serve["enable_prefix_caching"],
+                "max_model_len": serve.max_model_len,
+                "max_num_seqs": serve.max_num_seqs,
+                "max_num_batched_tokens": serve.max_num_batched_tokens,
+                "kv_cache_dtype": serve.kv_cache_dtype,
+                "attention_backend": serve.attention_backend,
+                "moe_backend": serve.moe_backend,
+                "prefix_caching": serve.enable_prefix_caching,
             },
         },
         "generation": profile.generation.model_dump(),

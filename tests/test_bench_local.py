@@ -381,6 +381,21 @@ def test_profile_rejects_credentials_in_server_arguments(profile):
         LocalBenchmarkProfile.model_validate(payload)
 
 
+def test_profile_requires_recorded_server_settings(profile):
+    payload = profile.model_dump()
+    del payload["runtime"]["serve_args"]["max_num_seqs"]
+    with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+@pytest.mark.parametrize("name", ["thinking profile", "thinking/profile", ""])
+def test_profile_name_must_fit_result_id(profile, name):
+    payload = profile.model_dump()
+    payload["name"] = name
+    with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
 def test_profile_requires_nonsecret_local_api_key(profile):
     payload = profile.model_dump()
     payload["endpoint"]["api_key"] = "secret"

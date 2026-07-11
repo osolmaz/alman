@@ -27,7 +27,8 @@ the selection decision.
     "spec_in_context": true,
     "spec_examples_in_dataset": false,
     "commit": "dec7bee",
-    "working_tree_dirty": false
+    "working_tree_dirty": false,
+    "working_tree_changes": []
   }
 }
 ```
