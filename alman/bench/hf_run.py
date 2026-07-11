@@ -89,27 +89,21 @@ def _request(
     *,
     model: str,
     messages: list[dict[str, str]],
-    thinking: bool,
+    extra_body: dict[str, Any],
     max_tokens: int,
+    temperature: float,
+    top_p: float,
     retries: int = 2,
 ) -> dict[str, Any]:
     last_error: Exception | None = None
     for attempt in range(retries + 1):
         try:
-            extra_body = (
-                {
-                    "reasoning": {"effort": "low"},
-                    "separate_reasoning": True,
-                }
-                if thinking
-                else {"enable_thinking": False}
-            )
             response = client.chat.completions.create(
                 model=model,
                 messages=messages,
                 max_tokens=max_tokens,
-                temperature=1.0,
-                top_p=1.0,
+                temperature=temperature,
+                top_p=top_p,
                 extra_body=extra_body,
             )
             return _response_data(response)
@@ -121,19 +115,19 @@ def _request(
     raise RuntimeError(f"hosted inference failed after {retries + 1} attempts") from last_error
 
 
-def _run_sample(
-    client: InferenceClient, model: str, item: Any
-) -> dict[str, Any]:
+def _run_sample(client: InferenceClient, profile: dict[str, Any], item: Any) -> dict[str, Any]:
     messages = [
         {"role": "system", "content": _system_prompt(True)},
         {"role": "user", "content": item.source},
     ]
     primary = _request(
         client,
-        model=model,
+        model=profile["model"],
         messages=messages,
-        thinking=True,
+        extra_body=profile["thinking_extra_body"],
         max_tokens=THINKING_MAX_TOKENS,
+        temperature=profile["temperature"],
+        top_p=profile["top_p"],
     )
     forced_final = not bool(primary["content"])
     fallback = None
@@ -153,10 +147,12 @@ def _run_sample(
         ]
         fallback = _request(
             client,
-            model=model,
+            model=profile["model"],
             messages=fallback_messages,
-            thinking=False,
+            extra_body=profile["forced_final_extra_body"],
             max_tokens=FORCED_FINAL_MAX_TOKENS,
+            temperature=profile["temperature"],
+            top_p=profile["top_p"],
         )
         output = fallback["content"]
         if not output:
@@ -188,6 +184,8 @@ def _run_sample(
         "correct": is_accepted(output, item.accepted),
         "compliant": not lint(output),
         "tokens": tokens,
+        "primary_completion_tokens": primary["tokens"]["output"],
+        "primary_reasoning_tokens": primary["tokens"]["reasoning"],
         "primary": {
             key: primary[key]
             for key in ("response_id", "returned_model", "finish_reason")
@@ -264,17 +262,34 @@ def _aggregate(
             "thinking": {
                 "enabled": True,
                 "mode": "think",
-                "provider_effort": "low",
+                "provider_control": profile["thinking_control"],
                 "thinking_call_max_tokens": THINKING_MAX_TOKENS,
                 "samples_with_reasoning": sum(
                     sample["thinking_observed"] for sample in samples
                 ),
-                "max_observed_reasoning_tokens": max(
-                    sample["tokens"]["reasoning"] or 0 for sample in samples
+                "max_thinking_call_completion_tokens": max(
+                    sample.get(
+                        "primary_completion_tokens",
+                        min(sample["tokens"]["output"], THINKING_MAX_TOKENS),
+                    )
+                    for sample in samples
                 ),
+                "max_reported_reasoning_tokens": max(
+                    (
+                        sample.get(
+                            "primary_reasoning_tokens", sample["tokens"]["reasoning"]
+                        )
+                        or 0
+                    )
+                    for sample in samples
+                )
+                or None,
                 "forced_final_fallback_count": sum(
                     sample["forced_final"] for sample in samples
                 ),
+                "forced_final_fallback_disables_thinking": profile[
+                    "forced_final_disables_thinking"
+                ],
             },
         },
         "endpoint": {
@@ -284,8 +299,8 @@ def _aggregate(
             "routing": "explicit-client-provider",
         },
         "generation": {
-            "temperature": 1.0,
-            "top_p": 1.0,
+            "temperature": profile["temperature"],
+            "top_p": profile["top_p"],
             "thinking_call_max_tokens": THINKING_MAX_TOKENS,
             "forced_final_max_tokens": FORCED_FINAL_MAX_TOKENS,
             "max_retries": 2,
@@ -333,10 +348,13 @@ def validate_hosted_result(result: dict[str, Any]) -> None:
     if result["model"]["thinking"]["samples_with_reasoning"] < 1:
         raise ValueError("thinking must be observed")
     if (
-        result["model"]["thinking"]["max_observed_reasoning_tokens"]
+        result["model"]["thinking"]["max_thinking_call_completion_tokens"]
         > THINKING_MAX_TOKENS
     ):
-        raise ValueError("observed reasoning exceeds the thinking-call token cap")
+        raise ValueError("thinking call exceeds its completion-token cap")
+    reported_reasoning = result["model"]["thinking"]["max_reported_reasoning_tokens"]
+    if reported_reasoning is not None and reported_reasoning > THINKING_MAX_TOKENS:
+        raise ValueError("reported reasoning exceeds the thinking-call token cap")
 
 
 def run_profiles(
@@ -388,7 +406,7 @@ def run_profiles(
         for index, item in enumerate(items, start=1):
             if item.id in completed:
                 continue
-            sample = _run_sample(client, profile["model"], item)
+            sample = _run_sample(client, profile, item)
             _append_jsonl(samples_path, sample)
             completed[item.id] = sample
             print(f"{profile['name']}: {index}/48", flush=True)

@@ -34,21 +34,23 @@
       "type": "object", "additionalProperties": false,
       "required": ["repository", "hub_revision", "provider_model_id", "served_revision_pinned", "thinking"],
       "properties": {
-        "repository": {"enum": ["deepseek-ai/DeepSeek-V4-Pro", "deepseek-ai/DeepSeek-V4-Flash"]},
+        "repository": {"enum": ["deepseek-ai/DeepSeek-V4-Pro", "deepseek-ai/DeepSeek-V4-Flash", "zai-org/GLM-5.2", "moonshotai/Kimi-K2.7-Code"]},
         "hub_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "provider_model_id": {"type": "string", "minLength": 1},
         "served_revision_pinned": {"const": false},
         "thinking": {
           "type": "object", "additionalProperties": false,
-          "required": ["enabled", "mode", "provider_effort", "thinking_call_max_tokens", "samples_with_reasoning", "max_observed_reasoning_tokens", "forced_final_fallback_count"],
+          "required": ["enabled", "mode", "provider_control", "thinking_call_max_tokens", "samples_with_reasoning", "max_thinking_call_completion_tokens", "max_reported_reasoning_tokens", "forced_final_fallback_count", "forced_final_fallback_disables_thinking"],
           "properties": {
             "enabled": {"const": true},
             "mode": {"const": "think"},
-            "provider_effort": {"const": "low"},
+            "provider_control": {"type": "string", "minLength": 1},
             "thinking_call_max_tokens": {"const": 4096},
             "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 48},
-            "max_observed_reasoning_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
-            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 48}
+            "max_thinking_call_completion_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
+            "max_reported_reasoning_tokens": {"type": ["integer", "null"], "minimum": 1, "maximum": 4096},
+            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 48},
+            "forced_final_fallback_disables_thinking": {"type": "boolean"}
           }
         }
       }
@@ -68,7 +70,7 @@
       "required": ["temperature", "top_p", "thinking_call_max_tokens", "forced_final_max_tokens", "max_retries"],
       "properties": {
         "temperature": {"const": 1.0},
-        "top_p": {"const": 1.0},
+        "top_p": {"enum": [0.95, 1.0]},
         "thinking_call_max_tokens": {"const": 4096},
         "forced_final_max_tokens": {"const": 512},
         "max_retries": {"const": 2}

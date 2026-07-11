@@ -613,6 +613,15 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
             "model": "deepseek-ai/DeepSeek-V4-Flash",
             "hub_revision": "a" * 40,
             "provider_model_id": "deepseek/deepseek-v4-flash",
+            "thinking_control": "reasoning.effort=low",
+            "thinking_extra_body": {
+                "reasoning": {"effort": "low"},
+                "separate_reasoning": True,
+            },
+            "forced_final_extra_body": {"enable_thinking": False},
+            "forced_final_disables_thinking": True,
+            "temperature": 1.0,
+            "top_p": 1.0,
             "provider": "novita",
             "input_price_per_million": 0.14,
             "output_price_per_million": 0.28,
@@ -627,5 +636,6 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
     assert result["endpoint"]["platform"] == "huggingface-inference-providers"
     assert result["results"]["acceptance"]["correct"] == 24
     assert result["model"]["thinking"]["thinking_call_max_tokens"] == 4096
-    assert result["model"]["thinking"]["max_observed_reasoning_tokens"] == 12
+    assert result["model"]["thinking"]["max_reported_reasoning_tokens"] == 12
+    assert result["model"]["thinking"]["max_thinking_call_completion_tokens"] == 20
     assert result["model"]["served_revision_pinned"] is False

@@ -24,11 +24,13 @@
     "thinking": {
       "enabled": true,
       "mode": "think",
-      "provider_effort": "low",
+      "provider_control": "reasoning.effort=low",
       "thinking_call_max_tokens": 4096,
       "samples_with_reasoning": 48,
-      "max_observed_reasoning_tokens": 4096,
-      "forced_final_fallback_count": 1
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": 4096,
+      "forced_final_fallback_count": 1,
+      "forced_final_fallback_disables_thinking": true
     }
   },
   "endpoint": {
