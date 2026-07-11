@@ -19,6 +19,7 @@ from alman.bench.results import (
     DEFAULT_SCHEMA,
     _has_reasoning_content,
     _score,
+    raw_thinking_parts,
     validate_result,
 )
 
@@ -335,6 +336,15 @@ def test_raw_think_block_counts_as_reasoning():
     assert not _has_reasoning_content("<think>   </think>answer")
     assert not _has_reasoning_content("<think>unfinished")
     assert not _has_reasoning_content("answer only")
+
+
+def test_raw_thinking_parts_require_reasoning_and_final_answer():
+    assert raw_thinking_parts("<think>reasoning</think> answer") == (
+        "reasoning",
+        "answer",
+    )
+    assert raw_thinking_parts("<think></think>") == ("", "")
+    assert raw_thinking_parts("<think>reasoning</think>") == ("reasoning", "")
 
 
 def test_guard_wraps_vllm_command(profile):

@@ -57,10 +57,17 @@ def _has_reasoning_content(content: Any) -> bool:
 
 
 def _has_nonempty_think_block(value: str) -> bool:
-    return any(
-        match.strip()
-        for match in re.findall(r"<think>(.*?)</think>", value, flags=re.DOTALL)
+    reasoning, _ = raw_thinking_parts(value)
+    return bool(reasoning)
+
+
+def raw_thinking_parts(value: str) -> tuple[str, str]:
+    pattern = re.compile(r"<think>(.*?)</think>", flags=re.DOTALL)
+    reasoning = "\n".join(
+        match.strip() for match in pattern.findall(value) if match.strip()
     )
+    final_answer = pattern.sub("", value).strip()
+    return reasoning, final_answer
 
 
 def _score_counts(log: EvalLog, scorer: str) -> tuple[int, int]:

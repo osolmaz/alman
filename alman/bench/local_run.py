@@ -17,7 +17,7 @@ from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from alman.bench.dataset import load_curated_items
-from alman.bench.results import build_result, write_result
+from alman.bench.results import build_result, raw_thinking_parts, write_result
 from alman.bench.task import _system_prompt
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -360,9 +360,14 @@ def _smoke(client: OpenAI, profile: LocalBenchmarkProfile) -> dict[str, Any]:
     extras = message.model_extra or {}
     reasoning = extras.get("reasoning_content") or extras.get("reasoning")
     content = message.content or ""
-    if not reasoning and "<think>" not in content:
+    if reasoning:
+        reasoning_text = str(reasoning).strip()
+        final_answer = content.strip()
+    else:
+        reasoning_text, final_answer = raw_thinking_parts(content)
+    if not reasoning_text:
         raise RuntimeError("thinking was enabled but no reasoning was observed")
-    if not content.strip():
+    if not final_answer:
         raise RuntimeError("smoke response has no final answer")
     return response.model_dump()
 
