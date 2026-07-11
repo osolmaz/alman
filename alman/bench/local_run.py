@@ -96,7 +96,7 @@ class EndpointProfile(StrictModel):
 class GenerationProfile(StrictModel):
     max_tokens: int = Field(gt=0, le=16384)
     reasoning_token_budget: int = Field(gt=0, le=8192)
-    sampling_source: str = "model_generation_config"
+    sampling_source: str = "profile"
     do_sample: bool
     temperature: float = Field(ge=0)
     top_p: float = Field(gt=0, le=1)
@@ -249,11 +249,7 @@ def _generate_config(profile: LocalBenchmarkProfile) -> dict[str, Any]:
     return {
         "temperature": profile.generation.temperature,
         "top_p": profile.generation.top_p,
-        "extra_body": {
-            "chat_template_kwargs": {"enable_thinking": True},
-            "thinking_token_budget": profile.generation.reasoning_token_budget,
-            "top_k": profile.generation.top_k,
-        },
+        "extra_body": _request_extra_body(profile),
     }
 
 

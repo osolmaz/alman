@@ -342,6 +342,7 @@ def test_server_arguments_redact_api_key():
 
 
 def test_generate_config_applies_recorded_sampling(profile):
+    assert profile.generation.sampling_source == "profile"
     assert _generate_config(profile) == {
         "temperature": 1.0,
         "top_p": 0.95,

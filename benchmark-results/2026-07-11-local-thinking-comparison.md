@@ -22,8 +22,11 @@ discarded from both models' scores. The remaining 48 rows contain no spec
 example/answer pairs. Both runs enabled thinking, used vLLM's server-enforced
 4,096-token reasoning budget, allowed 8,192 total output tokens, and processed
 one request at a time under memory guards. Per-sample reasoning token counts
-were not returned, so the bound is configuration evidence rather than a
-measured token statistic. The exact
+were not returned by the API; an independent offline audit with each model's
+pinned tokenizer found a maximum of 4,095 reasoning tokens in both runs. Two
+evaluated Qwen rows (`curated/siddhartha/8` and `curated/starke-flexion/1`)
+exhausted the separate 8,192-token total-output cap after entering their final
+answer and were scored incorrect. The exact
 weights, runtime, sampling values, server arguments, recipe deviations, token
 usage, group scores, and artifact locations are recorded in:
 
