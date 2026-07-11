@@ -374,6 +374,14 @@ def test_profile_requires_immutable_model_revision(profile):
         LocalBenchmarkProfile.model_validate(payload)
 
 
+@pytest.mark.parametrize("field", ["repository", "served_name", "quantization"])
+def test_profile_requires_recordable_model_fields(profile, field):
+    payload = profile.model_dump()
+    payload["model"][field] = ""
+    with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
 def test_profile_rejects_credentials_in_server_arguments(profile):
     payload = profile.model_dump()
     payload["runtime"]["serve_args"]["hf_token"] = "secret"
@@ -399,6 +407,29 @@ def test_profile_name_must_fit_result_id(profile, name):
 def test_profile_requires_nonsecret_local_api_key(profile):
     payload = profile.model_dump()
     payload["endpoint"]["api_key"] = "secret"
+    with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+def test_profile_requires_vllm_runtime(profile):
+    payload = profile.model_dump()
+    payload["runtime"]["engine"] = "other"
+    with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+@pytest.mark.parametrize("commit", ["", "main", "a" * 41])
+def test_profile_requires_valid_recipe_commit(profile, commit):
+    payload = profile.model_dump()
+    payload["runtime"]["recipe"]["commit"] = commit
+    with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+@pytest.mark.parametrize("port", [0, -1, 65536])
+def test_profile_requires_valid_tcp_port(profile, port):
+    payload = profile.model_dump()
+    payload["endpoint"]["port"] = port
     with pytest.raises(ValueError):
         LocalBenchmarkProfile.model_validate(payload)
 

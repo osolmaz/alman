@@ -34,15 +34,15 @@ class StrictModel(BaseModel):
 
 
 class ModelProfile(StrictModel):
-    repository: str
+    repository: str = Field(min_length=1)
     revision: str = Field(pattern=r"^[0-9a-f]{40}$")
-    served_name: str
-    quantization: str
+    served_name: str = Field(min_length=1)
+    quantization: str = Field(min_length=1)
 
 
 class RecipeProfile(StrictModel):
     repository: str
-    commit: str
+    commit: str = Field(pattern=r"^[0-9a-f]{7,40}$")
     path: str
     profile: str
     deviations: list[str]
@@ -61,7 +61,7 @@ class ServeProfile(BaseModel):
 
 
 class RuntimeProfile(StrictModel):
-    engine: str = "vllm"
+    engine: Literal["vllm"] = "vllm"
     version: str
     executable: Path
     manifest: Path
@@ -85,7 +85,7 @@ class RuntimeProfile(StrictModel):
 
 class EndpointProfile(StrictModel):
     host: Literal["127.0.0.1", "localhost"] = "127.0.0.1"
-    port: int
+    port: int = Field(ge=1, le=65535)
     api_key: Literal["EMPTY"] = "EMPTY"
 
     @property
