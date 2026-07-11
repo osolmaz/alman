@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alman.ai/schemas/benchmark-result-v1.json",
+  "title": "Alman benchmark result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "run", "benchmark", "model", "endpoint", "runtime", "generation", "hardware", "memory_guard", "results", "artifacts"],
+  "properties": {
+    "$schema": {"const": "./result.schema.json"},
+    "schema_version": {"const": 1},
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "started_at", "completed_at", "status"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]+$"},
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"},
+        "status": {"const": "success"}
+      }
+    },
+    "benchmark": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task", "dataset", "sample_count", "spec_in_context", "spec_examples_in_dataset", "commit", "working_tree_dirty"],
+      "properties": {
+        "task": {"const": "alman_bench"},
+        "dataset": {"const": "curated"},
+        "sample_count": {"const": 50},
+        "spec_in_context": {"const": true},
+        "spec_examples_in_dataset": {"const": false},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"},
+        "working_tree_dirty": {"type": "boolean"}
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision", "served_name", "quantization", "thinking"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "minLength": 7},
+        "served_name": {"type": "string", "minLength": 1},
+        "quantization": {"type": "string", "minLength": 1},
+        "thinking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enabled", "verification_method", "verified_sample_count"],
+          "properties": {
+            "enabled": {"const": true},
+            "verification_method": {"type": "string", "minLength": 1},
+            "verified_sample_count": {"type": "integer", "minimum": 1, "maximum": 50}
+          }
+        }
+      }
+    },
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "api", "base_url", "max_connections", "max_samples"],
+      "properties": {
+        "provider": {"const": "inspect-openai-api"},
+        "api": {"const": "chat_completions"},
+        "base_url": {"type": "string", "pattern": "^http://(127\\.0\\.0\\.1|localhost):[0-9]+/v1$"},
+        "max_connections": {"const": 1},
+        "max_samples": {"const": 1}
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "version", "executable", "manifest", "recipe", "server"],
+      "properties": {
+        "engine": {"const": "vllm"},
+        "version": {"type": "string"},
+        "executable": {"type": "string"},
+        "manifest": {"type": "string"},
+        "recipe": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repository", "commit", "path", "profile", "deviations"],
+          "properties": {
+            "repository": {"type": "string"},
+            "commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"},
+            "path": {"type": "string"},
+            "profile": {"type": "string"},
+            "deviations": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "server": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["arguments", "max_model_len", "max_num_seqs", "max_num_batched_tokens", "kv_cache_dtype", "attention_backend", "moe_backend", "prefix_caching"],
+          "properties": {
+            "arguments": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+            "max_model_len": {"type": "integer", "minimum": 1},
+            "max_num_seqs": {"type": "integer", "minimum": 1},
+            "max_num_batched_tokens": {"type": "integer", "minimum": 1},
+            "kv_cache_dtype": {"type": "string"},
+            "attention_backend": {"type": "string"},
+            "moe_backend": {"type": "string"},
+            "prefix_caching": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "generation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_tokens", "sampling_source"],
+      "properties": {
+        "max_tokens": {"type": "integer", "minimum": 1, "maximum": 16384},
+        "sampling_source": {"type": "string"}
+      }
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["accelerator", "unified_memory_gib"],
+      "properties": {
+        "accelerator": {"type": "string"},
+        "unified_memory_gib": {"type": "number", "minimum": 1}
+      }
+    },
+    "memory_guard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["process_guard", "earlyoom", "memory_available_floor_gib", "swap_free_floor_gib", "pressure_kill_occurred"],
+      "properties": {
+        "process_guard": {"type": "string"},
+        "earlyoom": {"const": true},
+        "memory_available_floor_gib": {"type": "number", "minimum": 24},
+        "swap_free_floor_gib": {"type": "number", "minimum": 4},
+        "pressure_kill_occurred": {"const": false}
+      }
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["duration_seconds", "acceptance", "compliance", "groups", "tokens", "samples_with_reasoning"],
+      "properties": {
+        "duration_seconds": {"type": "number", "minimum": 0},
+        "acceptance": {"$ref": "#/$defs/score"},
+        "compliance": {"$ref": "#/$defs/score"},
+        "groups": {"type": "object", "additionalProperties": {"$ref": "#/$defs/score"}},
+        "tokens": {"$ref": "#/$defs/tokens"},
+        "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 50}
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inspect_log", "server_log", "smoke_response"],
+      "properties": {
+        "inspect_log": {"type": "string"},
+        "server_log": {"type": "string"},
+        "smoke_response": {"type": "string"}
+      }
+    }
+  },
+  "$defs": {
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["correct", "total", "rate", "stderr"],
+      "properties": {
+        "correct": {"type": "integer", "minimum": 0},
+        "total": {"type": "integer", "minimum": 1},
+        "rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "stderr": {"type": "number", "minimum": 0}
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input", "cached_input", "output", "reasoning", "total"],
+      "properties": {
+        "input": {"type": "integer", "minimum": 0},
+        "cached_input": {"type": ["integer", "null"], "minimum": 0},
+        "output": {"type": "integer", "minimum": 0},
+        "reasoning": {"type": ["integer", "null"], "minimum": 0},
+        "total": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

@@ -32,3 +32,5 @@ packages = ["alman"]
 
 [project.scripts]
 build = "alman.build:main"
+bench-local = "alman.bench.local_run:main"
+bench-result = "alman.bench.results:main"
