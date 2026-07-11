@@ -16,6 +16,7 @@ from alman.bench.local_run import (
     _serve_args,
     guarded_command,
 )
+from alman.bench.hf_run import _aggregate, _response_data
 from alman.bench.results import (
     DEFAULT_SCHEMA,
     _has_reasoning_content,
@@ -551,3 +552,80 @@ def test_disk_free_uses_nearest_existing_artifact_parent(tmp_path, monkeypatch):
 
     assert _disk_free_gib(artifact_root) == 12
     assert checked == [tmp_path]
+
+
+def test_hosted_response_extracts_reasoning_tokens():
+    class Value:
+        def __init__(self, **values):
+            self.__dict__.update(values)
+
+        def model_dump(self):
+            return self.__dict__
+
+    response = Value(
+        id="response-id",
+        model="deepseek/deepseek-v4-flash",
+        choices=[
+            Value(
+                finish_reason="stop",
+                message=Value(
+                    content="die Haus",
+                    reasoning_content="reasoning",
+                    reasoning=None,
+                ),
+            )
+        ],
+        usage=Value(
+            prompt_tokens=10,
+            completion_tokens=20,
+            total_tokens=30,
+            completion_tokens_details={"reasoning_tokens": 12},
+        ),
+    )
+    data = _response_data(response)
+    assert data["content"] == "die Haus"
+    assert data["reasoning"] == "reasoning"
+    assert data["tokens"] == {
+        "input": 10,
+        "output": 20,
+        "reasoning": 12,
+        "total": 30,
+    }
+
+
+def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
+    samples = []
+    for index in range(48):
+        samples.append(
+            {
+                "id": f"curated/example/{index}",
+                "paragraph": "example",
+                "correct": index < 24,
+                "compliant": True,
+                "thinking_observed": True,
+                "forced_final": False,
+                "tokens": {"input": 10, "output": 20, "reasoning": 12, "total": 30},
+            }
+        )
+    result = _aggregate(
+        profile={
+            "name": "deepseek-v4-flash-hf-novita-thinking",
+            "model": "deepseek-ai/DeepSeek-V4-Flash",
+            "hub_revision": "a" * 40,
+            "provider_model_id": "deepseek/deepseek-v4-flash",
+            "provider": "novita",
+            "input_price_per_million": 0.14,
+            "output_price_per_million": 0.28,
+            "pricing_observed_at": "2026-07-11T00:00:00Z",
+        },
+        samples=samples,
+        started_at="2026-07-11T00:00:00+00:00",
+        completed_at="2026-07-11T00:01:00+00:00",
+        commit="b" * 40,
+        artifact_path=tmp_path / "samples.jsonl",
+    )
+    assert result["endpoint"]["platform"] == "huggingface-inference-providers"
+    assert result["results"]["acceptance"]["correct"] == 24
+    assert result["model"]["thinking"]["thinking_call_max_tokens"] == 4096
+    assert result["model"]["thinking"]["max_observed_reasoning_tokens"] == 12
+    assert result["model"]["served_revision_pinned"] is False

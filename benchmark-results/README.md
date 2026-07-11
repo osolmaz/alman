@@ -4,6 +4,10 @@ Each `*.json` file in this directory is one successful curated Alman
 evaluation after any spec-example overlaps are discarded. The file is the compact comparison record; large Inspect logs,
 server logs, smoke responses, and model weights stay outside the repository.
 
+Local vLLM records use `result.schema.json`. Hosted Hugging Face Inference
+Providers records use `hosted-result.schema.json`, which records the routed
+provider, hosted pricing, the thinking-call cap, and any forced-final fallback.
+
 Human-readable comparisons may accompany result records as dated Markdown
 files. They must link the exact input records and state metric direction and
 the selection decision.
