@@ -324,6 +324,8 @@ def _inspect_command(
         str(generate_config),
         "--timeout",
         str(profile.safety.request_timeout_seconds),
+        "--max-retries",
+        "2",
         "--log-dir",
         str(log_dir),
         "--display",

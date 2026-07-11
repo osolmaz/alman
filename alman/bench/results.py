@@ -168,10 +168,20 @@ def validate_result(result: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA) 
             raise ValueError("score stderr does not match the authoritative counts")
     if result["results"]["acceptance"]["total"] != 50:
         raise ValueError("acceptance total must be 50")
+    if result["results"]["compliance"]["total"] != 50:
+        raise ValueError("compliance total must be 50")
     if sum(group["total"] for group in result["results"]["groups"].values()) != 50:
         raise ValueError("group totals must sum to 50")
-    if result["model"]["thinking"]["verified_sample_count"] < 1:
+    if (
+        sum(group["correct"] for group in result["results"]["groups"].values())
+        != result["results"]["acceptance"]["correct"]
+    ):
+        raise ValueError("group correct counts must sum to acceptance correct")
+    verified_reasoning = result["model"]["thinking"]["verified_sample_count"]
+    if verified_reasoning < 1:
         raise ValueError("thinking must be observed in at least one evaluated sample")
+    if verified_reasoning != result["results"]["samples_with_reasoning"]:
+        raise ValueError("duplicated reasoning sample counts must match")
     if (
         result["generation"]["reasoning_token_budget"]
         >= result["generation"]["max_tokens"]

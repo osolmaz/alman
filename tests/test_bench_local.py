@@ -229,6 +229,37 @@ def test_result_rejects_missing_thinking(valid_result):
         validate_result(invalid)
 
 
+def test_result_rejects_incomplete_compliance_counts(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["results"]["compliance"] = {
+        "correct": 1,
+        "total": 1,
+        "rate": 1.0,
+        "stderr": 0.0,
+    }
+    with pytest.raises(ValueError, match="compliance total must be 50"):
+        validate_result(invalid)
+
+
+def test_result_rejects_group_correct_mismatch(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["results"]["groups"]["example"] = {
+        "correct": 49,
+        "total": 50,
+        "rate": 0.98,
+        "stderr": (0.98 * 0.02 / 50) ** 0.5,
+    }
+    with pytest.raises(ValueError, match="group correct counts"):
+        validate_result(invalid)
+
+
+def test_result_rejects_reasoning_count_mismatch(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["model"]["thinking"]["verified_sample_count"] = 49
+    with pytest.raises(ValueError, match="reasoning sample counts must match"):
+        validate_result(invalid)
+
+
 def test_result_rejects_reasoning_budget_without_final_answer_room(valid_result):
     invalid = copy.deepcopy(valid_result)
     invalid["generation"]["reasoning_token_budget"] = 8192
@@ -290,6 +321,7 @@ def test_inspect_command_uses_reasoning_budget_config(profile, tmp_path):
     command = _inspect_command(profile, tmp_path, "run-id", generate_config)
     assert command[command.index("--generate-config") + 1] == str(generate_config)
     assert "reasoning_token_budget=4096" in command
+    assert command[command.index("--max-retries") + 1] == "2"
 
 
 def test_profile_requires_final_answer_budget(profile):
