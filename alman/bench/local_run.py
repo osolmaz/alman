@@ -274,6 +274,26 @@ def _has_zombie_descendant(root_pid: int) -> bool:
     return False
 
 
+def _assert_guard_healthy(
+    process: subprocess.Popen[str], server_log_path: Path
+) -> None:
+    returncode = process.poll()
+    log = (
+        server_log_path.read_text(encoding="utf-8", errors="replace")
+        if server_log_path.is_file()
+        else ""
+    )
+    pressure_killed = returncode == 137 or (
+        "guarded-launch: killing " in log
+        and ("MemAvailable " in log or "SwapFree " in log)
+        and " below " in log
+    )
+    if pressure_killed:
+        raise RuntimeError("memory guard pressure-killed the local server")
+    if returncode is not None:
+        raise RuntimeError(f"guarded server exited with status {returncode}")
+
+
 def _smoke(client: OpenAI, profile: LocalBenchmarkProfile) -> dict[str, Any]:
     item = load_curated_items()[0]
     response = client.chat.completions.create(
@@ -446,12 +466,14 @@ def run(profile: LocalBenchmarkProfile, output: Path, artifact_root: Path) -> No
             env=inspect_env,
             check=True,
         )
+        _assert_guard_healthy(guard_process, server_log_path)
         logs = list(log_dir.glob("*.eval"))
         if len(logs) != 1:
             raise RuntimeError(f"expected one Inspect log, found {len(logs)}")
         metadata = _metadata(profile, run_id, server_args, artifact_dir)
         metadata["artifacts"]["inspect_log"] = str(logs[0])
         result = build_result(logs[0], metadata)
+        _assert_guard_healthy(guard_process, server_log_path)
         write_result(result, output)
     finally:
         if guard_process is not None and guard_process.poll() is None:

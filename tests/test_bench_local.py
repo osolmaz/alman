@@ -6,6 +6,7 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from alman.bench.local_run import (
     LocalBenchmarkProfile,
+    _assert_guard_healthy,
     _generate_config,
     _has_zombie_descendant,
     _redact_server_args,
@@ -340,3 +341,35 @@ def test_zombie_descendant_detection(monkeypatch):
     )
     assert _has_zombie_descendant(10)
     assert not _has_zombie_descendant(20)
+
+
+@pytest.mark.parametrize(
+    ("returncode", "log"),
+    [
+        (137, ""),
+        (
+            None,
+            "guarded-launch: killing test process group 123: "
+            "MemAvailable 1KiB below 2KiB\n",
+        ),
+    ],
+)
+def test_guard_health_rejects_pressure_kill(tmp_path, returncode, log):
+    class Process:
+        def poll(self):
+            return returncode
+
+    server_log = tmp_path / "server.log"
+    server_log.write_text(log, encoding="utf-8")
+    with pytest.raises(RuntimeError, match="pressure-killed"):
+        _assert_guard_healthy(Process(), server_log)
+
+
+def test_guard_health_accepts_running_process(tmp_path):
+    class Process:
+        def poll(self):
+            return None
+
+    server_log = tmp_path / "server.log"
+    server_log.write_text("guarded-launch: starting test\n", encoding="utf-8")
+    _assert_guard_healthy(Process(), server_log)
