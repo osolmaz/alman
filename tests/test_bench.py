@@ -2,7 +2,11 @@ import json
 
 import pytest
 
-from alman.bench.dataset import load_curated_items, load_items
+from alman.bench.dataset import (
+    find_spec_example_overlaps,
+    load_curated_items,
+    load_items,
+)
 from alman.bench.pattern import PatternError, expand_pattern
 from alman.bench.scoring import is_accepted, lint, normalize
 from alman.bench.task import alman_bench
@@ -162,7 +166,7 @@ class TestCurated:
     def test_task_uses_curated_items_by_default(self):
         task = alman_bench()
         assert task.dataset.name == "alman-bench-curated"
-        assert len(task.dataset) == 50
+        assert len(task.dataset) == 48
 
     def test_task_rejects_spec_examples_with_spec_in_prompt(self):
         with pytest.raises(ValueError, match="leaks its answers"):
@@ -174,7 +178,15 @@ class TestCurated:
         assert len(task.dataset) == len(items)
 
     def test_item_count(self, curated_items):
-        assert len(curated_items) == 50
+        assert len(curated_items) == 48
+
+    def test_spec_examples_are_excluded(self, curated_items):
+        assert find_spec_example_overlaps(curated_items) == []
+        all_items = load_curated_items(exclude_spec_examples=False)
+        assert [item.id for item in find_spec_example_overlaps(all_items)] == [
+            "curated/berufe/0",
+            "curated/berufe/1",
+        ]
 
     def test_collections(self, curated_items):
         collections = {item.paragraph for item in curated_items}

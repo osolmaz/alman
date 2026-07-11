@@ -93,7 +93,7 @@ def profile(tmp_path: Path) -> LocalBenchmarkProfile:
 
 @pytest.fixture
 def valid_result() -> dict:
-    score = {"correct": 50, "total": 50, "rate": 1.0, "stderr": 0.0}
+    score = {"correct": 48, "total": 48, "rate": 1.0, "stderr": 0.0}
     return {
         "$schema": "./result.schema.json",
         "schema_version": 1,
@@ -106,7 +106,10 @@ def valid_result() -> dict:
         "benchmark": {
             "task": "alman_bench",
             "dataset": "curated",
-            "sample_count": 50,
+            "raw_sample_count": 48,
+            "sample_count": 48,
+            "excluded_spec_example_count": 0,
+            "excluded_spec_example_ids": [],
             "spec_in_context": True,
             "spec_examples_in_dataset": False,
             "commit": "a" * 40,
@@ -121,7 +124,7 @@ def valid_result() -> dict:
             "thinking": {
                 "enabled": True,
                 "verification_method": "reasoning_content",
-                "verified_sample_count": 50,
+                "verified_sample_count": 48,
             },
         },
         "endpoint": {
@@ -183,7 +186,7 @@ def valid_result() -> dict:
                 "reasoning": None,
                 "total": 150,
             },
-            "samples_with_reasoning": 50,
+            "samples_with_reasoning": 48,
         },
         "artifacts": {
             "inspect_log": "/tmp/run.eval",
@@ -255,17 +258,17 @@ def test_result_rejects_incomplete_compliance_counts(valid_result):
         "rate": 1.0,
         "stderr": 0.0,
     }
-    with pytest.raises(ValueError, match="compliance total must be 50"):
+    with pytest.raises(ValueError, match="evaluated sample count"):
         validate_result(invalid)
 
 
 def test_result_rejects_group_correct_mismatch(valid_result):
     invalid = copy.deepcopy(valid_result)
     invalid["results"]["groups"]["example"] = {
-        "correct": 49,
-        "total": 50,
-        "rate": 0.98,
-        "stderr": (0.98 * 0.02 / 50) ** 0.5,
+        "correct": 47,
+        "total": 48,
+        "rate": 47 / 48,
+        "stderr": ((47 / 48) * (1 / 48) / 48) ** 0.5,
     }
     with pytest.raises(ValueError, match="group correct counts"):
         validate_result(invalid)
@@ -273,7 +276,7 @@ def test_result_rejects_group_correct_mismatch(valid_result):
 
 def test_result_rejects_reasoning_count_mismatch(valid_result):
     invalid = copy.deepcopy(valid_result)
-    invalid["model"]["thinking"]["verified_sample_count"] = 49
+    invalid["model"]["thinking"]["verified_sample_count"] = 47
     with pytest.raises(ValueError, match="reasoning sample counts must match"):
         validate_result(invalid)
 
@@ -286,7 +289,27 @@ def test_result_rejects_reasoning_budget_without_final_answer_room(valid_result)
 
 
 def test_score_uses_exact_counts():
-    assert _score(47, 50)["rate"] == 0.94
+    assert _score(45, 48)["rate"] == 0.9375
+
+
+def test_result_rejects_inconsistent_excluded_count(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["benchmark"]["raw_sample_count"] = 50
+    invalid["benchmark"]["excluded_spec_example_count"] = 2
+    with pytest.raises(ValueError, match="count must match its id list"):
+        validate_result(invalid)
+
+
+def test_result_rejects_incorrect_excluded_ids(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["benchmark"]["raw_sample_count"] = 50
+    invalid["benchmark"]["excluded_spec_example_count"] = 2
+    invalid["benchmark"]["excluded_spec_example_ids"] = [
+        "curated/berufe/2",
+        "curated/berufe/3",
+    ]
+    with pytest.raises(ValueError, match="detected spec-example overlaps"):
+        validate_result(invalid)
 
 
 def test_serve_command_enables_thinking(profile):

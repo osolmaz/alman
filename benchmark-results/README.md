@@ -1,7 +1,7 @@
 # Benchmark result format
 
-Each `*.json` file in this directory is one successful 50-item curated Alman
-evaluation. The file is the compact comparison record; large Inspect logs,
+Each `*.json` file in this directory is one successful curated Alman
+evaluation after any spec-example overlaps are discarded. The file is the compact comparison record; large Inspect logs,
 server logs, smoke responses, and model weights stay outside the repository.
 
 Human-readable comparisons may accompany result records as dated Markdown
@@ -23,7 +23,10 @@ the selection decision.
   "benchmark": {
     "task": "alman_bench",
     "dataset": "curated",
-    "sample_count": 50,
+    "raw_sample_count": 48,
+    "sample_count": 48,
+    "excluded_spec_example_count": 0,
+    "excluded_spec_example_ids": [],
     "spec_in_context": true,
     "spec_examples_in_dataset": false,
     "commit": "dec7bee",
@@ -58,11 +61,15 @@ complete field set.
   `<redacted>`, including non-secret local placeholders.
 - Counts are authoritative. Rates and standard errors are stored for readers
   and must agree with the counts.
+- `raw_sample_count` is the number logged by Inspect. `sample_count` is the
+  number scored after discarding every source/answer pair found in the spec;
+  excluded row IDs are recorded explicitly. Token totals describe the raw run,
+  including any subsequently excluded requests.
 - New runs require a clean Git working tree. A preserved older dirty run is
   valid only when every change is identified by path and Git blob and none
   affects benchmark inputs.
 - Spec examples are forbidden from result records. The benchmark dataset must
-  be `curated`, contain exactly 50 items, and set
+  be `curated`, contain exactly 48 evaluated items, and set
   `spec_examples_in_dataset=false`.
 - Unknown fields are validation errors. Version the schema before adding a
   required incompatible field.
@@ -75,9 +82,10 @@ complete field set.
 uv run python -m alman.bench.results benchmark-results/<run>.json
 ```
 
-Validation checks JSON Schema constraints plus cross-field rules: rates match
-counts, group totals sum to 50, thinking was observed, and no memory-pressure
-kill occurred.
+Validation checks JSON Schema constraints plus cross-field rules: raw counts
+equal evaluated plus excluded rows, rates match counts, group totals match the
+evaluated sample count, thinking was observed, and no memory-pressure kill
+occurred.
 
 ## Loading
 

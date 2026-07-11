@@ -422,6 +422,7 @@ def _metadata(
     serve = profile.runtime.serve_args
     return {
         "run_id": run_id,
+        "working_tree_changes": [],
         "model": {
             **profile.model.model_dump(),
             "thinking": {

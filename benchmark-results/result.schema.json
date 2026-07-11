@@ -22,11 +22,19 @@
     "benchmark": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["task", "dataset", "sample_count", "spec_in_context", "spec_examples_in_dataset", "commit", "working_tree_dirty", "working_tree_changes"],
+      "required": ["task", "dataset", "raw_sample_count", "sample_count", "excluded_spec_example_count", "excluded_spec_example_ids", "spec_in_context", "spec_examples_in_dataset", "commit", "working_tree_dirty", "working_tree_changes"],
       "properties": {
         "task": {"const": "alman_bench"},
         "dataset": {"const": "curated"},
-        "sample_count": {"const": 50},
+        "raw_sample_count": {"type": "integer", "minimum": 48, "maximum": 50},
+        "sample_count": {"const": 48},
+        "excluded_spec_example_count": {"type": "integer", "minimum": 0, "maximum": 2},
+        "excluded_spec_example_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 2,
+          "items": {"type": "string", "pattern": "^curated/[a-z0-9-]+/[0-9]+$"}
+        },
         "spec_in_context": {"const": true},
         "spec_examples_in_dataset": {"const": false},
         "commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"},
@@ -63,7 +71,7 @@
           "properties": {
             "enabled": {"const": true},
             "verification_method": {"type": "string", "minLength": 1},
-            "verified_sample_count": {"type": "integer", "minimum": 1, "maximum": 50}
+            "verified_sample_count": {"type": "integer", "minimum": 1, "maximum": 48}
           }
         }
       }
@@ -163,7 +171,7 @@
         "compliance": {"$ref": "#/$defs/score"},
         "groups": {"type": "object", "additionalProperties": {"$ref": "#/$defs/score"}},
         "tokens": {"$ref": "#/$defs/tokens"},
-        "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 50}
+        "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 48}
       }
     },
     "artifacts": {

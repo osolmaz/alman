@@ -10,7 +10,13 @@
   "benchmark": {
     "task": "alman_bench",
     "dataset": "curated",
-    "sample_count": 50,
+    "raw_sample_count": 50,
+    "sample_count": 48,
+    "excluded_spec_example_count": 2,
+    "excluded_spec_example_ids": [
+      "curated/berufe/0",
+      "curated/berufe/1"
+    ],
     "spec_in_context": true,
     "spec_examples_in_dataset": false,
     "commit": "c08d7d9",
@@ -32,7 +38,7 @@
     "thinking": {
       "enabled": true,
       "verification_method": "nonempty reasoning_content or think block",
-      "verified_sample_count": 49
+      "verified_sample_count": 47
     }
   },
   "endpoint": {
@@ -148,16 +154,16 @@
   "results": {
     "duration_seconds": 4635.0,
     "acceptance": {
-      "correct": 6,
-      "total": 50,
-      "rate": 0.12,
-      "stderr": 0.04595650117230423
+      "correct": 5,
+      "total": 48,
+      "rate": 0.10416666666666667,
+      "stderr": 0.04409175381666769
     },
     "compliance": {
-      "correct": 32,
-      "total": 50,
-      "rate": 0.64,
-      "stderr": 0.06788225099390856
+      "correct": 30,
+      "total": 48,
+      "rate": 0.625,
+      "stderr": 0.06987712429686843
     },
     "groups": {
       "ablaut": {
@@ -167,10 +173,10 @@
         "stderr": 0.0
       },
       "berufe": {
-        "correct": 3,
-        "total": 7,
-        "rate": 0.42857142857142855,
-        "stderr": 0.1870439059165649
+        "correct": 2,
+        "total": 5,
+        "rate": 0.4,
+        "stderr": 0.21908902300206645
       },
       "deutsch-alman": {
         "correct": 2,
@@ -210,7 +216,7 @@
       "reasoning": null,
       "total": 800499
     },
-    "samples_with_reasoning": 49
+    "samples_with_reasoning": 47
   },
   "artifacts": {
     "inspect_log": "/home/onur/scratch/alman-benchmark-runs/20260711T105317Z-qwen36-35b-thinking-32k/inspect/2026-07-11T10-58-44-00-00_alman-bench_UgRrSTgtkguSsUw7cGs5yp.eval",

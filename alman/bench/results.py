@@ -15,6 +15,8 @@ from inspect_ai.log import EvalLog, read_eval_log
 from inspect_ai.model import ContentReasoning
 from jsonschema import Draft202012Validator, FormatChecker
 
+from alman.bench.dataset import find_spec_example_overlaps, load_curated_items
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SCHEMA = REPO_ROOT / "benchmark-results" / "result.schema.json"
 
@@ -104,24 +106,47 @@ def _token_usage(log: EvalLog) -> dict[str, int | None]:
     }
 
 
+def _evaluated_samples(log: EvalLog) -> tuple[list[Any], list[str]]:
+    logged = {str(sample.id): sample for sample in log.samples or []}
+    if len(logged) != len(log.samples or []):
+        raise ValueError("curated sample ids must be unique")
+    all_ids = {
+        item.id for item in load_curated_items(exclude_spec_examples=False)
+    }
+    evaluated_ids = {item.id for item in load_curated_items()}
+    logged_ids = set(logged)
+    if logged_ids == all_ids:
+        excluded_ids = sorted(all_ids - evaluated_ids)
+    elif logged_ids == evaluated_ids:
+        excluded_ids = []
+    else:
+        missing = sorted(evaluated_ids - logged_ids)
+        unexpected = sorted(logged_ids - all_ids)
+        raise ValueError(
+            f"curated sample ids do not match the dataset; "
+            f"missing={missing}, unexpected={unexpected}"
+        )
+    return [logged[item_id] for item_id in sorted(evaluated_ids)], excluded_ids
+
+
 def build_result(
     log_path: Path,
     run_metadata: dict[str, Any],
 ) -> dict[str, Any]:
     """Combine an Inspect log with the immutable local-run metadata."""
     log = read_eval_log(log_path)
-    samples = log.samples or []
+    raw_samples = log.samples or []
     if log.status != "success":
         raise ValueError(f"Inspect log status is {log.status!r}, not 'success'")
     if log.eval.task_args.get("dataset") != "curated":
         raise ValueError("result records only accept the curated dataset")
     if log.eval.task_args.get("include_spec") is not True:
         raise ValueError("result records require the Alman spec in context")
-    if len(samples) != 50:
-        raise ValueError(f"expected 50 curated samples, found {len(samples)}")
+    samples, excluded_ids = _evaluated_samples(log)
+    evaluated_log = log.model_copy(update={"samples": samples})
 
-    acceptance_correct, acceptance_total = _score_counts(log, "acceptance")
-    compliance_correct, compliance_total = _score_counts(log, "compliance")
+    acceptance_correct, acceptance_total = _score_counts(evaluated_log, "acceptance")
+    compliance_correct, compliance_total = _score_counts(evaluated_log, "compliance")
     started = datetime.fromisoformat(log.stats.started_at)
     completed = datetime.fromisoformat(log.stats.completed_at)
 
@@ -137,12 +162,15 @@ def build_result(
         "benchmark": {
             "task": log.eval.task,
             "dataset": "curated",
+            "raw_sample_count": len(raw_samples),
             "sample_count": len(samples),
+            "excluded_spec_example_count": len(excluded_ids),
+            "excluded_spec_example_ids": excluded_ids,
             "spec_in_context": True,
             "spec_examples_in_dataset": False,
             "commit": log.eval.revision.commit,
             "working_tree_dirty": log.eval.revision.dirty,
-            "working_tree_changes": [],
+            "working_tree_changes": run_metadata.get("working_tree_changes", []),
         },
         "model": run_metadata["model"],
         "endpoint": run_metadata["endpoint"],
@@ -154,9 +182,9 @@ def build_result(
             "duration_seconds": (completed - started).total_seconds(),
             "acceptance": _score(acceptance_correct, acceptance_total),
             "compliance": _score(compliance_correct, compliance_total),
-            "groups": _group_scores(log),
+            "groups": _group_scores(evaluated_log),
             "tokens": _token_usage(log),
-            "samples_with_reasoning": _thinking_sample_count(log),
+            "samples_with_reasoning": _thinking_sample_count(evaluated_log),
         },
         "artifacts": run_metadata["artifacts"],
     }
@@ -182,18 +210,36 @@ def validate_result(result: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA) 
         expected_stderr = math.sqrt(expected * (1 - expected) / score["total"])
         if not math.isclose(score["stderr"], expected_stderr, abs_tol=1e-12):
             raise ValueError("score stderr does not match the authoritative counts")
-    if result["results"]["acceptance"]["total"] != 50:
-        raise ValueError("acceptance total must be 50")
-    if result["results"]["compliance"]["total"] != 50:
-        raise ValueError("compliance total must be 50")
+    sample_count = result["benchmark"]["sample_count"]
+    excluded_count = result["benchmark"]["excluded_spec_example_count"]
+    excluded_ids = result["benchmark"]["excluded_spec_example_ids"]
+    if result["benchmark"]["raw_sample_count"] != sample_count + excluded_count:
+        raise ValueError("raw sample count must equal evaluated plus excluded samples")
+    if excluded_count != len(excluded_ids):
+        raise ValueError("excluded spec-example count must match its id list")
+    expected_excluded_ids = sorted(
+        item.id
+        for item in find_spec_example_overlaps(
+            load_curated_items(exclude_spec_examples=False)
+        )
+    )
+    if excluded_ids not in ([], expected_excluded_ids):
+        raise ValueError("excluded ids must match the detected spec-example overlaps")
+    if result["results"]["acceptance"]["total"] != sample_count:
+        raise ValueError("acceptance total must match the evaluated sample count")
+    if result["results"]["compliance"]["total"] != sample_count:
+        raise ValueError("compliance total must match the evaluated sample count")
     dirty = result["benchmark"]["working_tree_dirty"]
     changes = result["benchmark"]["working_tree_changes"]
     if dirty != bool(changes):
         raise ValueError("dirty working-tree state must include identified changes")
     if any(change["affects_benchmark_inputs"] for change in changes):
         raise ValueError("working-tree changes must not affect benchmark inputs")
-    if sum(group["total"] for group in result["results"]["groups"].values()) != 50:
-        raise ValueError("group totals must sum to 50")
+    if (
+        sum(group["total"] for group in result["results"]["groups"].values())
+        != sample_count
+    ):
+        raise ValueError("group totals must match the evaluated sample count")
     if (
         sum(group["correct"] for group in result["results"]["groups"].values())
         != result["results"]["acceptance"]["correct"]
