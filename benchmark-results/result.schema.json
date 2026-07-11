@@ -107,10 +107,14 @@
     "generation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["max_tokens", "sampling_source"],
+      "required": ["max_tokens", "sampling_source", "do_sample", "temperature", "top_p", "top_k"],
       "properties": {
         "max_tokens": {"type": "integer", "minimum": 1, "maximum": 16384},
-        "sampling_source": {"type": "string"}
+        "sampling_source": {"type": "string"},
+        "do_sample": {"type": "boolean"},
+        "temperature": {"type": "number", "minimum": 0},
+        "top_p": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "top_k": {"type": "integer", "minimum": 1}
       }
     },
     "hardware": {

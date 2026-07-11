@@ -65,6 +65,10 @@ class EndpointProfile(StrictModel):
 class GenerationProfile(StrictModel):
     max_tokens: int = Field(gt=0, le=16384)
     sampling_source: str = "model_generation_config"
+    do_sample: bool
+    temperature: float = Field(ge=0)
+    top_p: float = Field(gt=0, le=1)
+    top_k: int = Field(gt=0)
 
 
 class SafetyProfile(StrictModel):

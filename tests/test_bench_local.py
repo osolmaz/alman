@@ -51,7 +51,13 @@ def profile(tmp_path: Path) -> LocalBenchmarkProfile:
                 },
             },
             "endpoint": {"port": 9999},
-            "generation": {"max_tokens": 8192},
+            "generation": {
+                "max_tokens": 8192,
+                "do_sample": True,
+                "temperature": 1.0,
+                "top_p": 0.95,
+                "top_k": 20,
+            },
             "safety": {
                 "guard": str(guard),
                 "min_mem_available_gib": 24,
@@ -133,6 +139,10 @@ def valid_result() -> dict:
         "generation": {
             "max_tokens": 8192,
             "sampling_source": "model_generation_config",
+            "do_sample": True,
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "top_k": 20,
         },
         "hardware": {"accelerator": "NVIDIA GB10", "unified_memory_gib": 121},
         "memory_guard": {

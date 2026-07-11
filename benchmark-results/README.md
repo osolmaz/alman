@@ -42,6 +42,8 @@ complete field set.
 - Thinking must be enabled and observed in at least one evaluated sample.
 - `runtime.server.max_model_len` is server capacity, not measured active
   context. Actual token use belongs under `results.tokens`.
+- `generation` records the resolved sampling values, even when they came from
+  the model repository's `generation_config.json` rather than client flags.
 - Recipe provenance records the localperf source commit, file, profile, and
   every benchmark-specific deviation.
 - Counts are authoritative. Rates and standard errors are stored for readers
