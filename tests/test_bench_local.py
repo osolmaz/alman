@@ -19,6 +19,7 @@ from alman.bench.local_run import (
 )
 from alman.bench.hf_run import (
     _aggregate,
+    _artifact_batch_dir,
     _external_artifact_root as _external_hf_artifact_root,
     _load_jsonl,
     _response_data,
@@ -705,6 +706,15 @@ def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):
     with pytest.raises(ValueError, match="outside the Git working tree"):
         _external_hf_artifact_root(REPO_ROOT / "artifacts")
     assert _external_hf_artifact_root(tmp_path) == tmp_path.resolve()
+
+
+@pytest.mark.parametrize("batch_id", ["../escape", "/tmp/escape", ".", ".."])
+def test_hosted_batch_id_cannot_escape_artifact_root(tmp_path, batch_id):
+    with pytest.raises(ValueError):
+        _artifact_batch_dir(tmp_path.resolve(), batch_id)
+    assert _artifact_batch_dir(tmp_path.resolve(), "safe-batch") == (
+        tmp_path / "safe-batch"
+    ).resolve()
 
 
 def test_hosted_resume_ignores_only_a_truncated_final_record(tmp_path):

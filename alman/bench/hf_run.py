@@ -319,6 +319,15 @@ def _external_artifact_root(path: Path) -> Path:
     return resolved
 
 
+def _artifact_batch_dir(artifact_root: Path, batch_id: str) -> Path:
+    if Path(batch_id).name != batch_id or batch_id in {".", ".."}:
+        raise ValueError("batch id must be a single path component")
+    resolved = (artifact_root / batch_id).resolve()
+    if artifact_root not in resolved.parents:
+        raise ValueError("batch directory must remain under the artifact root")
+    return resolved
+
+
 def _aggregate(
     *,
     profile: dict[str, Any],
@@ -486,7 +495,7 @@ def run_profiles(
     if len(items) != 48:
         raise RuntimeError(f"expected 48 curated items, found {len(items)}")
     batch_id = batch_id or datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    batch_dir = artifact_root / batch_id
+    batch_dir = _artifact_batch_dir(artifact_root, batch_id)
     batch_dir.mkdir(parents=True, exist_ok=True)
     print(f"batch: {batch_id}", flush=True)
     pending_results: list[tuple[Path, dict[str, Any]]] = []
