@@ -4,6 +4,10 @@ Each `*.json` file in this directory is one successful 50-item curated Alman
 evaluation. The file is the compact comparison record; large Inspect logs,
 server logs, smoke responses, and model weights stay outside the repository.
 
+Human-readable comparisons may accompany result records as dated Markdown
+files. They must link the exact input records and state metric direction and
+the selection decision.
+
 ## Minimal shape
 
 ```json
