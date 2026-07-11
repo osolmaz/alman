@@ -7,6 +7,7 @@ from jsonschema import Draft202012Validator, ValidationError
 from alman.bench.local_run import (
     LocalBenchmarkProfile,
     _assert_guard_healthy,
+    _disk_free_gib,
     _external_artifact_root,
     _generate_config,
     _has_zombie_descendant,
@@ -308,7 +309,7 @@ def test_result_rejects_incorrect_excluded_ids(valid_result):
         "curated/berufe/2",
         "curated/berufe/3",
     ]
-    with pytest.raises(ValueError, match="detected spec-example overlaps"):
+    with pytest.raises(ValidationError):
         validate_result(invalid)
 
 
@@ -518,3 +519,20 @@ def test_artifact_root_must_be_outside_worktree(tmp_path):
     with pytest.raises(ValueError, match="outside the Git working tree"):
         _external_artifact_root(REPO_ROOT / "local-benchmark-artifacts")
     assert _external_artifact_root(tmp_path) == tmp_path.resolve()
+
+
+def test_disk_free_uses_nearest_existing_artifact_parent(tmp_path, monkeypatch):
+    checked = []
+
+    class Usage:
+        free = 12 * 1024**3
+
+    def fake_disk_usage(path):
+        checked.append(path)
+        return Usage()
+
+    monkeypatch.setattr("alman.bench.local_run.shutil.disk_usage", fake_disk_usage)
+    artifact_root = tmp_path / "not-created" / "runs"
+
+    assert _disk_free_gib(artifact_root) == 12
+    assert checked == [tmp_path]

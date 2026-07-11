@@ -147,7 +147,18 @@ def _meminfo_gib(key: str) -> float:
     raise ValueError(f"missing {key} in /proc/meminfo")
 
 
-def preflight(profile: LocalBenchmarkProfile) -> None:
+def _disk_free_gib(path: Path) -> float:
+    """Return free space for the filesystem that will contain ``path``."""
+    existing = path.expanduser().resolve()
+    while not existing.exists():
+        parent = existing.parent
+        if parent == existing:
+            raise ValueError(f"no existing parent for artifact root: {path}")
+        existing = parent
+    return shutil.disk_usage(existing).free / 1024**3
+
+
+def preflight(profile: LocalBenchmarkProfile, artifact_root: Path) -> None:
     for label, path in [
         ("runtime executable", profile.runtime.executable),
         ("process guard", profile.safety.guard),
@@ -173,7 +184,7 @@ def preflight(profile: LocalBenchmarkProfile) -> None:
             f"SwapFree {swap_free:.1f} GiB is below "
             f"{profile.safety.min_swap_free_gib:.1f} GiB"
         )
-    disk_free = shutil.disk_usage(Path.home()).free / 1024**3
+    disk_free = _disk_free_gib(artifact_root)
     if disk_free < profile.safety.min_disk_free_gib:
         raise RuntimeError(
             f"disk free {disk_free:.1f} GiB is below "
@@ -470,7 +481,7 @@ def _metadata(
 
 def run(profile: LocalBenchmarkProfile, output: Path, artifact_root: Path) -> None:
     artifact_root = _external_artifact_root(artifact_root)
-    preflight(profile)
+    preflight(profile, artifact_root)
     run_id = f"{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}-{profile.name}"
     artifact_dir = artifact_root / run_id
     log_dir = artifact_dir / "inspect"
@@ -553,7 +564,8 @@ def main() -> None:
         args.profile.read_text(encoding="utf-8")
     )
     if args.dry_run:
-        preflight(profile)
+        artifact_root = _external_artifact_root(args.artifact_root)
+        preflight(profile, artifact_root)
         print(
             json.dumps(
                 {

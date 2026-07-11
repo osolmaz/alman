@@ -15,7 +15,7 @@ from inspect_ai.log import EvalLog, read_eval_log
 from inspect_ai.model import ContentReasoning
 from jsonschema import Draft202012Validator, FormatChecker
 
-from alman.bench.dataset import find_spec_example_overlaps, load_curated_items
+from alman.bench.dataset import load_curated_items
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SCHEMA = REPO_ROOT / "benchmark-results" / "result.schema.json"
@@ -217,14 +217,6 @@ def validate_result(result: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA) 
         raise ValueError("raw sample count must equal evaluated plus excluded samples")
     if excluded_count != len(excluded_ids):
         raise ValueError("excluded spec-example count must match its id list")
-    expected_excluded_ids = sorted(
-        item.id
-        for item in find_spec_example_overlaps(
-            load_curated_items(exclude_spec_examples=False)
-        )
-    )
-    if excluded_ids not in ([], expected_excluded_ids):
-        raise ValueError("excluded ids must match the detected spec-example overlaps")
     if result["results"]["acceptance"]["total"] != sample_count:
         raise ValueError("acceptance total must match the evaluated sample count")
     if result["results"]["compliance"]["total"] != sample_count:

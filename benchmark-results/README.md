@@ -63,8 +63,10 @@ complete field set.
   and must agree with the counts.
 - `raw_sample_count` is the number logged by Inspect. `sample_count` is the
   number scored after discarding every source/answer pair found in the spec;
-  excluded row IDs are recorded explicitly. Token totals describe the raw run,
-  including any subsequently excluded requests.
+  excluded row IDs are recorded explicitly. Schema v1 fixes the known excluded
+  IDs so historical records validate independently of the current checkout's
+  specification. Token totals describe the raw run, including any subsequently
+  excluded requests.
 - New runs require a clean Git working tree. A preserved older dirty run is
   valid only when every change is identified by path and Git blob and none
   affects benchmark inputs.
