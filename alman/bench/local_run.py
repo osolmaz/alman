@@ -207,6 +207,8 @@ def _wait_for_server(
             raise RuntimeError(
                 f"guarded server exited with status {process.returncode}"
             )
+        if _has_zombie_descendant(process.pid):
+            raise RuntimeError("server worker exited during guarded startup")
         try:
             client.models.list()
             return
@@ -214,6 +216,28 @@ def _wait_for_server(
             last_error = error
             time.sleep(2)
     raise TimeoutError(f"server did not become ready: {last_error}")
+
+
+def _has_zombie_descendant(root_pid: int) -> bool:
+    process_rows = subprocess.run(
+        ["ps", "-eo", "pid=,ppid=,stat="],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.splitlines()
+    children: dict[int, list[tuple[int, str]]] = {}
+    for row in process_rows:
+        pid_text, parent_text, state = row.split(maxsplit=2)
+        children.setdefault(int(parent_text), []).append((int(pid_text), state))
+
+    pending = [root_pid]
+    while pending:
+        parent = pending.pop()
+        for child, state in children.get(parent, []):
+            if state.startswith("Z"):
+                return True
+            pending.append(child)
+    return False
 
 
 def _smoke(client: OpenAI, profile: LocalBenchmarkProfile) -> dict[str, Any]:

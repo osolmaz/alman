@@ -6,6 +6,7 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from alman.bench.local_run import (
     LocalBenchmarkProfile,
+    _has_zombie_descendant,
     _inspect_command,
     _serve_args,
     guarded_command,
@@ -253,3 +254,14 @@ def test_profile_requires_final_answer_budget(profile):
     payload["generation"]["reasoning_token_budget"] = 8192
     with pytest.raises(ValueError, match="must be less than max_tokens"):
         LocalBenchmarkProfile.model_validate(payload)
+
+
+def test_zombie_descendant_detection(monkeypatch):
+    class Completed:
+        stdout = "10 1 S\n11 10 S\n12 11 Z\n20 1 Z\n"
+
+    monkeypatch.setattr(
+        "alman.bench.local_run.subprocess.run", lambda *a, **k: Completed()
+    )
+    assert _has_zombie_descendant(10)
+    assert not _has_zombie_descendant(20)
