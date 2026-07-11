@@ -109,6 +109,7 @@ def valid_result() -> dict:
             "spec_examples_in_dataset": False,
             "commit": "a" * 40,
             "working_tree_dirty": False,
+            "working_tree_changes": [],
         },
         "model": {
             "repository": "example/model",
@@ -213,6 +214,13 @@ def test_result_rejects_moving_model_revision(valid_result):
     invalid = copy.deepcopy(valid_result)
     invalid["model"]["revision"] = "main"
     with pytest.raises(ValidationError):
+        validate_result(invalid)
+
+
+def test_result_rejects_unidentified_dirty_tree(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["benchmark"]["working_tree_dirty"] = True
+    with pytest.raises(ValueError, match="must include identified changes"):
         validate_result(invalid)
 
 
@@ -362,6 +370,20 @@ def test_profile_requires_loopback_endpoint(profile, host):
 def test_profile_requires_immutable_model_revision(profile):
     payload = profile.model_dump()
     payload["model"]["revision"] = "main"
+    with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+def test_profile_rejects_credentials_in_server_arguments(profile):
+    payload = profile.model_dump()
+    payload["runtime"]["serve_args"]["hf_token"] = "secret"
+    with pytest.raises(ValueError, match="credential-bearing serve_args"):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+def test_profile_requires_nonsecret_local_api_key(profile):
+    payload = profile.model_dump()
+    payload["endpoint"]["api_key"] = "secret"
     with pytest.raises(ValueError):
         LocalBenchmarkProfile.model_validate(payload)
 

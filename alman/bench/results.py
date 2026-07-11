@@ -135,6 +135,7 @@ def build_result(
             "spec_examples_in_dataset": False,
             "commit": log.eval.revision.commit,
             "working_tree_dirty": log.eval.revision.dirty,
+            "working_tree_changes": [],
         },
         "model": run_metadata["model"],
         "endpoint": run_metadata["endpoint"],
@@ -178,6 +179,12 @@ def validate_result(result: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA) 
         raise ValueError("acceptance total must be 50")
     if result["results"]["compliance"]["total"] != 50:
         raise ValueError("compliance total must be 50")
+    dirty = result["benchmark"]["working_tree_dirty"]
+    changes = result["benchmark"]["working_tree_changes"]
+    if dirty != bool(changes):
+        raise ValueError("dirty working-tree state must include identified changes")
+    if any(change["affects_benchmark_inputs"] for change in changes):
+        raise ValueError("working-tree changes must not affect benchmark inputs")
     if sum(group["total"] for group in result["results"]["groups"].values()) != 50:
         raise ValueError("group totals must sum to 50")
     if (

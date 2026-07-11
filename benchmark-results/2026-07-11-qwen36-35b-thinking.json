@@ -14,7 +14,15 @@
     "spec_in_context": true,
     "spec_examples_in_dataset": false,
     "commit": "c08d7d9",
-    "working_tree_dirty": true
+    "working_tree_dirty": true,
+    "working_tree_changes": [
+      {
+        "status": "untracked",
+        "path": "benchmark-results/2026-07-11-gemma4-26b-thinking.json",
+        "git_blob": "845b50310c31971fc7c7a7923e5de23d0ca76064",
+        "affects_benchmark_inputs": false
+      }
+    ]
   },
   "model": {
     "repository": "nvidia/Qwen3.6-35B-A3B-NVFP4",

@@ -24,3 +24,7 @@ usage, group scores, and artifact locations are recorded in:
 
 - [`2026-07-11-gemma4-26b-thinking.json`](./2026-07-11-gemma4-26b-thinking.json)
 - [`2026-07-11-qwen36-35b-thinking.json`](./2026-07-11-qwen36-35b-thinking.json)
+
+Qwen's dirty-tree flag is fully identified in its result: the only change was
+the untracked Gemma result (Git blob `845b50310c31971fc7c7a7923e5de23d0ca76064`),
+which did not affect the task, specification, or dataset.

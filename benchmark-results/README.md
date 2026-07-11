@@ -57,6 +57,9 @@ complete field set.
   `<redacted>`, including non-secret local placeholders.
 - Counts are authoritative. Rates and standard errors are stored for readers
   and must agree with the counts.
+- New runs require a clean Git working tree. A preserved older dirty run is
+  valid only when every change is identified by path and Git blob and none
+  affects benchmark inputs.
 - Spec examples are forbidden from result records. The benchmark dataset must
   be `curated`, contain exactly 50 items, and set
   `spec_examples_in_dataset=false`.

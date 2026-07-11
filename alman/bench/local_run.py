@@ -23,6 +23,12 @@ from alman.bench.task import _system_prompt
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
+def _is_credential_flag(flag: str) -> bool:
+    return flag in {"--api-key", "--hf-token"} or flag.endswith(
+        ("-api-key", "-access-token", "-auth-token", "-password", "-secret")
+    )
+
+
 class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -51,11 +57,24 @@ class RuntimeProfile(StrictModel):
     serve_args: dict[str, Any]
     recipe: RecipeProfile
 
+    @model_validator(mode="after")
+    def keep_credentials_out_of_process_arguments(self) -> RuntimeProfile:
+        sensitive = [
+            name
+            for name in self.serve_args
+            if _is_credential_flag("--" + name.replace("_", "-"))
+        ]
+        if sensitive:
+            raise ValueError(
+                "credential-bearing serve_args are forbidden; pass secrets in runtime.env"
+            )
+        return self
+
 
 class EndpointProfile(StrictModel):
     host: Literal["127.0.0.1", "localhost"] = "127.0.0.1"
     port: int
-    api_key: str = "EMPTY"
+    api_key: Literal["EMPTY"] = "EMPTY"
 
     @property
     def base_url(self) -> str:
@@ -153,6 +172,15 @@ def preflight(profile: LocalBenchmarkProfile) -> None:
     ).stdout.splitlines()
     if any("vllm" in command and " serve " in command for command in processes):
         raise RuntimeError("another vLLM server is already running")
+    status = subprocess.run(
+        ["git", "status", "--porcelain=v1"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    if status:
+        raise RuntimeError("benchmark runs require a clean Git working tree")
 
 
 def _flag(name: str) -> str:
@@ -189,9 +217,7 @@ def _redact_server_args(args: list[str]) -> list[str]:
     redacted = args.copy()
     for index, value in enumerate(redacted):
         flag = value.split("=", 1)[0]
-        credential_flag = flag in {"--api-key", "--hf-token"} or flag.endswith(
-            ("-api-key", "-access-token", "-auth-token", "-password", "-secret")
-        )
+        credential_flag = _is_credential_flag(flag)
         if credential_flag and "=" not in value and index + 1 < len(redacted):
             redacted[index + 1] = "<redacted>"
         elif credential_flag and "=" in value:

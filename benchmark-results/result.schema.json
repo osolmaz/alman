@@ -22,7 +22,7 @@
     "benchmark": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["task", "dataset", "sample_count", "spec_in_context", "spec_examples_in_dataset", "commit", "working_tree_dirty"],
+      "required": ["task", "dataset", "sample_count", "spec_in_context", "spec_examples_in_dataset", "commit", "working_tree_dirty", "working_tree_changes"],
       "properties": {
         "task": {"const": "alman_bench"},
         "dataset": {"const": "curated"},
@@ -30,7 +30,21 @@
         "spec_in_context": {"const": true},
         "spec_examples_in_dataset": {"const": false},
         "commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"},
-        "working_tree_dirty": {"type": "boolean"}
+        "working_tree_dirty": {"type": "boolean"},
+        "working_tree_changes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["status", "path", "git_blob", "affects_benchmark_inputs"],
+            "properties": {
+              "status": {"enum": ["untracked", "modified", "added", "deleted", "renamed", "copied", "unmerged"]},
+              "path": {"type": "string", "minLength": 1},
+              "git_blob": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+              "affects_benchmark_inputs": {"const": false}
+            }
+          }
+        }
       }
     },
     "model": {
