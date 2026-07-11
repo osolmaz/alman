@@ -107,9 +107,10 @@
     "generation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["max_tokens", "sampling_source", "do_sample", "temperature", "top_p", "top_k"],
+      "required": ["max_tokens", "reasoning_token_budget", "sampling_source", "do_sample", "temperature", "top_p", "top_k"],
       "properties": {
         "max_tokens": {"type": "integer", "minimum": 1, "maximum": 16384},
+        "reasoning_token_budget": {"type": "integer", "minimum": 1, "maximum": 8192},
         "sampling_source": {"type": "string"},
         "do_sample": {"type": "boolean"},
         "temperature": {"type": "number", "minimum": 0},

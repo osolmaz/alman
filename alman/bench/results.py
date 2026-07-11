@@ -160,6 +160,11 @@ def validate_result(result: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA) 
         raise ValueError("group totals must sum to 50")
     if result["model"]["thinking"]["verified_sample_count"] < 1:
         raise ValueError("thinking must be observed in at least one evaluated sample")
+    if (
+        result["generation"]["reasoning_token_budget"]
+        >= result["generation"]["max_tokens"]
+    ):
+        raise ValueError("reasoning token budget must leave room for a final answer")
     if result["memory_guard"]["pressure_kill_occurred"]:
         raise ValueError("a pressure-killed run is not a valid benchmark result")
 

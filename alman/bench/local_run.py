@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from openai import OpenAI
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from alman.bench.dataset import load_curated_items
 from alman.bench.results import build_result, write_result
@@ -64,11 +64,18 @@ class EndpointProfile(StrictModel):
 
 class GenerationProfile(StrictModel):
     max_tokens: int = Field(gt=0, le=16384)
+    reasoning_token_budget: int = Field(gt=0, le=8192)
     sampling_source: str = "model_generation_config"
     do_sample: bool
     temperature: float = Field(ge=0)
     top_p: float = Field(gt=0, le=1)
     top_k: int = Field(gt=0)
+
+    @model_validator(mode="after")
+    def reserve_final_answer_tokens(self) -> GenerationProfile:
+        if self.reasoning_token_budget >= self.max_tokens:
+            raise ValueError("reasoning_token_budget must be less than max_tokens")
+        return self
 
 
 class SafetyProfile(StrictModel):
@@ -218,7 +225,10 @@ def _smoke(client: OpenAI, profile: LocalBenchmarkProfile) -> dict[str, Any]:
             {"role": "user", "content": item.source},
         ],
         max_tokens=profile.generation.max_tokens,
-        extra_body={"chat_template_kwargs": {"enable_thinking": True}},
+        extra_body={
+            "chat_template_kwargs": {"enable_thinking": True},
+            "thinking_token_budget": profile.generation.reasoning_token_budget,
+        },
     )
     message = response.choices[0].message
     extras = message.model_extra or {}
@@ -232,7 +242,10 @@ def _smoke(client: OpenAI, profile: LocalBenchmarkProfile) -> dict[str, Any]:
 
 
 def _inspect_command(
-    profile: LocalBenchmarkProfile, log_dir: Path, run_id: str
+    profile: LocalBenchmarkProfile,
+    log_dir: Path,
+    run_id: str,
+    generate_config: Path,
 ) -> list[str]:
     return [
         "uv",
@@ -250,6 +263,8 @@ def _inspect_command(
         "1",
         "--max-tokens",
         str(profile.generation.max_tokens),
+        "--generate-config",
+        str(generate_config),
         "--timeout",
         str(profile.safety.request_timeout_seconds),
         "--log-dir",
@@ -260,6 +275,8 @@ def _inspect_command(
         f"local_run_id={run_id}",
         "--metadata",
         "thinking_enabled=true",
+        "--metadata",
+        f"reasoning_token_budget={profile.generation.reasoning_token_budget}",
     ]
 
 
@@ -331,6 +348,20 @@ def run(profile: LocalBenchmarkProfile, output: Path, artifact_root: Path) -> No
     server_log_path = artifact_dir / "server.log"
     server_args = _serve_args(profile)
     command = guarded_command(profile)
+    generate_config_path = artifact_dir / "generate-config.json"
+    generate_config_path.write_text(
+        json.dumps(
+            {
+                "extra_body": {
+                    "chat_template_kwargs": {"enable_thinking": True},
+                    "thinking_token_budget": profile.generation.reasoning_token_budget,
+                }
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
     env = os.environ | profile.runtime.env
     guard_process: subprocess.Popen[str] | None = None
 
@@ -360,7 +391,7 @@ def run(profile: LocalBenchmarkProfile, output: Path, artifact_root: Path) -> No
             "LOCAL_BASE_URL": profile.endpoint.base_url,
         }
         subprocess.run(
-            _inspect_command(profile, log_dir, run_id),
+            _inspect_command(profile, log_dir, run_id, generate_config_path),
             cwd=REPO_ROOT,
             env=inspect_env,
             check=True,
@@ -403,7 +434,12 @@ def main() -> None:
             json.dumps(
                 {
                     "serve": guarded_command(profile),
-                    "inspect": _inspect_command(profile, Path("<log-dir>"), "<run-id>"),
+                    "inspect": _inspect_command(
+                        profile,
+                        Path("<log-dir>"),
+                        "<run-id>",
+                        Path("<artifact-dir>/generate-config.json"),
+                    ),
                 },
                 indent=2,
             )

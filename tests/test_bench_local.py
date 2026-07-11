@@ -4,7 +4,12 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator, ValidationError
 
-from alman.bench.local_run import LocalBenchmarkProfile, _serve_args, guarded_command
+from alman.bench.local_run import (
+    LocalBenchmarkProfile,
+    _inspect_command,
+    _serve_args,
+    guarded_command,
+)
 from alman.bench.results import DEFAULT_SCHEMA, _score, validate_result
 
 
@@ -53,6 +58,7 @@ def profile(tmp_path: Path) -> LocalBenchmarkProfile:
             "endpoint": {"port": 9999},
             "generation": {
                 "max_tokens": 8192,
+                "reasoning_token_budget": 4096,
                 "do_sample": True,
                 "temperature": 1.0,
                 "top_p": 0.95,
@@ -138,6 +144,7 @@ def valid_result() -> dict:
         },
         "generation": {
             "max_tokens": 8192,
+            "reasoning_token_budget": 4096,
             "sampling_source": "model_generation_config",
             "do_sample": True,
             "temperature": 1.0,
@@ -207,6 +214,13 @@ def test_result_rejects_missing_thinking(valid_result):
         validate_result(invalid)
 
 
+def test_result_rejects_reasoning_budget_without_final_answer_room(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["generation"]["reasoning_token_budget"] = 8192
+    with pytest.raises(ValueError, match="leave room for a final answer"):
+        validate_result(invalid)
+
+
 def test_score_uses_exact_counts():
     assert _score(47, 50)["rate"] == 0.94
 
@@ -225,3 +239,17 @@ def test_guard_wraps_vllm_command(profile):
     assert command[0] == str(profile.safety.guard)
     assert command[separator + 1] == str(profile.runtime.executable)
     assert command[separator + 2] == "serve"
+
+
+def test_inspect_command_uses_reasoning_budget_config(profile, tmp_path):
+    generate_config = tmp_path / "generate-config.json"
+    command = _inspect_command(profile, tmp_path, "run-id", generate_config)
+    assert command[command.index("--generate-config") + 1] == str(generate_config)
+    assert "reasoning_token_budget=4096" in command
+
+
+def test_profile_requires_final_answer_budget(profile):
+    payload = profile.model_dump()
+    payload["generation"]["reasoning_token_budget"] = 8192
+    with pytest.raises(ValueError, match="must be less than max_tokens"):
+        LocalBenchmarkProfile.model_validate(payload)
