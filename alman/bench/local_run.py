@@ -11,7 +11,7 @@ import subprocess
 import time
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from openai import OpenAI
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -29,7 +29,7 @@ class StrictModel(BaseModel):
 
 class ModelProfile(StrictModel):
     repository: str
-    revision: str
+    revision: str = Field(pattern=r"^[0-9a-f]{40}$")
     served_name: str
     quantization: str
 
@@ -53,7 +53,7 @@ class RuntimeProfile(StrictModel):
 
 
 class EndpointProfile(StrictModel):
-    host: str = "127.0.0.1"
+    host: Literal["127.0.0.1", "localhost"] = "127.0.0.1"
     port: int
     api_key: str = "EMPTY"
 
@@ -207,10 +207,10 @@ def _generate_config(profile: LocalBenchmarkProfile) -> dict[str, Any]:
     return {
         "temperature": profile.generation.temperature,
         "top_p": profile.generation.top_p,
-        "top_k": profile.generation.top_k,
         "extra_body": {
             "chat_template_kwargs": {"enable_thinking": True},
             "thinking_token_budget": profile.generation.reasoning_token_budget,
+            "top_k": profile.generation.top_k,
         },
     }
 

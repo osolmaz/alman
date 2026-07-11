@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -45,13 +46,20 @@ def _thinking_sample_count(log: EvalLog) -> int:
 
 def _has_reasoning_content(content: Any) -> bool:
     if isinstance(content, str):
-        return "<think>" in content
+        return _has_nonempty_think_block(content)
     if not isinstance(content, list):
         return False
     return any(
         (isinstance(item, ContentReasoning) and bool(item.reasoning.strip()))
-        or "<think>" in str(getattr(item, "text", ""))
+        or _has_nonempty_think_block(str(getattr(item, "text", "")))
         for item in content
+    )
+
+
+def _has_nonempty_think_block(value: str) -> bool:
+    return any(
+        match.strip()
+        for match in re.findall(r"<think>(.*?)</think>", value, flags=re.DOTALL)
     )
 
 

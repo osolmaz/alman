@@ -209,6 +209,13 @@ def test_result_rejects_spec_examples(valid_result):
         validate_result(invalid)
 
 
+def test_result_rejects_moving_model_revision(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["model"]["revision"] = "main"
+    with pytest.raises(ValidationError):
+        validate_result(invalid)
+
+
 def test_result_rejects_inconsistent_rate(valid_result):
     invalid = copy.deepcopy(valid_result)
     invalid["results"]["acceptance"]["rate"] = 0.5
@@ -296,16 +303,19 @@ def test_generate_config_applies_recorded_sampling(profile):
     assert _generate_config(profile) == {
         "temperature": 1.0,
         "top_p": 0.95,
-        "top_k": 20,
         "extra_body": {
             "chat_template_kwargs": {"enable_thinking": True},
             "thinking_token_budget": 4096,
+            "top_k": 20,
         },
     }
 
 
 def test_raw_think_block_counts_as_reasoning():
     assert _has_reasoning_content("<think>reasoning</think>answer")
+    assert not _has_reasoning_content("<think></think>answer")
+    assert not _has_reasoning_content("<think>   </think>answer")
+    assert not _has_reasoning_content("<think>unfinished")
     assert not _has_reasoning_content("answer only")
 
 
@@ -329,6 +339,21 @@ def test_profile_requires_final_answer_budget(profile):
     payload = profile.model_dump()
     payload["generation"]["reasoning_token_budget"] = 8192
     with pytest.raises(ValueError, match="must be less than max_tokens"):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+@pytest.mark.parametrize("host", ["0.0.0.0", "192.0.2.1"])
+def test_profile_requires_loopback_endpoint(profile, host):
+    payload = profile.model_dump()
+    payload["endpoint"]["host"] = host
+    with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+def test_profile_requires_immutable_model_revision(profile):
+    payload = profile.model_dump()
+    payload["model"]["revision"] = "main"
+    with pytest.raises(ValueError):
         LocalBenchmarkProfile.model_validate(payload)
 
 

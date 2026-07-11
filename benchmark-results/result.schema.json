@@ -39,7 +39,7 @@
       "required": ["repository", "revision", "served_name", "quantization", "thinking"],
       "properties": {
         "repository": {"type": "string", "minLength": 1},
-        "revision": {"type": "string", "minLength": 7},
+        "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "served_name": {"type": "string", "minLength": 1},
         "quantization": {"type": "string", "minLength": 1},
         "thinking": {
