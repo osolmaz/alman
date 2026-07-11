@@ -1,4 +1,5 @@
 import copy
+import json
 from pathlib import Path
 
 import pytest
@@ -16,7 +17,14 @@ from alman.bench.local_run import (
     _serve_args,
     guarded_command,
 )
-from alman.bench.hf_run import _aggregate, _response_data, validate_hosted_result
+from alman.bench.hf_run import (
+    _aggregate,
+    _external_artifact_root as _external_hf_artifact_root,
+    _load_jsonl,
+    _response_data,
+    _validate_profiles,
+    validate_hosted_result,
+)
 from alman.bench.results import (
     DEFAULT_SCHEMA,
     _has_reasoning_content,
@@ -659,3 +667,46 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
     invalid["results"]["groups"]["example"]["stderr"] = (23 / 48 * 25 / 48 / 48) ** 0.5
     with pytest.raises(ValueError, match="group correct counts"):
         validate_hosted_result(invalid)
+
+
+def test_hosted_profiles_are_validated_before_use():
+    profile = {
+        "name": "deepseek-v4-flash-hf-novita-thinking",
+        "model": "deepseek-ai/DeepSeek-V4-Flash",
+        "hub_revision": "a" * 40,
+        "provider": "novita",
+        "provider_model_id": "deepseek/deepseek-v4-flash",
+        "thinking_control": "reasoning.effort=low",
+        "thinking_extra_body": {"reasoning": {"effort": "low"}},
+        "forced_final_extra_body": {"enable_thinking": False},
+        "forced_final_disables_thinking": True,
+        "temperature": 1.0,
+        "top_p": 1.0,
+        "input_price_per_million": 0.14,
+        "output_price_per_million": 0.28,
+        "pricing_observed_at": "2026-07-11T00:00:00Z",
+        "output": "result.json",
+    }
+    _validate_profiles([profile])
+    invalid = copy.deepcopy(profile)
+    invalid["provider"] = "auto"
+    with pytest.raises(ValidationError):
+        _validate_profiles([invalid])
+
+
+def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):
+    from alman.bench.hf_run import REPO_ROOT
+
+    with pytest.raises(ValueError, match="outside the Git working tree"):
+        _external_hf_artifact_root(REPO_ROOT / "artifacts")
+    assert _external_hf_artifact_root(tmp_path) == tmp_path.resolve()
+
+
+def test_hosted_resume_ignores_only_a_truncated_final_record(tmp_path):
+    path = tmp_path / "samples.jsonl"
+    path.write_text('{"id":"first"}\n{"id":', encoding="utf-8")
+    assert _load_jsonl(path) == [{"id": "first"}]
+
+    path.write_text('{"id":\n{"id":"second"}\n', encoding="utf-8")
+    with pytest.raises(json.JSONDecodeError):
+        _load_jsonl(path)

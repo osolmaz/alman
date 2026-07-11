@@ -25,6 +25,56 @@ SCHEMA_PATH = REPO_ROOT / "benchmark-results" / "hosted-result.schema.json"
 PLATFORM = "huggingface-inference-providers"
 THINKING_MAX_TOKENS = 4096
 FORCED_FINAL_MAX_TOKENS = 512
+PROFILE_SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": [
+        "name",
+        "model",
+        "hub_revision",
+        "provider",
+        "provider_model_id",
+        "thinking_control",
+        "thinking_extra_body",
+        "forced_final_extra_body",
+        "forced_final_disables_thinking",
+        "temperature",
+        "top_p",
+        "input_price_per_million",
+        "output_price_per_million",
+        "pricing_observed_at",
+        "output",
+    ],
+    "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+        "model": {
+            "enum": [
+                "deepseek-ai/DeepSeek-V4-Pro",
+                "deepseek-ai/DeepSeek-V4-Flash",
+                "zai-org/GLM-5.2",
+                "moonshotai/Kimi-K2.7-Code",
+            ]
+        },
+        "hub_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "provider": {"const": "novita"},
+        "provider_model_id": {"type": "string", "minLength": 1},
+        "thinking_control": {"type": "string", "minLength": 1},
+        "thinking_extra_body": {"type": "object"},
+        "forced_final_extra_body": {"type": "object"},
+        "forced_final_disables_thinking": {"type": "boolean"},
+        "forced_final_max_tokens": {
+            "type": "integer",
+            "minimum": 512,
+            "maximum": 2048,
+        },
+        "temperature": {"const": 1.0},
+        "top_p": {"enum": [0.95, 1.0]},
+        "input_price_per_million": {"type": "number", "minimum": 0},
+        "output_price_per_million": {"type": "number", "minimum": 0},
+        "pricing_observed_at": {"type": "string", "format": "date-time"},
+        "output": {"type": "string", "pattern": "^[^/]+\\.json$"},
+    },
+}
 
 
 def _score(correct: int, total: int) -> dict[str, int | float]:
@@ -223,11 +273,35 @@ def _write_json(path: Path, value: dict[str, Any]) -> None:
 def _load_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.is_file():
         return []
-    return [
-        json.loads(line)
+    lines = [
+        line
         for line in path.read_text(encoding="utf-8").splitlines()
         if line.strip()
     ]
+    values = []
+    for index, line in enumerate(lines):
+        try:
+            values.append(json.loads(line))
+        except json.JSONDecodeError:
+            if index != len(lines) - 1:
+                raise
+    return values
+
+
+def _validate_profiles(profiles: list[dict[str, Any]]) -> None:
+    validator = Draft202012Validator(
+        PROFILE_SCHEMA,
+        format_checker=FormatChecker(),
+    )
+    for profile in profiles:
+        validator.validate(profile)
+
+
+def _external_artifact_root(path: Path) -> Path:
+    resolved = path.expanduser().resolve()
+    if resolved == REPO_ROOT or REPO_ROOT in resolved.parents:
+        raise ValueError("artifact root must be outside the Git working tree")
+    return resolved
 
 
 def _aggregate(
@@ -388,6 +462,8 @@ def run_profiles(
     output_dir: Path,
     batch_id: str | None = None,
 ) -> None:
+    _validate_profiles(profiles)
+    artifact_root = _external_artifact_root(artifact_root)
     commit, dirty = _git_revision()
     if dirty:
         raise RuntimeError("hosted benchmark runs require a clean Git working tree")
@@ -395,7 +471,7 @@ def run_profiles(
     if len(items) != 48:
         raise RuntimeError(f"expected 48 curated items, found {len(items)}")
     batch_id = batch_id or datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
-    batch_dir = artifact_root.expanduser().resolve() / batch_id
+    batch_dir = artifact_root / batch_id
     batch_dir.mkdir(parents=True, exist_ok=True)
     print(f"batch: {batch_id}", flush=True)
     pending_results: list[tuple[Path, dict[str, Any]]] = []
