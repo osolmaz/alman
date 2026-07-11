@@ -323,6 +323,15 @@ def test_result_rejects_incorrect_excluded_ids(valid_result):
         validate_result(invalid)
 
 
+def test_result_rejects_partial_known_overlap_set(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["benchmark"]["raw_sample_count"] = 49
+    invalid["benchmark"]["excluded_spec_example_count"] = 1
+    invalid["benchmark"]["excluded_spec_example_ids"] = ["curated/berufe/0"]
+    with pytest.raises(ValueError, match="complete known pair"):
+        validate_result(invalid)
+
+
 def test_serve_command_enables_thinking(profile):
     args = _serve_args(profile)
     kwargs_index = args.index("--default-chat-template-kwargs")

@@ -217,6 +217,9 @@ def validate_result(result: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA) 
         raise ValueError("raw sample count must equal evaluated plus excluded samples")
     if excluded_count != len(excluded_ids):
         raise ValueError("excluded spec-example count must match its id list")
+    known_overlap_ids = {"curated/berufe/0", "curated/berufe/1"}
+    if excluded_ids and set(excluded_ids) != known_overlap_ids:
+        raise ValueError("excluded spec-example ids must contain the complete known pair")
     if result["results"]["acceptance"]["total"] != sample_count:
         raise ValueError("acceptance total must match the evaluated sample count")
     if result["results"]["compliance"]["total"] != sample_count:
