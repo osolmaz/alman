@@ -65,7 +65,7 @@
         "--port",
         "9332",
         "--api-key",
-        "EMPTY",
+        "<redacted>",
         "--max-model-len",
         "32768",
         "--max-num-seqs",

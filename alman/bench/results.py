@@ -38,12 +38,21 @@ def _thinking_sample_count(log: EvalLog) -> int:
         if sample.output is None or not sample.output.choices:
             continue
         content = sample.output.choices[0].message.content
-        if isinstance(content, list) and any(
-            isinstance(item, ContentReasoning) and bool(item.reasoning.strip())
-            for item in content
-        ):
+        if _has_reasoning_content(content):
             count += 1
     return count
+
+
+def _has_reasoning_content(content: Any) -> bool:
+    if isinstance(content, str):
+        return "<think>" in content
+    if not isinstance(content, list):
+        return False
+    return any(
+        (isinstance(item, ContentReasoning) and bool(item.reasoning.strip()))
+        or "<think>" in str(getattr(item, "text", ""))
+        for item in content
+    )
 
 
 def _score_counts(log: EvalLog, scorer: str) -> tuple[int, int]:
@@ -154,6 +163,9 @@ def validate_result(result: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA) 
         expected = score["correct"] / score["total"]
         if not math.isclose(score["rate"], expected, abs_tol=1e-12):
             raise ValueError("score rate does not match correct / total")
+        expected_stderr = math.sqrt(expected * (1 - expected) / score["total"])
+        if not math.isclose(score["stderr"], expected_stderr, abs_tol=1e-12):
+            raise ValueError("score stderr does not match the authoritative counts")
     if result["results"]["acceptance"]["total"] != 50:
         raise ValueError("acceptance total must be 50")
     if sum(group["total"] for group in result["results"]["groups"].values()) != 50:

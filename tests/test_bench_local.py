@@ -6,12 +6,19 @@ from jsonschema import Draft202012Validator, ValidationError
 
 from alman.bench.local_run import (
     LocalBenchmarkProfile,
+    _generate_config,
     _has_zombie_descendant,
+    _redact_server_args,
     _inspect_command,
     _serve_args,
     guarded_command,
 )
-from alman.bench.results import DEFAULT_SCHEMA, _score, validate_result
+from alman.bench.results import (
+    DEFAULT_SCHEMA,
+    _has_reasoning_content,
+    _score,
+    validate_result,
+)
 
 
 @pytest.fixture
@@ -208,6 +215,13 @@ def test_result_rejects_inconsistent_rate(valid_result):
         validate_result(invalid)
 
 
+def test_result_rejects_inconsistent_stderr(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["results"]["acceptance"]["stderr"] = 0.5
+    with pytest.raises(ValueError, match="stderr does not match"):
+        validate_result(invalid)
+
+
 def test_result_rejects_missing_thinking(valid_result):
     invalid = copy.deepcopy(valid_result)
     invalid["model"]["thinking"]["verified_sample_count"] = 0
@@ -232,6 +246,35 @@ def test_serve_command_enables_thinking(profile):
     assert args[kwargs_index + 1] == '{"enable_thinking":true}'
     assert "--no-enable-prefix-caching" in args
     assert "--revision" in args
+
+
+def test_server_arguments_redact_api_key():
+    assert _redact_server_args(["vllm", "--api-key", "secret"]) == [
+        "vllm",
+        "--api-key",
+        "<redacted>",
+    ]
+    assert _redact_server_args(["vllm", "--api-key=secret"]) == [
+        "vllm",
+        "--api-key=<redacted>",
+    ]
+
+
+def test_generate_config_applies_recorded_sampling(profile):
+    assert _generate_config(profile) == {
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "top_k": 20,
+        "extra_body": {
+            "chat_template_kwargs": {"enable_thinking": True},
+            "thinking_token_budget": 4096,
+        },
+    }
+
+
+def test_raw_think_block_counts_as_reasoning():
+    assert _has_reasoning_content("<think>reasoning</think>answer")
+    assert not _has_reasoning_content("answer only")
 
 
 def test_guard_wraps_vllm_command(profile):

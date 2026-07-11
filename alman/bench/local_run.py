@@ -75,6 +75,10 @@ class GenerationProfile(StrictModel):
     def reserve_final_answer_tokens(self) -> GenerationProfile:
         if self.reasoning_token_budget >= self.max_tokens:
             raise ValueError("reasoning_token_budget must be less than max_tokens")
+        if self.do_sample and self.temperature == 0:
+            raise ValueError("sampled generation requires a positive temperature")
+        if not self.do_sample and self.temperature != 0:
+            raise ValueError("non-sampled generation requires temperature 0")
         return self
 
 
@@ -181,6 +185,36 @@ def _serve_args(profile: LocalBenchmarkProfile) -> list[str]:
     return args
 
 
+def _redact_server_args(args: list[str]) -> list[str]:
+    redacted = args.copy()
+    for index, value in enumerate(redacted):
+        if value == "--api-key" and index + 1 < len(redacted):
+            redacted[index + 1] = "<redacted>"
+        elif value.startswith("--api-key="):
+            redacted[index] = "--api-key=<redacted>"
+    return redacted
+
+
+def _request_extra_body(profile: LocalBenchmarkProfile) -> dict[str, Any]:
+    return {
+        "chat_template_kwargs": {"enable_thinking": True},
+        "thinking_token_budget": profile.generation.reasoning_token_budget,
+        "top_k": profile.generation.top_k,
+    }
+
+
+def _generate_config(profile: LocalBenchmarkProfile) -> dict[str, Any]:
+    return {
+        "temperature": profile.generation.temperature,
+        "top_p": profile.generation.top_p,
+        "top_k": profile.generation.top_k,
+        "extra_body": {
+            "chat_template_kwargs": {"enable_thinking": True},
+            "thinking_token_budget": profile.generation.reasoning_token_budget,
+        },
+    }
+
+
 def guarded_command(profile: LocalBenchmarkProfile) -> list[str]:
     return [
         str(profile.safety.guard),
@@ -249,10 +283,9 @@ def _smoke(client: OpenAI, profile: LocalBenchmarkProfile) -> dict[str, Any]:
             {"role": "user", "content": item.source},
         ],
         max_tokens=profile.generation.max_tokens,
-        extra_body={
-            "chat_template_kwargs": {"enable_thinking": True},
-            "thinking_token_budget": profile.generation.reasoning_token_budget,
-        },
+        temperature=profile.generation.temperature,
+        top_p=profile.generation.top_p,
+        extra_body=_request_extra_body(profile),
     )
     message = response.choices[0].message
     extras = message.model_extra or {}
@@ -335,7 +368,7 @@ def _metadata(
             "manifest": str(profile.runtime.manifest),
             "recipe": profile.runtime.recipe.model_dump(),
             "server": {
-                "arguments": server_args,
+                "arguments": _redact_server_args(server_args),
                 "max_model_len": serve["max_model_len"],
                 "max_num_seqs": serve["max_num_seqs"],
                 "max_num_batched_tokens": serve["max_num_batched_tokens"],
@@ -374,16 +407,7 @@ def run(profile: LocalBenchmarkProfile, output: Path, artifact_root: Path) -> No
     command = guarded_command(profile)
     generate_config_path = artifact_dir / "generate-config.json"
     generate_config_path.write_text(
-        json.dumps(
-            {
-                "extra_body": {
-                    "chat_template_kwargs": {"enable_thinking": True},
-                    "thinking_token_budget": profile.generation.reasoning_token_budget,
-                }
-            },
-            indent=2,
-        )
-        + "\n",
+        json.dumps(_generate_config(profile), indent=2) + "\n",
         encoding="utf-8",
     )
     env = os.environ | profile.runtime.env
