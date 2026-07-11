@@ -693,6 +693,11 @@ def test_hosted_profiles_are_validated_before_use():
     with pytest.raises(ValidationError):
         _validate_profiles([invalid])
 
+    duplicate = copy.deepcopy(profile)
+    duplicate["name"] = "another-profile"
+    with pytest.raises(ValueError, match="output values must be unique"):
+        _validate_profiles([profile, duplicate])
+
 
 def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):
     from alman.bench.hf_run import REPO_ROOT
@@ -706,7 +711,16 @@ def test_hosted_resume_ignores_only_a_truncated_final_record(tmp_path):
     path = tmp_path / "samples.jsonl"
     path.write_text('{"id":"first"}\n{"id":', encoding="utf-8")
     assert _load_jsonl(path) == [{"id": "first"}]
+    assert path.read_text(encoding="utf-8") == '{"id":"first"}\n'
 
     path.write_text('{"id":\n{"id":"second"}\n', encoding="utf-8")
     with pytest.raises(json.JSONDecodeError):
         _load_jsonl(path)
+
+    path.write_text('{"id":"first"}\n{"id":\n', encoding="utf-8")
+    with pytest.raises(json.JSONDecodeError):
+        _load_jsonl(path)
+
+    path.write_text('{"id":"first"}', encoding="utf-8")
+    assert _load_jsonl(path) == [{"id": "first"}]
+    assert path.read_text(encoding="utf-8").endswith("\n")

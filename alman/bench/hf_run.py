@@ -273,9 +273,10 @@ def _write_json(path: Path, value: dict[str, Any]) -> None:
 def _load_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.is_file():
         return []
+    text = path.read_text(encoding="utf-8")
     lines = [
         line
-        for line in path.read_text(encoding="utf-8").splitlines()
+        for line in text.splitlines()
         if line.strip()
     ]
     values = []
@@ -283,8 +284,18 @@ def _load_jsonl(path: Path) -> list[dict[str, Any]]:
         try:
             values.append(json.loads(line))
         except json.JSONDecodeError:
-            if index != len(lines) - 1:
+            if index != len(lines) - 1 or text.endswith(("\n", "\r")):
                 raise
+            repaired = "\n".join(lines[:index])
+            if repaired:
+                repaired += "\n"
+            repair_path = path.with_suffix(path.suffix + ".repair")
+            repair_path.write_text(repaired, encoding="utf-8")
+            repair_path.replace(path)
+            return values
+    if text and not text.endswith(("\n", "\r")):
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write("\n")
     return values
 
 
@@ -295,6 +306,10 @@ def _validate_profiles(profiles: list[dict[str, Any]]) -> None:
     )
     for profile in profiles:
         validator.validate(profile)
+    for field in ("name", "output"):
+        values = [profile[field] for profile in profiles]
+        if len(values) != len(set(values)):
+            raise ValueError(f"hosted profile {field} values must be unique")
 
 
 def _external_artifact_root(path: Path) -> Path:
