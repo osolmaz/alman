@@ -297,6 +297,15 @@ def test_server_arguments_redact_api_key():
         "vllm",
         "--api-key=<redacted>",
     ]
+    assert _redact_server_args(["vllm", "--hf-token", "hf_secret"]) == [
+        "vllm",
+        "--hf-token",
+        "<redacted>",
+    ]
+    assert _redact_server_args(["vllm", "--auth-token=secret"]) == [
+        "vllm",
+        "--auth-token=<redacted>",
+    ]
 
 
 def test_generate_config_applies_recorded_sampling(profile):

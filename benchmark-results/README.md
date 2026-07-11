@@ -52,8 +52,9 @@ complete field set.
   this to be smaller than the total output budget so a final answer can follow.
 - Recipe provenance records the localperf source commit, file, profile, and
   every benchmark-specific deviation.
-- Recorded server arguments preserve the launch shape but replace every API-key
-  value with `<redacted>`, including non-secret local placeholders.
+- Recorded server arguments preserve the launch shape but replace values for
+  credential-bearing flags such as API keys and Hugging Face tokens with
+  `<redacted>`, including non-secret local placeholders.
 - Counts are authoritative. Rates and standard errors are stored for readers
   and must agree with the counts.
 - Spec examples are forbidden from result records. The benchmark dataset must

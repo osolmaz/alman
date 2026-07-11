@@ -188,10 +188,14 @@ def _serve_args(profile: LocalBenchmarkProfile) -> list[str]:
 def _redact_server_args(args: list[str]) -> list[str]:
     redacted = args.copy()
     for index, value in enumerate(redacted):
-        if value == "--api-key" and index + 1 < len(redacted):
+        flag = value.split("=", 1)[0]
+        credential_flag = flag in {"--api-key", "--hf-token"} or flag.endswith(
+            ("-api-key", "-access-token", "-auth-token", "-password", "-secret")
+        )
+        if credential_flag and "=" not in value and index + 1 < len(redacted):
             redacted[index + 1] = "<redacted>"
-        elif value.startswith("--api-key="):
-            redacted[index] = "--api-key=<redacted>"
+        elif credential_flag and "=" in value:
+            redacted[index] = f"{flag}=<redacted>"
     return redacted
 
 
