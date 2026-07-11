@@ -7,6 +7,7 @@ from jsonschema import Draft202012Validator, ValidationError
 from alman.bench.local_run import (
     LocalBenchmarkProfile,
     _assert_guard_healthy,
+    _external_artifact_root,
     _generate_config,
     _has_zombie_descendant,
     _redact_server_args,
@@ -475,3 +476,11 @@ def test_guard_health_accepts_running_process(tmp_path):
     server_log = tmp_path / "server.log"
     server_log.write_text("guarded-launch: starting test\n", encoding="utf-8")
     _assert_guard_healthy(Process(), server_log)
+
+
+def test_artifact_root_must_be_outside_worktree(tmp_path):
+    from alman.bench.local_run import REPO_ROOT
+
+    with pytest.raises(ValueError, match="outside the Git working tree"):
+        _external_artifact_root(REPO_ROOT / "local-benchmark-artifacts")
+    assert _external_artifact_root(tmp_path) == tmp_path.resolve()

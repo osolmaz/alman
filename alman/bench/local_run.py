@@ -336,6 +336,13 @@ def _assert_guard_healthy(
         raise RuntimeError(f"guarded server exited with status {returncode}")
 
 
+def _external_artifact_root(artifact_root: Path) -> Path:
+    resolved = artifact_root.expanduser().resolve()
+    if resolved == REPO_ROOT or REPO_ROOT in resolved.parents:
+        raise ValueError("artifact root must be outside the Git working tree")
+    return resolved
+
+
 def _smoke(client: OpenAI, profile: LocalBenchmarkProfile) -> dict[str, Any]:
     item = load_curated_items()[0]
     response = client.chat.completions.create(
@@ -460,6 +467,7 @@ def _metadata(
 
 
 def run(profile: LocalBenchmarkProfile, output: Path, artifact_root: Path) -> None:
+    artifact_root = _external_artifact_root(artifact_root)
     preflight(profile)
     run_id = f"{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}-{profile.name}"
     artifact_dir = artifact_root / run_id
