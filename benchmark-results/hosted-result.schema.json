@@ -72,7 +72,7 @@
         "temperature": {"const": 1.0},
         "top_p": {"enum": [0.95, 1.0]},
         "thinking_call_max_tokens": {"const": 4096},
-        "forced_final_max_tokens": {"const": 512},
+        "forced_final_max_tokens": {"type": "integer", "minimum": 512, "maximum": 2048},
         "max_retries": {"const": 2}
       }
     },

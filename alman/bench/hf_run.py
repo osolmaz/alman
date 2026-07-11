@@ -142,7 +142,10 @@ def _run_sample(client: InferenceClient, profile: dict[str, Any], item: Any) -> 
             },
             {
                 "role": "user",
-                "content": "The reasoning budget is exhausted. Return only the final Alman translation now.",
+                "content": (
+                    "The reasoning budget is exhausted. Do not restart the analysis. "
+                    "Return only the final Alman translation now."
+                ),
             },
         ]
         fallback = _request(
@@ -150,7 +153,9 @@ def _run_sample(client: InferenceClient, profile: dict[str, Any], item: Any) -> 
             model=profile["model"],
             messages=fallback_messages,
             extra_body=profile["forced_final_extra_body"],
-            max_tokens=FORCED_FINAL_MAX_TOKENS,
+            max_tokens=profile.get(
+                "forced_final_max_tokens", FORCED_FINAL_MAX_TOKENS
+            ),
             temperature=profile["temperature"],
             top_p=profile["top_p"],
         )
@@ -302,7 +307,9 @@ def _aggregate(
             "temperature": profile["temperature"],
             "top_p": profile["top_p"],
             "thinking_call_max_tokens": THINKING_MAX_TOKENS,
-            "forced_final_max_tokens": FORCED_FINAL_MAX_TOKENS,
+            "forced_final_max_tokens": profile.get(
+                "forced_final_max_tokens", FORCED_FINAL_MAX_TOKENS
+            ),
             "max_retries": 2,
         },
         "results": {

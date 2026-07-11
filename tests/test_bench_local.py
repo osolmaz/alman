@@ -620,6 +620,7 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
             },
             "forced_final_extra_body": {"enable_thinking": False},
             "forced_final_disables_thinking": True,
+            "forced_final_max_tokens": 512,
             "temperature": 1.0,
             "top_p": 1.0,
             "provider": "novita",
