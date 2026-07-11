@@ -454,6 +454,21 @@ def test_profile_requires_vllm_runtime(profile):
         LocalBenchmarkProfile.model_validate(payload)
 
 
+@pytest.mark.parametrize(
+    ("section", "field"),
+    [
+        ("runtime", "executable"),
+        ("runtime", "manifest"),
+        ("safety", "guard"),
+    ],
+)
+def test_profile_requires_absolute_process_paths(profile, section, field):
+    payload = profile.model_dump()
+    payload[section][field] = Path("relative/path")
+    with pytest.raises(ValueError, match="must be absolute"):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
 @pytest.mark.parametrize("commit", ["", "main", "a" * 41])
 def test_profile_requires_valid_recipe_commit(profile, commit):
     payload = profile.model_dump()

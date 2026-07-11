@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from openai import OpenAI
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from alman.bench.dataset import load_curated_items
 from alman.bench.results import build_result, raw_thinking_parts, write_result
@@ -69,6 +69,13 @@ class RuntimeProfile(StrictModel):
     serve_args: ServeProfile
     recipe: RecipeProfile
 
+    @field_validator("executable", "manifest")
+    @classmethod
+    def require_absolute_runtime_paths(cls, path: Path) -> Path:
+        if not path.is_absolute():
+            raise ValueError("runtime paths must be absolute")
+        return path
+
     @model_validator(mode="after")
     def keep_credentials_out_of_process_arguments(self) -> RuntimeProfile:
         sensitive = [
@@ -120,6 +127,13 @@ class SafetyProfile(StrictModel):
     min_disk_free_gib: float = Field(ge=8)
     startup_timeout_seconds: int = Field(gt=0)
     request_timeout_seconds: int = Field(gt=0)
+
+    @field_validator("guard")
+    @classmethod
+    def require_absolute_guard_path(cls, path: Path) -> Path:
+        if not path.is_absolute():
+            raise ValueError("process guard path must be absolute")
+        return path
 
 
 class HardwareProfile(StrictModel):

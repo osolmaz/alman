@@ -56,6 +56,8 @@ complete field set.
   this to be smaller than the total output budget so a final answer can follow.
 - Recipe provenance records the localperf source commit, file, profile, and
   every benchmark-specific deviation.
+- Runtime executable, manifest, and process-guard paths must be absolute so
+  preflight validation and the repository-root launch use the same files.
 - Recorded server arguments preserve the launch shape but replace values for
   credential-bearing flags such as API keys and Hugging Face tokens with
   `<redacted>`, including non-secret local placeholders.
