@@ -1,0 +1,123 @@
+{
+  "$schema": "./hosted-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260711T154255Z-kimi-k2.7-code-hf-novita-thinking",
+    "started_at": "2026-07-11T15:42:55.394163+00:00",
+    "completed_at": "2026-07-11T16:02:40.136075+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 48,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "1ed1e4d73442a266d6b3d9ef5494c78130b62806",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "repository": "moonshotai/Kimi-K2.7-Code",
+    "hub_revision": "74797c9c62378b951a1f6fcf5c4631024e9b8bef",
+    "provider_model_id": "moonshotai/kimi-k2.7-code",
+    "served_revision_pinned": false,
+    "thinking": {
+      "enabled": true,
+      "mode": "think",
+      "provider_control": "forced-by-model",
+      "thinking_call_max_tokens": 4096,
+      "samples_with_reasoning": 48,
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": 4095,
+      "forced_final_fallback_count": 5,
+      "forced_final_fallback_disables_thinking": false
+    }
+  },
+  "endpoint": {
+    "platform": "huggingface-inference-providers",
+    "provider": "novita",
+    "api": "chat_completions",
+    "routing": "explicit-client-provider"
+  },
+  "generation": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "thinking_call_max_tokens": 4096,
+    "forced_final_max_tokens": 2048,
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 42,
+      "total": 48,
+      "rate": 0.875,
+      "stderr": 0.047735163489123336
+    },
+    "compliance": {
+      "correct": 48,
+      "total": 48,
+      "rate": 1.0,
+      "stderr": 0.0
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "deutsch-alman": {
+        "correct": 10,
+        "total": 11,
+        "rate": 0.9090909090909091,
+        "stderr": 0.08667841720414476
+      },
+      "die-verwandlung": {
+        "correct": 3,
+        "total": 4,
+        "rate": 0.75,
+        "stderr": 0.21650635094610965
+      },
+      "siddhartha": {
+        "correct": 13,
+        "total": 16,
+        "rate": 0.8125,
+        "stderr": 0.09757809372497497
+      },
+      "starke-flexion": {
+        "correct": 7,
+        "total": 8,
+        "rate": 0.875,
+        "stderr": 0.11692679333668567
+      },
+      "steppenwolf": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 715938,
+      "output": 65984,
+      "reasoning": 64426,
+      "total": 781922
+    },
+    "estimated_cost_usd": 0.9440770999999999
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 0.95,
+    "output_per_million_tokens": 4.0,
+    "observed_at": "2026-07-11T14:55:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/hf-providers/20260711T154255Z/kimi-k2.7-code-hf-novita-thinking.samples.jsonl"
+  }
+}

@@ -212,6 +212,14 @@ def _append_jsonl(path: Path, value: dict[str, Any]) -> None:
         handle.flush()
 
 
+def _write_json(path: Path, value: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(value, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
 def _load_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.is_file():
         return []
@@ -414,6 +422,7 @@ def run_profiles(
             if item.id in completed:
                 continue
             sample = _run_sample(client, profile, item)
+            sample["completed_at"] = datetime.now(UTC).isoformat()
             _append_jsonl(samples_path, sample)
             completed[item.id] = sample
             print(f"{profile['name']}: {index}/48", flush=True)
@@ -427,14 +436,12 @@ def run_profiles(
             commit=commit,
             artifact_path=samples_path,
         )
+        checkpoint_path = batch_dir / f"{profile['name']}.result.json"
+        _write_json(checkpoint_path, result)
         pending_results.append((output_dir / profile["output"], result))
 
-    output_dir.mkdir(parents=True, exist_ok=True)
     for path, result in pending_results:
-        path.write_text(
-            json.dumps(result, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
+        _write_json(path, result)
         print(f"wrote {path}")
 
 

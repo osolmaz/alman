@@ -7,6 +7,9 @@ server logs, smoke responses, and model weights stay outside the repository.
 Local vLLM records use `result.schema.json`. Hosted Hugging Face Inference
 Providers records use `hosted-result.schema.json`, which records the routed
 provider, hosted pricing, the thinking-call cap, and any forced-final fallback.
+Hosted raw samples, manifests, and per-profile result checkpoints stay in the
+external artifact directory so a later profile failure does not discard an
+earlier completed run.
 
 Human-readable comparisons may accompany result records as dated Markdown
 files. They must link the exact input records and state metric direction and
