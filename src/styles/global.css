@@ -200,26 +200,23 @@ tr:last-child td {
 }
 
 .site-brand .wordmark {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.15;
+  height: 2.7rem;
+  width: auto;
+  display: block;
 }
 
 .site-brand .wordmark .name {
   font-family: var(--font-din);
   font-weight: 600;
-  font-size: 1.45rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 26px;
+  fill: var(--ink);
 }
 
 .site-brand .wordmark .sub {
   font-family: var(--font-din);
   font-weight: 500;
-  font-size: 0.72rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--grey-1);
+  font-size: 13px;
+  fill: var(--grey-1);
 }
 
 .site-nav {
@@ -383,7 +380,7 @@ tr:last-child td {
     height: 2.5rem;
   }
 
-  .site-brand .wordmark .name {
-    font-size: 1.2rem;
+  .site-brand .wordmark {
+    height: 2.2rem;
   }
 }
