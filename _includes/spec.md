@@ -153,7 +153,7 @@ An apposition agrees in construction with its head noun phrase. When a genitive 
 | das Haus des Mannes | die Haus der Mann / die Haus von die Mann |  |
 | die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |  |
 | bei den Lehren seines Vaters, des Gelehrten | bei die Lehren von sein Vater, die Gelehrte | in the teachings of his father, the scholar |
-| der Name Gotamas, des Buddha | die Name Gotamas, der Buddha / die Name von Gotama, die Buddha | the name of Gotama, the Buddha |
+| die Werke Goethes, des Dichters | die Werke Goethes, der Dichter / die Werke von Goethe, die Dichter | the works of Goethe, the poet |
 
 
 

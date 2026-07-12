@@ -121,8 +121,8 @@ class TestExtraction:
         assert von.accepted == ["bei die Lehren von sein Vater, die Gelehrte"]
         name = items_by_id["articles/definite-articles/von-die-usage/3"]
         assert name.accepted == [
-            "die Name Gotamas, der Buddha",
-            "die Name von Gotama, die Buddha",
+            "die Werke Goethes, der Dichter",
+            "die Werke von Goethe, die Dichter",
         ]
 
 
