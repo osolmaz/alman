@@ -91,3 +91,21 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} 
 
 writeFileSync(path.join(BRAND, "alman_institut_lockup.svg"), svg);
 console.log(`wrote alman_institut_lockup.svg (${totalWidth}x${H})`);
+
+// Favicon: emblem centered on a white rounded rectangle.
+const F = 64;
+const PAD = 6;
+const emblemW = F - 2 * PAD;
+const emblemH = (emblemW * 162.71875) / 222.77916;
+const favScale = emblemW / 222.77916;
+const favY = (F - emblemH) / 2;
+const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${F} ${F}" width="${F}" height="${F}">
+  <rect width="${F}" height="${F}" rx="14" fill="#ffffff"/>
+  <g transform="translate(${PAD} ${favY.toFixed(2)}) scale(${favScale.toFixed(6)})">
+    ${emblem}
+  </g>
+</svg>
+`;
+
+writeFileSync(path.join(ROOT, "public/favicon.svg"), favicon);
+console.log(`wrote public/favicon.svg (${F}x${F})`);
