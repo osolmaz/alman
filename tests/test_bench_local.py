@@ -85,6 +85,7 @@ def profile(tmp_path: Path) -> LocalBenchmarkProfile:
                 "temperature": 1.0,
                 "top_p": 0.95,
                 "top_k": 20,
+                "presence_penalty": 1.5,
             },
             "safety": {
                 "guard": str(guard),
@@ -366,6 +367,7 @@ def test_generate_config_applies_recorded_sampling(profile):
     assert _generate_config(profile) == {
         "temperature": 1.0,
         "top_p": 0.95,
+        "presence_penalty": 1.5,
         "extra_body": {
             "chat_template_kwargs": {"enable_thinking": True},
             "thinking_token_budget": 4096,

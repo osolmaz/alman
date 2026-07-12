@@ -108,6 +108,7 @@ class GenerationProfile(StrictModel):
     temperature: float = Field(ge=0)
     top_p: float = Field(gt=0, le=1)
     top_k: int = Field(gt=0)
+    presence_penalty: float = Field(default=0, ge=-2, le=2)
 
     @model_validator(mode="after")
     def reserve_final_answer_tokens(self) -> GenerationProfile:
@@ -274,6 +275,7 @@ def _generate_config(profile: LocalBenchmarkProfile) -> dict[str, Any]:
     return {
         "temperature": profile.generation.temperature,
         "top_p": profile.generation.top_p,
+        "presence_penalty": profile.generation.presence_penalty,
         "extra_body": _request_extra_body(profile),
     }
 
@@ -375,6 +377,7 @@ def _smoke(client: OpenAI, profile: LocalBenchmarkProfile) -> dict[str, Any]:
         max_tokens=profile.generation.max_tokens,
         temperature=profile.generation.temperature,
         top_p=profile.generation.top_p,
+        presence_penalty=profile.generation.presence_penalty,
         extra_body=_request_extra_body(profile),
     )
     message = response.choices[0].message

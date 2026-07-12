@@ -137,7 +137,8 @@
         "do_sample": {"type": "boolean"},
         "temperature": {"type": "number", "minimum": 0},
         "top_p": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
-        "top_k": {"type": "integer", "minimum": 1}
+        "top_k": {"type": "integer", "minimum": 1},
+        "presence_penalty": {"type": "number", "minimum": -2, "maximum": 2}
       }
     },
     "hardware": {
