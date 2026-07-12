@@ -2,6 +2,23 @@
 
 Currently under development. Deployed at [alman.ai](https://alman.ai).
 
+## Website
+
+The site is built with [Astro](https://astro.build/) and deployed to GitHub
+Pages via `.github/workflows/deploy.yml`:
+
+```bash
+npm install
+npm run dev       # local dev server
+npm run build     # static build into dist/
+```
+
+The specification page renders `_includes/spec.md`, which is generated from
+the JSON files under `spec/` (the source of truth) with
+`uv run python -m alman.build` — never edit it by hand. Blog posts live in
+`src/content/blog/`, and the visual identity is documented in
+`docs/design-guide.md`.
+
 ## Translation benchmark
 
 A Standard German → Alman translation benchmark, built on

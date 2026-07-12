@@ -1,0 +1,97 @@
+---
+import "@fontsource/barlow-semi-condensed/500.css";
+import "@fontsource/barlow-semi-condensed/600.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/400-italic.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "katex/dist/katex.min.css";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = "A Simplified German Dialect" } = Astro.props;
+const pageTitle = title ? `${title} | Alman Institut` : "Alman Institut";
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { href: "/", label: "Specification" },
+  { href: "/blog/", label: "Blog" },
+  { href: "/about/", label: "About" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/assets/brand/alman_institut_logo.svg" />
+    <link rel="alternate" type="application/rss+xml" title="Alman Institut" href="/feed.xml" />
+    <link rel="canonical" href={new URL(currentPath, Astro.site)} />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BDXXJLP8RP"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-BDXXJLP8RP");
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="inner">
+        <a class="site-brand" href="/">
+          <img src="/assets/brand/alman_institut_logo.svg" alt="Alman Institut emblem" />
+          <span class="wordmark">
+            <span class="name">Alman Institut</span>
+            <span class="sub">für Sprachvereinfachung</span>
+          </span>
+        </a>
+        <nav class="site-nav">
+          {
+            navItems.map((item) => (
+              <a
+                href={item.href}
+                aria-current={
+                  item.href === "/"
+                    ? currentPath === "/"
+                      ? "page"
+                      : undefined
+                    : currentPath.startsWith(item.href)
+                      ? "page"
+                      : undefined
+                }
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+    <div class="flag-rule" aria-hidden="true"><span></span><span></span><span></span></div>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="inner">
+        <span>Alman Institut für Sprachvereinfachung</span>
+        <span>
+          <a href="https://github.com/osolmaz/alman">GitHub</a> ·
+          <a href="/feed.xml">RSS</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -5,12 +5,13 @@ __pycache__/
 *.pyw
 *.pyz
 
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
 vendor
 build/spec.md
+
+# Astro
+node_modules/
+dist/
+.astro/
 .DS_Store
 local-benchmark-artifacts/
 
