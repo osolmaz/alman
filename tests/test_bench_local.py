@@ -22,6 +22,9 @@ from alman.bench.hf_run import (
     _artifact_batch_dir,
     _external_artifact_root as _external_hf_artifact_root,
     _load_jsonl,
+    _request,
+    _resumed_benchmark_commit,
+    _run_sample,
     _response_data,
     _validate_profiles,
     validate_hosted_result,
@@ -664,6 +667,9 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
         artifact_path=tmp_path / "samples.jsonl",
     )
     assert result["endpoint"]["platform"] == "huggingface-inference-providers"
+    assert result["endpoint"]["max_concurrency"] == 1
+    assert result["generation"]["top_k"] is None
+    assert result["generation"]["presence_penalty"] is None
     assert result["results"]["acceptance"]["correct"] == 24
     assert result["model"]["thinking"]["thinking_call_max_tokens"] == 4096
     assert result["model"]["thinking"]["max_reported_reasoning_tokens"] == 12
@@ -687,6 +693,11 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
     invalid["results"]["groups"]["example"]["rate"] = 23 / 48
     invalid["results"]["groups"]["example"]["stderr"] = (23 / 48 * 25 / 48 / 48) ** 0.5
     with pytest.raises(ValueError, match="group correct counts"):
+        validate_hosted_result(invalid)
+
+    invalid = copy.deepcopy(result)
+    invalid["endpoint"]["provider"] = "together"
+    with pytest.raises(ValueError, match="unsupported hosted"):
         validate_hosted_result(invalid)
 
 
@@ -714,10 +725,146 @@ def test_hosted_profiles_are_validated_before_use():
     with pytest.raises(ValidationError):
         _validate_profiles([invalid])
 
+    invalid = copy.deepcopy(profile)
+    invalid["provider_model_id"] = "wrong/model"
+    with pytest.raises(ValueError, match="unsupported hosted"):
+        _validate_profiles([invalid])
+
+    invalid = copy.deepcopy(profile)
+    invalid["top_k"] = 20
+    with pytest.raises(ValueError, match="thinking_extra_body.top_k"):
+        _validate_profiles([invalid])
+
+    invalid = copy.deepcopy(profile)
+    invalid["thinking_extra_body"]["top_k"] = 20
+    with pytest.raises(ValueError, match="requires a profile top_k"):
+        _validate_profiles([invalid])
+
     duplicate = copy.deepcopy(profile)
     duplicate["name"] = "another-profile"
     with pytest.raises(ValueError, match="output values must be unique"):
         _validate_profiles([profile, duplicate])
+
+
+def test_hosted_request_only_sends_optional_presence_penalty():
+    class Value:
+        def __init__(self, **values):
+            self.__dict__.update(values)
+
+        def model_dump(self):
+            return self.__dict__
+
+    calls = []
+
+    class Completions:
+        def create(self, **kwargs):
+            calls.append(kwargs)
+            return Value(
+                id="response-id",
+                model="model",
+                choices=[
+                    Value(
+                        finish_reason="stop",
+                        message=Value(
+                            content="die Haus", reasoning_content="reasoning"
+                        ),
+                    )
+                ],
+                usage=Value(
+                    prompt_tokens=10,
+                    completion_tokens=20,
+                    total_tokens=30,
+                    completion_tokens_details={"reasoning_tokens": 12},
+                ),
+            )
+
+    client = Value(chat=Value(completions=Completions()))
+    arguments = {
+        "model": "model",
+        "messages": [{"role": "user", "content": "Haus"}],
+        "extra_body": {},
+        "max_tokens": 4096,
+        "temperature": 1.0,
+        "top_p": 0.95,
+    }
+    _request(client, **arguments)
+    _request(client, **arguments, presence_penalty=1.5, stop=['"'])
+
+    assert "presence_penalty" not in calls[0]
+    assert calls[1]["presence_penalty"] == 1.5
+    assert calls[1]["stop"] == ['"']
+
+
+def test_hosted_prefilled_fallback_can_select_parser_reasoning(monkeypatch):
+    responses = iter(
+        [
+            {
+                "response_id": "primary",
+                "returned_model": "model",
+                "finish_reason": "length",
+                "content": "",
+                "reasoning": "completed analysis",
+                "tokens": {
+                    "input": 10,
+                    "output": 4096,
+                    "reasoning": None,
+                    "total": 4106,
+                },
+            },
+            {
+                "response_id": "fallback",
+                "returned_model": "model",
+                "finish_reason": "stop",
+                "content": "",
+                "reasoning": "die Haus",
+                "tokens": {
+                    "input": 12,
+                    "output": 2,
+                    "reasoning": None,
+                    "total": 14,
+                },
+            },
+        ]
+    )
+    calls = []
+
+    def fake_request(*args, **kwargs):
+        calls.append(kwargs)
+        return next(responses)
+
+    monkeypatch.setattr("alman.bench.hf_run._request", fake_request)
+
+    class Item:
+        id = "curated/example/0"
+        source = "das Haus"
+        accepted = ["die Haus"]
+        paragraph = "example"
+
+    profile = {
+        "model": "stepfun-ai/Step-3.7-Flash",
+        "thinking_extra_body": {"chat_template_kwargs": {"reasoning_effort": "high"}},
+        "forced_final_extra_body": {
+            "chat_template_kwargs": {"reasoning_effort": "low"},
+            "continue_final_message": True,
+        },
+        "forced_final_prefill": '"',
+        "forced_final_stop": ['"'],
+        "forced_final_output_field": "reasoning",
+        "forced_final_max_tokens": 512,
+        "temperature": 1.0,
+        "top_p": 0.95,
+    }
+    sample = _run_sample(object(), profile, Item())
+
+    assert sample["output"] == "die Haus"
+    assert sample["correct"] is True
+    assert sample["forced_final_output_field"] == "reasoning"
+    assert calls[1]["messages"][-1] == {
+        "role": "assistant",
+        "content": '"',
+        "reasoning_content": "completed analysis",
+    }
+    assert calls[1]["stop"] == ['"']
 
 
 def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):
@@ -726,6 +873,13 @@ def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):
     with pytest.raises(ValueError, match="outside the Git working tree"):
         _external_hf_artifact_root(REPO_ROOT / "artifacts")
     assert _external_hf_artifact_root(tmp_path) == tmp_path.resolve()
+
+
+def test_hosted_completed_profile_can_be_published_from_original_commit():
+    assert _resumed_benchmark_commit("a" * 40, "b" * 40, True) == "a" * 40
+    assert _resumed_benchmark_commit("a" * 40, "a" * 40, False) == "a" * 40
+    with pytest.raises(RuntimeError, match="incomplete profile"):
+        _resumed_benchmark_commit("a" * 40, "b" * 40, False)
 
 
 @pytest.mark.parametrize("batch_id", ["../escape", "/tmp/escape", ".", ".."])

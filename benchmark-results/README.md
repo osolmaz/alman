@@ -7,6 +7,8 @@ server logs, smoke responses, and model weights stay outside the repository.
 Local vLLM records use `result.schema.json`. Hosted Hugging Face Inference
 Providers records use `hosted-result.schema.json`, which records the routed
 provider, hosted pricing, the thinking-call cap, and any forced-final fallback.
+Direct OpenAI API records use `openai-result.schema.json`, which also separates
+cached input tokens and records requested and returned model IDs.
 Hosted raw samples, manifests, and per-profile result checkpoints stay in the
 external artifact directory so a later profile failure does not discard an
 earlier completed run.
@@ -20,6 +22,15 @@ cost, fallback, incident, caveat, and validation outcome, is in
 [`2026-07-11-complete-thinking-benchmark-report.md`](./2026-07-11-complete-thinking-benchmark-report.md).
 That report also contains the 2026-07-12 Qwen `presence_penalty=1.5`
 follow-up and links its exact result record.
+
+The additional 2026-07-12 Hugging Face Inference Providers runs for hosted
+Qwen 3.6 35B, MiniMax M3, Nemotron 3 Ultra, and Step 3.7 Flash—including the
+Step forced-final incident and the hosted-versus-local Qwen diagnosis—are in
+[`2026-07-12-more-hf-inference-providers-thinking-comparison.md`](./2026-07-12-more-hf-inference-providers-thinking-comparison.md).
+
+The GPT-5.4 mini and GPT-5.6 Luna/Sol/Terra xhigh runs, including cached-token
+costs and the updated overall ranking, are in
+[`2026-07-12-openai-xhigh-comparison.md`](./2026-07-12-openai-xhigh-comparison.md).
 
 ## Minimal shape
 

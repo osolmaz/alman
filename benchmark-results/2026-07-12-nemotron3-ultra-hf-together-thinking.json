@@ -1,0 +1,127 @@
+{
+  "$schema": "./hosted-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260712T091857Z-nemotron3-ultra-hf-together-thinking",
+    "started_at": "2026-07-12T09:18:57.803192+00:00",
+    "completed_at": "2026-07-12T09:30:54.986762+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 48,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "3866ada42483de8f6f133ed627a2e2eaba6f76cd",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "repository": "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-NVFP4",
+    "hub_revision": "183968f87ae4cedce3039313cac1fd43d112c578",
+    "provider_model_id": "nvidia/nemotron-3-ultra-550b-a55b",
+    "served_revision_pinned": false,
+    "thinking": {
+      "enabled": true,
+      "mode": "think",
+      "provider_control": "chat_template_kwargs.enable_thinking=true",
+      "thinking_call_max_tokens": 4096,
+      "samples_with_reasoning": 48,
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": 4096,
+      "forced_final_fallback_count": 1,
+      "forced_final_fallback_disables_thinking": true
+    }
+  },
+  "endpoint": {
+    "platform": "huggingface-inference-providers",
+    "provider": "together",
+    "api": "chat_completions",
+    "routing": "explicit-client-provider",
+    "max_concurrency": 4
+  },
+  "generation": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "presence_penalty": null,
+    "thinking_call_max_tokens": 4096,
+    "forced_final_max_tokens": 512,
+    "forced_final_strategy": "new-turn-final-request",
+    "forced_final_output_field": "content",
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 37,
+      "total": 48,
+      "rate": 0.7708333333333334,
+      "stderr": 0.060664601422417176
+    },
+    "compliance": {
+      "correct": 47,
+      "total": 48,
+      "rate": 0.9791666666666666,
+      "stderr": 0.020615177234440847
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 3,
+        "total": 5,
+        "rate": 0.6,
+        "stderr": 0.21908902300206645
+      },
+      "deutsch-alman": {
+        "correct": 10,
+        "total": 11,
+        "rate": 0.9090909090909091,
+        "stderr": 0.08667841720414476
+      },
+      "die-verwandlung": {
+        "correct": 2,
+        "total": 4,
+        "rate": 0.5,
+        "stderr": 0.25
+      },
+      "siddhartha": {
+        "correct": 12,
+        "total": 16,
+        "rate": 0.75,
+        "stderr": 0.10825317547305482
+      },
+      "starke-flexion": {
+        "correct": 7,
+        "total": 8,
+        "rate": 0.875,
+        "stderr": 0.11692679333668567
+      },
+      "steppenwolf": {
+        "correct": 1,
+        "total": 2,
+        "rate": 0.5,
+        "stderr": 0.3535533905932738
+      }
+    },
+    "tokens": {
+      "input": 620900,
+      "output": 62296,
+      "reasoning": 60944,
+      "total": 683196
+    },
+    "estimated_cost_usd": 0.5968055999999999
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 0.6,
+    "output_per_million_tokens": 3.6,
+    "observed_at": "2026-07-12T09:00:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/hf-providers/20260712T091500Z-more-hosted-thinking/nemotron3-ultra-hf-together-thinking.samples.jsonl"
+  }
+}
