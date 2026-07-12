@@ -4,7 +4,7 @@
   "run": {
     "id": "20260712T091857Z-nemotron3-ultra-hf-together-thinking",
     "started_at": "2026-07-12T09:18:57.803192+00:00",
-    "completed_at": "2026-07-12T09:37:53.872880+00:00",
+    "completed_at": "2026-07-12T09:30:54.986762+00:00",
     "status": "success"
   },
   "benchmark": {
@@ -46,6 +46,8 @@
     "presence_penalty": null,
     "thinking_call_max_tokens": 4096,
     "forced_final_max_tokens": 512,
+    "forced_final_strategy": "new-turn-final-request",
+    "forced_final_output_field": "content",
     "max_retries": 2
   },
   "results": {

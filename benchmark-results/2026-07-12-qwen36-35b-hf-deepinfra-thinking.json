@@ -4,7 +4,7 @@
   "run": {
     "id": "20260712T090922Z-qwen36-35b-hf-deepinfra-thinking",
     "started_at": "2026-07-12T09:09:22.277873+00:00",
-    "completed_at": "2026-07-12T09:37:53.869503+00:00",
+    "completed_at": "2026-07-12T09:14:32.853012+00:00",
     "status": "success"
   },
   "benchmark": {
@@ -46,6 +46,8 @@
     "presence_penalty": 1.5,
     "thinking_call_max_tokens": 4096,
     "forced_final_max_tokens": 512,
+    "forced_final_strategy": "new-turn-final-request",
+    "forced_final_output_field": "content",
     "max_retries": 2
   },
   "results": {
