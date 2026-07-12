@@ -22,6 +22,7 @@ from alman.bench.hf_run import (
     _artifact_batch_dir,
     _external_artifact_root as _external_hf_artifact_root,
     _load_jsonl,
+    _request,
     _response_data,
     _validate_profiles,
     validate_hosted_result,
@@ -664,6 +665,8 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
         artifact_path=tmp_path / "samples.jsonl",
     )
     assert result["endpoint"]["platform"] == "huggingface-inference-providers"
+    assert result["endpoint"]["max_concurrency"] == 1
+    assert result["generation"]["presence_penalty"] is None
     assert result["results"]["acceptance"]["correct"] == 24
     assert result["model"]["thinking"]["thinking_call_max_tokens"] == 4096
     assert result["model"]["thinking"]["max_reported_reasoning_tokens"] == 12
@@ -714,10 +717,63 @@ def test_hosted_profiles_are_validated_before_use():
     with pytest.raises(ValidationError):
         _validate_profiles([invalid])
 
+    invalid = copy.deepcopy(profile)
+    invalid["provider_model_id"] = "wrong/model"
+    with pytest.raises(ValueError, match="unsupported hosted"):
+        _validate_profiles([invalid])
+
     duplicate = copy.deepcopy(profile)
     duplicate["name"] = "another-profile"
     with pytest.raises(ValueError, match="output values must be unique"):
         _validate_profiles([profile, duplicate])
+
+
+def test_hosted_request_only_sends_optional_presence_penalty():
+    class Value:
+        def __init__(self, **values):
+            self.__dict__.update(values)
+
+        def model_dump(self):
+            return self.__dict__
+
+    calls = []
+
+    class Completions:
+        def create(self, **kwargs):
+            calls.append(kwargs)
+            return Value(
+                id="response-id",
+                model="model",
+                choices=[
+                    Value(
+                        finish_reason="stop",
+                        message=Value(
+                            content="die Haus", reasoning_content="reasoning"
+                        ),
+                    )
+                ],
+                usage=Value(
+                    prompt_tokens=10,
+                    completion_tokens=20,
+                    total_tokens=30,
+                    completion_tokens_details={"reasoning_tokens": 12},
+                ),
+            )
+
+    client = Value(chat=Value(completions=Completions()))
+    arguments = {
+        "model": "model",
+        "messages": [{"role": "user", "content": "Haus"}],
+        "extra_body": {},
+        "max_tokens": 4096,
+        "temperature": 1.0,
+        "top_p": 0.95,
+    }
+    _request(client, **arguments)
+    _request(client, **arguments, presence_penalty=1.5)
+
+    assert "presence_penalty" not in calls[0]
+    assert calls[1]["presence_penalty"] == 1.5
 
 
 def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):

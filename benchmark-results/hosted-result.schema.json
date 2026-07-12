@@ -34,7 +34,7 @@
       "type": "object", "additionalProperties": false,
       "required": ["repository", "hub_revision", "provider_model_id", "served_revision_pinned", "thinking"],
       "properties": {
-        "repository": {"enum": ["deepseek-ai/DeepSeek-V4-Pro", "deepseek-ai/DeepSeek-V4-Flash", "zai-org/GLM-5.2", "moonshotai/Kimi-K2.7-Code"]},
+        "repository": {"enum": ["deepseek-ai/DeepSeek-V4-Pro", "deepseek-ai/DeepSeek-V4-Flash", "zai-org/GLM-5.2", "moonshotai/Kimi-K2.7-Code", "Qwen/Qwen3.6-35B-A3B", "MiniMaxAI/MiniMax-M3", "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-NVFP4", "stepfun-ai/Step-3.7-Flash"]},
         "hub_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "provider_model_id": {"type": "string", "minLength": 1},
         "served_revision_pinned": {"const": false},
@@ -60,9 +60,10 @@
       "required": ["platform", "provider", "api", "routing"],
       "properties": {
         "platform": {"const": "huggingface-inference-providers"},
-        "provider": {"const": "novita"},
+        "provider": {"enum": ["novita", "deepinfra", "together"]},
         "api": {"const": "chat_completions"},
-        "routing": {"const": "explicit-client-provider"}
+        "routing": {"const": "explicit-client-provider"},
+        "max_concurrency": {"type": "integer", "minimum": 1, "maximum": 8}
       }
     },
     "generation": {
@@ -71,6 +72,7 @@
       "properties": {
         "temperature": {"const": 1.0},
         "top_p": {"enum": [0.95, 1.0]},
+        "presence_penalty": {"type": ["number", "null"], "minimum": -2, "maximum": 2},
         "thinking_call_max_tokens": {"const": 4096},
         "forced_final_max_tokens": {"type": "integer", "minimum": 512, "maximum": 2048},
         "max_retries": {"const": 2}

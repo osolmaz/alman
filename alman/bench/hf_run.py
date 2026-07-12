@@ -9,6 +9,7 @@ import math
 import subprocess
 import time
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -25,6 +26,42 @@ SCHEMA_PATH = REPO_ROOT / "benchmark-results" / "hosted-result.schema.json"
 PLATFORM = "huggingface-inference-providers"
 THINKING_MAX_TOKENS = 4096
 FORCED_FINAL_MAX_TOKENS = 512
+SUPPORTED_ROUTES = {
+    (
+        "deepseek-ai/DeepSeek-V4-Pro",
+        "novita",
+        "deepseek/deepseek-v4-pro",
+    ),
+    (
+        "deepseek-ai/DeepSeek-V4-Flash",
+        "novita",
+        "deepseek/deepseek-v4-flash",
+    ),
+    ("zai-org/GLM-5.2", "novita", "zai-org/glm-5.2"),
+    (
+        "moonshotai/Kimi-K2.7-Code",
+        "novita",
+        "moonshotai/kimi-k2.7-code",
+    ),
+    (
+        "Qwen/Qwen3.6-35B-A3B",
+        "deepinfra",
+        "Qwen/Qwen3.6-35B-A3B",
+    ),
+    ("MiniMaxAI/MiniMax-M3", "novita", "minimax/minimax-m3"),
+    (
+        "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-NVFP4",
+        "together",
+        "nvidia/nemotron-3-ultra-550b-a55b",
+    ),
+    (
+        "stepfun-ai/Step-3.7-Flash",
+        "deepinfra",
+        "stepfun-ai/Step-3.7-Flash",
+    ),
+}
+SUPPORTED_MODELS = sorted({route[0] for route in SUPPORTED_ROUTES})
+SUPPORTED_PROVIDERS = sorted({route[1] for route in SUPPORTED_ROUTES})
 PROFILE_SCHEMA = {
     "type": "object",
     "additionalProperties": False,
@@ -48,15 +85,10 @@ PROFILE_SCHEMA = {
     "properties": {
         "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
         "model": {
-            "enum": [
-                "deepseek-ai/DeepSeek-V4-Pro",
-                "deepseek-ai/DeepSeek-V4-Flash",
-                "zai-org/GLM-5.2",
-                "moonshotai/Kimi-K2.7-Code",
-            ]
+            "enum": SUPPORTED_MODELS,
         },
         "hub_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
-        "provider": {"const": "novita"},
+        "provider": {"enum": SUPPORTED_PROVIDERS},
         "provider_model_id": {"type": "string", "minLength": 1},
         "thinking_control": {"type": "string", "minLength": 1},
         "thinking_extra_body": {"type": "object"},
@@ -69,6 +101,8 @@ PROFILE_SCHEMA = {
         },
         "temperature": {"const": 1.0},
         "top_p": {"enum": [0.95, 1.0]},
+        "presence_penalty": {"type": "number", "minimum": -2, "maximum": 2},
+        "max_concurrency": {"type": "integer", "minimum": 1, "maximum": 8},
         "input_price_per_million": {"type": "number", "minimum": 0},
         "output_price_per_million": {"type": "number", "minimum": 0},
         "pricing_observed_at": {"type": "string", "format": "date-time"},
@@ -143,18 +177,24 @@ def _request(
     max_tokens: int,
     temperature: float,
     top_p: float,
+    presence_penalty: float | None = None,
     retries: int = 2,
 ) -> dict[str, Any]:
     last_error: Exception | None = None
     for attempt in range(retries + 1):
         try:
+            request = {
+                "model": model,
+                "messages": messages,
+                "max_tokens": max_tokens,
+                "temperature": temperature,
+                "top_p": top_p,
+                "extra_body": extra_body,
+            }
+            if presence_penalty is not None:
+                request["presence_penalty"] = presence_penalty
             response = client.chat.completions.create(
-                model=model,
-                messages=messages,
-                max_tokens=max_tokens,
-                temperature=temperature,
-                top_p=top_p,
-                extra_body=extra_body,
+                **request,
             )
             return _response_data(response)
         except Exception as error:
@@ -162,10 +202,14 @@ def _request(
             if attempt == retries:
                 break
             time.sleep(2**attempt)
-    raise RuntimeError(f"hosted inference failed after {retries + 1} attempts") from last_error
+    raise RuntimeError(
+        f"hosted inference failed after {retries + 1} attempts"
+    ) from last_error
 
 
-def _run_sample(client: InferenceClient, profile: dict[str, Any], item: Any) -> dict[str, Any]:
+def _run_sample(
+    client: InferenceClient, profile: dict[str, Any], item: Any
+) -> dict[str, Any]:
     messages = [
         {"role": "system", "content": _system_prompt(True)},
         {"role": "user", "content": item.source},
@@ -178,6 +222,7 @@ def _run_sample(client: InferenceClient, profile: dict[str, Any], item: Any) -> 
         max_tokens=THINKING_MAX_TOKENS,
         temperature=profile["temperature"],
         top_p=profile["top_p"],
+        presence_penalty=profile.get("presence_penalty"),
     )
     forced_final = not bool(primary["content"])
     fallback = None
@@ -203,11 +248,10 @@ def _run_sample(client: InferenceClient, profile: dict[str, Any], item: Any) -> 
             model=profile["model"],
             messages=fallback_messages,
             extra_body=profile["forced_final_extra_body"],
-            max_tokens=profile.get(
-                "forced_final_max_tokens", FORCED_FINAL_MAX_TOKENS
-            ),
+            max_tokens=profile.get("forced_final_max_tokens", FORCED_FINAL_MAX_TOKENS),
             temperature=profile["temperature"],
             top_p=profile["top_p"],
+            presence_penalty=profile.get("presence_penalty"),
         )
         output = fallback["content"]
         if not output:
@@ -274,11 +318,7 @@ def _load_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.is_file():
         return []
     text = path.read_text(encoding="utf-8")
-    lines = [
-        line
-        for line in text.splitlines()
-        if line.strip()
-    ]
+    lines = [line for line in text.splitlines() if line.strip()]
     values = []
     for index, line in enumerate(lines):
         try:
@@ -306,6 +346,16 @@ def _validate_profiles(profiles: list[dict[str, Any]]) -> None:
     )
     for profile in profiles:
         validator.validate(profile)
+        route = (
+            profile["model"],
+            profile["provider"],
+            profile["provider_model_id"],
+        )
+        if route not in SUPPORTED_ROUTES:
+            raise ValueError(
+                "unsupported hosted model/provider/provider-model route: "
+                + " / ".join(route)
+            )
     for field in ("name", "output"):
         values = [profile[field] for profile in profiles]
         if len(values) != len(set(values)):
@@ -408,10 +458,12 @@ def _aggregate(
             "provider": profile["provider"],
             "api": "chat_completions",
             "routing": "explicit-client-provider",
+            "max_concurrency": profile.get("max_concurrency", 1),
         },
         "generation": {
             "temperature": profile["temperature"],
             "top_p": profile["top_p"],
+            "presence_penalty": profile.get("presence_penalty"),
             "thinking_call_max_tokens": THINKING_MAX_TOKENS,
             "forced_final_max_tokens": profile.get(
                 "forced_final_max_tokens", FORCED_FINAL_MAX_TOKENS
@@ -466,7 +518,10 @@ def validate_hosted_result(result: dict[str, Any]) -> None:
         raise ValueError("headline score totals must match the sample count")
     if sum(group["total"] for group in groups) != sample_count:
         raise ValueError("group totals must match the sample count")
-    if sum(group["correct"] for group in result["results"]["groups"].values()) != acceptance["correct"]:
+    if (
+        sum(group["correct"] for group in result["results"]["groups"].values())
+        != acceptance["correct"]
+    ):
         raise ValueError("group correct counts must match headline acceptance")
     if result["model"]["thinking"]["samples_with_reasoning"] < 1:
         raise ValueError("thinking must be observed")
@@ -509,7 +564,10 @@ def run_profiles(
         ).hexdigest()
         if manifest_path.is_file():
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            if manifest["profile_fingerprint"] != fingerprint or manifest["commit"] != commit:
+            if (
+                manifest["profile_fingerprint"] != fingerprint
+                or manifest["commit"] != commit
+            ):
                 raise RuntimeError(f"resume metadata mismatch for {profile['name']}")
             started_at = manifest["started_at"]
         else:
@@ -527,15 +585,40 @@ def run_profiles(
                 encoding="utf-8",
             )
         completed = {sample["id"]: sample for sample in _load_jsonl(samples_path)}
-        client = InferenceClient(provider=profile["provider"], timeout=600)
-        for index, item in enumerate(items, start=1):
-            if item.id in completed:
-                continue
-            sample = _run_sample(client, profile, item)
-            sample["completed_at"] = datetime.now(UTC).isoformat()
-            _append_jsonl(samples_path, sample)
-            completed[item.id] = sample
-            print(f"{profile['name']}: {index}/48", flush=True)
+        remaining = [item for item in items if item.id not in completed]
+        max_concurrency = profile.get("max_concurrency", 1)
+        with ThreadPoolExecutor(max_workers=max_concurrency) as executor:
+            for offset in range(0, len(remaining), max_concurrency):
+                chunk = remaining[offset : offset + max_concurrency]
+                futures = {
+                    executor.submit(
+                        _run_sample,
+                        InferenceClient(provider=profile["provider"], timeout=600),
+                        profile,
+                        item,
+                    ): item
+                    for item in chunk
+                }
+                failures = []
+                for future in as_completed(futures):
+                    item = futures[future]
+                    try:
+                        sample = future.result()
+                    except Exception as error:
+                        failures.append((item, error))
+                        continue
+                    sample["completed_at"] = datetime.now(UTC).isoformat()
+                    _append_jsonl(samples_path, sample)
+                    completed[item.id] = sample
+                    print(
+                        f"{profile['name']}: {len(completed)}/48",
+                        flush=True,
+                    )
+                if failures:
+                    item, error = failures[0]
+                    raise RuntimeError(
+                        f"hosted inference failed for {profile['name']} / {item.id}"
+                    ) from error
         samples = [completed[item.id] for item in items]
         completed_at = datetime.now(UTC).isoformat()
         result = _aggregate(
