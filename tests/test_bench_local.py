@@ -23,6 +23,7 @@ from alman.bench.hf_run import (
     _external_artifact_root as _external_hf_artifact_root,
     _load_jsonl,
     _request,
+    _resumed_benchmark_commit,
     _run_sample,
     _response_data,
     _validate_profiles,
@@ -856,6 +857,13 @@ def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):
     with pytest.raises(ValueError, match="outside the Git working tree"):
         _external_hf_artifact_root(REPO_ROOT / "artifacts")
     assert _external_hf_artifact_root(tmp_path) == tmp_path.resolve()
+
+
+def test_hosted_completed_profile_can_be_published_from_original_commit():
+    assert _resumed_benchmark_commit("a" * 40, "b" * 40, True) == "a" * 40
+    assert _resumed_benchmark_commit("a" * 40, "a" * 40, False) == "a" * 40
+    with pytest.raises(RuntimeError, match="incomplete profile"):
+        _resumed_benchmark_commit("a" * 40, "b" * 40, False)
 
 
 @pytest.mark.parametrize("batch_id", ["../escape", "/tmp/escape", ".", ".."])

@@ -411,6 +411,16 @@ def _artifact_batch_dir(artifact_root: Path, batch_id: str) -> Path:
     return resolved
 
 
+def _resumed_benchmark_commit(
+    manifest_commit: str, current_commit: str, profile_complete: bool
+) -> str:
+    if manifest_commit == current_commit:
+        return current_commit
+    if profile_complete:
+        return manifest_commit
+    raise RuntimeError("cannot resume an incomplete profile from a different commit")
+
+
 def _aggregate(
     *,
     profile: dict[str, Any],
@@ -605,27 +615,25 @@ def run_profiles(
         ).hexdigest()
         if manifest_path.is_file():
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            if (
-                manifest["profile_fingerprint"] != fingerprint
-                or manifest["commit"] != commit
-            ):
+            if manifest["profile_fingerprint"] != fingerprint:
                 raise RuntimeError(f"resume metadata mismatch for {profile['name']}")
             started_at = manifest["started_at"]
         else:
+            manifest = {
+                "profile": profile,
+                "profile_fingerprint": fingerprint,
+                "commit": commit,
+                "started_at": started_at,
+            }
             manifest_path.write_text(
-                json.dumps(
-                    {
-                        "profile": profile,
-                        "profile_fingerprint": fingerprint,
-                        "commit": commit,
-                        "started_at": started_at,
-                    },
-                    indent=2,
-                )
-                + "\n",
+                json.dumps(manifest, indent=2) + "\n",
                 encoding="utf-8",
             )
         completed = {sample["id"]: sample for sample in _load_jsonl(samples_path)}
+        profile_complete = all(item.id in completed for item in items)
+        profile_commit = _resumed_benchmark_commit(
+            manifest["commit"], commit, profile_complete
+        )
         remaining = [item for item in items if item.id not in completed]
         max_concurrency = profile.get("max_concurrency", 1)
         with ThreadPoolExecutor(max_workers=max_concurrency) as executor:
@@ -661,13 +669,13 @@ def run_profiles(
                         f"hosted inference failed for {profile['name']} / {item.id}"
                     ) from error
         samples = [completed[item.id] for item in items]
-        completed_at = datetime.now(UTC).isoformat()
+        completed_at = max(sample["completed_at"] for sample in samples)
         result = _aggregate(
             profile=profile,
             samples=samples,
             started_at=started_at,
             completed_at=completed_at,
-            commit=commit,
+            commit=profile_commit,
             artifact_path=samples_path,
         )
         checkpoint_path = batch_dir / f"{profile['name']}.result.json"
