@@ -34,12 +34,13 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SCHEMA_PATH = REPO_ROOT / "benchmark-results" / "openai-result.schema.json"
 THINKING_MAX_TOKENS = 4096
 FORCED_FINAL_MAX_TOKENS = 512
-SUPPORTED_MODELS = {
-    "gpt-5.4-mini-2026-03-17",
-    "gpt-5.6-luna",
-    "gpt-5.6-sol",
-    "gpt-5.6-terra",
+MODEL_METADATA = {
+    "gpt-5.4-mini-2026-03-17": ("GPT-5.4 mini", 0.75, 0.075, 4.5),
+    "gpt-5.6-luna": ("GPT-5.6 Luna", 1.0, 0.1, 6.0),
+    "gpt-5.6-sol": ("GPT-5.6 Sol", 5.0, 0.5, 30.0),
+    "gpt-5.6-terra": ("GPT-5.6 Terra", 2.5, 0.25, 15.0),
 }
+SUPPORTED_MODELS = set(MODEL_METADATA)
 PROFILE_SCHEMA = {
     "type": "object",
     "additionalProperties": False,
@@ -79,6 +80,15 @@ def _validate_profiles(profiles: list[dict[str, Any]]) -> None:
     )
     for profile in profiles:
         validator.validate(profile)
+        expected = MODEL_METADATA[profile["model"]]
+        observed = (
+            profile["label"],
+            profile["input_price_per_million"],
+            profile["cached_input_price_per_million"],
+            profile["output_price_per_million"],
+        )
+        if observed != expected:
+            raise ValueError("OpenAI profile label or pricing does not match the model")
         if (
             profile["cached_input_price_per_million"]
             > profile["input_price_per_million"]
@@ -337,6 +347,18 @@ def _aggregate(
 def validate_openai_result(result: dict[str, Any]) -> None:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     Draft202012Validator(schema, format_checker=FormatChecker()).validate(result)
+    expected = MODEL_METADATA[result["model"]["requested"]]
+    observed = (
+        result["model"]["label"],
+        result["pricing"]["input_per_million_tokens"],
+        result["pricing"]["cached_input_per_million_tokens"],
+        result["pricing"]["output_per_million_tokens"],
+    )
+    if observed != expected:
+        raise ValueError("OpenAI result label or pricing does not match the model")
+    snapshot_pinned = "-2026-" in result["model"]["requested"]
+    if result["model"]["snapshot_pinned"] != snapshot_pinned:
+        raise ValueError("snapshot_pinned does not match the requested model")
     sample_count = result["benchmark"]["sample_count"]
     scores = [
         result["results"]["acceptance"],
@@ -365,6 +387,20 @@ def validate_openai_result(result: dict[str, Any]) -> None:
     tokens = result["results"]["tokens"]
     if tokens["cached_input"] > tokens["input"]:
         raise ValueError("cached input cannot exceed total input")
+    if tokens["reasoning"] > tokens["output"]:
+        raise ValueError("reasoning tokens cannot exceed total output")
+    if tokens["input"] + tokens["output"] != tokens["total"]:
+        raise ValueError("input and output tokens must sum to total tokens")
+    uncached_input = tokens["input"] - tokens["cached_input"]
+    expected_cost = (
+        uncached_input * result["pricing"]["input_per_million_tokens"]
+        + tokens["cached_input"] * result["pricing"]["cached_input_per_million_tokens"]
+        + tokens["output"] * result["pricing"]["output_per_million_tokens"]
+    ) / 1e6
+    if not math.isclose(
+        result["results"]["estimated_cost_usd"], expected_cost, abs_tol=1e-12
+    ):
+        raise ValueError("estimated cost does not match tokens and pricing")
 
 
 def run_profiles(

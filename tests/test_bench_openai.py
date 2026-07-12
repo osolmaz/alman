@@ -40,7 +40,7 @@ def test_openai_profiles_are_strict():
 
     invalid = copy.deepcopy(profile)
     invalid["cached_input_price_per_million"] = 1
-    with pytest.raises(ValueError, match="cached input price"):
+    with pytest.raises(ValueError, match="pricing does not match"):
         _validate_profiles([invalid])
 
 
@@ -175,4 +175,9 @@ def test_openai_aggregate_is_valid(tmp_path: Path):
     invalid = copy.deepcopy(result)
     invalid["results"]["tokens"]["cached_input"] = 5000
     with pytest.raises(ValueError, match="cached input"):
+        validate_openai_result(invalid)
+
+    invalid = copy.deepcopy(result)
+    invalid["results"]["estimated_cost_usd"] = 1
+    with pytest.raises(ValueError, match="estimated cost"):
         validate_openai_result(invalid)
