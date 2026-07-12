@@ -390,6 +390,12 @@ def _validate_profiles(profiles: list[dict[str, Any]]) -> None:
             raise ValueError(
                 "reasoning-field forced-final output requires a prefill and stop"
             )
+        nested_top_k = any(
+            "top_k" in profile[field]
+            for field in ("thinking_extra_body", "forced_final_extra_body")
+        )
+        if nested_top_k and "top_k" not in profile:
+            raise ValueError("extra-body top_k requires a profile top_k")
         if "top_k" in profile:
             for field in ("thinking_extra_body", "forced_final_extra_body"):
                 if profile[field].get("top_k") != profile["top_k"]:

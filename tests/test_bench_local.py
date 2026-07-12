@@ -735,6 +735,11 @@ def test_hosted_profiles_are_validated_before_use():
     with pytest.raises(ValueError, match="thinking_extra_body.top_k"):
         _validate_profiles([invalid])
 
+    invalid = copy.deepcopy(profile)
+    invalid["thinking_extra_body"]["top_k"] = 20
+    with pytest.raises(ValueError, match="requires a profile top_k"):
+        _validate_profiles([invalid])
+
     duplicate = copy.deepcopy(profile)
     duplicate["name"] = "another-profile"
     with pytest.raises(ValueError, match="output values must be unique"):
