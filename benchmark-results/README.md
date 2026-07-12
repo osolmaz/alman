@@ -15,6 +15,10 @@ Human-readable comparisons may accompany result records as dated Markdown
 files. They must link the exact input records and state metric direction and
 the selection decision.
 
+The complete 2026-07-11 record, including every run mode, result, token total,
+cost, fallback, incident, caveat, and validation outcome, is in
+[`2026-07-11-complete-thinking-benchmark-report.md`](./2026-07-11-complete-thinking-benchmark-report.md).
+
 ## Minimal shape
 
 ```json
