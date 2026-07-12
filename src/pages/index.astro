@@ -1,6 +1,7 @@
 ---
 import { getEntry, render } from "astro:content";
 import Base from "../layouts/Base.astro";
+import Scrolly from "../components/Scrolly.astro";
 import specMeta from "../../spec/main.json";
 
 const entry = await getEntry("spec", "spec");
@@ -13,6 +14,7 @@ const { Content } = await render(entry);
 ---
 
 <Base title="Specification" description="The Alman specification: a simplified German dialect.">
+  <Scrolly />
   <div class="doc-band">
     <span>Amtliche Fassung</span>
     <span>Dokument AL-1 · Stand {specMeta.lastUpdated}</span>

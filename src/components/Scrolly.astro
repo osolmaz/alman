@@ -1,0 +1,658 @@
+---
+// Scroll-driven demonstration: the article table collapses, then a Kafka
+// sentence is "processed" rule by rule like a form at an office, ending
+// with the official stamp. Progress is driven by an IntersectionObserver
+// setting data-step on the section; all visuals react via CSS classes.
+---
+
+<section class="scrolly" id="demo" data-step="0">
+  <header class="scrolly-lead">
+    <p class="kicker">Amtliche Vorführung</p>
+    <h2>German, simplified.</h2>
+    <p class="sub">A guided demonstration in seven steps. Scroll to proceed.</p>
+  </header>
+
+  <div class="scrolly-body">
+    <div class="scrolly-stage">
+      <!-- Stage A: the declension table -->
+      <div class="stage-card stage-table">
+        <div class="card-head">
+          <span>Anlage 1</span>
+          <span>Bestimmter Artikel, Standarddeutsch</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th></th><th>Mask.</th><th>Fem.</th><th>Neut.</th><th>Plural</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>Nominativ</th>
+              <td><del>der</del><ins>die</ins></td>
+              <td class="stays">die</td>
+              <td><del>das</del><ins>die</ins></td>
+              <td class="stays">die</td>
+            </tr>
+            <tr>
+              <th>Akkusativ</th>
+              <td><del>den</del><ins>die</ins></td>
+              <td class="stays">die</td>
+              <td><del>das</del><ins>die</ins></td>
+              <td class="stays">die</td>
+            </tr>
+            <tr>
+              <th>Dativ</th>
+              <td><del>dem</del><ins>die</ins></td>
+              <td><del>der</del><ins>die</ins></td>
+              <td><del>dem</del><ins>die</ins></td>
+              <td><del>den</del><ins>die</ins></td>
+            </tr>
+            <tr class="gen">
+              <th>Genitiv</th>
+              <td><del>des</del><ins>der</ins></td>
+              <td class="stays">der</td>
+              <td><del>des</del><ins>der</ins></td>
+              <td class="stays">der</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="table-verdict">Sechzehn Felder. Zwei Formen.</p>
+      </div>
+
+      <!-- Stage B: the specimen document -->
+      <div class="stage-card stage-doc">
+        <div class="card-head">
+          <span>Formblatt AL-2</span>
+          <span>Antrag auf Vereinfachung</span>
+        </div>
+        <p class="doc-source">
+          Eingang: F. Kafka, <em>Die Verwandlung</em> (1915), Satz 1
+        </p>
+        <p class="doc-sentence">
+          Als Gregor Samsa
+          <span class="tok" data-at="3"><del>eines Morgens</del><ins>ein Morgen</ins></span>
+          aus
+          <span class="tok" data-at="5"><del>unruhigen</del><ins>unruhige</ins></span>
+          <span class="tok" data-at="4"><del>Träumen</del><ins>Träume</ins></span>
+          erwachte, fand er sich in
+          <span class="tok" data-at="6"><del>seinem</del><ins>sein</ins></span>
+          Bett zu
+          <span class="tok" data-at="3"><del>einem</del><ins>ein</ins></span>
+          <span class="tok" data-at="5"><del>ungeheueren</del><ins>ungeheure</ins></span>
+          Ungeziefer verwandelt.
+        </p>
+        <div class="doc-chips" aria-hidden="true">
+          <span class="chip" data-at="3">§2a</span>
+          <span class="chip" data-at="4">§3a</span>
+          <span class="chip" data-at="5">§4a</span>
+          <span class="chip" data-at="6">§7c</span>
+        </div>
+        <div class="doc-clean" data-at="7">
+          <p class="clean-label">Reinschrift</p>
+          <p class="clean-sentence">
+            Als Gregor Samsa ein Morgen aus unruhige Träume erwachte, fand er
+            sich in sein Bett zu ein ungeheure Ungeziefer verwandelt.
+          </p>
+        </div>
+        <div class="stamp" data-at="7" aria-hidden="true">
+          <span class="stamp-emblem"></span>
+          <span class="stamp-line1">Amtlich vereinfacht</span>
+          <span class="stamp-line2">Geprüft · §1–§10</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scrolly-steps">
+      <div class="step" data-step="0">
+        <p class="step-kicker">Schritt 1 · Befund</p>
+        <p>
+          Standard German declines its definite article across three genders,
+          four cases and two numbers. Sixteen slots, six forms — and every
+          noun's gender must be memorized before any of them can be used.
+        </p>
+      </div>
+      <div class="step" data-step="1">
+        <p class="step-kicker">Schritt 2 · §1a, §1b</p>
+        <p>
+          Alman files fifteen of them away. Every non-genitive context
+          receives <strong>die</strong>. The genitive receives
+          <strong>der</strong>. Nothing else survives the procedure.
+        </p>
+      </div>
+      <div class="step" data-step="2">
+        <p class="step-kicker">Schritt 3 · Eingang</p>
+        <p>
+          The procedure extends beyond articles. A specimen is submitted for
+          processing: the opening sentence of Kafka's
+          <em>Die Verwandlung</em>.
+        </p>
+      </div>
+      <div class="step" data-step="3">
+        <p class="step-kicker">Schritt 4 · §2a</p>
+        <p>
+          The indefinite article adopts its invariant base form
+          <strong>ein</strong>. Case endings are discarded:
+          <em>eines Morgens</em> and <em>einem</em> are corrected.
+        </p>
+      </div>
+      <div class="step" data-step="4">
+        <p class="step-kicker">Schritt 5 · §3a</p>
+        <p>
+          Case endings on nouns are eliminated. The dative plural
+          <em>Träumen</em> loses its <em>-n</em> and reverts to the plain
+          plural <em>Träume</em>.
+        </p>
+      </div>
+      <div class="step" data-step="5">
+        <p class="step-kicker">Schritt 6 · §4a</p>
+        <p>
+          Adjective endings regularize to an invariant <strong>-e</strong>:
+          <em>unruhigen</em> becomes <em>unruhige</em>,
+          <em>ungeheueren</em> becomes <em>ungeheure</em>.
+        </p>
+      </div>
+      <div class="step" data-step="6">
+        <p class="step-kicker">Schritt 7 · §7c</p>
+        <p>
+          Possessive determiners keep their bare base form in all non-genitive
+          contexts: <em>seinem Bett</em> is corrected to
+          <em>sein Bett</em>.
+        </p>
+      </div>
+      <div class="step" data-step="7">
+        <p class="step-kicker">Bescheid</p>
+        <p>
+          Processing complete. The sentence remains fully intelligible to any
+          German speaker — with none of the declension machinery. The full
+          procedure is codified below in
+          <a href="#definite-articles">§1–§10</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const section = document.getElementById("demo")!;
+  const steps = section.querySelectorAll<HTMLElement>(".step");
+
+  function apply(step: number) {
+    section.dataset.step = String(step);
+    section
+      .querySelectorAll<HTMLElement>("[data-at]")
+      .forEach((el) => {
+        el.classList.toggle("done", step >= Number(el.dataset.at));
+      });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          apply(Number((entry.target as HTMLElement).dataset.step));
+        }
+      }
+    },
+    { rootMargin: "-40% 0px -50% 0px" },
+  );
+  steps.forEach((el) => observer.observe(el));
+</script>
+
+<style>
+  /* Full-bleed breakout from the 50rem main column */
+  .scrolly {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    padding: 1rem 1.25rem 4rem;
+  }
+
+  .scrolly-lead {
+    max-width: var(--content-width);
+    margin: 0 auto 1rem;
+    text-align: center;
+    padding: 1.5rem 0 0;
+  }
+
+  .kicker,
+  .step-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey-1);
+  }
+
+  .scrolly-lead h2 {
+    border: none;
+    padding: 0;
+    margin: 0.4rem 0 0.3rem;
+    font-size: 2.3rem;
+  }
+
+  .scrolly-lead .sub {
+    margin: 0;
+    color: var(--grey-1);
+  }
+
+  .scrolly-body {
+    max-width: 66rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(15rem, 20rem) 1fr;
+    gap: 3rem;
+  }
+
+  /* ---------- Stage ---------- */
+
+  .scrolly-stage {
+    order: 2;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .stage-card {
+    background: #ffffff;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    padding: 1.5rem 1.75rem 1.75rem;
+    width: 100%;
+    max-width: 34rem;
+    grid-area: 1 / 1;
+    position: relative;
+    transition: opacity 0.45s ease, visibility 0.45s;
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--grey-1);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 0.55rem;
+    margin-bottom: 1.1rem;
+  }
+
+  /* Table stage */
+  .stage-table table {
+    margin: 0.5rem 0 0;
+  }
+
+  .stage-table th {
+    border: none;
+    font-size: 0.72rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .stage-table tbody th {
+    text-align: left;
+    color: var(--grey-1);
+    font-weight: 500;
+  }
+
+  .stage-table td {
+    border-bottom: 1px solid var(--grey-2);
+    padding: 0.5rem 0.6rem;
+    font-family: var(--font-din);
+    font-weight: 600;
+    font-size: 1.35rem;
+    width: 21%;
+  }
+
+  .stage-table td del {
+    text-decoration: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .stage-table td ins {
+    display: none;
+    text-decoration: none;
+    color: var(--form-blue);
+  }
+
+  .stage-table td.stays {
+    transition: color 0.5s ease;
+  }
+
+  /* collapsed state (step >= 1) */
+  [data-step]:not([data-step="0"]) .stage-table td del {
+    display: none;
+  }
+
+  [data-step]:not([data-step="0"]) .stage-table td ins {
+    display: inline;
+  }
+
+  [data-step]:not([data-step="0"]) .stage-table td.stays {
+    color: var(--form-blue);
+  }
+
+  .table-verdict {
+    margin: 1.2rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--grey-1);
+    opacity: 0;
+    transition: opacity 0.5s ease 0.3s;
+  }
+
+  [data-step]:not([data-step="0"]) .table-verdict {
+    opacity: 1;
+  }
+
+  /* Stage swap: table visible for steps 0-1, doc from step 2 on */
+  .stage-doc {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  [data-step="2"] .stage-doc,
+  [data-step="3"] .stage-doc,
+  [data-step="4"] .stage-doc,
+  [data-step="5"] .stage-doc,
+  [data-step="6"] .stage-doc,
+  [data-step="7"] .stage-doc {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  [data-step="2"] .stage-table,
+  [data-step="3"] .stage-table,
+  [data-step="4"] .stage-table,
+  [data-step="5"] .stage-table,
+  [data-step="6"] .stage-table,
+  [data-step="7"] .stage-table {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Document stage */
+  .doc-source {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--grey-1);
+    margin: 0 0 1rem;
+  }
+
+  .doc-sentence {
+    font-size: 1.12rem;
+    line-height: 2;
+    margin: 0;
+  }
+
+  .tok del {
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .tok ins {
+    display: none;
+    text-decoration: none;
+    color: var(--form-blue);
+    font-weight: 600;
+  }
+
+  .tok.done del {
+    text-decoration: line-through;
+    text-decoration-color: var(--fail-red);
+    text-decoration-thickness: 1.5px;
+    opacity: 0.45;
+    margin-right: 0.3em;
+  }
+
+  .tok.done ins {
+    display: inline;
+  }
+
+  .doc-chips {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+    min-height: 1.6rem;
+  }
+
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    border: 1px solid var(--form-blue);
+    color: var(--form-blue);
+    border-radius: 2px;
+    padding: 0.1rem 0.45rem;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .chip.done {
+    opacity: 1;
+    transform: none;
+  }
+
+  .doc-clean {
+    border-top: 1px solid var(--grey-2);
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    padding-right: 9.5rem;
+    min-height: 5.5rem;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.15s;
+  }
+
+  .doc-clean.done {
+    opacity: 1;
+  }
+
+  .clean-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-1);
+    margin: 0 0 0.4rem;
+  }
+
+  .clean-sentence {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--form-blue);
+  }
+
+  /* Stamp */
+  .stamp {
+    position: absolute;
+    right: 1.4rem;
+    bottom: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.6rem 1rem 0.7rem;
+    border: 2.5px solid var(--form-blue);
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1.5px #ffffff, inset 0 0 0 2.5px var(--form-blue);
+    color: var(--form-blue);
+    transform: rotate(-8deg) scale(1.6);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.2, 1.4, 0.4, 1);
+    pointer-events: none;
+  }
+
+  .stamp.done {
+    opacity: 0.92;
+    transform: rotate(-8deg) scale(1);
+  }
+
+  .stamp-emblem {
+    display: block;
+    width: 2.1rem;
+    height: 1.6rem;
+    background: var(--form-blue);
+    -webkit-mask: url("/assets/brand/alman_institut_logo.svg") no-repeat center / contain;
+    mask: url("/assets/brand/alman_institut_logo.svg") no-repeat center / contain;
+  }
+
+  .stamp-line1 {
+    font-family: var(--font-din);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .stamp-line2 {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ---------- Steps ---------- */
+
+  .scrolly-steps {
+    order: 1;
+  }
+
+  .step {
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .step p:not(.step-kicker) {
+    background: var(--paper);
+    margin: 0.5rem 0 0;
+  }
+
+  .step:first-child {
+    min-height: 60vh;
+  }
+
+  .step:last-child {
+    min-height: 95vh;
+  }
+
+  /* ---------- Mobile ---------- */
+
+  @media (max-width: 860px) {
+    .scrolly-body {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .scrolly-stage {
+      order: 1;
+      position: sticky;
+      top: 0;
+      height: auto;
+      padding: 0.6rem 0;
+      background: var(--paper);
+      z-index: 3;
+      align-items: start;
+    }
+
+    .stage-card {
+      padding: 0.85rem 1rem 1rem;
+    }
+
+    .card-head {
+      font-size: 0.58rem;
+      letter-spacing: 0.06em;
+      padding-bottom: 0.45rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-head span {
+      white-space: nowrap;
+    }
+
+    .stage-table td {
+      font-size: 1.05rem;
+    }
+
+    .doc-source {
+      font-size: 0.64rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .doc-sentence {
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .doc-chips {
+      margin-top: 0.8rem;
+      min-height: 1.4rem;
+    }
+
+    .doc-clean {
+      margin-top: 0.8rem;
+      padding-top: 0.7rem;
+      padding-right: 0;
+      min-height: 0;
+    }
+
+    .clean-sentence {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .scrolly-steps {
+      order: 2;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step {
+      min-height: 60vh;
+      justify-content: flex-end;
+      padding-bottom: 1.5rem;
+      z-index: 1;
+    }
+
+    .step p:not(.step-kicker) {
+      border: 1px solid var(--grey-2);
+      border-radius: 2px;
+      padding: 0.8rem 1rem;
+    }
+
+    /* Stamped across the document, like a real rubber stamp */
+    .stamp {
+      right: auto;
+      left: 50%;
+      bottom: 2.6rem;
+      transform: translateX(-50%) rotate(-8deg) scale(1.6);
+    }
+
+    .stamp.done {
+      transform: translateX(-50%) rotate(-8deg) scale(0.9);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stage-card,
+    .tok del,
+    .chip,
+    .doc-clean,
+    .stamp,
+    .table-verdict {
+      transition: none;
+    }
+  }
+</style>
