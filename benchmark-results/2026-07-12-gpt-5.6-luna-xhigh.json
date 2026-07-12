@@ -1,0 +1,124 @@
+{
+  "$schema": "./openai-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260712T104258Z-gpt-5.6-luna-xhigh",
+    "started_at": "2026-07-12T10:42:58.321903+00:00",
+    "completed_at": "2026-07-12T10:44:28.918035+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 48,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "b66e4916698782cabb8f376b52ae98c99b5d1796",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "requested": "gpt-5.6-luna",
+    "label": "GPT-5.6 Luna",
+    "returned_models": [
+      "gpt-5.6-luna"
+    ],
+    "snapshot_pinned": false,
+    "reasoning": {
+      "enabled": true,
+      "effort": "xhigh",
+      "primary_call_max_completion_tokens": 4096,
+      "samples_with_reasoning": 47,
+      "max_primary_completion_tokens": 4096,
+      "max_primary_reasoning_tokens": 4096,
+      "forced_final_fallback_count": 1,
+      "forced_final_effort": "none"
+    }
+  },
+  "endpoint": {
+    "platform": "openai-api",
+    "provider": "openai",
+    "api": "chat_completions",
+    "max_concurrency": 4
+  },
+  "generation": {
+    "primary_max_completion_tokens": 4096,
+    "forced_final_max_completion_tokens": 512,
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 42,
+      "total": 48,
+      "rate": 0.875,
+      "stderr": 0.047735163489123336
+    },
+    "compliance": {
+      "correct": 48,
+      "total": 48,
+      "rate": 1.0,
+      "stderr": 0.0
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "deutsch-alman": {
+        "correct": 10,
+        "total": 11,
+        "rate": 0.9090909090909091,
+        "stderr": 0.08667841720414476
+      },
+      "die-verwandlung": {
+        "correct": 3,
+        "total": 4,
+        "rate": 0.75,
+        "stderr": 0.21650635094610965
+      },
+      "siddhartha": {
+        "correct": 12,
+        "total": 16,
+        "rate": 0.75,
+        "stderr": 0.10825317547305482
+      },
+      "starke-flexion": {
+        "correct": 8,
+        "total": 8,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "steppenwolf": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 609571,
+      "cached_input": 12413,
+      "output": 27719,
+      "reasoning": 25927,
+      "total": 637290
+    },
+    "estimated_cost_usd": 0.7647133
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 1.0,
+    "cached_input_per_million_tokens": 0.1,
+    "output_per_million_tokens": 6.0,
+    "observed_at": "2026-07-12T10:10:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/openai/20260712T102000Z-openai-xhigh/gpt-5.6-luna-xhigh.samples.jsonl"
+  }
+}
