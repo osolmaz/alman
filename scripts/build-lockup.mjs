@@ -76,11 +76,14 @@ emblem = emblem
   .replace(/<\/svg>\s*$/, "")
   .trim();
 
+// A scaled group instead of a nested <svg viewBox>: WebKit does not
+// support viewBox on nested svg elements, which drops the emblem in Safari.
+const emblemScale = H / 162.71875;
 const totalWidth = Math.ceil(TEXT_X + target);
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalWidth} ${H}" width="${totalWidth}" height="${H}">
-  <svg x="0" y="0" width="${EMBLEM_W.toFixed(2)}" height="${H}" viewBox="0 0 222.77916 162.71875">
+  <g transform="scale(${emblemScale.toFixed(6)})">
     ${emblem}
-  </svg>
+  </g>
   <path fill="${INK}" d="${name.d}"/>
   <path fill="#6b6b6b" d="${sub.d}"/>
 </svg>
