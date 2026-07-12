@@ -23,6 +23,7 @@ from alman.bench.hf_run import (
     _external_artifact_root as _external_hf_artifact_root,
     _load_jsonl,
     _request,
+    _run_sample,
     _response_data,
     _validate_profiles,
     validate_hosted_result,
@@ -770,10 +771,83 @@ def test_hosted_request_only_sends_optional_presence_penalty():
         "top_p": 0.95,
     }
     _request(client, **arguments)
-    _request(client, **arguments, presence_penalty=1.5)
+    _request(client, **arguments, presence_penalty=1.5, stop=['"'])
 
     assert "presence_penalty" not in calls[0]
     assert calls[1]["presence_penalty"] == 1.5
+    assert calls[1]["stop"] == ['"']
+
+
+def test_hosted_prefilled_fallback_can_select_parser_reasoning(monkeypatch):
+    responses = iter(
+        [
+            {
+                "response_id": "primary",
+                "returned_model": "model",
+                "finish_reason": "length",
+                "content": "",
+                "reasoning": "completed analysis",
+                "tokens": {
+                    "input": 10,
+                    "output": 4096,
+                    "reasoning": None,
+                    "total": 4106,
+                },
+            },
+            {
+                "response_id": "fallback",
+                "returned_model": "model",
+                "finish_reason": "stop",
+                "content": "",
+                "reasoning": "die Haus",
+                "tokens": {
+                    "input": 12,
+                    "output": 2,
+                    "reasoning": None,
+                    "total": 14,
+                },
+            },
+        ]
+    )
+    calls = []
+
+    def fake_request(*args, **kwargs):
+        calls.append(kwargs)
+        return next(responses)
+
+    monkeypatch.setattr("alman.bench.hf_run._request", fake_request)
+
+    class Item:
+        id = "curated/example/0"
+        source = "das Haus"
+        accepted = ["die Haus"]
+        paragraph = "example"
+
+    profile = {
+        "model": "stepfun-ai/Step-3.7-Flash",
+        "thinking_extra_body": {"chat_template_kwargs": {"reasoning_effort": "high"}},
+        "forced_final_extra_body": {
+            "chat_template_kwargs": {"reasoning_effort": "low"},
+            "continue_final_message": True,
+        },
+        "forced_final_prefill": '"',
+        "forced_final_stop": ['"'],
+        "forced_final_output_field": "reasoning",
+        "forced_final_max_tokens": 512,
+        "temperature": 1.0,
+        "top_p": 0.95,
+    }
+    sample = _run_sample(object(), profile, Item())
+
+    assert sample["output"] == "die Haus"
+    assert sample["correct"] is True
+    assert sample["forced_final_output_field"] == "reasoning"
+    assert calls[1]["messages"][-1] == {
+        "role": "assistant",
+        "content": '"',
+        "reasoning_content": "completed analysis",
+    }
+    assert calls[1]["stop"] == ['"']
 
 
 def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):

@@ -94,6 +94,14 @@ PROFILE_SCHEMA = {
         "thinking_extra_body": {"type": "object"},
         "forced_final_extra_body": {"type": "object"},
         "forced_final_disables_thinking": {"type": "boolean"},
+        "forced_final_prefill": {"type": "string", "minLength": 1},
+        "forced_final_stop": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "minItems": 1,
+            "uniqueItems": True,
+        },
+        "forced_final_output_field": {"enum": ["content", "reasoning"]},
         "forced_final_max_tokens": {
             "type": "integer",
             "minimum": 512,
@@ -178,6 +186,7 @@ def _request(
     temperature: float,
     top_p: float,
     presence_penalty: float | None = None,
+    stop: list[str] | None = None,
     retries: int = 2,
 ) -> dict[str, Any]:
     last_error: Exception | None = None
@@ -193,6 +202,8 @@ def _request(
             }
             if presence_penalty is not None:
                 request["presence_penalty"] = presence_penalty
+            if stop is not None:
+                request["stop"] = stop
             response = client.chat.completions.create(
                 **request,
             )
@@ -228,21 +239,31 @@ def _run_sample(
     fallback = None
     output = primary["content"]
     if forced_final:
-        fallback_messages = [
-            *messages,
-            {
-                "role": "assistant",
-                "content": "",
-                "reasoning_content": primary["reasoning"],
-            },
-            {
-                "role": "user",
-                "content": (
-                    "The reasoning budget is exhausted. Do not restart the analysis. "
-                    "Return only the final Alman translation now."
-                ),
-            },
-        ]
+        if "forced_final_prefill" in profile:
+            fallback_messages = [
+                *messages,
+                {
+                    "role": "assistant",
+                    "content": profile["forced_final_prefill"],
+                    "reasoning_content": primary["reasoning"],
+                },
+            ]
+        else:
+            fallback_messages = [
+                *messages,
+                {
+                    "role": "assistant",
+                    "content": "",
+                    "reasoning_content": primary["reasoning"],
+                },
+                {
+                    "role": "user",
+                    "content": (
+                        "The reasoning budget is exhausted. Do not restart the "
+                        "analysis. Return only the final Alman translation now."
+                    ),
+                },
+            ]
         fallback = _request(
             client,
             model=profile["model"],
@@ -252,8 +273,10 @@ def _run_sample(
             temperature=profile["temperature"],
             top_p=profile["top_p"],
             presence_penalty=profile.get("presence_penalty"),
+            stop=profile.get("forced_final_stop"),
         )
-        output = fallback["content"]
+        fallback_output_field = profile.get("forced_final_output_field", "content")
+        output = fallback[fallback_output_field]
         if not output:
             raise RuntimeError(f"forced-final request returned no answer for {item.id}")
 
@@ -280,6 +303,9 @@ def _run_sample(
         "reasoning": primary["reasoning"],
         "thinking_observed": bool(primary["reasoning"]),
         "forced_final": forced_final,
+        "forced_final_output_field": profile.get(
+            "forced_final_output_field", "content"
+        ),
         "correct": is_accepted(output, item.accepted),
         "compliant": not lint(output),
         "tokens": tokens,
@@ -355,6 +381,13 @@ def _validate_profiles(profiles: list[dict[str, Any]]) -> None:
             raise ValueError(
                 "unsupported hosted model/provider/provider-model route: "
                 + " / ".join(route)
+            )
+        output_field = profile.get("forced_final_output_field", "content")
+        prefilled = "forced_final_prefill" in profile
+        stopped = "forced_final_stop" in profile
+        if output_field == "reasoning" and not (prefilled and stopped):
+            raise ValueError(
+                "reasoning-field forced-final output requires a prefill and stop"
             )
     for field in ("name", "output"):
         values = [profile[field] for profile in profiles]
@@ -467,6 +500,14 @@ def _aggregate(
             "thinking_call_max_tokens": THINKING_MAX_TOKENS,
             "forced_final_max_tokens": profile.get(
                 "forced_final_max_tokens", FORCED_FINAL_MAX_TOKENS
+            ),
+            "forced_final_strategy": (
+                "continue-prefilled-answer"
+                if "forced_final_prefill" in profile
+                else "new-turn-final-request"
+            ),
+            "forced_final_output_field": profile.get(
+                "forced_final_output_field", "content"
             ),
             "max_retries": 2,
         },

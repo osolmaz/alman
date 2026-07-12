@@ -75,6 +75,8 @@
         "presence_penalty": {"type": ["number", "null"], "minimum": -2, "maximum": 2},
         "thinking_call_max_tokens": {"const": 4096},
         "forced_final_max_tokens": {"type": "integer", "minimum": 512, "maximum": 2048},
+        "forced_final_strategy": {"enum": ["new-turn-final-request", "continue-prefilled-answer"]},
+        "forced_final_output_field": {"enum": ["content", "reasoning"]},
         "max_retries": {"const": 2}
       }
     },
