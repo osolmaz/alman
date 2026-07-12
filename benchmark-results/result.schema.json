@@ -84,8 +84,8 @@
         "provider": {"const": "inspect-openai-api"},
         "api": {"const": "chat_completions"},
         "base_url": {"type": "string", "pattern": "^http://(127\\.0\\.0\\.1|localhost):[0-9]+/v1$"},
-        "max_connections": {"const": 1},
-        "max_samples": {"const": 1}
+        "max_connections": {"type": "integer", "minimum": 1, "maximum": 32},
+        "max_samples": {"type": "integer", "minimum": 1, "maximum": 32}
       }
     },
     "runtime": {

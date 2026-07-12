@@ -262,6 +262,13 @@ def test_result_rejects_missing_thinking(valid_result):
         validate_result(invalid)
 
 
+def test_result_rejects_more_samples_than_server_sequences(valid_result):
+    invalid = copy.deepcopy(valid_result)
+    invalid["endpoint"]["max_samples"] = 5
+    with pytest.raises(ValueError, match="max_samples cannot exceed"):
+        validate_result(invalid)
+
+
 def test_result_rejects_incomplete_compliance_counts(valid_result):
     invalid = copy.deepcopy(valid_result)
     invalid["results"]["compliance"] = {
@@ -725,9 +732,10 @@ def test_hosted_artifacts_must_stay_outside_worktree(tmp_path):
 def test_hosted_batch_id_cannot_escape_artifact_root(tmp_path, batch_id):
     with pytest.raises(ValueError):
         _artifact_batch_dir(tmp_path.resolve(), batch_id)
-    assert _artifact_batch_dir(tmp_path.resolve(), "safe-batch") == (
-        tmp_path / "safe-batch"
-    ).resolve()
+    assert (
+        _artifact_batch_dir(tmp_path.resolve(), "safe-batch")
+        == (tmp_path / "safe-batch").resolve()
+    )
 
 
 def test_hosted_resume_ignores_only_a_truncated_final_record(tmp_path):
