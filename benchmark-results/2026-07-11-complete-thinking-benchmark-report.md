@@ -17,8 +17,11 @@ lookup rather than applying the rules.
 Acceptance is exact match after the benchmark's light normalization against
 each row's accepted Alman renderings. Compliance is a conservative linter for
 Standard German forms forbidden by Alman. A compliant answer is not
-necessarily correct. Each row is independent, client concurrency was one, and
-all reported results are single sampled runs.
+necessarily correct. Compliance does not measure output formatting, language,
+completeness, or meaning: an empty, unrelated, or malformed answer can pass if
+it contains no forbidden surface form. Acceptance is therefore the primary
+quality metric; compliance is only a necessary floor. Each row is independent,
+client concurrency was one, and all reported results are single sampled runs.
 
 ## Complete leaderboard
 
@@ -294,7 +297,7 @@ later identified as specification overlaps; the follow-up dataset excluded
 those rows before inference.
 
 The penalty substantially reduced repetition, reasoning-cap pressure, and
-total output, and improved format compliance by six rows. It did not improve
+total output, and improved linter compliance by six rows. It did not improve
 task acceptance: the score and every collection-level acceptance count were
 identical to the original run. Empty final answers increased from two to seven,
 so the setting changes the failure mode rather than fixing Qwen's task quality
