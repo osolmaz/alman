@@ -99,6 +99,32 @@ class TestExtraction:
         assert "diese" in item.accepted
         assert "diese, diese, diese, diese, diese" in item.accepted
 
+    def test_singular_they_examples(self, items_by_id):
+        generic = items_by_id[
+            "pronouns-and-determiners/pronouns/gender-neutral-referents/4"
+        ]
+        assert generic.accepted == ["Die Mensch? Sie sind ein Rätsel."]
+        unknown = items_by_id[
+            "pronouns-and-determiners/pronouns/gender-neutral-referents/5"
+        ]
+        assert unknown.accepted == ["Jemand hat angerufen. Sie waren freundlich."]
+
+    def test_ein_compound_base_form(self, items_by_id):
+        item = items_by_id[
+            "pronouns-and-determiners/determiners/possessive-determiners-kein/4"
+        ]
+        assert item.source == "mit irgendeiner Besorgung"
+        assert item.accepted == ["mit irgendein Besorgung"]
+
+    def test_apposition_agreement_examples(self, items_by_id):
+        von = items_by_id["articles/definite-articles/von-die-usage/2"]
+        assert von.accepted == ["bei die Lehren von sein Vater, die Gelehrte"]
+        name = items_by_id["articles/definite-articles/von-die-usage/3"]
+        assert name.accepted == [
+            "die Name Gotamas, der Buddha",
+            "die Name von Gotama, die Buddha",
+        ]
+
 
 class TestPattern:
     def test_plain_text(self):
@@ -199,6 +225,15 @@ class TestCurated:
             "starke-flexion",
             "steppenwolf",
         }
+
+    def test_singular_they_in_steppenwolf(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+        generic = by_id["curated/steppenwolf/0"]
+        assert "sie sind vielmehr ein Versuch" in generic.accepted[0]
+        assert not any("er ist vielmehr" in v for v in generic.accepted)
+        anaphora = by_id["curated/steppenwolf/1"]
+        assert "treibt sie die innerste Bestimmung" in anaphora.accepted[0]
+        assert "ihr Leben" in anaphora.accepted[0]
 
     def test_ids_unique_across_tiers(self, items, curated_items):
         ids = [item.id for item in items] + [item.id for item in curated_items]

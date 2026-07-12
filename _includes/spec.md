@@ -143,13 +143,17 @@ The prepositional construction 'von die' may substitute the genitive article 'de
 
 While interchangeable, 'der' should be retained when translating original genitive constructions ('des/der') unless contextual factors favor 'von die'.
 
+An apposition agrees in construction with its head noun phrase. When a genitive is rendered periphrastically with **von**, an apposition to it likewise takes the non-genitive form; when the genitive **der** is used, the apposition remains in the genitive. The same holds for appositions following a retained proper-name genitive (see the section on nouns). Note that possessive genitives (*seines Vaters*) have no **der** form and are always periphrastic (see the rule on possessive determiners in the section on determiners), so their appositions always take the non-genitive form.
+
 
 **Examples:**
 
-| Standard German | Alman |
-|------------------|-------|
-| das Haus des Mannes | die Haus der Mann / die Haus von die Mann |
-| die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| das Haus des Mannes | die Haus der Mann / die Haus von die Mann |  |
+| die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |  |
+| bei den Lehren seines Vaters, des Gelehrten | bei die Lehren von sein Vater, die Gelehrte | in the teachings of his father, the scholar |
+| der Name Gotamas, des Buddha | die Name Gotamas, der Buddha / die Name von Gotama, die Buddha | the name of Gotama, the Buddha |
 
 
 
@@ -467,7 +471,7 @@ This rule takes precedence over the contraction resolution rule in the section o
 
 ## Pronouns and Determiners {#pronouns-and-determiners}
 
-This section outlines modifications to **Standard German**'s pronominal system that prioritize natural gender attribution while maintaining case distinctions for referential clarity. Personal pronouns retain **Standard German** case forms but reference biological/social gender rather than grammatical gender. Relative pronouns collapse to the invariant **die** (genitive **deren**), following the article system. Determiners, possessive determiners, and the negative article **kein** undergo simplification through invariant forms in non-genitive contexts, with preserved case inflection only in personal pronouns.
+This section outlines modifications to **Standard German**'s pronominal system that prioritize natural gender attribution while maintaining case distinctions for referential clarity. Personal pronouns retain **Standard German** case forms but reference biological/social gender rather than grammatical gender; for persons of unknown or generic gender, the plural **sie** functions as a singular *they*, mirroring English. Relative pronouns collapse to the invariant **die** (genitive **deren**), following the article system. Determiners, possessive determiners, the negative article **kein**, and other **ein**-compounds undergo simplification through invariant forms in non-genitive contexts, with preserved case inflection only in personal pronouns.
 
 
 ### §6. Pronouns {#pronouns}
@@ -480,7 +484,9 @@ This paragraph outlines the retention of **Standard German** personal pronoun ca
 Personal pronouns maintain their **Standard German** case forms but are interpreted through natural gender assignment (mirroring English conventions):
 1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities
 2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities
-3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender
+3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or other non-person entities without natural gender
+
+Persons whose gender is unknown, unspecified, or generic are referred to with the plural **sie** used as a singular *they*, as described in the rule on gender-neutral referents.
 
 Note that when the referent is described by an occupational title, the title itself follows the uniformity rules described in the section on lexical gender simplifications, while the pronoun follows natural gender.
 
@@ -532,10 +538,11 @@ The indefinite pronoun **man** likewise retains its full **Standard German** par
 
 #### §6c. Gender-Neutral Referents
 
-For entities without natural gender (objects, abstract concepts, collectives):
+For entities without natural gender (objects, abstract concepts, institutions):
 - **es** serves as the default singular pronoun
-- **sie** (3rd plural) for mixed/unspecified gender referents
-- Retains **Standard German** plural pronoun forms
+- **Standard German** plural pronoun forms are retained (**sie** for plural referents, including groups of mixed or unspecified gender)
+
+For **persons** whose gender is unknown, unspecified, or generic, the third-person plural **sie** is used with plural verb agreement, even when the referent is singular. This mirrors the English singular *they* ("Someone called. They were friendly.") and applies both to generic person-denoting expressions (*der Mensch*, *jeder*, *jemand*, *niemand*) and to specific persons of unknown gender. Accusative and dative follow the plural paradigm (**sie**/**ihnen**), and the corresponding possessive is **ihr**. Where the plural reading would genuinely mislead, speakers may rephrase, exactly as in English.
 
 
 **Examples:**
@@ -546,6 +553,9 @@ For entities without natural gender (objects, abstract concepts, collectives):
 | Die Universität? Sie ist groß. | Die Universität? Es ist groß. | The university? It is large. |
 | Ich kaufe das Auto, weil es günstig ist. | Ich kaufe die Auto, weil es günstig ist. | I buy the car because it is affordable. |
 | Die Leute sind hier. Sie sind müde. | Die Leute sind hier. Sie sind müde. | The people are here. They are tired. |
+| Der Mensch? Er ist ein Rätsel. | Die Mensch? Sie sind ein Rätsel. | The human being? They are a riddle. |
+| Jemand hat angerufen. Er war freundlich. | Jemand hat angerufen. Sie waren freundlich. | Someone called. They were friendly. |
+| Jeder tut, was er kann. | Jede tut, was sie können. | Everyone does what they can. |
 
 
 
@@ -566,7 +576,7 @@ Reflexive pronouns follow **Standard German** case forms (mich, dich, sich, uns,
 
 #### §6e. Possessive Pronouns
 
-The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, Ihr**) follows natural gender attribution of the possessor. Their endings follow the determiner rules: the invariant base form is used in all non-genitive contexts (see the section on determiners).
+The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, Ihr**) follows natural gender attribution of the possessor. For possessors of unknown, unspecified, or generic gender, **ihr** is used, consistent with the singular *they* described in the rule on gender-neutral referents. Their endings follow the determiner rules: the invariant base form is used in all non-genitive contexts (see the section on determiners).
 
 
 **Examples:**
@@ -657,6 +667,8 @@ This paragraph describes the simplification of determiner and demonstrative form
 
 In non-genitive contexts, any determiner or pronoun that inflects for gender or case in **Standard German** adopts the invariant feminine "die..." form, i.e. the form ending in -e. This is a general principle covering the entire class: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe**, and all analogous items are employed regardless of the gender or case of the referent. Determiners that already end in -e and do not inflect for gender in the relevant contexts (**beide, einige, mehrere**) remain unchanged.
 
+This principle covers the der-type (strong-inflecting) determiners. Words built on **ein** — the negative article **kein**, the possessive determiners, and compounds such as **irgendein** — do not take the -e form; they follow the invariant base-form pattern described in the rule on possessive determiners and the negative article.
+
 The paired quantifiers described in the rule on indefinite and negative quantifiers (**alle/alles, viel/viele, wenig/wenige, nicht/nichts**) are exempt and follow their own rule.
 
 
@@ -697,7 +709,7 @@ When a genitive construction is required, speakers of **Alman** may either adopt
 
 #### §7c. Possessive Determiners and the Negative Article
 
-Possessive determiners (**mein, dein, sein, ihr, unser, euer, Ihr**) and the negative article **kein** follow the same pattern as the indefinite article **ein**: the invariant base form is used in all non-genitive contexts, eliminating the gender- and case-specific endings of **Standard German** (meine/meinen/meinem/meiner, keine/keinen/keinem/keiner).
+Possessive determiners (**mein, dein, sein, ihr, unser, euer, Ihr**), the negative article **kein**, and all compounds of **ein** (such as **irgendein**, **so ein**, **was für ein**) follow the same pattern as the indefinite article **ein**: the invariant base form is used in all non-genitive contexts, eliminating the gender- and case-specific endings of **Standard German** (meine/meinen/meinem/meiner, keine/keinen/keinem/keiner, irgendeine/irgendeinen/irgendeinem/irgendeiner).
 
 Genitive constructions employ either the periphrastic **von** + base form, or the bare base form after genitive prepositions such as **wegen**, **trotz**, and **statt**, paralleling the treatment of the indefinite article.
 
@@ -714,6 +726,7 @@ The same invariant base form is used in pronominal (standalone) use, where **Sta
 | mit meiner Frau | mit mein Frau | with my wife |
 | Ich habe keine Zeit. | Ich habe kein Zeit. | I have no time. |
 | mit keinem Wort | mit kein Wort | with not a single word |
+| mit irgendeiner Besorgung | mit irgendein Besorgung | with some errand |
 | das Auto meines Vaters | die Auto von mein Vater | my father's car |
 | wegen keines Geldes | wegen kein Geld | for lack of money |
 | Das ist meins. | Das ist mein. | That is mine. |

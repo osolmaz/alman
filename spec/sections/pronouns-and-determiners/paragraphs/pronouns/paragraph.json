@@ -6,7 +6,7 @@
     {
       "id": "natural-gender-attribution",
       "title": "Personal Pronouns: Natural Gender Attribution",
-      "description": "Personal pronouns maintain their <sd /> case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or entities without natural gender\n\nNote that when the referent is described by an occupational title, the title itself follows the uniformity rules described in the section on lexical gender simplifications, while the pronoun follows natural gender.",
+      "description": "Personal pronouns maintain their <sd /> case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or other non-person entities without natural gender\n\nPersons whose gender is unknown, unspecified, or generic are referred to with the plural **sie** used as a singular *they*, as described in the rule on gender-neutral referents.\n\nNote that when the referent is described by an occupational title, the title itself follows the uniformity rules described in the section on lexical gender simplifications, while the pronoun follows natural gender.",
       "examples": [
         {
           "standard": "Sie ist nett. (die Frau, f.)",
@@ -70,7 +70,7 @@
     {
       "id": "gender-neutral-referents",
       "title": "Gender-Neutral Referents",
-      "description": "For entities without natural gender (objects, abstract concepts, collectives):\n- **es** serves as the default singular pronoun\n- **sie** (3rd plural) for mixed/unspecified gender referents\n- Retains <sd /> plural pronoun forms",
+      "description": "For entities without natural gender (objects, abstract concepts, institutions):\n- **es** serves as the default singular pronoun\n- <sd /> plural pronoun forms are retained (**sie** for plural referents, including groups of mixed or unspecified gender)\n\nFor **persons** whose gender is unknown, unspecified, or generic, the third-person plural **sie** is used with plural verb agreement, even when the referent is singular. This mirrors the English singular *they* (\"Someone called. They were friendly.\") and applies both to generic person-denoting expressions (*der Mensch*, *jeder*, *jemand*, *niemand*) and to specific persons of unknown gender. Accusative and dative follow the plural paradigm (**sie**/**ihnen**), and the corresponding possessive is **ihr**. Where the plural reading would genuinely mislead, speakers may rephrase, exactly as in English.",
       "examples": [
         {
           "standard": "Der Computer? Er ist kaputt.",
@@ -91,6 +91,21 @@
           "standard": "Die Leute sind hier. Sie sind müde.",
           "alman": "Die Leute sind hier. Sie sind müde.",
           "english": "The people are here. They are tired."
+        },
+        {
+          "standard": "Der Mensch? Er ist ein Rätsel.",
+          "alman": "Die Mensch? Sie sind ein Rätsel.",
+          "english": "The human being? They are a riddle."
+        },
+        {
+          "standard": "Jemand hat angerufen. Er war freundlich.",
+          "alman": "Jemand hat angerufen. Sie waren freundlich.",
+          "english": "Someone called. They were friendly."
+        },
+        {
+          "standard": "Jeder tut, was er kann.",
+          "alman": "Jede tut, was sie können.",
+          "english": "Everyone does what they can."
         }
       ]
     },
@@ -119,7 +134,7 @@
     {
       "id": "possessive-pronouns",
       "title": "Possessive Pronouns",
-      "description": "The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, Ihr**) follows natural gender attribution of the possessor. Their endings follow the determiner rules: the invariant base form is used in all non-genitive contexts (see the section on determiners).",
+      "description": "The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, Ihr**) follows natural gender attribution of the possessor. For possessors of unknown, unspecified, or generic gender, **ihr** is used, consistent with the singular *they* described in the rule on gender-neutral referents. Their endings follow the determiner rules: the invariant base form is used in all non-genitive contexts (see the section on determiners).",
       "examples": [
         {
           "standard": "Sein Buch (des Mannes)",
