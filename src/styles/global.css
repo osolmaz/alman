@@ -262,10 +262,7 @@ tr:last-child td {
 /* ---------- Spec document ---------- */
 
 .spec-doc .toc-container {
-  border: 1px solid var(--grey-2);
-  padding: 1.25rem 1.5rem;
   margin: 1.5rem 0 2.5rem;
-  background: #ffffff;
 }
 
 .spec-doc .toc-container a {
