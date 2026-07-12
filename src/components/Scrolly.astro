@@ -1,20 +1,50 @@
 ---
-// Scroll-driven demonstration: the article table collapses, then a Kafka
-// sentence is "processed" rule by rule like a form at an office, ending
-// with the official stamp. Progress is driven by an IntersectionObserver
-// setting data-step on the section; all visuals react via CSS classes.
+// Scroll-driven demonstration framed as the Institut finally processing
+// Mark Twain's 1880 complaint about German ("The Awful German Language").
+// His case file is exhibited, the article table collapses, the English
+// precedent is cited, then a Kafka sentence is corrected rule by rule and
+// stamped. Progress is driven by an IntersectionObserver setting
+// data-step / data-stage on the section; visuals react via CSS.
 ---
 
-<section class="scrolly" id="demo" data-step="0">
+<section class="scrolly" id="demo" data-step="0" data-stage="file">
   <header class="scrolly-lead">
     <p class="kicker">Amtliche Vorführung</p>
     <h2>German, simplified.</h2>
-    <p class="sub">A guided demonstration in seven steps. Scroll to proceed.</p>
+    <p class="sub">The simplification procedure, demonstrated. Scroll to proceed.</p>
   </header>
 
   <div class="scrolly-body">
     <div class="scrolly-stage">
-      <!-- Stage A: the declension table -->
+      <!-- Stage A: the Twain case file -->
+      <div class="stage-card stage-file">
+        <div class="card-head">
+          <span>Az. 1880-TW-001</span>
+          <span>Antrag auf Sprachreform</span>
+        </div>
+        <p class="file-meta">
+          Antragsteller: Twain, M. (Heidelberg)<br />
+          Eingegangen: 1880 &nbsp;·&nbsp; Status: <strong>offen</strong>
+        </p>
+        <blockquote class="file-quote">
+          Every noun has a gender, and there is no sense or system in the
+          distribution; so the gender of each must be learned separately and
+          by heart. There is no other way. &hellip; In German, a young lady
+          has no sex, while a turnip has.
+        </blockquote>
+        <p class="file-attrib">— M. Twain, <em>A Tramp Abroad</em> (1880)</p>
+        <div class="file-annex" data-at="1">
+          <p class="annex-label">Anlage: Beweisstück</p>
+          <div class="annex-dialogue">
+            <p><span class="speaker">Gretchen.</span> Wilhelm, where is the turnip?</p>
+            <p><span class="speaker">Wilhelm.</span> She has gone to the kitchen.</p>
+            <p><span class="speaker">Gretchen.</span> Where is the accomplished and beautiful English maiden?</p>
+            <p><span class="speaker">Wilhelm.</span> It has gone to the opera.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stage B: the declension table -->
       <div class="stage-card stage-table">
         <div class="card-head">
           <span>Anlage 1</span>
@@ -60,7 +90,44 @@
         <p class="table-verdict">Sechzehn Felder. Zwei Formen.</p>
       </div>
 
-      <!-- Stage B: the specimen document -->
+      <!-- Stage C: the English precedent -->
+      <div class="stage-card stage-precedent">
+        <div class="card-head">
+          <span>Präzedenzfall</span>
+          <span>Englisch, erledigt ca. 1300</span>
+        </div>
+        <table class="prec-table">
+          <thead>
+            <tr>
+              <th>Altenglisch</th>
+              <th></th>
+              <th>Englisch, heute</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>se mōna <span class="gloss">(m.)</span></td>
+              <td class="arrow">→</td>
+              <td><ins>the</ins> moon</td>
+            </tr>
+            <tr>
+              <td>sēo sunne <span class="gloss">(f.)</span></td>
+              <td class="arrow">→</td>
+              <td><ins>the</ins> sun</td>
+            </tr>
+            <tr>
+              <td>þæt wīf <span class="gloss">(n.)</span></td>
+              <td class="arrow">→</td>
+              <td><ins>the</ins> wife</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="table-verdict prec-verdict">
+          Erledigt. Keine Beschwerden seit 700 Jahren.
+        </p>
+      </div>
+
+      <!-- Stage D: the sentence under processing -->
       <div class="stage-card stage-doc">
         <div class="card-head">
           <span>Formblatt AL-2</span>
@@ -71,31 +138,31 @@
         </p>
         <p class="doc-sentence">
           Als Gregor Samsa
-          <span class="tok" data-at="3"><del>eines Morgens</del><ins>ein Morgen</ins></span>
+          <span class="tok" data-at="6"><del>eines Morgens</del><ins>ein Morgen</ins></span>
           aus
-          <span class="tok" data-at="5"><del>unruhigen</del><ins>unruhige</ins></span>
-          <span class="tok" data-at="4"><del>Träumen</del><ins>Träume</ins></span>
+          <span class="tok" data-at="8"><del>unruhigen</del><ins>unruhige</ins></span>
+          <span class="tok" data-at="7"><del>Träumen</del><ins>Träume</ins></span>
           erwachte, fand er sich in
-          <span class="tok" data-at="6"><del>seinem</del><ins>sein</ins></span>
+          <span class="tok" data-at="9"><del>seinem</del><ins>sein</ins></span>
           Bett zu
-          <span class="tok" data-at="3"><del>einem</del><ins>ein</ins></span>
-          <span class="tok" data-at="5"><del>ungeheueren</del><ins>ungeheure</ins></span>
+          <span class="tok" data-at="6"><del>einem</del><ins>ein</ins></span>
+          <span class="tok" data-at="8"><del>ungeheueren</del><ins>ungeheure</ins></span>
           Ungeziefer verwandelt.
         </p>
         <div class="doc-chips" aria-hidden="true">
-          <span class="chip" data-at="3">§2a</span>
-          <span class="chip" data-at="4">§3a</span>
-          <span class="chip" data-at="5">§4a</span>
-          <span class="chip" data-at="6">§7c</span>
+          <span class="chip" data-at="6">§2a</span>
+          <span class="chip" data-at="7">§3a</span>
+          <span class="chip" data-at="8">§4a</span>
+          <span class="chip" data-at="9">§7c</span>
         </div>
-        <div class="doc-clean" data-at="7">
+        <div class="doc-clean" data-at="10">
           <p class="clean-label">Reinschrift</p>
           <p class="clean-sentence">
             Als Gregor Samsa ein Morgen aus unruhige Träume erwachte, fand er
             sich in sein Bett zu ein ungeheure Ungeziefer verwandelt.
           </p>
         </div>
-        <div class="stamp" data-at="7" aria-hidden="true">
+        <div class="stamp" data-at="10" aria-hidden="true">
           <span class="stamp-emblem"></span>
           <span class="stamp-line1">Amtlich vereinfacht</span>
           <span class="stamp-line2">Geprüft · §1–§10</span>
@@ -105,68 +172,96 @@
 
     <div class="scrolly-steps">
       <div class="step" data-step="0">
-        <p class="step-kicker">Schritt 1 · Befund</p>
+        <p class="step-kicker">Vorgang 1880-TW-001</p>
         <p>
-          Standard German declines its definite article across three genders,
-          four cases and two numbers. Sixteen slots, six forms — and every
-          noun's gender must be memorized before any of them can be used.
+          In 1880, an American author filed a detailed complaint about the
+          German language, together with a proposal for its reform. The
+          file has remained open since.
         </p>
       </div>
       <div class="step" data-step="1">
-        <p class="step-kicker">Schritt 2 · §1a, §1b</p>
+        <p class="step-kicker">Beweisaufnahme</p>
         <p>
-          Alman files fifteen of them away. Every non-genitive context
-          receives <strong>die</strong>. The genitive receives
-          <strong>der</strong>. Nothing else survives the procedure.
+          Supporting evidence was attached. The Institut has since verified
+          the examples: a turnip is <em>she</em>, a young lady is
+          <em>it</em>, a tree is male, its buds are female, its leaves are
+          neuter. No error on the applicant's part could be established.
         </p>
       </div>
       <div class="step" data-step="2">
-        <p class="step-kicker">Schritt 3 · Eingang</p>
+        <p class="step-kicker">Befund</p>
         <p>
-          The procedure extends beyond articles. A specimen is submitted for
-          processing: the opening sentence of Kafka's
-          <em>Die Verwandlung</em>.
+          The complaint has merit. Standard German declines its definite
+          article across three genders, four cases and two numbers: sixteen
+          slots, six forms, and no system by which to learn them.
         </p>
       </div>
       <div class="step" data-step="3">
-        <p class="step-kicker">Schritt 4 · §2a</p>
+        <p class="step-kicker">Abhilfe · §1a, §1b</p>
+        <p>
+          Alman abolishes fifteen of them. Every non-genitive context
+          receives <strong>die</strong>; the genitive receives
+          <strong>der</strong>. The applicant's first proposal — to leave
+          out the dative case — is hereby exceeded.
+        </p>
+      </div>
+      <div class="step" data-step="4">
+        <p class="step-kicker">Präzedenzfall</p>
+        <p>
+          The remedy follows precedent. English — also a Germanic language —
+          once declined the same three genders: <em>se mōna</em>, the
+          he-moon; <em>sēo sunne</em>, the she-sun; <em>þæt wīf</em>, the
+          it-wife. By the fourteenth century every one of them had become
+          <strong>the</strong>. Nobody has missed them since.
+        </p>
+      </div>
+      <div class="step" data-step="5">
+        <p class="step-kicker">Eingang</p>
+        <p>
+          The procedure extends to whole sentences. For demonstration, one
+          is submitted for processing: the opening of Kafka's
+          <em>Die Verwandlung</em>.
+        </p>
+      </div>
+      <div class="step" data-step="6">
+        <p class="step-kicker">§2a</p>
         <p>
           The indefinite article adopts its invariant base form
           <strong>ein</strong>. Case endings are discarded:
           <em>eines Morgens</em> and <em>einem</em> are corrected.
         </p>
       </div>
-      <div class="step" data-step="4">
-        <p class="step-kicker">Schritt 5 · §3a</p>
+      <div class="step" data-step="7">
+        <p class="step-kicker">§3a</p>
         <p>
           Case endings on nouns are eliminated. The dative plural
           <em>Träumen</em> loses its <em>-n</em> and reverts to the plain
           plural <em>Träume</em>.
         </p>
       </div>
-      <div class="step" data-step="5">
-        <p class="step-kicker">Schritt 6 · §4a</p>
+      <div class="step" data-step="8">
+        <p class="step-kicker">§4a</p>
         <p>
-          Adjective endings regularize to an invariant <strong>-e</strong>:
-          <em>unruhigen</em> becomes <em>unruhige</em>,
-          <em>ungeheueren</em> becomes <em>ungeheure</em>.
+          The applicant reported he would "rather decline two drinks than
+          one German adjective." The matter is resolved: all adjective
+          endings regularize to an invariant <strong>-e</strong>.
         </p>
       </div>
-      <div class="step" data-step="6">
-        <p class="step-kicker">Schritt 7 · §7c</p>
+      <div class="step" data-step="9">
+        <p class="step-kicker">§7c</p>
         <p>
-          Possessive determiners keep their bare base form in all non-genitive
-          contexts: <em>seinem Bett</em> is corrected to
+          Possessive determiners keep their bare base form in all
+          non-genitive contexts: <em>seinem Bett</em> is corrected to
           <em>sein Bett</em>.
         </p>
       </div>
-      <div class="step" data-step="7">
+      <div class="step" data-step="10">
         <p class="step-kicker">Bescheid</p>
         <p>
-          Processing complete. The sentence remains fully intelligible to any
-          German speaker — with none of the declension machinery. The full
-          procedure is codified below in
-          <a href="#definite-articles">§1–§10</a>.
+          Processing complete. What English accomplished seven hundred years
+          ago, Alman applies to German: a gender-equitable world language.
+          File 1880-TW-001 is closed. The full procedure is codified below
+          in <a href="#definite-articles">§1–§10</a>.
         </p>
       </div>
     </div>
@@ -179,6 +274,9 @@
 
   function apply(step: number) {
     section.dataset.step = String(step);
+    section.dataset.stage =
+      step >= 5 ? "doc" : step === 4 ? "precedent" : step >= 2 ? "table" : "file";
+    section.classList.toggle("collapsed", step >= 3);
     section
       .querySelectorAll<HTMLElement>("[data-at]")
       .forEach((el) => {
@@ -265,7 +363,17 @@
     max-width: 34rem;
     grid-area: 1 / 1;
     position: relative;
+    opacity: 0;
+    visibility: hidden;
     transition: opacity 0.45s ease, visibility 0.45s;
+  }
+
+  [data-stage="file"] .stage-file,
+  [data-stage="table"] .stage-table,
+  [data-stage="precedent"] .stage-precedent,
+  [data-stage="doc"] .stage-doc {
+    opacity: 1;
+    visibility: visible;
   }
 
   .card-head {
@@ -280,6 +388,68 @@
     border-bottom: 1px solid var(--ink);
     padding-bottom: 0.55rem;
     margin-bottom: 1.1rem;
+  }
+
+  /* Case-file stage */
+  .file-meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: var(--grey-1);
+    margin: 0 0 1.1rem;
+  }
+
+  .file-meta strong {
+    color: var(--fail-red);
+    font-weight: 400;
+  }
+
+  .file-quote {
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: var(--ink);
+    font-style: italic;
+    font-size: 1.02rem;
+    line-height: 1.75;
+  }
+
+  .file-attrib {
+    margin: 0.7rem 0 0;
+    font-size: 0.85rem;
+    color: var(--grey-1);
+  }
+
+  .file-annex {
+    border-top: 1px solid var(--grey-2);
+    margin-top: 1.1rem;
+    padding-top: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.5s ease 0.15s;
+  }
+
+  .file-annex.done {
+    opacity: 1;
+  }
+
+  .annex-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-1);
+    margin: 0 0 0.6rem;
+  }
+
+  .annex-dialogue p {
+    margin: 0 0 0.35rem;
+    font-size: 0.95rem;
+    font-style: italic;
+  }
+
+  .annex-dialogue .speaker {
+    font-style: normal;
+    font-weight: 600;
   }
 
   /* Table stage */
@@ -323,16 +493,15 @@
     transition: color 0.5s ease;
   }
 
-  /* collapsed state (step >= 1) */
-  [data-step]:not([data-step="0"]) .stage-table td del {
+  .collapsed .stage-table td del {
     display: none;
   }
 
-  [data-step]:not([data-step="0"]) .stage-table td ins {
+  .collapsed .stage-table td ins {
     display: inline;
   }
 
-  [data-step]:not([data-step="0"]) .stage-table td.stays {
+  .collapsed .stage-table td.stays {
     color: var(--form-blue);
   }
 
@@ -347,34 +516,57 @@
     transition: opacity 0.5s ease 0.3s;
   }
 
-  [data-step]:not([data-step="0"]) .table-verdict {
+  .collapsed .table-verdict {
     opacity: 1;
   }
 
-  /* Stage swap: table visible for steps 0-1, doc from step 2 on */
-  .stage-doc {
-    opacity: 0;
-    visibility: hidden;
+  /* Precedent stage */
+  .prec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.5rem 0 0;
   }
 
-  [data-step="2"] .stage-doc,
-  [data-step="3"] .stage-doc,
-  [data-step="4"] .stage-doc,
-  [data-step="5"] .stage-doc,
-  [data-step="6"] .stage-doc,
-  [data-step="7"] .stage-doc {
+  .prec-table th {
+    font-family: var(--font-din);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.72rem;
+    text-align: left;
+    border: none;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .prec-table td {
+    border-bottom: 1px solid var(--grey-2);
+    padding: 0.55rem 0.6rem;
+    font-family: var(--font-din);
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+
+  .prec-table td ins {
+    text-decoration: none;
+    color: var(--form-blue);
+  }
+
+  .prec-table .arrow {
+    color: var(--grey-1);
+    font-weight: 400;
+    width: 2rem;
+    text-align: center;
+  }
+
+  .prec-table .gloss {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 0.72rem;
+    color: var(--grey-1);
+  }
+
+  .prec-verdict {
     opacity: 1;
-    visibility: visible;
-  }
-
-  [data-step="2"] .stage-table,
-  [data-step="3"] .stage-table,
-  [data-step="4"] .stage-table,
-  [data-step="5"] .stage-table,
-  [data-step="6"] .stage-table,
-  [data-step="7"] .stage-table {
-    opacity: 0;
-    visibility: hidden;
   }
 
   /* Document stage */
@@ -527,7 +719,7 @@
   }
 
   .step {
-    min-height: 88vh;
+    min-height: 80vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -582,8 +774,36 @@
       white-space: nowrap;
     }
 
+    .file-meta {
+      font-size: 0.66rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .file-quote {
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .file-attrib {
+      font-size: 0.78rem;
+      margin-top: 0.5rem;
+    }
+
+    .file-annex {
+      margin-top: 0.8rem;
+      padding-top: 0.7rem;
+    }
+
+    .annex-dialogue p {
+      font-size: 0.86rem;
+    }
+
     .stage-table td {
       font-size: 1.05rem;
+    }
+
+    .prec-table td {
+      font-size: 1rem;
     }
 
     .doc-source {
@@ -650,6 +870,7 @@
     .tok del,
     .chip,
     .doc-clean,
+    .file-annex,
     .stamp,
     .table-verdict {
       transition: none;
