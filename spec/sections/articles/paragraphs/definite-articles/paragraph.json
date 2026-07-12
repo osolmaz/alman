@@ -87,7 +87,7 @@
     {
       "id": "von-die-usage",
       "title": "Optional Use of 'von die' for Possession",
-      "description": "The prepositional construction 'von die' may substitute the genitive article 'der' to indicate possession, though 'der' remains preferable in most contexts. This periphrastic construction serves to: \n1. Resolve ambiguity in complex phrases\n2. Provide phonological variety\n3. Mirror colloquial speech patterns\n\nWhile interchangeable, 'der' should be retained when translating original genitive constructions ('des/der') unless contextual factors favor 'von die'.",
+      "description": "The prepositional construction 'von die' may substitute the genitive article 'der' to indicate possession, though 'der' remains preferable in most contexts. This periphrastic construction serves to: \n1. Resolve ambiguity in complex phrases\n2. Provide phonological variety\n3. Mirror colloquial speech patterns\n\nWhile interchangeable, 'der' should be retained when translating original genitive constructions ('des/der') unless contextual factors favor 'von die'.\n\nAn apposition agrees in construction with its head noun phrase. When a genitive is rendered periphrastically with **von**, an apposition to it likewise takes the non-genitive form; when the genitive **der** is used, the apposition remains in the genitive. The same holds for appositions following a retained proper-name genitive (see the section on nouns). Note that possessive genitives (*seines Vaters*) have no **der** form and are always periphrastic (see the rule on possessive determiners in the section on determiners), so their appositions always take the non-genitive form.",
       "examples": [
         {
           "standard": "das Haus des Mannes",
@@ -96,6 +96,16 @@
         {
           "standard": "die Farbe des Autos",
           "alman": "die Farbe der Auto / die Farbe von die Auto"
+        },
+        {
+          "standard": "bei den Lehren seines Vaters, des Gelehrten",
+          "alman": "bei die Lehren von sein Vater, die Gelehrte",
+          "english": "in the teachings of his father, the scholar"
+        },
+        {
+          "standard": "die Werke Goethes, des Dichters",
+          "alman": "die Werke Goethes, der Dichter / die Werke von Goethe, die Dichter",
+          "english": "the works of Goethe, the poet"
         }
       ]
     },

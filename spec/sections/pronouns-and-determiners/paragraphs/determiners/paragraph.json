@@ -6,7 +6,7 @@
     {
       "id": "unified-non-genitive-forms",
       "title": "Unified Forms for Non-Genitive Contexts",
-      "description": "In non-genitive contexts, any determiner or pronoun that inflects for gender or case in <sd /> adopts the invariant feminine \"die...\" form, i.e. the form ending in -e. This is a general principle covering the entire class: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe**, and all analogous items are employed regardless of the gender or case of the referent. Determiners that already end in -e and do not inflect for gender in the relevant contexts (**beide, einige, mehrere**) remain unchanged.\n\nThe paired quantifiers described in the rule on indefinite and negative quantifiers (**alle/alles, viel/viele, wenig/wenige, nicht/nichts**) are exempt and follow their own rule.",
+      "description": "In non-genitive contexts, any determiner or pronoun that inflects for gender or case in <sd /> adopts the invariant feminine \"die...\" form, i.e. the form ending in -e. This is a general principle covering the entire class: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe**, and all analogous items are employed regardless of the gender or case of the referent. Determiners that already end in -e and do not inflect for gender in the relevant contexts (**beide, einige, mehrere**) remain unchanged.\n\nThis principle covers the der-type (strong-inflecting) determiners. Words built on **ein** — the negative article **kein**, the possessive determiners, and compounds such as **irgendein** — do not take the -e form; they follow the invariant base-form pattern described in the rule on possessive determiners and the negative article.\n\nThe paired quantifiers described in the rule on indefinite and negative quantifiers (**alle/alles, viel/viele, wenig/wenige, nicht/nichts**) are exempt and follow their own rule.",
       "examples": [
         {
           "standard": "dieser, diese, dieses, diesen, diesem (Nominativ, Akkusativ, Dativ)",
@@ -84,7 +84,7 @@
     {
       "id": "possessive-determiners-kein",
       "title": "Possessive Determiners and the Negative Article",
-      "description": "Possessive determiners (**mein, dein, sein, ihr, unser, euer, Ihr**) and the negative article **kein** follow the same pattern as the indefinite article **ein**: the invariant base form is used in all non-genitive contexts, eliminating the gender- and case-specific endings of <sd /> (meine/meinen/meinem/meiner, keine/keinen/keinem/keiner).\n\nGenitive constructions employ either the periphrastic **von** + base form, or the bare base form after genitive prepositions such as **wegen**, **trotz**, and **statt**, paralleling the treatment of the indefinite article.\n\nThe choice among **mein, dein, sein, ihr**, etc. follows natural gender attribution of the possessor, as described in the section on pronouns.\n\nThe same invariant base form is used in pronominal (standalone) use, where <sd /> employs inflected forms such as *meins*, *deiner*, *keins*, and *keiner*. This parallels the retention of bare **ein** in nominalized constructions, as described in the section on articles: *Das ist mein* (\"That is mine\"), *Kein hat es gesehen* (\"None saw it\").",
+      "description": "Possessive determiners (**mein, dein, sein, ihr, unser, euer, Ihr**), the negative article **kein**, and all compounds of **ein** (such as **irgendein**, **so ein**, **was für ein**) follow the same pattern as the indefinite article **ein**: the invariant base form is used in all non-genitive contexts, eliminating the gender- and case-specific endings of <sd /> (meine/meinen/meinem/meiner, keine/keinen/keinem/keiner, irgendeine/irgendeinen/irgendeinem/irgendeiner).\n\nGenitive constructions employ either the periphrastic **von** + base form, or the bare base form after genitive prepositions such as **wegen**, **trotz**, and **statt**, paralleling the treatment of the indefinite article.\n\nThe choice among **mein, dein, sein, ihr**, etc. follows natural gender attribution of the possessor, as described in the section on pronouns.\n\nThe same invariant base form is used in pronominal (standalone) use, where <sd /> employs inflected forms such as *meins*, *deiner*, *keins*, and *keiner*. This parallels the retention of bare **ein** in nominalized constructions, as described in the section on articles: *Das ist mein* (\"That is mine\"), *Kein hat es gesehen* (\"None saw it\").",
       "examples": [
         {
           "standard": "Ich sehe meinen Hund.",
@@ -105,6 +105,11 @@
           "standard": "mit keinem Wort",
           "alman": "mit kein Wort",
           "english": "with not a single word"
+        },
+        {
+          "standard": "mit irgendeiner Besorgung",
+          "alman": "mit irgendein Besorgung",
+          "english": "with some errand"
         },
         {
           "standard": "das Auto meines Vaters",

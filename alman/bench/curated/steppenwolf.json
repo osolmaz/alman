@@ -4,16 +4,17 @@
   "items": [
     {
       "source": "Der Mensch ist ja keine feste und dauernde Gestaltung (dies war, trotz entgegengesetzter Ahnungen ihrer Weisen, das Ideal der Antike), er ist vielmehr ein Versuch und Übergang, er ist nichts anderes als die schmale, gefährliche Brücke zwischen Natur und Geist.",
-      "pattern": "Die Mensch ist ja kein feste und dauernde Gestaltung (diese war, trotz entgegengesetzte Ahnungen von {sein|ihr}@6e Weisen, die Ideal {der|von die}@1d Antike), er ist vielmehr ein Versuch und Übergang, er ist nichts andere als die schmale, gefährliche Brücke zwischen Natur und Geist.",
+      "pattern": "Die Mensch ist ja kein feste und dauernde Gestaltung (diese war, trotz entgegengesetzte Ahnungen von {sein|ihr}@6e Weisen, die Ideal {der|von die}@1d Antike), sie sind vielmehr ein Versuch und Übergang, sie sind nichts andere als die schmale, gefährliche Brücke zwischen Natur und Geist.",
       "rule": "mixed",
-      "note": "Possessor of 'ihrer Weisen' is the (inanimate) Antike: strict natural-gender attribution gives 'sein'; 'ihr' accepted since a collective reading is defensible."
+      "note": "Generic 'der Mensch' is resumed with singular-they 'sie' + plural verb per the gender-neutral referents rule. Possessor of 'ihrer Weisen' is the (inanimate) Antike: strict natural-gender attribution gives 'sein'; 'ihr' accepted since a collective reading is defensible."
     },
     {
       "source": "Nach dem Geiste hin, zu Gott hin treibt ihn die innerste Bestimmung—nach der Natur, zur Mutter zurück zieht ihn die innigste Sehnsucht: zwischen beiden Mächten schwankt angstvoll bebend sein Leben.",
       "accepted": [
-        "Nach die Geist hin, zu Gott hin treibt ihn die innerste Bestimmung—nach die Natur, zu die Mutter zurück zieht ihn die innigste Sehnsucht: zwischen beide Mächte schwankt angstvoll bebend sein Leben."
+        "Nach die Geist hin, zu Gott hin treibt sie die innerste Bestimmung—nach die Natur, zu die Mutter zurück zieht sie die innigste Sehnsucht: zwischen beide Mächte schwankt angstvoll bebend ihr Leben."
       ],
-      "rule": "mixed"
+      "rule": "mixed",
+      "note": "The pronouns refer to the generic 'der Mensch' of the preceding sentence: singular-they gives accusative 'sie' and possessive 'ihr' per the gender-neutral referents rule."
     }
   ]
 }
