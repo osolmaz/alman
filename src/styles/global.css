@@ -20,6 +20,12 @@
   box-sizing: border-box;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 html {
   background: var(--paper);
   color: var(--ink);
@@ -245,6 +251,7 @@ tr:last-child td {
 /* ---------- Document meta band ---------- */
 
 .doc-band {
+  scroll-margin-top: 1.25rem;
   display: flex;
   justify-content: space-between;
   gap: 1rem;

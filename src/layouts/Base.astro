@@ -18,9 +18,9 @@ const pageTitle = title ? `${title} | Alman Institut` : "Alman Institut";
 const currentPath = Astro.url.pathname;
 
 const navItems = [
-  { href: "/", label: "Specification" },
-  { href: "/blog/", label: "Blog" },
-  { href: "/about/", label: "About" },
+  { href: "/#spec", label: "Specification", match: "/" },
+  { href: "/blog/", label: "Blog", match: "/blog/" },
+  { href: "/about/", label: "About", match: "/about/" },
 ];
 ---
 
@@ -61,13 +61,11 @@ const navItems = [
               <a
                 href={item.href}
                 aria-current={
-                  item.href === "/"
+                  (item.match === "/"
                     ? currentPath === "/"
-                      ? "page"
-                      : undefined
-                    : currentPath.startsWith(item.href)
-                      ? "page"
-                      : undefined
+                    : currentPath.startsWith(item.match))
+                    ? "page"
+                    : undefined
                 }
               >
                 {item.label}
