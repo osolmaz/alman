@@ -1,7 +1,7 @@
 # Complete thinking benchmark record — 2026-07-11
 
-This is the durable human-readable record for the GPT-5.5 ceiling run, two
-local NVFP4 runs, and four Hugging Face Inference Providers runs. The six JSON
+This is the durable human-readable record for the GPT-5.5 ceiling run, three
+local NVFP4 runs, and four Hugging Face Inference Providers runs. The seven JSON
 records linked below are authoritative for machine-readable fields. The GPT-5.5
 baseline predates the result schema and is sourced from its retained Inspect
 log and [`docs/benchmark-results.md`](../docs/benchmark-results.md).
@@ -20,8 +20,9 @@ Standard German forms forbidden by Alman. A compliant answer is not
 necessarily correct. Compliance does not measure output formatting, language,
 completeness, or meaning: an empty, unrelated, or malformed answer can pass if
 it contains no forbidden surface form. Acceptance is therefore the primary
-quality metric; compliance is only a necessary floor. Each row is independent,
-client concurrency was one, and all reported results are single sampled runs.
+quality metric; compliance is only a necessary floor. Each row is independent.
+The leaderboard runs used client concurrency one; the Qwen follow-up below
+used four-way concurrency. All reported results are single sampled runs.
 
 ## Complete leaderboard
 
@@ -252,11 +253,12 @@ Exact hosted records:
   exclusions, provenance, the local model selection, and reasoning bounds.
 - Repeated `codex review --base main` passes drove validation and recovery
   fixes; the final pass reported no actionable correctness regressions.
-- `uv run pytest -q`: 117 passed, 1 skipped.
+- `uv run pytest -q`: 118 passed, 1 skipped.
 - Targeted Ruff checks passed.
-- Both local result records and all four hosted records passed JSON Schema and
-  semantic validation.
-- A locked Jekyll build completed, and `_site/AGENTS.md` was absent.
+- All three local result records and all four hosted records passed JSON
+  Schema and semantic validation.
+- A locked Jekyll build completed, and both `_site/AGENTS.md` and
+  `_site/benchmark-results` were absent.
 - GitHub reported no configured checks or statuses for PR #14.
 - At final verification, no vLLM, SGLang, llama.cpp, hosted benchmark, or Alman
   benchmark process remained active. The machine's independent `earlyoom`
