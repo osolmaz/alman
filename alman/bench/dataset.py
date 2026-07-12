@@ -191,7 +191,28 @@ def load_items(spec_dir: Path = SPEC_DIR) -> list[BenchItem]:
     return _apply_overrides(items)
 
 
-def load_curated_items(curated_dir: Path = CURATED_DIR) -> list[BenchItem]:
+def find_spec_example_overlaps(
+    items: list[BenchItem], spec_dir: Path = SPEC_DIR
+) -> list[BenchItem]:
+    """Return curated items whose source/answer pair occurs in the specification."""
+    spec_pairs = {
+        (item.source, accepted)
+        for item in load_items(spec_dir)
+        for accepted in item.accepted
+    }
+    return [
+        item
+        for item in items
+        if any((item.source, accepted) in spec_pairs for accepted in item.accepted)
+    ]
+
+
+def load_curated_items(
+    curated_dir: Path = CURATED_DIR,
+    *,
+    exclude_spec_examples: bool = True,
+    spec_dir: Path = SPEC_DIR,
+) -> list[BenchItem]:
     """Load the hand-curated sentence-level items (tier 2 of the benchmark)."""
     items: list[BenchItem] = []
     for path in sorted(curated_dir.glob("*.json")):
@@ -223,4 +244,7 @@ def load_curated_items(curated_dir: Path = CURATED_DIR) -> list[BenchItem]:
                     pattern=entry.get("pattern"),
                 )
             )
-    return items
+    if not exclude_spec_examples:
+        return items
+    overlaps = {item.id for item in find_spec_example_overlaps(items, spec_dir)}
+    return [item for item in items if item.id not in overlaps]

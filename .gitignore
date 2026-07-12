@@ -12,6 +12,7 @@ _site
 vendor
 build/spec.md
 .DS_Store
+local-benchmark-artifacts/
 
 # Inspect AI eval logs
 logs/

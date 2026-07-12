@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alman.ai/schemas/hosted-benchmark-result-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "run", "benchmark", "model", "endpoint", "generation", "results", "pricing", "artifacts"],
+  "properties": {
+    "$schema": {"const": "./hosted-result.schema.json"},
+    "schema_version": {"const": 1},
+    "run": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "started_at", "completed_at", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"},
+        "status": {"const": "success"}
+      }
+    },
+    "benchmark": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task", "dataset", "sample_count", "spec_in_context", "spec_examples_in_dataset", "commit", "working_tree_dirty"],
+      "properties": {
+        "task": {"const": "alman_bench"},
+        "dataset": {"const": "curated"},
+        "sample_count": {"const": 48},
+        "spec_in_context": {"const": true},
+        "spec_examples_in_dataset": {"const": false},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "working_tree_dirty": {"const": false}
+      }
+    },
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["repository", "hub_revision", "provider_model_id", "served_revision_pinned", "thinking"],
+      "properties": {
+        "repository": {"enum": ["deepseek-ai/DeepSeek-V4-Pro", "deepseek-ai/DeepSeek-V4-Flash", "zai-org/GLM-5.2", "moonshotai/Kimi-K2.7-Code"]},
+        "hub_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "provider_model_id": {"type": "string", "minLength": 1},
+        "served_revision_pinned": {"const": false},
+        "thinking": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "mode", "provider_control", "thinking_call_max_tokens", "samples_with_reasoning", "max_thinking_call_completion_tokens", "max_reported_reasoning_tokens", "forced_final_fallback_count", "forced_final_fallback_disables_thinking"],
+          "properties": {
+            "enabled": {"const": true},
+            "mode": {"const": "think"},
+            "provider_control": {"type": "string", "minLength": 1},
+            "thinking_call_max_tokens": {"const": 4096},
+            "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 48},
+            "max_thinking_call_completion_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
+            "max_reported_reasoning_tokens": {"type": ["integer", "null"], "minimum": 1, "maximum": 4096},
+            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 48},
+            "forced_final_fallback_disables_thinking": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "endpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["platform", "provider", "api", "routing"],
+      "properties": {
+        "platform": {"const": "huggingface-inference-providers"},
+        "provider": {"const": "novita"},
+        "api": {"const": "chat_completions"},
+        "routing": {"const": "explicit-client-provider"}
+      }
+    },
+    "generation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["temperature", "top_p", "thinking_call_max_tokens", "forced_final_max_tokens", "max_retries"],
+      "properties": {
+        "temperature": {"const": 1.0},
+        "top_p": {"enum": [0.95, 1.0]},
+        "thinking_call_max_tokens": {"const": 4096},
+        "forced_final_max_tokens": {"type": "integer", "minimum": 512, "maximum": 2048},
+        "max_retries": {"const": 2}
+      }
+    },
+    "results": {
+      "type": "object", "additionalProperties": false,
+      "required": ["acceptance", "compliance", "groups", "tokens", "estimated_cost_usd"],
+      "properties": {
+        "acceptance": {"$ref": "#/$defs/score"},
+        "compliance": {"$ref": "#/$defs/score"},
+        "groups": {"type": "object", "additionalProperties": {"$ref": "#/$defs/score"}},
+        "tokens": {
+          "type": "object", "additionalProperties": false,
+          "required": ["input", "output", "reasoning", "total"],
+          "properties": {
+            "input": {"type": "integer", "minimum": 0},
+            "output": {"type": "integer", "minimum": 0},
+            "reasoning": {"type": ["integer", "null"], "minimum": 0},
+            "total": {"type": "integer", "minimum": 0}
+          }
+        },
+        "estimated_cost_usd": {"type": "number", "minimum": 0}
+      }
+    },
+    "pricing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["currency", "input_per_million_tokens", "output_per_million_tokens", "observed_at"],
+      "properties": {
+        "currency": {"const": "USD"},
+        "input_per_million_tokens": {"type": "number", "minimum": 0},
+        "output_per_million_tokens": {"type": "number", "minimum": 0},
+        "observed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "artifacts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["samples_jsonl"],
+      "properties": {"samples_jsonl": {"type": "string", "minLength": 1}}
+    }
+  },
+  "$defs": {
+    "score": {
+      "type": "object", "additionalProperties": false,
+      "required": ["correct", "total", "rate", "stderr"],
+      "properties": {
+        "correct": {"type": "integer", "minimum": 0},
+        "total": {"type": "integer", "minimum": 1},
+        "rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "stderr": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}
