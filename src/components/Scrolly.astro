@@ -1153,8 +1153,30 @@ import worldMap from "../assets/world-map.svg?raw";
       align-items: start;
     }
 
+    /*
+     * Inactive cards leave the layout flow so the sticky container hugs
+     * the active card instead of sizing to the tallest card in the stack
+     * (which left an opaque band covering the step text below).
+     */
     .stage-card {
       padding: 0.85rem 1rem 1rem;
+      position: absolute;
+      top: 0.6rem;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+    }
+
+    [data-stage="f1"] .stage-f1,
+    [data-stage="f2"] .stage-f2,
+    [data-stage="f3"] .stage-f3,
+    [data-stage="de"] .stage-de,
+    [data-stage="oe"] .stage-oe,
+    [data-stage="prec"] .stage-prec,
+    [data-stage="doc"] .stage-doc,
+    [data-stage="world"] .stage-world {
+      position: relative;
+      top: auto;
     }
 
     .card-head {
