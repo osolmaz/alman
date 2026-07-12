@@ -77,7 +77,7 @@ def profile(tmp_path: Path) -> LocalBenchmarkProfile:
                     "deviations": ["thinking enabled"],
                 },
             },
-            "endpoint": {"port": 9999},
+            "endpoint": {"port": 9999, "max_connections": 4, "max_samples": 4},
             "generation": {
                 "max_tokens": 8192,
                 "reasoning_token_budget": 4096,
@@ -406,6 +406,8 @@ def test_inspect_command_uses_reasoning_budget_config(profile, tmp_path):
     command = _inspect_command(profile, tmp_path, "run-id", generate_config)
     assert command[command.index("--generate-config") + 1] == str(generate_config)
     assert "reasoning_token_budget=4096" in command
+    assert command[command.index("--max-connections") + 1] == "4"
+    assert command[command.index("--max-samples") + 1] == "4"
     assert command[command.index("--max-retries") + 1] == "2"
 
 

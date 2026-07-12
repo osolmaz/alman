@@ -94,6 +94,8 @@ class EndpointProfile(StrictModel):
     host: Literal["127.0.0.1", "localhost"] = "127.0.0.1"
     port: int = Field(ge=1, le=65535)
     api_key: Literal["EMPTY"] = "EMPTY"
+    max_connections: int = Field(default=1, gt=0)
+    max_samples: int = Field(default=1, gt=0)
 
     @property
     def base_url(self) -> str:
@@ -413,9 +415,9 @@ def _inspect_command(
         "--model-base-url",
         profile.endpoint.base_url,
         "--max-connections",
-        "1",
+        str(profile.endpoint.max_connections),
         "--max-samples",
-        "1",
+        str(profile.endpoint.max_samples),
         "--max-tokens",
         str(profile.generation.max_tokens),
         "--generate-config",
@@ -459,8 +461,8 @@ def _metadata(
             "provider": "inspect-openai-api",
             "api": "chat_completions",
             "base_url": profile.endpoint.base_url,
-            "max_connections": 1,
-            "max_samples": 1,
+            "max_connections": profile.endpoint.max_connections,
+            "max_samples": profile.endpoint.max_samples,
         },
         "runtime": {
             "engine": profile.runtime.engine,
