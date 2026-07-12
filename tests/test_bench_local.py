@@ -695,6 +695,11 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
     with pytest.raises(ValueError, match="group correct counts"):
         validate_hosted_result(invalid)
 
+    invalid = copy.deepcopy(result)
+    invalid["endpoint"]["provider"] = "together"
+    with pytest.raises(ValueError, match="unsupported hosted"):
+        validate_hosted_result(invalid)
+
 
 def test_hosted_profiles_are_validated_before_use():
     profile = {

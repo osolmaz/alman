@@ -556,6 +556,16 @@ def _aggregate(
 def validate_hosted_result(result: dict[str, Any]) -> None:
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     Draft202012Validator(schema, format_checker=FormatChecker()).validate(result)
+    route = (
+        result["model"]["repository"],
+        result["endpoint"]["provider"],
+        result["model"]["provider_model_id"],
+    )
+    if route not in SUPPORTED_ROUTES:
+        raise ValueError(
+            "unsupported hosted model/provider/provider-model route: "
+            + " / ".join(route)
+        )
     sample_count = result["benchmark"]["sample_count"]
     for score in [
         result["results"]["acceptance"],
