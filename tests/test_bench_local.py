@@ -668,6 +668,7 @@ def test_hosted_aggregate_is_distinct_and_valid(tmp_path):
     )
     assert result["endpoint"]["platform"] == "huggingface-inference-providers"
     assert result["endpoint"]["max_concurrency"] == 1
+    assert result["generation"]["top_k"] is None
     assert result["generation"]["presence_penalty"] is None
     assert result["results"]["acceptance"]["correct"] == 24
     assert result["model"]["thinking"]["thinking_call_max_tokens"] == 4096
@@ -722,6 +723,11 @@ def test_hosted_profiles_are_validated_before_use():
     invalid = copy.deepcopy(profile)
     invalid["provider_model_id"] = "wrong/model"
     with pytest.raises(ValueError, match="unsupported hosted"):
+        _validate_profiles([invalid])
+
+    invalid = copy.deepcopy(profile)
+    invalid["top_k"] = 20
+    with pytest.raises(ValueError, match="thinking_extra_body.top_k"):
         _validate_profiles([invalid])
 
     duplicate = copy.deepcopy(profile)

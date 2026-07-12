@@ -72,6 +72,7 @@
       "properties": {
         "temperature": {"const": 1.0},
         "top_p": {"enum": [0.95, 1.0]},
+        "top_k": {"type": ["integer", "null"], "minimum": 1},
         "presence_penalty": {"type": ["number", "null"], "minimum": -2, "maximum": 2},
         "thinking_call_max_tokens": {"const": 4096},
         "forced_final_max_tokens": {"type": "integer", "minimum": 512, "maximum": 2048},

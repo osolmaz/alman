@@ -109,6 +109,7 @@ PROFILE_SCHEMA = {
         },
         "temperature": {"const": 1.0},
         "top_p": {"enum": [0.95, 1.0]},
+        "top_k": {"type": "integer", "minimum": 1},
         "presence_penalty": {"type": "number", "minimum": -2, "maximum": 2},
         "max_concurrency": {"type": "integer", "minimum": 1, "maximum": 8},
         "input_price_per_million": {"type": "number", "minimum": 0},
@@ -389,6 +390,10 @@ def _validate_profiles(profiles: list[dict[str, Any]]) -> None:
             raise ValueError(
                 "reasoning-field forced-final output requires a prefill and stop"
             )
+        if "top_k" in profile:
+            for field in ("thinking_extra_body", "forced_final_extra_body"):
+                if profile[field].get("top_k") != profile["top_k"]:
+                    raise ValueError(f"{field}.top_k must match profile top_k")
     for field in ("name", "output"):
         values = [profile[field] for profile in profiles]
         if len(values) != len(set(values)):
@@ -506,6 +511,7 @@ def _aggregate(
         "generation": {
             "temperature": profile["temperature"],
             "top_p": profile["top_p"],
+            "top_k": profile.get("top_k"),
             "presence_penalty": profile.get("presence_penalty"),
             "thinking_call_max_tokens": THINKING_MAX_TOKENS,
             "forced_final_max_tokens": profile.get(

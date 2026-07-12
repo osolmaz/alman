@@ -43,6 +43,7 @@
   "generation": {
     "temperature": 1.0,
     "top_p": 0.95,
+    "top_k": 20,
     "presence_penalty": 1.5,
     "thinking_call_max_tokens": 4096,
     "forced_final_max_tokens": 512,
