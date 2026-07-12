@@ -1,0 +1,125 @@
+{
+  "$schema": "./hosted-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260712T090922Z-qwen36-35b-hf-deepinfra-thinking",
+    "started_at": "2026-07-12T09:09:22.277873+00:00",
+    "completed_at": "2026-07-12T09:37:53.869503+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 48,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "3866ada42483de8f6f133ed627a2e2eaba6f76cd",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "repository": "Qwen/Qwen3.6-35B-A3B",
+    "hub_revision": "995ad96eacd98c81ed38be0c5b274b04031597b0",
+    "provider_model_id": "Qwen/Qwen3.6-35B-A3B",
+    "served_revision_pinned": false,
+    "thinking": {
+      "enabled": true,
+      "mode": "think",
+      "provider_control": "chat_template_kwargs.enable_thinking=true",
+      "thinking_call_max_tokens": 4096,
+      "samples_with_reasoning": 48,
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": null,
+      "forced_final_fallback_count": 14,
+      "forced_final_fallback_disables_thinking": true
+    }
+  },
+  "endpoint": {
+    "platform": "huggingface-inference-providers",
+    "provider": "deepinfra",
+    "api": "chat_completions",
+    "routing": "explicit-client-provider",
+    "max_concurrency": 4
+  },
+  "generation": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "presence_penalty": 1.5,
+    "thinking_call_max_tokens": 4096,
+    "forced_final_max_tokens": 512,
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 30,
+      "total": 48,
+      "rate": 0.625,
+      "stderr": 0.06987712429686843
+    },
+    "compliance": {
+      "correct": 36,
+      "total": 48,
+      "rate": 0.75,
+      "stderr": 0.0625
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "deutsch-alman": {
+        "correct": 9,
+        "total": 11,
+        "rate": 0.8181818181818182,
+        "stderr": 0.11629129983033296
+      },
+      "die-verwandlung": {
+        "correct": 3,
+        "total": 4,
+        "rate": 0.75,
+        "stderr": 0.21650635094610965
+      },
+      "siddhartha": {
+        "correct": 3,
+        "total": 16,
+        "rate": 0.1875,
+        "stderr": 0.09757809372497497
+      },
+      "starke-flexion": {
+        "correct": 8,
+        "total": 8,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 801331,
+      "output": 118238,
+      "reasoning": null,
+      "total": 919569
+    },
+    "estimated_cost_usd": 0.23252574999999998
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 0.15,
+    "output_per_million_tokens": 0.95,
+    "observed_at": "2026-07-12T09:00:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/hf-providers/20260712T091500Z-more-hosted-thinking/qwen36-35b-hf-deepinfra-thinking.samples.jsonl"
+  }
+}

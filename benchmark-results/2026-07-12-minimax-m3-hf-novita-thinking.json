@@ -1,0 +1,125 @@
+{
+  "$schema": "./hosted-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260712T091432Z-minimax-m3-hf-novita-thinking",
+    "started_at": "2026-07-12T09:14:32.854580+00:00",
+    "completed_at": "2026-07-12T09:37:53.871253+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 48,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "3866ada42483de8f6f133ed627a2e2eaba6f76cd",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "repository": "MiniMaxAI/MiniMax-M3",
+    "hub_revision": "50942730318c7943fe83db7ec8e9f9177ecb1cf8",
+    "provider_model_id": "minimax/minimax-m3",
+    "served_revision_pinned": false,
+    "thinking": {
+      "enabled": true,
+      "mode": "think",
+      "provider_control": "chat_template_kwargs.thinking_mode=enabled",
+      "thinking_call_max_tokens": 4096,
+      "samples_with_reasoning": 46,
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": null,
+      "forced_final_fallback_count": 3,
+      "forced_final_fallback_disables_thinking": true
+    }
+  },
+  "endpoint": {
+    "platform": "huggingface-inference-providers",
+    "provider": "novita",
+    "api": "chat_completions",
+    "routing": "explicit-client-provider",
+    "max_concurrency": 4
+  },
+  "generation": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "presence_penalty": null,
+    "thinking_call_max_tokens": 4096,
+    "forced_final_max_tokens": 512,
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 33,
+      "total": 48,
+      "rate": 0.6875,
+      "stderr": 0.06690225301388088
+    },
+    "compliance": {
+      "correct": 46,
+      "total": 48,
+      "rate": 0.9583333333333334,
+      "stderr": 0.028842443968465525
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 4,
+        "total": 5,
+        "rate": 0.8,
+        "stderr": 0.17888543819998315
+      },
+      "deutsch-alman": {
+        "correct": 10,
+        "total": 11,
+        "rate": 0.9090909090909091,
+        "stderr": 0.08667841720414476
+      },
+      "die-verwandlung": {
+        "correct": 2,
+        "total": 4,
+        "rate": 0.5,
+        "stderr": 0.25
+      },
+      "siddhartha": {
+        "correct": 7,
+        "total": 16,
+        "rate": 0.4375,
+        "stderr": 0.12401959270615269
+      },
+      "starke-flexion": {
+        "correct": 7,
+        "total": 8,
+        "rate": 0.875,
+        "stderr": 0.11692679333668567
+      },
+      "steppenwolf": {
+        "correct": 1,
+        "total": 2,
+        "rate": 0.5,
+        "stderr": 0.3535533905932738
+      }
+    },
+    "tokens": {
+      "input": 657696,
+      "output": 53400,
+      "reasoning": null,
+      "total": 711096
+    },
+    "estimated_cost_usd": 0.2613888
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 0.3,
+    "output_per_million_tokens": 1.2,
+    "observed_at": "2026-07-12T09:00:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/hf-providers/20260712T091500Z-more-hosted-thinking/minimax-m3-hf-novita-thinking.samples.jsonl"
+  }
+}
