@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alman.ai/schemas/openai-benchmark-result-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "run", "benchmark", "model", "endpoint", "generation", "results", "pricing", "artifacts"],
+  "properties": {
+    "$schema": {"const": "./openai-result.schema.json"},
+    "schema_version": {"const": 1},
+    "run": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "started_at", "completed_at", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"},
+        "status": {"const": "success"}
+      }
+    },
+    "benchmark": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task", "dataset", "sample_count", "spec_in_context", "spec_examples_in_dataset", "commit", "working_tree_dirty"],
+      "properties": {
+        "task": {"const": "alman_bench"},
+        "dataset": {"const": "curated"},
+        "sample_count": {"const": 48},
+        "spec_in_context": {"const": true},
+        "spec_examples_in_dataset": {"const": false},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "working_tree_dirty": {"const": false}
+      }
+    },
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["requested", "label", "returned_models", "snapshot_pinned", "reasoning"],
+      "properties": {
+        "requested": {"enum": ["gpt-5.4-mini-2026-03-17", "gpt-5.6-luna", "gpt-5.6-sol", "gpt-5.6-terra"]},
+        "label": {"type": "string", "minLength": 1},
+        "returned_models": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
+        "snapshot_pinned": {"type": "boolean"},
+        "reasoning": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "effort", "primary_call_max_completion_tokens", "samples_with_reasoning", "max_primary_completion_tokens", "max_primary_reasoning_tokens", "forced_final_fallback_count", "forced_final_effort"],
+          "properties": {
+            "enabled": {"const": true},
+            "effort": {"const": "xhigh"},
+            "primary_call_max_completion_tokens": {"const": 4096},
+            "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 48},
+            "max_primary_completion_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
+            "max_primary_reasoning_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
+            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 48},
+            "forced_final_effort": {"const": "none"}
+          }
+        }
+      }
+    },
+    "endpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["platform", "provider", "api", "max_concurrency"],
+      "properties": {
+        "platform": {"const": "openai-api"},
+        "provider": {"const": "openai"},
+        "api": {"const": "chat_completions"},
+        "max_concurrency": {"type": "integer", "minimum": 1, "maximum": 8}
+      }
+    },
+    "generation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["primary_max_completion_tokens", "forced_final_max_completion_tokens", "max_retries"],
+      "properties": {
+        "primary_max_completion_tokens": {"const": 4096},
+        "forced_final_max_completion_tokens": {"const": 512},
+        "max_retries": {"const": 2}
+      }
+    },
+    "results": {
+      "type": "object", "additionalProperties": false,
+      "required": ["acceptance", "compliance", "groups", "tokens", "estimated_cost_usd"],
+      "properties": {
+        "acceptance": {"$ref": "#/$defs/score"},
+        "compliance": {"$ref": "#/$defs/score"},
+        "groups": {"type": "object", "additionalProperties": {"$ref": "#/$defs/score"}},
+        "tokens": {
+          "type": "object", "additionalProperties": false,
+          "required": ["input", "cached_input", "output", "reasoning", "total"],
+          "properties": {
+            "input": {"type": "integer", "minimum": 0},
+            "cached_input": {"type": "integer", "minimum": 0},
+            "output": {"type": "integer", "minimum": 0},
+            "reasoning": {"type": "integer", "minimum": 0},
+            "total": {"type": "integer", "minimum": 0}
+          }
+        },
+        "estimated_cost_usd": {"type": "number", "minimum": 0}
+      }
+    },
+    "pricing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["currency", "input_per_million_tokens", "cached_input_per_million_tokens", "output_per_million_tokens", "observed_at"],
+      "properties": {
+        "currency": {"const": "USD"},
+        "input_per_million_tokens": {"type": "number", "minimum": 0},
+        "cached_input_per_million_tokens": {"type": "number", "minimum": 0},
+        "output_per_million_tokens": {"type": "number", "minimum": 0},
+        "observed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "artifacts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["samples_jsonl"],
+      "properties": {"samples_jsonl": {"type": "string", "minLength": 1}}
+    }
+  },
+  "$defs": {
+    "score": {
+      "type": "object", "additionalProperties": false,
+      "required": ["correct", "total", "rate", "stderr"],
+      "properties": {
+        "correct": {"type": "integer", "minimum": 0},
+        "total": {"type": "integer", "minimum": 1},
+        "rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "stderr": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}

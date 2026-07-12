@@ -7,6 +7,8 @@ server logs, smoke responses, and model weights stay outside the repository.
 Local vLLM records use `result.schema.json`. Hosted Hugging Face Inference
 Providers records use `hosted-result.schema.json`, which records the routed
 provider, hosted pricing, the thinking-call cap, and any forced-final fallback.
+Direct OpenAI API records use `openai-result.schema.json`, which also separates
+cached input tokens and records requested and returned model IDs.
 Hosted raw samples, manifests, and per-profile result checkpoints stay in the
 external artifact directory so a later profile failure does not discard an
 earlier completed run.
