@@ -21,6 +21,11 @@ cost, fallback, incident, caveat, and validation outcome, is in
 That report also contains the 2026-07-12 Qwen `presence_penalty=1.5`
 follow-up and links its exact result record.
 
+The additional 2026-07-12 Hugging Face Inference Providers runs for hosted
+Qwen 3.6 35B, MiniMax M3, Nemotron 3 Ultra, and Step 3.7 Flash—including the
+Step forced-final incident and the hosted-versus-local Qwen diagnosis—are in
+[`2026-07-12-more-hf-inference-providers-thinking-comparison.md`](./2026-07-12-more-hf-inference-providers-thinking-comparison.md).
+
 ## Minimal shape
 
 ```json
