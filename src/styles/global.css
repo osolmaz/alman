@@ -1,0 +1,359 @@
+/* Design tokens — see docs/design-guide.md */
+:root {
+  --paper: #fafaf8;
+  --ink: #1a1a1a;
+  --form-blue: #1f4e9b;
+  --grey-1: #6b6b6b;
+  --grey-2: #d9d9d6;
+  --pass-green: #2e7d43;
+  --fail-red: #b3261e;
+
+  --font-din: "Barlow Semi Condensed", "D-DIN", "DIN Alternate", sans-serif;
+  --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --content-width: 50rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 5rem;
+}
+
+/* ---------- Typography ---------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-din);
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 2.2em 0 0.6em;
+}
+
+h1 {
+  font-size: 2.1rem;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 1.55rem;
+  border-top: 1px solid var(--ink);
+  padding-top: 1.1rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1.05rem;
+}
+
+a {
+  color: var(--form-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+strong,
+b {
+  font-weight: 600;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+pre {
+  padding: 1rem;
+  border: 1px solid var(--grey-2);
+  overflow-x: auto;
+  background: #ffffff;
+}
+
+hr {
+  margin: 2.5rem 0;
+  border: none;
+  border-top: 1px solid var(--grey-2);
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0 1.25rem;
+  border-left: 3px solid var(--grey-2);
+  color: var(--grey-1);
+}
+
+figure {
+  margin: 2rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--grey-1);
+}
+
+figure img {
+  display: block;
+  margin: 0 auto 0.75rem;
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* ---------- Tables: ruled like forms ---------- */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+th {
+  font-family: var(--font-din);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.82rem;
+  text-align: left;
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 0.5rem 0.75rem;
+}
+
+td {
+  border-bottom: 1px solid var(--grey-2);
+  padding: 0.45rem 0.75rem;
+  vertical-align: top;
+}
+
+tr:last-child td {
+  border-bottom: 1px solid var(--ink);
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  border-bottom: 1px solid var(--ink);
+}
+
+.site-header .inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-brand:hover {
+  text-decoration: none;
+}
+
+.site-brand img {
+  height: 3rem;
+  width: auto;
+  display: block;
+}
+
+.site-nav {
+  margin-left: auto;
+  display: flex;
+  gap: 1.4rem;
+}
+
+.site-nav a {
+  font-family: var(--font-din);
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--form-blue);
+  text-decoration: none;
+}
+
+/* Structural tricolor hairline under the header */
+.flag-rule {
+  height: 3px;
+  display: flex;
+}
+
+.flag-rule span {
+  flex: 1;
+}
+
+.flag-rule span:nth-child(1) {
+  background: #1a1a1a;
+}
+
+.flag-rule span:nth-child(2) {
+  background: #b3261e;
+}
+
+.flag-rule span:nth-child(3) {
+  background: #d4a017;
+}
+
+/* ---------- Document meta band ---------- */
+
+.doc-band {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--grey-1);
+  border-bottom: 1px solid var(--grey-2);
+  padding-bottom: 0.6rem;
+  margin-bottom: 2.2rem;
+}
+
+/* ---------- Spec document ---------- */
+
+.spec-doc .toc-container {
+  margin: 1.5rem 0 2.5rem;
+}
+
+.spec-doc .toc-container a {
+  color: var(--ink);
+}
+
+.spec-doc .toc-container a:hover {
+  color: var(--form-blue);
+}
+
+.spec-doc h4 {
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+/* ---------- Blog ---------- */
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+}
+
+.post-list li {
+  display: flex;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--grey-2);
+}
+
+.post-list time {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--grey-1);
+  white-space: nowrap;
+}
+
+.post-list a {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.post-list a:hover {
+  color: var(--form-blue);
+}
+
+.post-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--grey-1);
+  margin-bottom: 2.5rem;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  border-top: 1px solid var(--ink);
+  margin-top: auto;
+}
+
+.site-footer .inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 1.2rem 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--grey-1);
+}
+
+.site-footer a {
+  color: var(--grey-1);
+  text-decoration: underline;
+}
+
+.site-footer a:hover {
+  color: var(--form-blue);
+}
+
+@media (max-width: 640px) {
+  .site-nav {
+    margin-left: 0;
+    width: 100%;
+    gap: 1.1rem;
+  }
+
+  .site-brand img {
+    height: 2.5rem;
+  }
+}
