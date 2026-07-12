@@ -12,6 +12,8 @@ plugins:
 exclude:
   - AGENTS.md
   - benchmark-results
+  - docs/benchmark-plan.md
+  - docs/benchmark-results.md
 
 # Set the permalink for posts so they render under /blog/
 permalink: /blog/:title/
