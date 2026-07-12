@@ -194,29 +194,9 @@ tr:last-child td {
 }
 
 .site-brand img {
-  height: 3.1rem;
+  height: 3rem;
   width: auto;
   display: block;
-}
-
-.site-brand .wordmark {
-  height: 2.7rem;
-  width: auto;
-  display: block;
-}
-
-.site-brand .wordmark .name {
-  font-family: var(--font-din);
-  font-weight: 600;
-  font-size: 26px;
-  fill: var(--ink);
-}
-
-.site-brand .wordmark .sub {
-  font-family: var(--font-din);
-  font-weight: 500;
-  font-size: 13px;
-  fill: var(--grey-1);
 }
 
 .site-nav {
@@ -378,9 +358,5 @@ tr:last-child td {
 
   .site-brand img {
     height: 2.5rem;
-  }
-
-  .site-brand .wordmark {
-    height: 2.2rem;
   }
 }

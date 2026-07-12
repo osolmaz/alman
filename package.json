@@ -22,5 +22,8 @@
   },
   "allowScripts": {
     "esbuild@0.28.1": true
+  },
+  "devDependencies": {
+    "opentype.js": "^2.0.0"
   }
 }
