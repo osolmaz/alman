@@ -274,3 +274,44 @@ Exact hosted records:
   sufficient for correctness.
 - Artifact paths are diagnostic local paths and may not exist on another
   machine. The compact JSON records are the portable result snapshots.
+
+## Qwen presence-penalty follow-up — 2026-07-12
+
+Qwen was rerun with its upstream-recommended thinking-mode
+`presence_penalty=1.5`. The pinned checkpoint, prompt, 4,096-token reasoning
+cap, 8,192-token output cap, temperature 1.0, top-p 0.95, top-k 20, runtime,
+32,768-token server context, scorer, and 48-row dataset were unchanged.
+
+```text
+Configuration             Acceptance   Compliance   Output tokens   Median output   Near 4K cap   Repeated line >=5   Empty final   Duration
+Original                     5/48          30/48        150,545          4,106            31              18                2       77m15s
+presence_penalty=1.5         5/48          36/48        104,310          1,829.5          20               4                7       17m32s
+```
+
+The original token and failure counts in this table are recomputed over the
+same 48 scored rows. Its recorded duration also includes the two raw requests
+later identified as specification overlaps; the follow-up dataset excluded
+those rows before inference.
+
+The penalty substantially reduced repetition, reasoning-cap pressure, and
+total output, and improved format compliance by six rows. It did not improve
+task acceptance: the score and every collection-level acceptance count were
+identical to the original run. Empty final answers increased from two to seven,
+so the setting changes the failure mode rather than fixing Qwen's task quality
+on this checkpoint/runtime combination.
+
+The successful run used four concurrent requests and four server sequence
+slots under the same fixed 8 GiB KV cache and 24 GiB available-memory / 4 GiB
+free-swap guard floors. It completed with no HTTP retries, server errors,
+memory-pressure kill, or output-length stop. Concurrency reduced wall time but
+is not comparable to the original serial duration as a pure model-speed result.
+
+One preceding serial attempt was interrupted after 31 of 48 rows when the
+concurrency setting was changed; its partial log remains external and is not a
+result. The first complete concurrent run then exposed a result-schema
+constraint that still required concurrency 1. The complete Inspect log was
+preserved, the schema was fixed to accept and cross-check bounded concurrency,
+and the result was rebuilt from that sealed log without rerunning inference.
+
+Exact result:
+[`2026-07-12-qwen36-35b-thinking-pp15.json`](./2026-07-12-qwen36-35b-thinking-pp15.json).

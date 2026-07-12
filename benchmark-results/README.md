@@ -18,6 +18,8 @@ the selection decision.
 The complete 2026-07-11 record, including every run mode, result, token total,
 cost, fallback, incident, caveat, and validation outcome, is in
 [`2026-07-11-complete-thinking-benchmark-report.md`](./2026-07-11-complete-thinking-benchmark-report.md).
+That report also contains the 2026-07-12 Qwen `presence_penalty=1.5`
+follow-up and links its exact result record.
 
 ## Minimal shape
 
