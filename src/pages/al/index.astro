@@ -1,13 +1,15 @@
 ---
 import { getEntry, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
+import AlmanDiff from "../../components/AlmanDiff.astro";
 import specMeta from "../../../spec/main.json";
 import { ui } from "../../i18n/ui";
 
 const entry = await getEntry("spec", "spec.al");
-if (!entry) {
+const deEntry = await getEntry("spec", "spec.de");
+if (!entry || !deEntry) {
   throw new Error(
-    "Alman spec document not found. Generate it with `uv run python -m alman.build`.",
+    "Spec documents not found. Generate them with `uv run python -m alman.build`.",
   );
 }
 const { Content } = await render(entry);
@@ -25,9 +27,9 @@ const t = ui.al;
     <span>Amtliche Fassung · Alman-Sprachfassung</span>
     <span>Dokument AL-1 · Stand {specMeta.lastUpdated}</span>
   </div>
-  <article class="spec-doc">
+  <AlmanDiff german={deEntry.body ?? ""} alman={entry.body ?? ""} class="spec-doc">
     <Content />
-  </article>
+  </AlmanDiff>
   <hr />
   <p>{t["spec.edit"]} <a href="https://github.com/osolmaz/alman">GitHub</a>.</p>
 </Base>

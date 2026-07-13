@@ -4,7 +4,8 @@
 // (the `fallback` flag), instead of redirecting the reader elsewhere.
 import { render, type CollectionEntry } from "astro:content";
 import Base from "../layouts/Base.astro";
-import { formatPostDate } from "../i18n/blog";
+import AlmanDiff from "./AlmanDiff.astro";
+import { formatPostDate, translatedPost } from "../i18n/blog";
 import { translationsFor, ui, type Locale } from "../i18n/ui";
 
 interface Props {
@@ -19,6 +20,12 @@ interface Props {
 const { post, slug, locale, fallback = false } = Astro.props;
 const { Content } = await render(post);
 const t = ui[locale];
+
+// On Alman posts with a structurally parallel German translation, offer
+// the diff view against Standard German (same toggle as the About page
+// and the Alman specification).
+const germanSibling =
+  locale === "al" && !fallback ? await translatedPost(slug, "de") : undefined;
 ---
 
 <Base
@@ -35,7 +42,15 @@ const t = ui[locale];
         {formatPostDate(post.data.date, locale)}
       </time>
     </p>
-    <Content />
+    {
+      germanSibling ? (
+        <AlmanDiff german={germanSibling.body ?? ""} alman={post.body ?? ""}>
+          <Content />
+        </AlmanDiff>
+      ) : (
+        <Content />
+      )
+    }
   </article>
 </Base>
 
