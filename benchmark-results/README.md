@@ -9,6 +9,9 @@ Providers records use `hosted-result.schema.json`, which records the routed
 provider, hosted pricing, the thinking-call cap, and any forced-final fallback.
 Direct OpenAI API records use `openai-result.schema.json`, which also separates
 cached input tokens and records requested and returned model IDs.
+Direct Anthropic API records use `anthropic-result.schema.json`. They record
+the explicit cache policy, cache-write and cache-read tokens, hidden reasoning
+tokens, and the prewarm cost.
 Hosted raw samples, manifests, and per-profile result checkpoints stay in the
 external artifact directory so a later profile failure does not discard an
 earlier completed run.
@@ -36,6 +39,10 @@ The same four GPT models were rerun against the updated Alman rules and the
 corrected invariant-relativizer target on 2026-07-13. Results, run conditions,
 costs, and the discarded initial-pass incident are in
 [`2026-07-13-openai-updated-rules-comparison.md`](./2026-07-13-openai-updated-rules-comparison.md).
+
+The Claude Sonnet 5 xhigh run, including verified cache hits, cold-cache cost,
+and the discarded cache-key preflight, is in
+[`2026-07-13-claude-sonnet-5-xhigh.md`](./2026-07-13-claude-sonnet-5-xhigh.md).
 
 ## Minimal shape
 

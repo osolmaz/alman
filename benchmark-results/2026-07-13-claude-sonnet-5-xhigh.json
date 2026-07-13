@@ -1,0 +1,157 @@
+{
+  "$schema": "./anthropic-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260713T075520Z-claude-sonnet-5-xhigh",
+    "started_at": "2026-07-13T07:55:20.772908+00:00",
+    "completed_at": "2026-07-13T08:02:23.473412+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 48,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "e411a98095ad7a78a031ca15b55f626979358bbc",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "requested": "claude-sonnet-5",
+    "label": "Claude Sonnet 5",
+    "returned_models": [
+      "claude-sonnet-5"
+    ],
+    "snapshot_pinned": true,
+    "reasoning": {
+      "enabled": true,
+      "type": "adaptive",
+      "effort": "xhigh",
+      "display": "omitted",
+      "primary_call_max_output_tokens": 4096,
+      "samples_with_reasoning": 48,
+      "max_primary_output_tokens": 4096,
+      "max_primary_reasoning_tokens": 4096,
+      "forced_final_fallback_count": 8,
+      "forced_final_thinking_disabled": true,
+      "forced_final_effort": "low"
+    }
+  },
+  "endpoint": {
+    "platform": "anthropic-api",
+    "provider": "anthropic",
+    "api": "messages",
+    "anthropic_version": "2023-06-01",
+    "max_concurrency": 4
+  },
+  "cache": {
+    "enabled": true,
+    "type": "explicit",
+    "scope": "system",
+    "ttl": "1h",
+    "prewarm": {
+      "response_id": "msg_011CcyhRJ2BenjvcbAfsR2PH",
+      "returned_model": "claude-sonnet-5",
+      "tokens": {
+        "input": 13,
+        "cache_read_input": 21365,
+        "cache_creation_input": 0,
+        "cache_creation_5m_input": 0,
+        "cache_creation_1h_input": 0,
+        "output": 1,
+        "reasoning": 0,
+        "total": 21379
+      },
+      "estimated_cost_usd": 0.004309
+    },
+    "sample_cache_hit_count": 48,
+    "sample_cache_hit_rate": 1.0
+  },
+  "generation": {
+    "primary_max_output_tokens": 4096,
+    "forced_final_max_output_tokens": 512,
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 40,
+      "total": 48,
+      "rate": 0.8333333333333334,
+      "stderr": 0.0537914353639919
+    },
+    "compliance": {
+      "correct": 44,
+      "total": 48,
+      "rate": 0.9166666666666666,
+      "stderr": 0.039892796156514095
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "deutsch-alman": {
+        "correct": 11,
+        "total": 11,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "die-verwandlung": {
+        "correct": 4,
+        "total": 4,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "siddhartha": {
+        "correct": 10,
+        "total": 16,
+        "rate": 0.625,
+        "stderr": 0.12103072956898178
+      },
+      "starke-flexion": {
+        "correct": 8,
+        "total": 8,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 3672,
+      "cache_read_input": 1196440,
+      "cache_creation_input": 0,
+      "cache_creation_5m_input": 0,
+      "cache_creation_1h_input": 0,
+      "output": 80499,
+      "reasoning": 78084,
+      "total": 1280611
+    },
+    "estimated_cost_usd": 1.055931
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 2.0,
+    "cache_write_5m_per_million_tokens": 2.5,
+    "cache_write_1h_per_million_tokens": 4.0,
+    "cache_read_per_million_tokens": 0.2,
+    "output_per_million_tokens": 10.0,
+    "observed_at": "2026-07-13T15:57:00+08:00",
+    "introductory_pricing_ends": "2026-08-31"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/anthropic/20260713T080300Z/claude-sonnet-5-xhigh.samples.jsonl"
+  }
+}
