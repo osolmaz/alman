@@ -26,7 +26,7 @@ There is a pleasing symmetry here. A project about making language easier for hu
 
 ## The mission stands
 
-The redesign changes the packaging, not the position. We remain adamant about the task. **German should be easier to learn.** Its grammatical gender system and case inflections are a tax paid by every adult learner, with interest, for no communicative benefit. That tax falls hardest on the millions of immigrants who are asked to master it while also holding down jobs, raising families, and building lives here.
+The redesign only changes the packaging. We remain adamant about the task. **German should be easier to learn.** Its grammatical gender system and case inflections are a tax paid by every adult learner, with interest, for no communicative benefit. That tax falls hardest on the millions of immigrants who are asked to master it while also holding down jobs, raising families, and building lives here.
 
 Alman is our answer, a simplified German dialect that stays mutually intelligible with Standard German while removing the parts that make it needlessly hard. Easier German means faster integration, and faster integration is good for everyone in the country, including the people who never had to learn German at all, because they were born into it.
 
