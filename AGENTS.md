@@ -7,7 +7,9 @@
 
 ## Writing style
 
-- Avoid em dashes in prose written for this project (blog posts, site copy, documentation). Heavy em-dash use is a tell for AI writing. Hard limit: at most one set of em dashes per 1000 words. Restructure with commas, parentheses, colons, or separate sentences instead.
+- Avoid em dashes in prose written for this project (blog posts, site copy, documentation). Heavy em-dash use is a tell for AI writing. At most one set of em dashes per 1000 words. Restructure with commas, parentheses, or separate sentences instead.
+- Do not compensate by overusing colons or semicolons the same way. "X: Y" constructions used for punchiness ("Alman is our answer: a simplified...") are the same AI tell. Colons are for genuine lists only; semicolons should be rare. Do not try to make prose sound edgy through punctuation. Write plain sentences.
+- Never mention or describe the subject of the emblem in any published or user-facing text (site copy, blog posts, alt text, social copy). It is an obvious visual joke that must never be acknowledged verbally. Call it "the seal" or "the emblem" if a reference is unavoidable. Internal design documentation is the only exception.
 
 ## Translation style
 
