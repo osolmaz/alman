@@ -3,7 +3,7 @@
 - Never bump `documentVersion` or `lastUpdated` in `spec/main.json` (or version fields anywhere else) unless explicitly instructed to. Versioning is managed by the maintainer.
 - The JSON files under `spec/` are the source of truth; `_includes/spec.md`, `_includes/spec.de.md`, and `_includes/spec.al.md` are generated from them. After editing any spec data file (including the `i18n` translation blocks), regenerate them with `uv run python -m alman.build` and commit the results alongside the data changes. Never edit the generated `_includes/spec*.md` files by hand.
 - German (`de`) and Alman (`al`) spec translations live in `i18n` objects next to the English prose fields. Keep them faithful to the English text, and keep the `al` text compliant with the Alman grammar itself (quoted Standard German forms are mentions and are exempt).
-- Alman's language code is `al` (URL prefix `/al/`, internal locale key, spec i18n key). The petitioned official BCP 47 tag is `de-AL`; until granted, HTML markup uses the private-use tag `de-x-alman`.
+- Alman's language code is `al` (URL prefix `/al/`, internal locale key, spec i18n key). The BCP 47 tag is `de-AL` — petitioned as official and used in markup as if already granted. Do not use private-use tags like `de-x-alman`.
 
 ## Translation style
 

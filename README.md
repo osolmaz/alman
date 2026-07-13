@@ -19,9 +19,9 @@ under `spec/` (the source of truth) with `uv run python -m alman.build` —
 never edit them by hand. Translations live in the `i18n` blocks of the spec
 JSON files. The site is served in three language versions (`/`, `/de/`,
 `/al/`); localized About pages live in `src/content/about/`. Alman's
-language code: this project petitions for the official BCP 47 tag `de-AL`;
-until it is granted, the markup uses the private-use tag `de-x-alman`, and
-URLs use the shorter `al` prefix. Blog posts
+language tag is `de-AL` — this project petitions for it to be recognized
+officially and uses it as if it already were. URLs use the shorter `al`
+prefix. Blog posts
 live in `src/content/blog/`, and the visual identity is documented in
 `docs/design-guide.md`.
 

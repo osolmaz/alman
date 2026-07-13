@@ -3,16 +3,13 @@
 
 export type Locale = "en" | "de" | "al";
 
-// BCP 47 language tags. Alman has no ISO 639 code of its own yet: this
-// project petitions for the official language tag "de-AL". Until that is
-// granted, the markup uses the standards-compliant private-use tag
-// "de-x-alman", so browsers, search engines, and screen readers treat the
-// text as German. In URLs we use the bare "al" prefix regardless, because
-// it is shorter and simpler.
+// BCP 47 language tags. Alman's tag is "de-AL" — the project petitions for
+// this to be recognized officially and uses it as if it already were. In
+// URLs we use the bare "al" prefix, because it is shorter and simpler.
 export const langCodes: Record<Locale, string> = {
   en: "en",
   de: "de",
-  al: "de-x-alman",
+  al: "de-AL",
 };
 
 export const localeNames: Record<Locale, string> = {

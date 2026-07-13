@@ -12,9 +12,9 @@ export default defineConfig({
     defaultLocale: "en",
     // Alman has no ISO 639 code; per BCP 47 it is German with a
     // private-use subtag. The URL path uses the readable name.
-    // Alman: petitioned official tag is "de-AL"; until granted, markup uses
-    // the private-use tag "de-x-alman". The URL prefix is the shorter "al".
-    locales: ["en", "de", { path: "al", codes: ["de-x-alman"] }],
+    // Alman's language tag is "de-AL" (petitioned as official, used as if
+    // already granted). The URL prefix is the shorter "al".
+    locales: ["en", "de", { path: "al", codes: ["de-AL"] }],
     routing: {
       prefixDefaultLocale: false,
     },
