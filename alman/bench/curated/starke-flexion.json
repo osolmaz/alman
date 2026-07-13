@@ -6,6 +6,7 @@
       "source": "großer Mann (Nominative)",
       "accepted": ["große Mann"],
       "rule": "adjectives",
+      "covers": ["morphological-regularization"],
       "note": "Nominative"
     },
     {
@@ -48,6 +49,7 @@
       "source": "netten Kind (Genitive)",
       "accepted": ["nette Kind"],
       "rule": "adjectives",
+      "covers": ["genitive-consistency"],
       "note": "Genitive"
     }
   ]

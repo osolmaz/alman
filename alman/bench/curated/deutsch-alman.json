@@ -5,32 +5,38 @@
     {
       "source": "Der Hund läuft schnell.",
       "accepted": ["Die Hund läuft schnell."],
-      "rule": "articles"
+      "rule": "articles",
+      "covers": ["non-genitive-articles"]
     },
     {
       "source": "Ein Mann und eine Frau sahen das Auto.",
       "accepted": ["Ein Mann und ein Frau sahen die Auto."],
-      "rule": "articles"
+      "rule": "articles",
+      "covers": ["non-genitive-forms"]
     },
     {
       "source": "Die Kinder spielen im Garten.",
       "accepted": ["Die Kinder spielen in die Garten."],
-      "rule": "contraction"
+      "rule": "contraction",
+      "covers": ["contraction-handling"]
     },
     {
       "source": "Das Buch des Schülers liegt auf dem Tisch.",
       "pattern": "Die Buch {der|von die}@1d Schüler liegt auf die Tisch.",
-      "rule": "genitive"
+      "rule": "genitive",
+      "covers": ["genitive-articles", "von-die-usage"]
     },
     {
       "source": "Ich gebe dem Arzt das Medikament.",
       "pattern": "Ich gebe {die Arzt die Medikament|die Medikament an die Arzt}@9c.",
-      "rule": "ditransitive"
+      "rule": "ditransitive",
+      "covers": ["ditransitive-order"]
     },
     {
       "source": "Die Regierung hat ihre Entscheidung bekannt gegeben.",
       "pattern": "Die Regierung hat {sein|ihr}@6e Entscheidung bekannt gegeben.",
       "rule": "possessive",
+      "covers": ["possessive-pronouns"],
       "note": "Possessor is an institution: strict natural-gender attribution gives 'sein' (its); 'ihr' accepted since the spec leaves collective possessors underspecified."
     },
     {

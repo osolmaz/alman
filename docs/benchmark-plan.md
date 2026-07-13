@@ -6,10 +6,14 @@ translation benchmark (`alman/bench/`, built on
 
 ## What is being measured
 
-The benchmark contains 48 curated, hand-translated sentences under
-`alman/bench/curated/`. They are mostly literary German from Kafka and Hesse,
-re-derived from the `alman-research` seed data under the current spec. Each
-sentence exercises several rules at once.
+The benchmark contains 87 curated, hand-translated items under
+`alman/bench/curated/`. Literary sentences from Kafka and Hesse (re-derived
+from the `alman-research` seed data under the current spec) exercise several
+rules at once; targeted collections (`relativsaetze`, `regelabdeckung`)
+demonstrate individual rules, including their tricky cases and
+overcorrection guards. The curated tier is a minimum demonstrative set: every
+spec rule is claimed by at least one item via its `covers` field, enforced by
+`test_every_spec_rule_covered`.
 
 The 179 examples embedded in the spec are not benchmark rows when the spec is
 provided to the model. Their source text and answers both appear verbatim in
@@ -53,7 +57,7 @@ stricter canonical-match scorer can be added without changing the data.
      --reasoning-effort xhigh --max-connections 1 --limit 2
    ```
 
-2. **Full run** (all 48 non-overlapping curated items, strictly sequential):
+2. **Full run** (all non-overlapping curated items, strictly sequential):
 
    ```bash
    uv run inspect eval alman/bench/task.py --model openai/gpt-5.5 \
@@ -84,7 +88,7 @@ with curated rows in headline metrics.
 
 ## Planned comparisons
 
-- **GPT-5.5 xhigh, spec in context** — the informed ceiling on the 48 unseen
+- **GPT-5.5 xhigh, spec in context** — the informed ceiling on the unseen
   curated sentences.
 - **Same model, `include_spec=false`** — measures latent Alman knowledge and
   provides a contamination baseline.

@@ -34,6 +34,13 @@ A Standard German → Alman translation benchmark, built on
   genitives, contractions, weak nouns, dative plurals, adjective chains.
   Each file records its provenance.
 
+The curated tier is kept a **minimum demonstrative set**: every rule in the
+spec is the designated target of at least one curated item (a straightforward
+demonstration, plus a tricky or guard item where the rule has a trap). Items
+declare this with a `covers` field naming spec rule ids, and a test fails if
+any rule is left unclaimed. The `regelabdeckung` collection holds the targeted
+single-rule items authored to close coverage gaps.
+
 The spec examples are also available as extraction fixtures for scoring and
 training-data validation, but they are not evaluation rows when the full spec
 is in the model context: the spec contains their answers verbatim. The curated

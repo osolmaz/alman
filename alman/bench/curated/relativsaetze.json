@@ -6,6 +6,7 @@
       "source": "Der Mann, der neben mir wohnt, ist Lehrer.",
       "pattern": "Die Mann, {das|die}@6f neben mir wohnt, ist Lehrer.",
       "rule": "relative-pronouns",
+      "covers": ["relative-pronouns"],
       "note": "Subject relative on a masculine antecedent: SD 'der' becomes the invariant relativizer, canonical 'das'."
     },
     {
@@ -74,6 +75,7 @@
       "source": "Diejenigen, die den Kurs bestanden haben, bekommen ein Zertifikat.",
       "pattern": "Diejenige, {das|die}@6f die Kurs bestanden haben, bekommen ein Zertifikat.",
       "rule": "mixed",
+      "covers": ["unified-non-genitive-forms"],
       "note": "Demonstrative head plus relative clause: 'diejenigen' takes the unified determiner form 'diejenige' while the relativizer is chosen independently."
     },
     {

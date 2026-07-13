@@ -15,7 +15,8 @@
     {
       "source": "Die Lehrerin unterrichtet Mathematik in der Schule.",
       "accepted": ["Die Lehrer unterrichtet Mathematik in die Schule."],
-      "rule": "occupational"
+      "rule": "occupational",
+      "covers": ["occupational-titles"]
     },
     {
       "source": "Der Polizist patrouilliert in der Nachbarschaft.",

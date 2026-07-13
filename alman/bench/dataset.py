@@ -65,6 +65,10 @@ class BenchItem(BaseModel):
     """Where the item came from, for curated (non-spec) items."""
     pattern: str | None = None
     """The compact pattern the acceptance set was expanded from, if any."""
+    covers: list[str] = []
+    """Spec rule ids this item is the designated demonstration for. Every
+    spec rule must be claimed by at least one curated item (enforced by a
+    test), so the curated tier stays a minimum demonstrative set."""
 
 
 def _split_variants(text: str) -> list[str]:
@@ -161,6 +165,26 @@ def _apply_overrides(items: list[BenchItem]) -> list[BenchItem]:
     return result
 
 
+def spec_rule_ids(spec_dir: Path = SPEC_DIR) -> list[str]:
+    """All rule ids defined in the specification, in document order."""
+    main = _load_json(spec_dir / "main.json")
+    ids: list[str] = []
+    for section_ref in main["sections"]:
+        section_id = section_ref["id"]
+        section = _load_json(spec_dir / "sections" / section_id / "section.json")
+        for para_ref in section.get("paragraphs", []):
+            paragraph = _load_json(
+                spec_dir
+                / "sections"
+                / section_id
+                / "paragraphs"
+                / para_ref["id"]
+                / "paragraph.json"
+            )
+            ids.extend(rule["id"] for rule in paragraph.get("rules", []))
+    return ids
+
+
 def load_items(spec_dir: Path = SPEC_DIR) -> list[BenchItem]:
     """Load all spec-example fixtures in document order."""
     main = _load_json(spec_dir / "main.json")
@@ -214,6 +238,7 @@ def load_curated_items(
     spec_dir: Path = SPEC_DIR,
 ) -> list[BenchItem]:
     """Load the hand-curated sentence-level items (tier 2 of the benchmark)."""
+    known_rules = set(spec_rule_ids(spec_dir))
     items: list[BenchItem] = []
     for path in sorted(curated_dir.glob("*.json")):
         data = _load_json(path)
@@ -231,6 +256,13 @@ def load_curated_items(
                     raise ValueError(f"{item_id}: {err}") from err
             else:
                 accepted = list(entry["accepted"])
+            covers = list(entry.get("covers", []))
+            unknown_rules = set(covers) - known_rules
+            if unknown_rules:
+                raise ValueError(
+                    f"{item_id}: 'covers' names unknown spec rules: "
+                    f"{sorted(unknown_rules)}"
+                )
             items.append(
                 BenchItem(
                     id=item_id,
@@ -242,6 +274,7 @@ def load_curated_items(
                     note=entry.get("note"),
                     provenance=data.get("provenance"),
                     pattern=entry.get("pattern"),
+                    covers=covers,
                 )
             )
     if not exclude_spec_examples:
