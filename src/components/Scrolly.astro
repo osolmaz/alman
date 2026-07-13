@@ -61,15 +61,15 @@ import worldMap from "../assets/world-map.svg?raw";
             <tr><th>Gegenstand</th><th>Geschlecht lt. Wörterbuch</th></tr>
           </thead>
           <tbody>
-            <tr><td>der Baum <span class="gloss">(tree)</span></td><td>männlich</td></tr>
-            <tr><td>die Knospe <span class="gloss">(its bud)</span></td><td>weiblich</td></tr>
-            <tr><td>das Blatt <span class="gloss">(its leaf)</span></td><td>sächlich</td></tr>
-            <tr><td>der Hund <span class="gloss">(dog)</span></td><td>männlich</td></tr>
-            <tr><td>die Katze <span class="gloss">(cat, incl. tomcats)</span></td><td>weiblich</td></tr>
+            <tr><td>der Baum <span class="gloss">(tree)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
+            <tr><td>die Knospe <span class="gloss">(its bud)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
+            <tr><td>das Blatt <span class="gloss">(its leaf)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
+            <tr><td>der Hund <span class="gloss">(dog)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
+            <tr><td>die Katze <span class="gloss">(cat, incl. tomcats)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
             <tr><td>das Pferd <span class="gloss">(horse)</span></td><td>—</td></tr>
-            <tr><td>das Weib <span class="gloss">(wife)</span></td><td>sächlich</td></tr>
-            <tr><td>die Steckrübe <span class="gloss">(turnip)</span></td><td>weiblich</td></tr>
-            <tr><td>das Mädchen <span class="gloss">(young lady)</span></td><td>sächlich</td></tr>
+            <tr><td>das Weib <span class="gloss">(wife)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
+            <tr><td>die Steckrübe <span class="gloss">(turnip)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
+            <tr><td>das Mädchen <span class="gloss">(young lady)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
           </tbody>
         </table>
         <p class="table-verdict inv-verdict">Systematik: keine.</p>
@@ -694,6 +694,16 @@ import worldMap from "../assets/world-map.svg?raw";
     font-family: var(--font-mono);
     font-size: 0.8rem;
     color: var(--grey-1);
+  }
+
+  .g-sym {
+    /* ♂ ♀ ⚲ — the gender symbols; system fonts, not the mono stack,
+       so U+26B2 NEUTER renders reliably. */
+    font-family:
+      "Hiragino Sans", "Segoe UI Symbol", "Noto Sans Symbols 2", sans-serif;
+    font-size: 0.9rem;
+    color: var(--form-blue);
+    padding-left: 0.15rem;
   }
 
   .inv-verdict,
