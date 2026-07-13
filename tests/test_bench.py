@@ -235,6 +235,13 @@ class TestCurated:
         assert "treibt sie die innerste Bestimmung" in anaphora.accepted[0]
         assert "ihr Leben" in anaphora.accepted[0]
 
+    def test_invariant_relativizer_in_siddhartha(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+        item = by_id["curated/siddhartha/10"]
+        assert "alles, das Siddhartha" in item.accepted[0]
+        assert any("alles, die Siddhartha" in value for value in item.accepted)
+        assert not any("alles, was Siddhartha" in value for value in item.accepted)
+
     def test_ids_unique_across_tiers(self, items, curated_items):
         ids = [item.id for item in items] + [item.id for item in curated_items]
         assert len(ids) == len(set(ids))
