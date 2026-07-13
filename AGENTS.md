@@ -4,6 +4,12 @@
 - The JSON files under `spec/` are the source of truth; `_includes/spec.md`, `_includes/spec.de.md`, and `_includes/spec.al.md` are generated from them. After editing any spec data file (including the `i18n` translation blocks), regenerate them with `uv run python -m alman.build` and commit the results alongside the data changes. Never edit the generated `_includes/spec*.md` files by hand.
 - German (`de`) and Alman (`al`) spec translations live in `i18n` objects next to the English prose fields. Keep them faithful to the English text, and keep the `al` text compliant with the Alman grammar itself (quoted Standard German forms are mentions and are exempt).
 
+## Translation style
+
+- No language purism. When translating into German or Alman, use the terms actually used in practice, especially for technical vocabulary — e.g. **Open Source**, not *quelloffen*. Avoid purist "Reindeutsch" coinages; we are not the Goethe-Institut. The test: what would a German developer or a mainstream German tech publication write today?
+- Translations must stay faithful to the English source, and the `de`/`al` versions must stay structurally parallel to each other.
+- The full style guide is the `translation-style` skill in `.agents/skills/translation-style/SKILL.md`. Follow it for any German or Alman text in this repo.
+
 ## Language design perspective
 
 - Alman's guiding heuristic is that English is the experiment that already ran: a Germanic language that actually lost grammatical gender and case during the Middle English period. Its outcome demonstrates the path of least resistance for such a simplification, and because English is the world's most common second language, its patterns are the attractor that would shape German if it ever tipped the same way.
