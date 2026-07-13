@@ -31,3 +31,12 @@ const formatDate = (date: Date) =>
     <Content />
   </article>
 </Base>
+
+<style>
+  /* The ruled h2 look belongs to the spec document; in blog posts the
+     lines read as section separators, so drop them. */
+  article :global(h2) {
+    border-top: none;
+    padding-top: 0;
+  }
+</style>
