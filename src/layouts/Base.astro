@@ -38,9 +38,10 @@ const t = ui[locale];
 
 const homePath = localeHome(locale);
 const aboutPath = `${localePrefix(locale)}/about/`;
+const blogPath = `${localePrefix(locale)}/blog/`;
 const navItems = [
   { href: `${homePath}#spec`, label: t["nav.spec"], match: homePath },
-  { href: "/blog/", label: t["nav.blog"], match: "/blog/" },
+  { href: blogPath, label: t["nav.blog"], match: blogPath },
   { href: aboutPath, label: t["nav.about"], match: aboutPath },
 ];
 

@@ -3,7 +3,9 @@ import { getCollection } from "astro:content";
 import type { APIContext } from "astro";
 
 export async function GET(context: APIContext) {
-  const posts = (await getCollection("blog")).sort(
+  // The feed carries the canonical English posts only; ids with a locale
+  // suffix ("<slug>.de", "<slug>.al") are translations.
+  const posts = (await getCollection("blog", (p) => !/\.(de|al)$/.test(p.id))).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );
   return rss({

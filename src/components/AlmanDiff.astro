@@ -1,0 +1,87 @@
+---
+// The diff view for Alman pages: renders the page's own (Alman) content
+// via the slot, plus a hidden variant where every change against the
+// structurally parallel Standard German source is marked del/ins. A
+// pure-CSS checkbox toggles between the two; no client JS is involved.
+import { renderAlmanDiff } from "../lib/almanDiff";
+
+interface Props {
+  /** Standard German markdown source, structurally parallel to the Alman text. */
+  german: string;
+  /** Alman markdown source (the same text the slot renders). */
+  alman: string;
+  /** Extra class for both content containers (e.g. "spec-doc"). */
+  class?: string;
+}
+
+const { german, alman, class: className } = Astro.props;
+
+// The diff variant repeats the whole document, so its anchors (heading
+// ids, footnote refs) must be renamed: duplicate ids are invalid, and
+// in-page links would otherwise target the hidden clean variant. The
+// HTML comes from our own markdown pipeline, so attribute quoting is
+// uniform and a textual rewrite is safe.
+const diffHtml = (await renderAlmanDiff(german, alman))
+  .replaceAll(' id="', ' id="diff-')
+  .replaceAll(' href="#', ' href="#diff-')
+  .replaceAll(' aria-labelledby="', ' aria-labelledby="diff-')
+  .replaceAll(' aria-describedby="', ' aria-describedby="diff-');
+---
+
+<div class="al-view">
+  <label class="diff-toggle">
+    <input type="checkbox" />
+    Änderungen gegenüber die Standarddeutsche anzeigen
+  </label>
+  <div class:list={["al-clean", className]}>
+    <slot />
+  </div>
+  <div class:list={["al-diff", className]} set:html={diffHtml} />
+</div>
+
+<style>
+  .diff-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--grey-1);
+    border: 1px dashed var(--grey-2);
+    padding: 0.4rem 0.8rem;
+    margin: 0 0 1.4rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .diff-toggle input {
+    accent-color: var(--form-blue);
+    margin: 0;
+  }
+
+  .al-diff {
+    display: none;
+  }
+
+  .al-view:has(.diff-toggle input:checked) .al-clean {
+    display: none;
+  }
+
+  .al-view:has(.diff-toggle input:checked) .al-diff {
+    display: block;
+  }
+
+  .al-diff :global(del) {
+    text-decoration: line-through;
+    text-decoration-color: var(--fail-red);
+    text-decoration-thickness: 1.5px;
+    color: var(--grey-1);
+  }
+
+  .al-diff :global(ins) {
+    text-decoration: none;
+    color: var(--form-blue);
+    font-weight: 600;
+  }
+</style>

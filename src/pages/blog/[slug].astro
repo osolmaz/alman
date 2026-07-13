@@ -1,9 +1,9 @@
 ---
-import { getCollection, render } from "astro:content";
-import Base from "../../layouts/Base.astro";
+import BlogPost from "../../components/BlogPost.astro";
+import { englishPosts } from "../../i18n/blog";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+  const posts = await englishPosts();
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -11,32 +11,6 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
-
-const formatDate = (date: Date) =>
-  date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
 ---
 
-<Base title={post.data.title} description={post.data.description}>
-  <article>
-    <h1>{post.data.title}</h1>
-    <p class="post-meta">
-      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
-    </p>
-    <Content />
-  </article>
-</Base>
-
-<style>
-  /* The ruled h2 look belongs to the spec document; in blog posts the
-     lines read as section separators, so drop them. */
-  article :global(h2) {
-    border-top: none;
-    padding-top: 0;
-  }
-</style>
+<BlogPost post={post} slug={post.id} locale="en" />

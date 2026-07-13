@@ -1,0 +1,21 @@
+---
+import BlogPost from "../../../components/BlogPost.astro";
+import { englishPosts, translatedPost } from "../../../i18n/blog";
+
+export async function getStaticPaths() {
+  const posts = await englishPosts();
+  return Promise.all(
+    posts.map(async (post) => {
+      const translated = await translatedPost(post.id, "al");
+      return {
+        params: { slug: post.id },
+        props: { post: translated ?? post, slug: post.id, fallback: !translated },
+      };
+    }),
+  );
+}
+
+const { post, slug, fallback } = Astro.props;
+---
+
+<BlogPost post={post} slug={slug} locale="al" fallback={fallback} />

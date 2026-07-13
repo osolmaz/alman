@@ -1,0 +1,64 @@
+---
+// Renders a blog post in a given locale. When no translation exists for
+// the requested locale, the English original is shown with a notice
+// (the `fallback` flag), instead of redirecting the reader elsewhere.
+import { render, type CollectionEntry } from "astro:content";
+import Base from "../layouts/Base.astro";
+import AlmanDiff from "./AlmanDiff.astro";
+import { formatPostDate, translatedPost } from "../i18n/blog";
+import { translationsFor, ui, type Locale } from "../i18n/ui";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  /** Canonical (English) slug, without locale suffix. */
+  slug: string;
+  locale: Locale;
+  /** True when the English original is shown for lack of a translation. */
+  fallback?: boolean;
+}
+
+const { post, slug, locale, fallback = false } = Astro.props;
+const { Content } = await render(post);
+const t = ui[locale];
+
+// On Alman posts with a structurally parallel German translation, offer
+// the diff view against Standard German (same toggle as the About page
+// and the Alman specification).
+const germanSibling =
+  locale === "al" && !fallback ? await translatedPost(slug, "de") : undefined;
+---
+
+<Base
+  title={post.data.title}
+  description={post.data.description}
+  locale={locale}
+  translations={translationsFor(`blog/${slug}`)}
+>
+  <article lang={fallback ? "en" : undefined}>
+    {fallback && <p class="i18n-notice" lang={locale === "al" ? "de-AL" : "de"}>{t["blog.untranslated"]}</p>}
+    <h1>{post.data.title}</h1>
+    <p class="post-meta">
+      <time datetime={post.data.date.toISOString()}>
+        {formatPostDate(post.data.date, locale)}
+      </time>
+    </p>
+    {
+      germanSibling ? (
+        <AlmanDiff german={germanSibling.body ?? ""} alman={post.body ?? ""}>
+          <Content />
+        </AlmanDiff>
+      ) : (
+        <Content />
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  /* The ruled h2 look belongs to the spec document; in blog posts the
+     lines read as section separators, so drop them. */
+  article :global(h2) {
+    border-top: none;
+    padding-top: 0;
+  }
+</style>
