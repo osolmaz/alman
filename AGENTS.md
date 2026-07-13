@@ -7,7 +7,7 @@
 
 ## Writing style
 
-- All prose written for this project (blog posts, site copy, documentation, PR descriptions) must be free of AI writing tells. Follow the `delete-ai-smell` skill in `.agents/skills/delete-ai-smell/SKILL.md`. In short, no em dashes (at most one set per 1000 words), no colon or semicolon punchiness, no "it is not X, it is Y" contrast rhetoric or its variants. Write plain sentences.
+- All prose written for this project (blog posts, site copy, documentation, PR descriptions) must be free of AI writing tells. Follow the `kill-ai-smell` skill (from the osolmaz/tools skill collection). In short, no em dashes (at most one set per 1000 words), no colon or semicolon punchiness, no "it is not X, it is Y" contrast rhetoric or its variants. Write plain sentences.
 - Never mention or describe the subject of the emblem in any published or user-facing text (site copy, blog posts, alt text, social copy). It is an obvious visual joke that must never be acknowledged verbally. Call it "the seal" or "the emblem" if a reference is unavoidable. Internal design documentation is the only exception.
 
 ## Translation style
