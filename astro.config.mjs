@@ -1,9 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
-import remarkMath from "remark-math";
-import remarkSmartypants from "remark-smartypants";
-import rehypeKatex from "rehype-katex";
-import { remarkHeadingId } from "remark-custom-heading-id";
+import { markdownConfig } from "./markdown.config.mjs";
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,15 +8,14 @@ export default defineConfig({
   // The default HTML compression eats meaningful spaces before inline
   // elements (e.g. "edited on <a>GitHub</a>" rendered as "onGitHub").
   compressHTML: false,
-  markdown: {
-    // remarkHeadingId handles the kramdown-style `{#id}` heading anchors
-    // used by the generated spec document (_includes/spec.md).
-    // "oldschool" dashes match kramdown: -- becomes en dash, --- em dash.
-    remarkPlugins: [
-      remarkMath,
-      remarkHeadingId,
-      [remarkSmartypants, { dashes: "oldschool" }],
-    ],
-    rehypePlugins: [rehypeKatex],
+  i18n: {
+    defaultLocale: "en",
+    // Alman has no ISO 639 code; per BCP 47 it is German with a
+    // private-use subtag. The URL path uses the readable name.
+    locales: ["en", "de", { path: "alman", codes: ["de-x-alman"] }],
+    routing: {
+      prefixDefaultLocale: false,
+    },
   },
+  markdown: markdownConfig,
 });

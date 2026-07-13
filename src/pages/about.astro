@@ -1,0 +1,17 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import LangSwitcher from "../components/LangSwitcher.astro";
+import { translationsFor } from "../i18n/ui";
+
+const entry = await getEntry("about", "en");
+if (!entry) throw new Error("About entry 'en' not found.");
+const { Content } = await render(entry);
+const translations = translationsFor("about");
+---
+
+<Base title={entry.data.title} locale="en" translations={translations}>
+  <LangSwitcher locale="en" translations={translations} />
+  <h1>{entry.data.title}</h1>
+  <Content />
+</Base>

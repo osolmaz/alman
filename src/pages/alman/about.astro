@@ -1,0 +1,84 @@
+---
+import { getEntry, render } from "astro:content";
+import { createMarkdownProcessor } from "@astrojs/markdown-remark";
+import Base from "../../layouts/Base.astro";
+import LangSwitcher from "../../components/LangSwitcher.astro";
+import { translationsFor } from "../../i18n/ui";
+import { diffMarkdown } from "../../lib/wordDiff";
+import { markdownConfig } from "../../../markdown.config.mjs";
+
+const entry = await getEntry("about", "alman");
+const deEntry = await getEntry("about", "de");
+if (!entry || !deEntry) throw new Error("About entries 'alman'/'de' not found.");
+const { Content } = await render(entry);
+
+// Build-time word diff against the German version, so the reader can
+// toggle a view showing exactly what the simplification changed.
+const processor = await createMarkdownProcessor(markdownConfig);
+const merged = diffMarkdown(deEntry.body ?? "", entry.body ?? "");
+const diffHtml = (await processor.render(merged)).code;
+
+const translations = translationsFor("about");
+---
+
+<Base title={entry.data.title} locale="alman" translations={translations}>
+  <LangSwitcher locale="alman" translations={translations} />
+  <h1>{entry.data.title}</h1>
+  <div class="al-view">
+    <label class="diff-toggle">
+      <input type="checkbox" />
+      Änderungen gegenüber die Standarddeutsche anzeigen
+    </label>
+    <article class="al-clean">
+      <Content />
+    </article>
+    <article class="al-diff" set:html={diffHtml} />
+  </div>
+</Base>
+
+<style>
+  .diff-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--grey-1);
+    border: 1px dashed var(--grey-2);
+    padding: 0.4rem 0.8rem;
+    margin: 0 0 1.4rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .diff-toggle input {
+    accent-color: var(--form-blue);
+    margin: 0;
+  }
+
+  .al-diff {
+    display: none;
+  }
+
+  .al-view:has(.diff-toggle input:checked) .al-clean {
+    display: none;
+  }
+
+  .al-view:has(.diff-toggle input:checked) .al-diff {
+    display: block;
+  }
+
+  .al-diff :global(del) {
+    text-decoration: line-through;
+    text-decoration-color: var(--fail-red);
+    text-decoration-thickness: 1.5px;
+    color: var(--grey-1);
+  }
+
+  .al-diff :global(ins) {
+    text-decoration: none;
+    color: var(--form-blue);
+    font-weight: 600;
+  }
+</style>

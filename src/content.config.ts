@@ -17,4 +17,15 @@ const spec = defineCollection({
   loader: glob({ base: "./_includes", pattern: "spec.md" }),
 });
 
-export const collections = { blog, spec };
+// The About page, one entry per locale (en.md, de.md, alman.md).
+// The German and Alman entries are faithful translations of the English
+// text and must stay structurally parallel: the Alman page renders a
+// word-level diff against the German entry.
+const about = defineCollection({
+  loader: glob({ base: "./src/content/about", pattern: "*.md" }),
+  schema: z.object({
+    title: z.string(),
+  }),
+});
+
+export const collections = { blog, spec, about };
