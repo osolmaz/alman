@@ -7,13 +7,13 @@
 
 ## Einleitung {#introduction}
 
-Die Genussystem der deutsche Sprache, umgangssprachlich als „der/die/das“ bezeichnet, ist für diejenigen, die Deutsch als zusätzliche Sprache (L2) lernen, notorisch schwierig. Wir vertreten die Auffassung, dass die korrekte Verwendung der Genera für die meiste L2-Lernenden nicht entscheidend ist, um in die deutsche Gesellschaft zu funktionieren. Zu diese Zweck konstruieren wir ein Dialekt namens **Alman**, die die Genera Maskulinum, Femininum und Neutrum zu ein einzige Kategorie vereinigt und genus- und kasusspezifische Flexionen beseitigt. Die daraus resultierende Genusverlust ähnelt diejenige, die die Englische während der mittelenglische Periode erfahren hat. Wir legen ein formale Beschreibung der **Alman**-Grammatik vor.
+Die Genussystem der deutsche Sprache, umgangssprachlich als „der/die/das“ bezeichnet, ist für diejenigen, das Deutsch als zusätzliche Sprache (L2) lernen, notorisch schwierig. Wir vertreten die Auffassung, dass die korrekte Verwendung der Genera für die meiste L2-Lernenden nicht entscheidend ist, um in die deutsche Gesellschaft zu funktionieren. Zu diese Zweck konstruieren wir ein Dialekt namens **Alman**, das die Genera Maskulinum, Femininum und Neutrum zu ein einzige Kategorie vereinigt und genus- und kasusspezifische Flexionen beseitigt. Die daraus resultierende Genusverlust ähnelt diejenige, das die Englische während der mittelenglische Periode erfahren hat. Wir legen ein formale Beschreibung der **Alman**-Grammatik vor.
 
 Die Idee zu **Alman** entstand aus die Erkenntnis, dass Sprachkomplexität – insbesondere in morphologische Systeme wie die Genus – die Sprachenlernen verlangsamen und die Integration von Zugewanderten in die Gesellschaft behindern kann. Wir vertreten die These, dass höhere grammatische Komplexität reale Kosten verursacht, darunter ein verzögerte Integration in die Arbeitsmarkt und ein verringerte Produktivität von Migranten. Indem **Alman** die Notwendigkeit beseitigt, mehrere Genusmarker zu memorieren und anzuwenden, will es diese Herausforderungen mildern, ohne die grundlegende Struktur der deutsche Syntax und der Wortschatz zu beeinträchtigen.
 
 Über die praktische Nutzen für Neuankömmlinge hinaus bleibt **Alman** mit **Standarddeutsch** gegenseitig verständlich. Die Dialekt ist darauf ausgelegt, die wesentliche Wortstellung zu bewahren (Verbzweitstellung in Hauptsätze und Verbendstellung in Nebensätze), die vertraute Verbkonjugationen beizubehalten und die lexikalische Klarheit insgesamt zu erhalten. Statt die gesamte Grammatik umzubauen, reduziert es die Komplexität gezielt dort, wo sie meist in die Gewicht fällt – nämlich bei die Artikelgebrauch, bei die Substantivflexion und bei die Adjektivendungen – und erlaubt es L2-Lernenden so, schon früher selbstbewusster zu kommunizieren.
 
-Diese Spezifikation liefert ein formale Darstellung der **Alman**-Grammatik und beschreibt in die Einzelne die Regeln für die Artikelvereinfachung, die Substantivmorphologie, die Adjektivendungen und weitere zentrale sprachliche Elemente. Indem wir diese Änderungen mit zahlreiche Beispiele veranschaulichen, wollen wir Lehrenden wie Lernenden ein klare Fahrplan für die Übernahme von diese Dialekt bieten. Ziel ist nicht, **Standarddeutsch** zu ersetzen, sondern ein zugängliche Variante einzuführen, die die Schwierigkeiten von erwachsene Lernenden adressiert und letztlich ein inklusivere und effizientere Sprachenlernen fördert.
+Diese Spezifikation liefert ein formale Darstellung der **Alman**-Grammatik und beschreibt in die Einzelne die Regeln für die Artikelvereinfachung, die Substantivmorphologie, die Adjektivendungen und weitere zentrale sprachliche Elemente. Indem wir diese Änderungen mit zahlreiche Beispiele veranschaulichen, wollen wir Lehrenden wie Lernenden ein klare Fahrplan für die Übernahme von diese Dialekt bieten. Ziel ist nicht, **Standarddeutsch** zu ersetzen, sondern ein zugängliche Variante einzuführen, das die Schwierigkeiten von erwachsene Lernenden adressiert und letztlich ein inklusivere und effizientere Sprachenlernen fördert.
 
 
 ## Inhaltsverzeichnis
@@ -69,7 +69,7 @@ Diese Spezifikation liefert ein formale Darstellung der **Alman**-Grammatik und 
 
 ## Artikel {#articles}
 
-Diese Abschnitt beschreibt die Vereinfachung der **Standarddeutsch**-Artikel in **Alman**, bei die Genus- und Kasusunterscheidungen beseitigt werden. Bestimmte Artikel verwenden **die** für alle nicht-genitivische Kontexte und **der** für die Genitiv, wobei **das** als neutrale Demonstrativum erhalten bleibt. Besitz kann alternativ mit **von die** statt mit Genitivkonstruktionen ausgedrückt werden. Unbestimmte Artikel übernehmen in nicht-genitivische Fälle durchgängig **ein**, während die Genitiv **von ein** verwendet oder **ein** nach Präpositionen beibehält. Präposition-Artikel-Verschmelzungen werden ausnahmslos zu ihre volle Formen aufgelöst (z. B. *vom* → *von die*), und nominalisierte Artikel bewahren **ein** als eigenständige Form. Die Kasusunterscheidung nach Wechselpräpositionen wird für Nominalphrasen abgeschafft.
+Diese Abschnitt beschreibt die Vereinfachung der **Standarddeutsch**-Artikel in **Alman**, bei die Genus- und Kasusunterscheidungen beseitigt werden. Bestimmte Artikel verwenden **die** für alle nicht-genitivische Kontexte und **der** für die Genitiv, wobei **das** als neutrale Demonstrativum erhalten bleibt und als invariante Relativierer dient (siehe die Abschnitt über Pronomen). Besitz kann alternativ mit **von die** statt mit Genitivkonstruktionen ausgedrückt werden. Unbestimmte Artikel übernehmen in nicht-genitivische Fälle durchgängig **ein**, während die Genitiv **von ein** verwendet oder **ein** nach Präpositionen beibehält. Präposition-Artikel-Verschmelzungen werden ausnahmslos zu ihre volle Formen aufgelöst (z. B. *vom* → *von die*), und nominalisierte Artikel bewahren **ein** als eigenständige Form. Die Kasusunterscheidung nach Wechselpräpositionen wird für Nominalphrasen abgeschafft.
 
 
 ### §1. Vereinfachung der bestimmte Artikel {#definite-articles}
@@ -102,7 +102,7 @@ Alle genitivische bestimmte Artikel (des/der) werden durch 'der' ersetzt, beglei
 
 Nach genitivische Präpositionen wie **wegen**, **trotz**, **statt**, **während** und **innerhalb** wird die genitivische Artikel **der** bevorzugt, doch ist auch die invariante nicht-genitivische **die** akzeptabel, in Anlehnung an die umgangssprachliche Gebrauch. Dies entspricht die Behandlung der unbestimmte Artikel nach genitivische Präpositionen.
 
-Die genitivische **der** ist die einzige kasusmarkierte Artikelform, die **Alman** beibehält. Dies ist ein bewusste Ausnahme von die ansonsten vollständige Beseitigung von kasusspezifische Flexion: Sie hält adnominale Genitivkonstruktionen (*die Haus der Mann*) erkennbar und mit **Standarddeutsch** gegenseitig verständlich. Unbestimmte Artikel, Possessivbegleiter und **kein** beseitigen die Genitivmarkierung stattdessen vollständig durch Periphrase, wie in die jeweilige Regeln beschrieben.
+Die genitivische **der** ist die einzige kasusmarkierte Artikelform, das **Alman** beibehält. Dies ist ein bewusste Ausnahme von die ansonsten vollständige Beseitigung von kasusspezifische Flexion: Sie hält adnominale Genitivkonstruktionen (*die Haus der Mann*) erkennbar und mit **Standarddeutsch** gegenseitig verständlich. Unbestimmte Artikel, Possessivbegleiter und **kein** beseitigen die Genitivmarkierung stattdessen vollständig durch Periphrase, wie in die jeweilige Regeln beschrieben.
 
 
 **Beispiele:**
@@ -120,7 +120,7 @@ Die genitivische **der** ist die einzige kasusmarkierte Artikelform, die **Alman
 
 Die Demonstrativpronomen 'das' behält sein Form in nominativische, akkusativische und dativische Kontexte, wenn es als neutrale Demonstrativum ('that') fungiert. In Genitivkonstruktionen wird die Form 'dessen' durch 'deren' ersetzt, unter Beibehaltung der invariante Artikelsystem.
 
-Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohne nachfolgende Substantiv. Unmittelbar vor ein Substantiv gelten stets die Artikelregeln, und jede Form der bestimmte Artikel wird zu **die**, unabhängig von Betonung oder demonstrative Absicht. Demonstrative Kraft vor ein Substantiv wird mit **diese** oder **jene** ausgedrückt (siehe die Abschnitt über Begleiter), analog zu die englische *this/that* + Substantiv. Ebenso werden die alleinstehend gebrauchte **Standarddeutsch**-Demonstrativpronomen 'der', 'den' und 'dem' (*Der war's!*) durch die invariante **die** ersetzt, in die Einklang mit die Behandlung der Relativpronomen.
+Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohne nachfolgende Substantiv. Unmittelbar vor ein Substantiv gelten stets die Artikelregeln, und jede Form der bestimmte Artikel wird zu **die**, unabhängig von Betonung oder demonstrative Absicht. Demonstrative Kraft vor ein Substantiv wird mit **diese** oder **jene** ausgedrückt (siehe die Abschnitt über Begleiter), analog zu die englische *this/that* + Substantiv. Ebenso werden die alleinstehend gebrauchte **Standarddeutsch**-Demonstrativpronomen 'der', 'den' und 'dem' (*Der war's!*) durch die neutrale **das** ersetzt (*Das war's!*); die artikelgleiche **die** ist als Variante zugelassen, in die Einklang mit die Behandlung der Relativpronomen.
 
 
 **Beispiele:**
@@ -130,7 +130,7 @@ Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohn
 | das ist gut (demonstrative) | das ist gut |
 | dessen Haus | deren Haus |
 | DAS Buch will ich! (stressed, attributive) | Diese Buch will ich! |
-| Der war's! (standalone demonstrative) | Die war's! |
+| Der war's! (standalone demonstrative) | Das war's! / Die war's! |
 
 
 
@@ -228,7 +228,7 @@ Unbestimmte Genitivkonstruktionen verwenden entweder:
 
 Die periphrastische **von ein**-Konstruktion wird bevorzugt, wenn die Wahrung der Unbestimmtheit entscheidend ist.
 
-Dies systematisiert bestehende umgangssprachliche Muster, die Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch die invariante **ein**.
+Dies systematisiert bestehende umgangssprachliche Muster, das Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch die invariante **ein**.
 
 
 **Beispiele:**
@@ -268,7 +268,7 @@ Die **Alman**-Dialekt beseitigt systematisch Genusunterscheidungen und kasusbasi
 Alle kasusspezifische Substantivendungen werden entfernt, darunter:
 - Genitiv-Marker -s/-es an Gattungsnamen (des Mannes → der Mann); die pränominale Genitiv-s von Eigennamen ist ausgenommen und bleibt erhalten (siehe die Regel zu die Eigennamen-Genitiv)
 - Dativ-Plural-Suffixe -n (den Bränden → die Brände)
-- Schwache Deklinationsmuster: Die -n/-en-Endungen, die schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativische Singularkasus annehmen, entfallen; die Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Die -n/-en-Plural von diese Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invariante Pluralformen), sodass die Singular *die Kollege* von die Plural *die Kollegen* unterschieden bleibt.
+- Schwache Deklinationsmuster: Die -n/-en-Endungen, das schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativische Singularkasus annehmen, entfallen; die Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Die -n/-en-Plural von diese Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invariante Pluralformen), sodass die Singular *die Kollege* von die Plural *die Kollegen* unterschieden bleibt.
 
 
 **Beispiele:**
@@ -287,9 +287,9 @@ Alle kasusspezifische Substantivendungen werden entfernt, darunter:
 
 #### §3b. Beibehaltung der Eigennamen-Genitiv -s
 
-Die pränominale Genitiv-s von Eigennamen ist von die Beseitigung der Kasusendungen ausgenommen und bleibt unverändert erhalten, analog zu die englische Possessiv *'s* (*Annas Buch* „Anna's book“). Da Eigennamen kein Artikel tragen, kann die analytische Genitivmarker **der** auf sie nicht angewendet werden; die namensfinale -s gehört daher nicht zu die Artikel-und-Kasus-System, die **Alman** beseitigt, und stellt für Sprecher, die mit die englische Konstruktion vertraut sind, kein zusätzliche Lernlast dar.
+Die pränominale Genitiv-s von Eigennamen ist von die Beseitigung der Kasusendungen ausgenommen und bleibt unverändert erhalten, analog zu die englische Possessiv *'s* (*Annas Buch* „Anna's book“). Da Eigennamen kein Artikel tragen, kann die analytische Genitivmarker **der** auf sie nicht angewendet werden; die namensfinale -s gehört daher nicht zu die Artikel-und-Kasus-System, das **Alman** beseitigt, und stellt für Sprecher, das mit die englische Konstruktion vertraut sind, kein zusätzliche Lernlast dar.
 
-Dies gilt für Personennamen ebenso wie für Ortsnamen und andere possessiv gebrauchte Eigennamen. Die orthographische Konvention der **Standarddeutsch** für Namen, die auf ein s-Laut enden — ein bloße Apostroph anstelle der -s (*Hans' Fahrrad*) —, bleibt ebenfalls erhalten.
+Dies gilt für Personennamen ebenso wie für Ortsnamen und andere possessiv gebrauchte Eigennamen. Die orthographische Konvention der **Standarddeutsch** für Namen, das auf ein s-Laut enden — ein bloße Apostroph anstelle der -s (*Hans' Fahrrad*) —, bleibt ebenfalls erhalten.
 
 Wie bei andere Possessivkonstruktionen bleibt die periphrastische **von**-Konstruktion als Alternative verfügbar (siehe die Regel zu die fakultative 'von die' für Besitz in die Abschnitt über Artikel).
 
@@ -356,7 +356,7 @@ Diese Disambiguierung bewahrt die vereinfachte Morphologie und trägt zugleich l
 
 ## Adjektive und Adverbien {#adjectives-and-adverbs}
 
-Diese Abschnitt beschreibt die einheitliche formbasierte Prinzip von **Alman** für die Adjektiv- und Adverbmorphologie: Jede deklinierte Adjektivendung der **Standarddeutsch** wird durch die invariante -e ersetzt, und Formen ohne Deklinationsendung bleiben unverändert. Die Prinzip gilt nach die Oberflächenform, nicht nach die syntaktische Funktion — attributive Adjektive (gute Mann), nominalisierte Adjektive (die Gute) und feste adverbiale Wendungen (unter anderem → unter andere) erhalten alle -e, während prädikative Adjektive und Adverbien bleiben, wie sie sind. Die einzige Ausnahme ist die adverbiale Superlativ, die die **Standarddeutsch**-Konstruktion **am** + Superlativ durch die bloße Superlativstamm ersetzt (am besten → best).
+Diese Abschnitt beschreibt die einheitliche formbasierte Prinzip von **Alman** für die Adjektiv- und Adverbmorphologie: Jede deklinierte Adjektivendung der **Standarddeutsch** wird durch die invariante -e ersetzt, und Formen ohne Deklinationsendung bleiben unverändert. Die Prinzip gilt nach die Oberflächenform, nicht nach die syntaktische Funktion — attributive Adjektive (gute Mann), nominalisierte Adjektive (die Gute) und feste adverbiale Wendungen (unter anderem → unter andere) erhalten alle -e, während prädikative Adjektive und Adverbien bleiben, wie sie sind. Die einzige Ausnahme ist die adverbiale Superlativ, das die **Standarddeutsch**-Konstruktion **am** + Superlativ durch die bloße Superlativstamm ersetzt (am besten → best).
 
 
 ### §4. Regularisierung der Adjektivendungen {#adjectives}
@@ -366,13 +366,13 @@ Die **Alman**-Dialekt regelt die Adjektivmorphologie über ein einzige formbasie
 
 #### §4a. Invariante -e für alle Deklinationsendungen
 
-Wann immer ein Adjektiv in die **Standarddeutsch** ein Deklinationsendung trägt — ein Endung, die Kasus, Genus oder Numerus markiert —, wird diese Endung in **Alman** durch die invariante **-e** ersetzt. Dies gilt einheitlich, unabhängig von Funktion oder Position der Adjektiv: Attributive Adjektive vor Substantive, nominalisierte Adjektive, nach **etwas**, **nichts** und **alles** nominalisierte Adjektive (*etwas Gutes*, *nichts Neues*) sowie Adjektive in feste adverbiale Wendungen (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) werden alle gleich behandelt.
+Wann immer ein Adjektiv in die **Standarddeutsch** ein Deklinationsendung trägt — ein Endung, das Kasus, Genus oder Numerus markiert —, wird diese Endung in **Alman** durch die invariante **-e** ersetzt. Dies gilt einheitlich, unabhängig von Funktion oder Position der Adjektiv: Attributive Adjektive vor Substantive, nominalisierte Adjektive, nach **etwas**, **nichts** und **alles** nominalisierte Adjektive (*etwas Gutes*, *nichts Neues*) sowie Adjektive in feste adverbiale Wendungen (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) werden alle gleich behandelt.
 
-Adjektive, die in die **Standarddeutsch** kein Deklinationsendung tragen — prädikative Adjektive und adverbial gebrauchte Formen —, bleiben unverändert; es wird kein Endung hinzugefügt (siehe die Abschnitt über Adverbien).
+Adjektive, das in die **Standarddeutsch** kein Deklinationsendung tragen — prädikative Adjektive und adverbial gebrauchte Formen —, bleiben unverändert; es wird kein Endung hinzugefügt (siehe die Abschnitt über Adverbien).
 
 Komparationssuffixe (**-er**, **-st**) sind Wortbildung und kein Deklination und bleiben erhalten: *schneller laufen* bleibt *schneller laufen*. Ebenso tragen lexikalisierte Adverbien wie **anders** oder **meistens** kein Deklinationsendung und bleiben unverändert.
 
-Die einzige Ausnahme von diese Prinzip ist die adverbiale Superlativ **am** + Superlativ, die durch die bloße Superlativstamm ersetzt wird (siehe die Abschnitt über Adverbien).
+Die einzige Ausnahme von diese Prinzip ist die adverbiale Superlativ **am** + Superlativ, das durch die bloße Superlativstamm ersetzt wird (siehe die Abschnitt über Adverbien).
 
 
 **Beispiele:**
@@ -410,7 +410,7 @@ Genitivkonstruktionen behalten die analytische Artikel 'der' bei und bewahren zu
 
 Nominalisierte Adjektive erhalten, wenn sie als Substantive fungieren, in die Singular die invariante Endung **-e**, unabhängig von ihr syntaktische Rolle; die Einheitlichkeit mit reguläre Adjektivformen bleibt so gewahrt.
 
-In die Plural verhalten sich nominalisierte Adjektive wie Substantive: In die Einklang mit die Bewahrung der Substantiv-Pluralmorphologie, die in die Abschnitt über Substantive beschrieben ist, behalten sie die Endung **-en** als Pluralmarker (nicht als Kasusmarker). Dies unterscheidet *die Schöne* (Singular) von *die Schönen* (Plural).
+In die Plural verhalten sich nominalisierte Adjektive wie Substantive: In die Einklang mit die Bewahrung der Substantiv-Pluralmorphologie, das in die Abschnitt über Substantive beschrieben ist, behalten sie die Endung **-en** als Pluralmarker (nicht als Kasusmarker). Dies unterscheidet *die Schöne* (Singular) von *die Schönen* (Plural).
 
 
 **Beispiele:**
@@ -432,11 +432,11 @@ Adverbien tragen in die **Standarddeutsch** kein Deklinationsendungen und bleibe
 #### §5a. Adverbien bleiben unverändert
 
 Adverbial gebrauchte Wörter tragen in die **Standarddeutsch** kein Deklinationsendung und bleiben daher in **Alman** unverändert. Dies folgt unmittelbar aus die formbasierte Prinzip in die Abschnitt über Adjektive: Nur vorhandene Deklinationsendungen werden durch -e ersetzt, und wo kein Endung ist, ändert sich nichts. Dies gilt für:
-- Adverbien, die Verben modifizieren
-- Adjektive, die andere Adjektive modifizieren
-- Phrasale Modifikatoren, die nicht unmittelbar vor ein Substantiv stehen
+- Adverbien, das Verben modifizieren
+- Adjektive, das andere Adjektive modifizieren
+- Phrasale Modifikatoren, das nicht unmittelbar vor ein Substantiv stehen
 
-Feste adverbiale Wendungen, die ein dekliniertes Adjektiv enthalten (**unter anderem**, **vor kurzem** und ähnliche), sind nicht ausgenommen: Ihr Endungen werden nach dieselbe Prinzip zu die invariante -e (unter andere, vor kurze).
+Feste adverbiale Wendungen, das ein dekliniertes Adjektiv enthalten (**unter anderem**, **vor kurzem** und ähnliche), sind nicht ausgenommen: Ihr Endungen werden nach dieselbe Prinzip zu die invariante -e (unter andere, vor kurze).
 
 
 **Beispiele:**
@@ -453,7 +453,7 @@ Feste adverbiale Wendungen, die ein dekliniertes Adjektiv enthalten (**unter and
 
 Die adverbiale Superlativkonstruktion der **Standarddeutsch** **am** + Superlativ (am besten, am schnellsten) wird durch die bloße Superlativstamm ersetzt: **best**, **schnellst** und so weiter. Dies entspricht die englische adverbiale Superlativ („I swim best“) und entfernt die kasusmarkierte Verschmelzung **am** (an + dem) vollständig aus die Konstruktion, in die Einklang mit die Beseitigung von kasusmarkierte Artikel an andere Stelle in **Alman**.
 
-Die Variante **an** + bloße Stamm (z. B. **an best**) ist ebenfalls akzeptabel und bewahrt die präpositionale Rhythmus der **Standarddeutsch**-Konstruktion für Sprecher, die ihn bevorzugen. Die bloße Stamm ist die bevorzugte Form.
+Die Variante **an** + bloße Stamm (z. B. **an best**) ist ebenfalls akzeptabel und bewahrt die präpositionale Rhythmus der **Standarddeutsch**-Konstruktion für Sprecher, das ihn bevorzugen. Die bloße Stamm ist die bevorzugte Form.
 
 Diese Regel hat Vorrang vor die Regel zu die Auflösung von Verschmelzungen in die Abschnitt über Artikel: **am** in adverbiale Superlative wird nicht zu **an die** aufgelöst. Attributive Superlative sind nicht betroffen und folgen die reguläre Regel der invariante -e-Endung (die beste Schwimmer).
 
@@ -471,7 +471,7 @@ Diese Regel hat Vorrang vor die Regel zu die Auflösung von Verschmelzungen in d
 
 ## Pronomen und Begleiter {#pronouns-and-determiners}
 
-Diese Abschnitt beschreibt Änderungen an die Pronominalsystem der **Standarddeutsch**, die die Zuweisung nach natürliche Geschlecht Vorrang geben und zugleich Kasusunterscheidungen für referentielle Klarheit bewahren. Personalpronomen behalten die **Standarddeutsch**-Kasusformen, beziehen sich aber auf die biologische/soziale Geschlecht statt auf die grammatische Genus; für Personen von unbekannte oder generische Geschlecht fungiert die plurale **sie** als singulare *they*, analog zu die Englische. Relativpronomen fallen in die invariante **die** zusammen (Genitiv **deren**) und folgen damit die Artikelsystem. Begleiter, Possessivbegleiter, die Negativartikel **kein** und andere **ein**-Komposita werden durch invariante Formen in nicht-genitivische Kontexte vereinfacht; Kasusflexion bleibt nur bei die Personalpronomen erhalten.
+Diese Abschnitt beschreibt Änderungen an die Pronominalsystem der **Standarddeutsch**, das die Zuweisung nach natürliche Geschlecht Vorrang geben und zugleich Kasusunterscheidungen für referentielle Klarheit bewahren. Personalpronomen behalten die **Standarddeutsch**-Kasusformen, beziehen sich aber auf die biologische/soziale Geschlecht statt auf die grammatische Genus; für Personen von unbekannte oder generische Geschlecht fungiert die plurale **sie** als singulare *they*, analog zu die Englische. Relativpronomen fallen in die invariante neutrale **das** zusammen (Genitiv **deren**), analog zu die englische Relativierer *that*; die artikelgleiche **die** ist als Variante zugelassen. Begleiter, Possessivbegleiter, die Negativartikel **kein** und andere **ein**-Komposita werden durch invariante Formen in nicht-genitivische Kontexte vereinfacht; Kasusflexion bleibt nur bei die Personalpronomen erhalten.
 
 
 ### §6. Pronomen {#pronouns}
@@ -591,19 +591,24 @@ Die Wahl unter die Possessivpronomen (**mein, dein, sein, ihr, unser, euer, Ihr*
 
 #### §6f. Relativpronomen
 
-Relativpronomen folgen dieselbe Vereinfachung wie die bestimmte Artikel. Alle nicht-genitivische Relativpronomenformen (der/die/das/den/dem) werden durch die invariante Form **die** ersetzt, unabhängig von Genus, Numerus oder Kasusrolle der Referent in die Relativsatz. Die genitivische Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, in die Einklang mit die Behandlung der genitivische Demonstrativa in die Abschnitt über Artikel.
+Relativpronomen werden zu ein einzige invariante Relativierer vereinfacht: die neutrale Form **das**, das unabhängig von Genus, Numerus oder Kasusrolle der Referent in die Relativsatz verwendet wird. Dies entspricht die englische Relativierer *that*, das Relativsätze ebenfalls unflektiert einleitet (*the man that stands there* → *die Mann, das dort steht*). Da **das** bereits als neutrale Demonstrativum erhalten bleibt (siehe die Abschnitt über Artikel), deckt ein einzige Form sowohl die Zeigen als auch die Satzverknüpfung ab.
 
-Da die invariante **die** die Kasusrolle der relativierte Element nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätze durch Verbkongruenz und Kontext aufgelöst; bei echte Mehrdeutigkeit können Sprecher mit ein Personalpronomen in die Relativsatz oder ein periphrastische Konstruktion umformulieren.
+Die artikelgleiche Form **die** ist in alle nicht-genitivische Positionen ebenfalls akzeptabel (*die Mann, die dort steht*). **das** wird bevorzugt, weil es die Relativierer optisch und klanglich von die invariante Artikel **die** unterscheidet und gestapelte identische Formen dort vermeidet, wo beide aufeinandertreffen (*die Frau, das die Kinder sieht* statt *die Frau, die die Kinder sieht*).
+
+Die genitivische Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, in die Einklang mit die Behandlung der genitivische Demonstrativa in die Abschnitt über Artikel.
+
+Da die invariante Relativierer die Kasusrolle der relativierte Element nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätze durch Verbkongruenz und Kontext aufgelöst; bei echte Mehrdeutigkeit können Sprecher mit ein Personalpronomen in die Relativsatz oder ein periphrastische Konstruktion umformulieren.
 
 
 **Beispiele:**
 
 | Standarddeutsch | Alman | Englisch |
 |------------------|--------|---------|
-| der Mann, der dort steht | die Mann, die dort steht | the man who is standing there |
-| der Mann, den ich sehe | die Mann, die ich sehe | the man whom I see |
-| der Mann, dem ich helfe | die Mann, die ich helfe | the man whom I help |
-| das Kind, das spielt | die Kind, die spielt | the child who is playing |
+| der Mann, der dort steht | die Mann, das dort steht / die Mann, die dort steht | the man that is standing there |
+| der Mann, den ich sehe | die Mann, das ich sehe / die Mann, die ich sehe | the man that I see |
+| der Mann, dem ich helfe | die Mann, das ich helfe / die Mann, die ich helfe | the man that I help |
+| das Kind, das spielt | die Kind, das spielt / die Kind, die spielt | the child that is playing |
+| die Frau, die die Kinder sieht | die Frau, das die Kinder sieht / die Frau, die die Kinder sieht | the woman that sees the children |
 | die Frau, deren Auto kaputt ist | die Frau, deren Auto kaputt ist | the woman whose car is broken |
 | der Mann, dessen Haus groß ist | die Mann, deren Haus groß ist | the man whose house is large |
 
@@ -665,7 +670,7 @@ Diese Paragraph beschreibt die Vereinfachung der Begleiter- und Demonstrativform
 
 #### §7a. Einheitliche Formen für nicht-genitivische Kontexte
 
-In nicht-genitivische Kontexte nimmt jede Begleiter und jede Pronomen, die in die **Standarddeutsch** nach Genus oder Kasus flektiert, die invariante feminine „die…“-Form an, d. h. die auf -e endende Form. Dies ist ein allgemeine Prinzip, die die gesamte Klasse abdeckt: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe** und alle analoge Elemente werden unabhängig von Genus oder Kasus der Referent verwendet. Begleiter, die bereits auf -e enden und in die relevante Kontexte nicht nach Genus flektieren (**beide, einige, mehrere**), bleiben unverändert.
+In nicht-genitivische Kontexte nimmt jede Begleiter und jede Pronomen, das in die **Standarddeutsch** nach Genus oder Kasus flektiert, die invariante feminine „die…“-Form an, d. h. die auf -e endende Form. Dies ist ein allgemeine Prinzip, das die gesamte Klasse abdeckt: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe** und alle analoge Elemente werden unabhängig von Genus oder Kasus der Referent verwendet. Begleiter, das bereits auf -e enden und in die relevante Kontexte nicht nach Genus flektieren (**beide, einige, mehrere**), bleiben unverändert.
 
 Diese Prinzip erfasst die Begleiter der der-Typ (stark flektierend). Auf **ein** aufgebaute Wörter — die Negativartikel **kein**, die Possessivbegleiter und Komposita wie **irgendein** — nehmen die -e-Form nicht an; sie folgen die invariante Grundform-Muster aus die Regel zu Possessivbegleiter und die Negativartikel.
 
@@ -679,7 +684,7 @@ Die gepaarte Quantoren aus die Regel zu indefinite und negative Quantoren (**all
 | dieser, diese, dieses, diesen, diesem (Nominativ, Akkusativ, Dativ) | diese |
 | derjenige (Nominativ, Dativ), diejenige (Nominativ, Akkusativ), dasjenige (Nominativ), denjenigen (Akkusativ), demjenigen (Dativ) | diejenige |
 | derselbe (Nominativ, Dativ), dieselbe (Nominativ, Akkusativ), dasselbe (Nominativ), denselben (Akkusativ), demselben (Dativ) | dieselbe |
-| derjenige Mann, der kommt | diejenige Mann, die kommt |
+| derjenige Mann, der kommt | diejenige Mann, das kommt / diejenige Mann, die kommt |
 | dieser Weg | diese Weg |
 | jener Tag | jene Tag |
 | jeder Tag, jeden Tag, jedem Tag | jede Tag |
@@ -737,7 +742,7 @@ Dieselbe invariante Grundform wird in die pronominale (alleinstehende) Gebrauch 
 
 #### §7d. Ausnahme für bestimmte indefinite und negative Quantoren
 
-Während **Alman** die meiste Begleiter zusammenführt und vereinfacht, werden einige **indefinite** oder **negative** Quantoren, die in die **Standarddeutsch** als **Wortpaare** auftreten, **in ihr ursprüngliche Formen beibehalten**. In diese Fälle werden **alle** vs. **alles**, **viel** vs. **viele**, **wenig** vs. **wenige** und **nicht** vs. **nichts** unter andere **nicht** reanalysiert oder zu ein einzige Form verschmolzen. Sie folgen stattdessen die **Standarddeutsch**-Gebrauch:
+Während **Alman** die meiste Begleiter zusammenführt und vereinfacht, werden einige **indefinite** oder **negative** Quantoren, das in die **Standarddeutsch** als **Wortpaare** auftreten, **in ihr ursprüngliche Formen beibehalten**. In diese Fälle werden **alle** vs. **alles**, **viel** vs. **viele**, **wenig** vs. **wenige** und **nicht** vs. **nichts** unter andere **nicht** reanalysiert oder zu ein einzige Form verschmolzen. Sie folgen stattdessen die **Standarddeutsch**-Gebrauch:
 
 1. **alle/alles**
    - **alle** → für plurale indefinite Referenzen („all [people/things]“).
@@ -757,7 +762,7 @@ Während **Alman** die meiste Begleiter zusammenführt und vereinfacht, werden e
 
 Da die **Standarddeutsch** diese Paare als **eigenständige lexikalische Einheiten** und nicht als bloße Flexionsvarianten behandelt, bewahrt **Alman** sie **unverändert** für Klarheit und gegenseitige Verständlichkeit. Sprecher sollten jede Paar weiterhin nach die etablierte **Standarddeutsch**-Konventionen verwenden. Diese Regel hat Vorrang vor andere Begleitervereinfachungen aus andere Regeln.
 
-Die kasusflektierte Formen, die diese Quantoren in die **Standarddeutsch** annehmen (**vielen, vielem, vieler, allen, allem, aller, wenigen, wenigem**), werden durch Weglassen der Kasusendung behandelt: Die Ergebnis ist diejenige Mitglied der beibehaltene Paar, die in die Kontext passt (nicht zählbar oder adverbial → **viel**, zählbar plural → **viele** und so weiter). So wird *vielen Dank* zu *viel Dank* und *in allen Fällen* zu *in alle Fälle*, analog zu die invariante englische Quantoren *much*, *many*, *all*, *little* und *few*. Da die Unterscheidung innerhalb jede Paar lexikalisch und nicht deklinational ist, nehmen diese Quantoren nie die invariante -e-Endung aus die Abschnitt über Adjektive an.
+Die kasusflektierte Formen, das diese Quantoren in die **Standarddeutsch** annehmen (**vielen, vielem, vieler, allen, allem, aller, wenigen, wenigem**), werden durch Weglassen der Kasusendung behandelt: Die Ergebnis ist diejenige Mitglied der beibehaltene Paar, das in die Kontext passt (nicht zählbar oder adverbial → **viel**, zählbar plural → **viele** und so weiter). So wird *vielen Dank* zu *viel Dank* und *in allen Fällen* zu *in alle Fälle*, analog zu die invariante englische Quantoren *much*, *many*, *all*, *little* und *few*. Da die Unterscheidung innerhalb jede Paar lexikalisch und nicht deklinational ist, nehmen diese Quantoren nie die invariante -e-Endung aus die Abschnitt über Adjektive an.
 
 
 **Beispiele:**
@@ -780,7 +785,7 @@ Die kasusflektierte Formen, die diese Quantoren in die **Standarddeutsch** anneh
 
 ## Verben und Wortstellung {#verbs-and-word-order}
 
-Diese Abschnitt beschreibt die Verbalsystem und die syntaktische Struktur von **Alman**, die die **Standarddeutsch**-Muster vollständig treu bleiben. Während andere Aspekte der Grammatik vereinfacht werden, bleiben Verbkonjugationen und Wortstellungsregeln unverändert, um die wesentliche Charakter der deutsche Syntax zu bewahren und klare Kommunikation zu gewährleisten. Ein Ergänzung kompensiert die Verlust der Kasusmarkierung: Wenn Subjekt und Objekt beide volle Nominalphrasen sind, muss die Subjekt die Objekt vorangehen. In ditransitive Konstruktionen wird die **Standarddeutsch**-Grundabfolge Empfänger vor Thema als Interpretationskonvention beibehalten, analog zu die englische Doppelobjekt-Konstruktion.
+Diese Abschnitt beschreibt die Verbalsystem und die syntaktische Struktur von **Alman**, das die **Standarddeutsch**-Muster vollständig treu bleiben. Während andere Aspekte der Grammatik vereinfacht werden, bleiben Verbkonjugationen und Wortstellungsregeln unverändert, um die wesentliche Charakter der deutsche Syntax zu bewahren und klare Kommunikation zu gewährleisten. Ein Ergänzung kompensiert die Verlust der Kasusmarkierung: Wenn Subjekt und Objekt beide volle Nominalphrasen sind, muss die Subjekt die Objekt vorangehen. In ditransitive Konstruktionen wird die **Standarddeutsch**-Grundabfolge Empfänger vor Thema als Interpretationskonvention beibehalten, analog zu die englische Doppelobjekt-Konstruktion.
 
 
 ### §8. Verbkonjugationen und -formen {#verbs}
@@ -870,7 +875,7 @@ Dies kompensiert die Verlust der morphologische Kasusmarkierung durch ein feste 
 
 Bei ditransitive Verben wie **geben**, **zeigen** und **schicken** unterscheidet die **Standarddeutsch** die indirekte Objekt (Dativ) von die direkte Objekt (Akkusativ) durch Kasusmarkierung und stellt zugleich die indirekte Objekt standardmäßig vor die direkte, wenn beide volle Nominalphrasen sind. **Alman** behält diese Grundabfolge bei, und die Verlust der Kasusmarkierung wird akzeptiert: In ein Folge von zwei volle Nominalphrasen-Objekte wird die erste als Empfänger und die zweite als Thema interpretiert.
 
-Dies entspricht die englische Doppelobjekt-Konstruktion („I give the woman the book“), die ebenfalls ohne Kasusmarkierung funktioniert. Es wird kein strikte Regel auferlegt; Verbsemantik und Kontext klären die Rollen in die Praxis, und verbleibende Mehrdeutigkeit wird toleriert, wie in die Englische.
+Dies entspricht die englische Doppelobjekt-Konstruktion („I give the woman the book“), das ebenfalls ohne Kasusmarkierung funktioniert. Es wird kein strikte Regel auferlegt; Verbsemantik und Kontext klären die Rollen in die Praxis, und verbleibende Mehrdeutigkeit wird toleriert, wie in die Englische.
 
 Wo ein explizite Markierung gewünscht ist oder die Thema die Empfänger vorangehen soll, kann die Empfänger stattdessen mit die Präposition **an** ausgedrückt werden (parallel zu die englische „to“), und Personalpronomen behalten wie üblich ihr Kasusformen (siehe die Abschnitt über Pronomen).
 
@@ -893,11 +898,11 @@ Diese Abschnitt beschreibt die systematische Beseitigung von geschlechtsspezifis
 
 ### §10. Einheitlichkeit von Berufs- und personenbezeichnende Substantive {#job-titles}
 
-Diese Paragraph beschreibt die Beseitigung von geschlechtsspezifische Formen bei Berufs- und personenbezeichnende Substantive zugunsten von ein vereinfachte System, die die Grundform mit die invariante Artikel verwendet.
+Diese Paragraph beschreibt die Beseitigung von geschlechtsspezifische Formen bei Berufs- und personenbezeichnende Substantive zugunsten von ein vereinfachte System, das die Grundform mit die invariante Artikel verwendet.
 
 In die **Standarddeutsch** werden personenbezeichnende Substantive häufig mit die Suffix **-in** nach Geschlecht markiert: Berufe (*der Lehrer* gegenüber *die Lehrerin*), Nationalitäten und Herkünfte (*der Türke* gegenüber *die Türkin*) und Rollen (*der Kollege* gegenüber *die Kollegin*). In **Alman** werden solche Unterscheidungen beseitigt. Alle personenbezeichnende Substantive werden ohne geschlechtsspezifische Veränderungen wiedergegeben; die feminine Suffix entfällt, und die maskuline Grundform wird durchgängig verwendet. Folglich werden personenbezeichnende Substantive analog zu andere Substantive behandelt, mit die invariante bestimmte Artikel **die** und die unbestimmte Artikel **ein**.
 
-Die natürliche Geschlecht wird, wo kommunikativ relevant, durch Pronomen (siehe die Abschnitt über Pronomen) oder durch die Kontext vermittelt. Beziehungsbedeutungen, die die **Standarddeutsch** über die Suffix transportiert (*Freundin* „girlfriend“), werden wie in die umgangssprachliche Gebrauch ausgedrückt, z. B. **feste Freund**, wobei Pronomen die Geschlecht markieren.
+Die natürliche Geschlecht wird, wo kommunikativ relevant, durch Pronomen (siehe die Abschnitt über Pronomen) oder durch die Kontext vermittelt. Beziehungsbedeutungen, das die **Standarddeutsch** über die Suffix transportiert (*Freundin* „girlfriend“), werden wie in die umgangssprachliche Gebrauch ausgedrückt, z. B. **feste Freund**, wobei Pronomen die Geschlecht markieren.
 
 Diese Regel gewährleistet ein einheitliche Behandlung von personenbezeichnende Substantive und spiegelt die umfassendere Bestreben von **Alman** wider, die Geschlechterdifferenzierung in lexikalische Einheiten zu reduzieren.
 

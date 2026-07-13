@@ -216,37 +216,42 @@
     {
       "id": "relative-pronouns",
       "title": "Relative Pronouns",
-      "description": "Relative pronouns follow the same simplification as definite articles. All non-genitive relative pronoun forms (der/die/das/den/dem) are replaced by the invariant form **die**, regardless of the gender, number, or case role of the referent within the relative clause. The genitive relative pronouns **dessen** and **deren** are both replaced by **deren**, consistent with the treatment of genitive demonstratives in the section on articles.\n\nSince the invariant **die** no longer marks the case role of the relativized element, ambiguity between subject and object relative clauses is resolved by verb agreement and context; where genuine ambiguity arises, speakers may rephrase using a personal pronoun in the relative clause or a periphrastic construction.",
+      "description": "Relative pronouns are simplified to a single invariant relativizer: the neutral form **das**, used regardless of the gender, number, or case role of the referent within the relative clause. This mirrors the English relativizer *that*, which likewise introduces relative clauses without inflecting (*the man that stands there* → *die Mann, das dort steht*). Since **das** is already retained as the neutral demonstrative (see the section on articles), a single form covers both pointing and clause-linking.\n\nThe article-aligned form **die** is also acceptable in all non-genitive positions (*die Mann, die dort steht*). **das** is preferred because it keeps the relativizer visually and audibly distinct from the invariant article **die**, avoiding stacked identical forms where the two meet (*die Frau, das die Kinder sieht* rather than *die Frau, die die Kinder sieht*).\n\nThe genitive relative pronouns **dessen** and **deren** are both replaced by **deren**, consistent with the treatment of genitive demonstratives in the section on articles.\n\nSince the invariant relativizer no longer marks the case role of the relativized element, ambiguity between subject and object relative clauses is resolved by verb agreement and context; where genuine ambiguity arises, speakers may rephrase using a personal pronoun in the relative clause or a periphrastic construction.",
       "i18n": {
         "de": {
           "title": "Relativpronomen",
-          "description": "Relativpronomen folgen derselben Vereinfachung wie die bestimmten Artikel. Alle nicht-genitivischen Relativpronomenformen (der/die/das/den/dem) werden durch die invariante Form **die** ersetzt, unabhängig von Genus, Numerus oder Kasusrolle des Referenten im Relativsatz. Die genitivischen Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, im Einklang mit der Behandlung der genitivischen Demonstrativa im Abschnitt über Artikel.\n\nDa das invariante **die** die Kasusrolle des relativierten Elements nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätzen durch Verbkongruenz und Kontext aufgelöst; bei echter Mehrdeutigkeit können Sprecher mit einem Personalpronomen im Relativsatz oder einer periphrastischen Konstruktion umformulieren."
+          "description": "Relativpronomen werden zu einem einzigen invarianten Relativierer vereinfacht: der neutralen Form **das**, die unabhängig von Genus, Numerus oder Kasusrolle des Referenten im Relativsatz verwendet wird. Dies entspricht dem englischen Relativierer *that*, der Relativsätze ebenfalls unflektiert einleitet (*the man that stands there* → *die Mann, das dort steht*). Da **das** bereits als neutrales Demonstrativum erhalten bleibt (siehe den Abschnitt über Artikel), deckt eine einzige Form sowohl das Zeigen als auch die Satzverknüpfung ab.\n\nDie artikelgleiche Form **die** ist in allen nicht-genitivischen Positionen ebenfalls akzeptabel (*die Mann, die dort steht*). **das** wird bevorzugt, weil es den Relativierer optisch und klanglich vom invarianten Artikel **die** unterscheidet und gestapelte identische Formen dort vermeidet, wo beide aufeinandertreffen (*die Frau, das die Kinder sieht* statt *die Frau, die die Kinder sieht*).\n\nDie genitivischen Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, im Einklang mit der Behandlung der genitivischen Demonstrativa im Abschnitt über Artikel.\n\nDa der invariante Relativierer die Kasusrolle des relativierten Elements nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätzen durch Verbkongruenz und Kontext aufgelöst; bei echter Mehrdeutigkeit können Sprecher mit einem Personalpronomen im Relativsatz oder einer periphrastischen Konstruktion umformulieren."
         },
         "al": {
           "title": "Relativpronomen",
-          "description": "Relativpronomen folgen dieselbe Vereinfachung wie die bestimmte Artikel. Alle nicht-genitivische Relativpronomenformen (der/die/das/den/dem) werden durch die invariante Form **die** ersetzt, unabhängig von Genus, Numerus oder Kasusrolle der Referent in die Relativsatz. Die genitivische Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, in die Einklang mit die Behandlung der genitivische Demonstrativa in die Abschnitt über Artikel.\n\nDa die invariante **die** die Kasusrolle der relativierte Element nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätze durch Verbkongruenz und Kontext aufgelöst; bei echte Mehrdeutigkeit können Sprecher mit ein Personalpronomen in die Relativsatz oder ein periphrastische Konstruktion umformulieren."
+          "description": "Relativpronomen werden zu ein einzige invariante Relativierer vereinfacht: die neutrale Form **das**, das unabhängig von Genus, Numerus oder Kasusrolle der Referent in die Relativsatz verwendet wird. Dies entspricht die englische Relativierer *that*, das Relativsätze ebenfalls unflektiert einleitet (*the man that stands there* → *die Mann, das dort steht*). Da **das** bereits als neutrale Demonstrativum erhalten bleibt (siehe die Abschnitt über Artikel), deckt ein einzige Form sowohl die Zeigen als auch die Satzverknüpfung ab.\n\nDie artikelgleiche Form **die** ist in alle nicht-genitivische Positionen ebenfalls akzeptabel (*die Mann, die dort steht*). **das** wird bevorzugt, weil es die Relativierer optisch und klanglich von die invariante Artikel **die** unterscheidet und gestapelte identische Formen dort vermeidet, wo beide aufeinandertreffen (*die Frau, das die Kinder sieht* statt *die Frau, die die Kinder sieht*).\n\nDie genitivische Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, in die Einklang mit die Behandlung der genitivische Demonstrativa in die Abschnitt über Artikel.\n\nDa die invariante Relativierer die Kasusrolle der relativierte Element nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätze durch Verbkongruenz und Kontext aufgelöst; bei echte Mehrdeutigkeit können Sprecher mit ein Personalpronomen in die Relativsatz oder ein periphrastische Konstruktion umformulieren."
         }
       },
       "examples": [
         {
           "standard": "der Mann, der dort steht",
-          "alman": "die Mann, die dort steht",
-          "english": "the man who is standing there"
+          "alman": "die Mann, das dort steht / die Mann, die dort steht",
+          "english": "the man that is standing there"
         },
         {
           "standard": "der Mann, den ich sehe",
-          "alman": "die Mann, die ich sehe",
-          "english": "the man whom I see"
+          "alman": "die Mann, das ich sehe / die Mann, die ich sehe",
+          "english": "the man that I see"
         },
         {
           "standard": "der Mann, dem ich helfe",
-          "alman": "die Mann, die ich helfe",
-          "english": "the man whom I help"
+          "alman": "die Mann, das ich helfe / die Mann, die ich helfe",
+          "english": "the man that I help"
         },
         {
           "standard": "das Kind, das spielt",
-          "alman": "die Kind, die spielt",
-          "english": "the child who is playing"
+          "alman": "die Kind, das spielt / die Kind, die spielt",
+          "english": "the child that is playing"
+        },
+        {
+          "standard": "die Frau, die die Kinder sieht",
+          "alman": "die Frau, das die Kinder sieht / die Frau, die die Kinder sieht",
+          "english": "the woman that sees the children"
         },
         {
           "standard": "die Frau, deren Auto kaputt ist",

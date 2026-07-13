@@ -9,7 +9,7 @@
     },
     "al": {
       "title": "Einheitlichkeit von Berufs- und personenbezeichnende Substantive",
-      "body": "Diese Paragraph beschreibt die Beseitigung von geschlechtsspezifische Formen bei Berufs- und personenbezeichnende Substantive zugunsten von ein vereinfachte System, die die Grundform mit die invariante Artikel verwendet."
+      "body": "Diese Paragraph beschreibt die Beseitigung von geschlechtsspezifische Formen bei Berufs- und personenbezeichnende Substantive zugunsten von ein vereinfachte System, das die Grundform mit die invariante Artikel verwendet."
     }
   },
   "rules": [
@@ -24,7 +24,7 @@
         },
         "al": {
           "title": "Einheitlichkeit von Berufs- und personenbezeichnende Substantive",
-          "description": "In die <sd /> werden personenbezeichnende Substantive häufig mit die Suffix **-in** nach Geschlecht markiert: Berufe (*der Lehrer* gegenüber *die Lehrerin*), Nationalitäten und Herkünfte (*der Türke* gegenüber *die Türkin*) und Rollen (*der Kollege* gegenüber *die Kollegin*). In <alman /> werden solche Unterscheidungen beseitigt. Alle personenbezeichnende Substantive werden ohne geschlechtsspezifische Veränderungen wiedergegeben; die feminine Suffix entfällt, und die maskuline Grundform wird durchgängig verwendet. Folglich werden personenbezeichnende Substantive analog zu andere Substantive behandelt, mit die invariante bestimmte Artikel **die** und die unbestimmte Artikel **ein**.\n\nDie natürliche Geschlecht wird, wo kommunikativ relevant, durch Pronomen (siehe die Abschnitt über Pronomen) oder durch die Kontext vermittelt. Beziehungsbedeutungen, die die <sd /> über die Suffix transportiert (*Freundin* „girlfriend“), werden wie in die umgangssprachliche Gebrauch ausgedrückt, z. B. **feste Freund**, wobei Pronomen die Geschlecht markieren.\n\nDiese Regel gewährleistet ein einheitliche Behandlung von personenbezeichnende Substantive und spiegelt die umfassendere Bestreben von <alman /> wider, die Geschlechterdifferenzierung in lexikalische Einheiten zu reduzieren."
+          "description": "In die <sd /> werden personenbezeichnende Substantive häufig mit die Suffix **-in** nach Geschlecht markiert: Berufe (*der Lehrer* gegenüber *die Lehrerin*), Nationalitäten und Herkünfte (*der Türke* gegenüber *die Türkin*) und Rollen (*der Kollege* gegenüber *die Kollegin*). In <alman /> werden solche Unterscheidungen beseitigt. Alle personenbezeichnende Substantive werden ohne geschlechtsspezifische Veränderungen wiedergegeben; die feminine Suffix entfällt, und die maskuline Grundform wird durchgängig verwendet. Folglich werden personenbezeichnende Substantive analog zu andere Substantive behandelt, mit die invariante bestimmte Artikel **die** und die unbestimmte Artikel **ein**.\n\nDie natürliche Geschlecht wird, wo kommunikativ relevant, durch Pronomen (siehe die Abschnitt über Pronomen) oder durch die Kontext vermittelt. Beziehungsbedeutungen, das die <sd /> über die Suffix transportiert (*Freundin* „girlfriend“), werden wie in die umgangssprachliche Gebrauch ausgedrückt, z. B. **feste Freund**, wobei Pronomen die Geschlecht markieren.\n\nDiese Regel gewährleistet ein einheitliche Behandlung von personenbezeichnende Substantive und spiegelt die umfassendere Bestreben von <alman /> wider, die Geschlechterdifferenzierung in lexikalische Einheiten zu reduzieren."
         }
       },
       "examples": [

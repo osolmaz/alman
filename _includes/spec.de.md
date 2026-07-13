@@ -69,7 +69,7 @@ Diese Spezifikation liefert eine formale Darstellung der **Alman**-Grammatik und
 
 ## Artikel {#articles}
 
-Dieser Abschnitt beschreibt die Vereinfachung der **Standarddeutsch**-Artikel in **Alman**, bei der Genus- und Kasusunterscheidungen beseitigt werden. Bestimmte Artikel verwenden **die** für alle nicht-genitivischen Kontexte und **der** für den Genitiv, wobei **das** als neutrales Demonstrativum erhalten bleibt. Besitz kann alternativ mit **von die** statt mit Genitivkonstruktionen ausgedrückt werden. Unbestimmte Artikel übernehmen in nicht-genitivischen Fällen durchgängig **ein**, während der Genitiv **von ein** verwendet oder **ein** nach Präpositionen beibehält. Präposition-Artikel-Verschmelzungen werden ausnahmslos zu ihren vollen Formen aufgelöst (z. B. *vom* → *von die*), und nominalisierte Artikel bewahren **ein** als eigenständige Form. Die Kasusunterscheidung nach Wechselpräpositionen wird für Nominalphrasen abgeschafft.
+Dieser Abschnitt beschreibt die Vereinfachung der **Standarddeutsch**-Artikel in **Alman**, bei der Genus- und Kasusunterscheidungen beseitigt werden. Bestimmte Artikel verwenden **die** für alle nicht-genitivischen Kontexte und **der** für den Genitiv, wobei **das** als neutrales Demonstrativum erhalten bleibt und als invarianter Relativierer dient (siehe den Abschnitt über Pronomen). Besitz kann alternativ mit **von die** statt mit Genitivkonstruktionen ausgedrückt werden. Unbestimmte Artikel übernehmen in nicht-genitivischen Fällen durchgängig **ein**, während der Genitiv **von ein** verwendet oder **ein** nach Präpositionen beibehält. Präposition-Artikel-Verschmelzungen werden ausnahmslos zu ihren vollen Formen aufgelöst (z. B. *vom* → *von die*), und nominalisierte Artikel bewahren **ein** als eigenständige Form. Die Kasusunterscheidung nach Wechselpräpositionen wird für Nominalphrasen abgeschafft.
 
 
 ### §1. Vereinfachung des bestimmten Artikels {#definite-articles}
@@ -120,7 +120,7 @@ Das genitivische **der** ist die einzige kasusmarkierte Artikelform, die **Alman
 
 Das Demonstrativpronomen 'das' behält seine Form in nominativischen, akkusativischen und dativischen Kontexten, wenn es als neutrales Demonstrativum ('that') fungiert. In Genitivkonstruktionen wird die Form 'dessen' durch 'deren' ersetzt, unter Beibehaltung des invarianten Artikelsystems.
 
-Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohne nachfolgendes Substantiv. Unmittelbar vor einem Substantiv gelten stets die Artikelregeln, und jede Form des bestimmten Artikels wird zu **die**, unabhängig von Betonung oder demonstrativer Absicht. Demonstrative Kraft vor einem Substantiv wird mit **diese** oder **jene** ausgedrückt (siehe den Abschnitt über Begleiter), analog zum englischen *this/that* + Substantiv. Ebenso werden die alleinstehend gebrauchten **Standarddeutsch**-Demonstrativpronomen 'der', 'den' und 'dem' (*Der war's!*) durch das invariante **die** ersetzt, im Einklang mit der Behandlung der Relativpronomen.
+Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohne nachfolgendes Substantiv. Unmittelbar vor einem Substantiv gelten stets die Artikelregeln, und jede Form des bestimmten Artikels wird zu **die**, unabhängig von Betonung oder demonstrativer Absicht. Demonstrative Kraft vor einem Substantiv wird mit **diese** oder **jene** ausgedrückt (siehe den Abschnitt über Begleiter), analog zum englischen *this/that* + Substantiv. Ebenso werden die alleinstehend gebrauchten **Standarddeutsch**-Demonstrativpronomen 'der', 'den' und 'dem' (*Der war's!*) durch das neutrale **das** ersetzt (*Das war's!*); das artikelgleiche **die** ist als Variante zugelassen, im Einklang mit der Behandlung der Relativpronomen.
 
 
 **Beispiele:**
@@ -130,7 +130,7 @@ Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohn
 | das ist gut (demonstrative) | das ist gut |
 | dessen Haus | deren Haus |
 | DAS Buch will ich! (stressed, attributive) | Diese Buch will ich! |
-| Der war's! (standalone demonstrative) | Die war's! |
+| Der war's! (standalone demonstrative) | Das war's! / Die war's! |
 
 
 
@@ -471,7 +471,7 @@ Diese Regel hat Vorrang vor der Regel zur Auflösung von Verschmelzungen im Absc
 
 ## Pronomen und Begleiter {#pronouns-and-determiners}
 
-Dieser Abschnitt beschreibt Änderungen am Pronominalsystem des **Standarddeutsch**, die der Zuweisung nach natürlichem Geschlecht Vorrang geben und zugleich Kasusunterscheidungen für referentielle Klarheit bewahren. Personalpronomen behalten die **Standarddeutsch**-Kasusformen, beziehen sich aber auf das biologische/soziale Geschlecht statt auf das grammatische Genus; für Personen unbekannten oder generischen Geschlechts fungiert das plurale **sie** als singulares *they*, analog zum Englischen. Relativpronomen fallen im invarianten **die** zusammen (Genitiv **deren**) und folgen damit dem Artikelsystem. Begleiter, Possessivbegleiter, der Negativartikel **kein** und andere **ein**-Komposita werden durch invariante Formen in nicht-genitivischen Kontexten vereinfacht; Kasusflexion bleibt nur bei den Personalpronomen erhalten.
+Dieser Abschnitt beschreibt Änderungen am Pronominalsystem des **Standarddeutsch**, die der Zuweisung nach natürlichem Geschlecht Vorrang geben und zugleich Kasusunterscheidungen für referentielle Klarheit bewahren. Personalpronomen behalten die **Standarddeutsch**-Kasusformen, beziehen sich aber auf das biologische/soziale Geschlecht statt auf das grammatische Genus; für Personen unbekannten oder generischen Geschlechts fungiert das plurale **sie** als singulares *they*, analog zum Englischen. Relativpronomen fallen im invarianten neutralen **das** zusammen (Genitiv **deren**), analog zum englischen Relativierer *that*; das artikelgleiche **die** ist als Variante zugelassen. Begleiter, Possessivbegleiter, der Negativartikel **kein** und andere **ein**-Komposita werden durch invariante Formen in nicht-genitivischen Kontexten vereinfacht; Kasusflexion bleibt nur bei den Personalpronomen erhalten.
 
 
 ### §6. Pronomen {#pronouns}
@@ -591,19 +591,24 @@ Die Wahl unter den Possessivpronomen (**mein, dein, sein, ihr, unser, euer, Ihr*
 
 #### §6f. Relativpronomen
 
-Relativpronomen folgen derselben Vereinfachung wie die bestimmten Artikel. Alle nicht-genitivischen Relativpronomenformen (der/die/das/den/dem) werden durch die invariante Form **die** ersetzt, unabhängig von Genus, Numerus oder Kasusrolle des Referenten im Relativsatz. Die genitivischen Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, im Einklang mit der Behandlung der genitivischen Demonstrativa im Abschnitt über Artikel.
+Relativpronomen werden zu einem einzigen invarianten Relativierer vereinfacht: der neutralen Form **das**, die unabhängig von Genus, Numerus oder Kasusrolle des Referenten im Relativsatz verwendet wird. Dies entspricht dem englischen Relativierer *that*, der Relativsätze ebenfalls unflektiert einleitet (*the man that stands there* → *die Mann, das dort steht*). Da **das** bereits als neutrales Demonstrativum erhalten bleibt (siehe den Abschnitt über Artikel), deckt eine einzige Form sowohl das Zeigen als auch die Satzverknüpfung ab.
 
-Da das invariante **die** die Kasusrolle des relativierten Elements nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätzen durch Verbkongruenz und Kontext aufgelöst; bei echter Mehrdeutigkeit können Sprecher mit einem Personalpronomen im Relativsatz oder einer periphrastischen Konstruktion umformulieren.
+Die artikelgleiche Form **die** ist in allen nicht-genitivischen Positionen ebenfalls akzeptabel (*die Mann, die dort steht*). **das** wird bevorzugt, weil es den Relativierer optisch und klanglich vom invarianten Artikel **die** unterscheidet und gestapelte identische Formen dort vermeidet, wo beide aufeinandertreffen (*die Frau, das die Kinder sieht* statt *die Frau, die die Kinder sieht*).
+
+Die genitivischen Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, im Einklang mit der Behandlung der genitivischen Demonstrativa im Abschnitt über Artikel.
+
+Da der invariante Relativierer die Kasusrolle des relativierten Elements nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätzen durch Verbkongruenz und Kontext aufgelöst; bei echter Mehrdeutigkeit können Sprecher mit einem Personalpronomen im Relativsatz oder einer periphrastischen Konstruktion umformulieren.
 
 
 **Beispiele:**
 
 | Standarddeutsch | Alman | Englisch |
 |------------------|--------|---------|
-| der Mann, der dort steht | die Mann, die dort steht | the man who is standing there |
-| der Mann, den ich sehe | die Mann, die ich sehe | the man whom I see |
-| der Mann, dem ich helfe | die Mann, die ich helfe | the man whom I help |
-| das Kind, das spielt | die Kind, die spielt | the child who is playing |
+| der Mann, der dort steht | die Mann, das dort steht / die Mann, die dort steht | the man that is standing there |
+| der Mann, den ich sehe | die Mann, das ich sehe / die Mann, die ich sehe | the man that I see |
+| der Mann, dem ich helfe | die Mann, das ich helfe / die Mann, die ich helfe | the man that I help |
+| das Kind, das spielt | die Kind, das spielt / die Kind, die spielt | the child that is playing |
+| die Frau, die die Kinder sieht | die Frau, das die Kinder sieht / die Frau, die die Kinder sieht | the woman that sees the children |
 | die Frau, deren Auto kaputt ist | die Frau, deren Auto kaputt ist | the woman whose car is broken |
 | der Mann, dessen Haus groß ist | die Mann, deren Haus groß ist | the man whose house is large |
 
@@ -679,7 +684,7 @@ Die gepaarten Quantoren aus der Regel zu indefiniten und negativen Quantoren (**
 | dieser, diese, dieses, diesen, diesem (Nominativ, Akkusativ, Dativ) | diese |
 | derjenige (Nominativ, Dativ), diejenige (Nominativ, Akkusativ), dasjenige (Nominativ), denjenigen (Akkusativ), demjenigen (Dativ) | diejenige |
 | derselbe (Nominativ, Dativ), dieselbe (Nominativ, Akkusativ), dasselbe (Nominativ), denselben (Akkusativ), demselben (Dativ) | dieselbe |
-| derjenige Mann, der kommt | diejenige Mann, die kommt |
+| derjenige Mann, der kommt | diejenige Mann, das kommt / diejenige Mann, die kommt |
 | dieser Weg | diese Weg |
 | jener Tag | jene Tag |
 | jeder Tag, jeden Tag, jedem Tag | jede Tag |

@@ -2,7 +2,7 @@
 title: Über uns
 ---
 
-Alman ist ein vereinfachte Dialekt der Deutsche, die entwickelt wurde, um die Komplexität der Sprache zu verringern und zugleich die gegenseitige Verständlichkeit mit die Standarddeutsche zu erhalten. Es beseitigt systematisch mehrere komplexe grammatische Merkmale:
+Alman ist ein vereinfachte Dialekt der Deutsche, das entwickelt wurde, um die Komplexität der Sprache zu verringern und zugleich die gegenseitige Verständlichkeit mit die Standarddeutsche zu erhalten. Es beseitigt systematisch mehrere komplexe grammatische Merkmale:
 
 - **Genussystem**: Verwendet ein einzige Artikelform für die meiste Kontexte
 - **Kasusmarkierungen**: Entfernt die meiste kasusbedingte Flexionen
@@ -20,7 +20,7 @@ Dadurch ist Alman leichter zu lernen und bleibt zugleich für Sprecher der Stand
 
 ## Ziele
 
-Die Hauptziel von diese Projekt ist es, ein deutsche Dialekt festzuschreiben und zu formalisieren, die so leicht zu lernen ist wie Englisch oder Spanisch, und es langfristig von die deutsche Staat anerkennen zu lassen.
+Die Hauptziel von diese Projekt ist es, ein deutsche Dialekt festzuschreiben und zu formalisieren, das so leicht zu lernen ist wie Englisch oder Spanisch, und es langfristig von die deutsche Staat anerkennen zu lassen.
 
 Wir entwickeln unter die folgende Vorgaben:
 
