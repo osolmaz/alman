@@ -65,9 +65,9 @@
     },
     {
       "source": "Er liebte Siddharthas Auge und holde Stimme, er liebte seinen Gang und den vollkommenen Anstand seiner Bewegungen, er liebte alles, was Siddhartha tat und sagte, und am meisten liebte er seinen Geist, seine hohen, feurigen Gedanken, seinen glühenden Willen, seine hohe Berufung.",
-      "pattern": "Er liebte Siddharthas Auge und holde Stimme, er liebte sein Gang und die vollkommene Anstand von sein Bewegungen, er liebte alles, was Siddhartha tat und sagte, und {meist|an meist}@5b liebte er sein Geist, sein hohe, feurige Gedanken, sein glühende Wille, sein hohe Berufung.",
+      "pattern": "Er liebte Siddharthas Auge und holde Stimme, er liebte sein Gang und die vollkommene Anstand von sein Bewegungen, er liebte alles, {das|die}@6f Siddhartha tat und sagte, und {meist|an meist}@5b liebte er sein Geist, sein hohe, feurige Gedanken, sein glühende Wille, sein hohe Berufung.",
       "rule": "mixed",
-      "note": "Both the bare-stem superlative (meist) and the 'an' + stem variant are spec-valid."
+      "note": "The canonical invariant relativizer is 'das', with 'die' accepted. Both the bare-stem superlative (meist) and the 'an' + stem variant are spec-valid."
     },
     {
       "source": "Am Abend dieses Tages holten sie die Asketen ein, die dürren Samanas, und boten ihnen Begleitschaft und Gehorsam an. Sie wurden angenommen.",
