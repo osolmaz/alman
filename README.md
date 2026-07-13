@@ -18,10 +18,8 @@ The specification pages render `_includes/spec.md` (English), `spec.de.md`
 under `spec/` (the source of truth) with `uv run python -m alman.build` —
 never edit them by hand. Translations live in the `i18n` blocks of the spec
 JSON files. The site is served in three language versions (`/`, `/de/`,
-`/al/`); localized About pages live in `src/content/about/`. Alman's
-language tag is `de-AL` — this project petitions for it to be recognized
-officially and uses it as if it already were. URLs use the shorter `al`
-prefix. Blog posts
+`/al/`); localized About pages live in `src/content/about/` (see
+`docs/i18n.md` for the language codes and URL scheme). Blog posts
 live in `src/content/blog/`, and the visual identity is documented in
 `docs/design-guide.md`.
 
