@@ -34,4 +34,4 @@ Die Spezifikation und die zugehörige Dokumentation sind überwiegend auf Englis
 
 ---
 
-Die Alman-Spezifikation ist quelloffen und kann auf [GitHub](https://github.com/osolmaz/alman) bearbeitet werden.
+Die Alman-Spezifikation ist Open Source und kann auf [GitHub](https://github.com/osolmaz/alman) bearbeitet werden.

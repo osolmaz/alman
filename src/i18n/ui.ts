@@ -59,7 +59,7 @@ export const ui: Record<Locale, Record<string, string>> = {
     "spec.description":
       "Die Alman-Spezifikation: ein vereinfachter deutscher Dialekt.",
     "spec.edit":
-      "Die Alman-Spezifikation ist quelloffen und kann bearbeitet werden auf",
+      "Die Alman-Spezifikation ist Open Source und kann bearbeitet werden auf",
   },
   alman: {
     "nav.spec": "Spezifikation",
@@ -69,6 +69,6 @@ export const ui: Record<Locale, Record<string, string>> = {
     "spec.description":
       "Die Alman-Spezifikation: ein vereinfachte deutsche Dialekt.",
     "spec.edit":
-      "Die Alman-Spezifikation ist quelloffen und kann bearbeitet werden auf",
+      "Die Alman-Spezifikation ist Open Source und kann bearbeitet werden auf",
   },
 };
