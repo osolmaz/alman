@@ -226,6 +226,44 @@ tr:last-child td {
   text-decoration: none;
 }
 
+/* Compact language switcher in the navbar (Sprachfassung) */
+.lang-nav {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--grey-2);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.lang-nav a,
+.lang-nav-current {
+  padding: 0.35rem 0.5rem;
+  text-decoration: none;
+}
+
+.lang-nav a {
+  color: var(--grey-1);
+}
+
+.lang-nav a:hover {
+  color: var(--form-blue);
+  text-decoration: none;
+}
+
+.lang-nav a + a,
+.lang-nav a + .lang-nav-current,
+.lang-nav-current + a {
+  border-left: 1px solid var(--grey-2);
+}
+
+.lang-nav-current {
+  color: var(--paper);
+  background: var(--ink);
+  font-weight: 600;
+}
+
 /* Structural tricolor hairline under the header */
 .flag-rule {
   height: 3px;

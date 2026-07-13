@@ -2,6 +2,16 @@
   "id": "adjectives-and-adverbs",
   "title": "Adjectives and Adverbs",
   "body": "This section details <alman />'s single form-based principle for adjective and adverb morphology: every declensional adjective ending of <sd /> is replaced by the invariant -e, and forms without declensional endings remain unchanged. The principle applies by surface form, not syntactic function — attributive adjectives (gute Mann), nominalized adjectives (die Gute), and fixed adverbial expressions (unter anderem → unter andere) all take -e, while predicative adjectives and adverbs stay as they are. The sole exception is the adverbial superlative, which replaces the <sd /> **am** + superlative construction with the bare superlative stem (am besten → best).",
+  "i18n": {
+    "de": {
+      "title": "Adjektive und Adverbien",
+      "body": "Dieser Abschnitt beschreibt das einheitliche formbasierte Prinzip von <alman /> für die Adjektiv- und Adverbmorphologie: Jede deklinierte Adjektivendung des <sd /> wird durch das invariante -e ersetzt, und Formen ohne Deklinationsendung bleiben unverändert. Das Prinzip gilt nach der Oberflächenform, nicht nach der syntaktischen Funktion — attributive Adjektive (gute Mann), nominalisierte Adjektive (die Gute) und feste adverbiale Wendungen (unter anderem → unter andere) erhalten alle -e, während prädikative Adjektive und Adverbien bleiben, wie sie sind. Die einzige Ausnahme ist der adverbiale Superlativ, der die <sd />-Konstruktion **am** + Superlativ durch den bloßen Superlativstamm ersetzt (am besten → best)."
+    },
+    "al": {
+      "title": "Adjektive und Adverbien",
+      "body": "Diese Abschnitt beschreibt die einheitliche formbasierte Prinzip von <alman /> für die Adjektiv- und Adverbmorphologie: Jede deklinierte Adjektivendung der <sd /> wird durch die invariante -e ersetzt, und Formen ohne Deklinationsendung bleiben unverändert. Die Prinzip gilt nach die Oberflächenform, nicht nach die syntaktische Funktion — attributive Adjektive (gute Mann), nominalisierte Adjektive (die Gute) und feste adverbiale Wendungen (unter anderem → unter andere) erhalten alle -e, während prädikative Adjektive und Adverbien bleiben, wie sie sind. Die einzige Ausnahme ist die adverbiale Superlativ, das die <sd />-Konstruktion **am** + Superlativ durch die bloße Superlativstamm ersetzt (am besten → best)."
+    }
+  },
   "paragraphs": [
     {
       "id": "adjectives"

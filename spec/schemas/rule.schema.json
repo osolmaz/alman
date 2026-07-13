@@ -16,6 +16,26 @@
       "type": "string",
       "description": "Detailed description of the rule"
     },
+    "i18n": {
+      "type": "object",
+      "description": "Translations of prose fields, keyed by locale (de, al)",
+      "properties": {
+        "de": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" }
+          }
+        },
+        "al": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" }
+          }
+        }
+      }
+    },
     "examples": {
       "type": "array",
       "items": {

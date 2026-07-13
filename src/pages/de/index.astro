@@ -1,0 +1,33 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import specMeta from "../../../spec/main.json";
+import { ui } from "../../i18n/ui";
+
+const entry = await getEntry("spec", "spec.de");
+if (!entry) {
+  throw new Error(
+    "German spec document not found. Generate it with `uv run python -m alman.build`.",
+  );
+}
+const { Content } = await render(entry);
+const translations = { en: "/", de: "/de/", al: "/al/" };
+const t = ui.de;
+---
+
+<Base
+  title={t["spec.title"]}
+  description={t["spec.description"]}
+  locale="de"
+  translations={translations}
+>
+  <div class="doc-band" id="spec">
+    <span>Amtliche Fassung · Deutsche Sprachfassung</span>
+    <span>Dokument AL-1 · Stand {specMeta.lastUpdated}</span>
+  </div>
+  <article class="spec-doc">
+    <Content />
+  </article>
+  <hr />
+  <p>{t["spec.edit"]} <a href="https://github.com/osolmaz/alman">GitHub</a>.</p>
+</Base>

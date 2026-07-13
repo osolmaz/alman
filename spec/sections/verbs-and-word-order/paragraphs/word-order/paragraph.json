@@ -2,11 +2,31 @@
   "id": "word-order",
   "title": "Word Order and Syntax",
   "body": "This paragraph details the preservation of <sd /> word order patterns in <alman />, maintaining both V2 in main clauses and verb-final position in subordinate clauses. It also describes how constituent order conventions compensate for the loss of case marking in clauses with full-noun-phrase arguments.",
+  "i18n": {
+    "de": {
+      "title": "Wortstellung und Syntax",
+      "body": "Dieser Paragraph beschreibt die Bewahrung der <sd />-Wortstellungsmuster in <alman />, sowohl der Verbzweitstellung in Hauptsätzen als auch der Verbendstellung in Nebensätzen. Er beschreibt außerdem, wie Konventionen der Konstituentenfolge den Verlust der Kasusmarkierung in Sätzen mit vollen Nominalphrasen als Argumenten kompensieren."
+    },
+    "al": {
+      "title": "Wortstellung und Syntax",
+      "body": "Diese Paragraph beschreibt die Bewahrung der <sd />-Wortstellungsmuster in <alman />, sowohl der Verbzweitstellung in Hauptsätze als auch der Verbendstellung in Nebensätze. Es beschreibt außerdem, wie Konventionen der Konstituentenfolge die Verlust der Kasusmarkierung in Sätze mit volle Nominalphrasen als Argumente kompensieren."
+    }
+  },
   "rules": [
     {
       "id": "word-order-rules",
       "title": "Word Order",
       "description": "The syntactic structure of sentences in <alman /> adheres to the conventional word order of <sd />. In main clauses, the finite verb occupies the second position (V2 word order). In subordinate clauses, the finite verb is placed at the end of the clause (verb-final position).\n\nVerb-first patterns are likewise retained exactly as in <sd />: yes/no questions (*Gehst du in die Kino?*), imperatives (*Gib mir die Buch!*), and conjunction-less conditionals (*Kommt er, so gehen wir*).\n\nThese rules ensure that while morphological aspects of nouns and determiners may be simplified, the verbal system and syntactic structure remain fully consistent with <sd />. Note that while word order patterns are preserved, the article and inflection rules of <alman /> still apply within these sentences.",
+      "i18n": {
+        "de": {
+          "title": "Wortstellung",
+          "description": "Die syntaktische Struktur der Sätze in <alman /> folgt der herkömmlichen Wortstellung des <sd />. In Hauptsätzen steht das finite Verb an zweiter Position (V2-Stellung). In Nebensätzen steht das finite Verb am Ende des Satzes (Verbendstellung).\n\nVerberststellungen bleiben ebenfalls genau wie im <sd /> erhalten: Ja/Nein-Fragen (*Gehst du in die Kino?*), Imperative (*Gib mir die Buch!*) und konjunktionslose Konditionalsätze (*Kommt er, so gehen wir*).\n\nDiese Regeln stellen sicher, dass das Verbalsystem und die syntaktische Struktur vollständig mit dem <sd /> übereinstimmen, auch wenn morphologische Aspekte von Substantiven und Begleitern vereinfacht werden. Man beachte, dass zwar die Wortstellungsmuster bewahrt werden, die Artikel- und Flexionsregeln von <alman /> innerhalb dieser Sätze aber weiterhin gelten."
+        },
+        "al": {
+          "title": "Wortstellung",
+          "description": "Die syntaktische Struktur der Sätze in <alman /> folgt die herkömmliche Wortstellung der <sd />. In Hauptsätze steht die finite Verb an zweite Position (V2-Stellung). In Nebensätze steht die finite Verb an die Ende der Satz (Verbendstellung).\n\nVerberststellungen bleiben ebenfalls genau wie in die <sd /> erhalten: Ja/Nein-Fragen (*Gehst du in die Kino?*), Imperative (*Gib mir die Buch!*) und konjunktionslose Konditionalsätze (*Kommt er, so gehen wir*).\n\nDiese Regeln stellen sicher, dass die Verbalsystem und die syntaktische Struktur vollständig mit die <sd /> übereinstimmen, auch wenn morphologische Aspekte von Substantive und Begleiter vereinfacht werden. Man beachte, dass zwar die Wortstellungsmuster bewahrt werden, die Artikel- und Flexionsregeln von <alman /> innerhalb diese Sätze aber weiterhin gelten."
+        }
+      },
       "examples": [
         {
           "standard": "Ich gehe heute ins Kino.",
@@ -38,6 +58,16 @@
       "id": "subject-object-order",
       "title": "Subject-Before-Object Order for Full Noun Phrases",
       "description": "In <sd />, case marking on articles allows flexible constituent order: an object may be fronted (e.g., *Den Mann beißt der Hund*) because the accusative article identifies it unambiguously. Since <alman /> eliminates case marking on articles and nouns, this disambiguation is lost.\n\nTherefore, when both the subject and the object of a clause are full noun phrases, the subject must precede the object. Object-fronting remains available when at least one argument is a personal pronoun (which retains case marking, see the section on pronouns) or when context makes the roles unambiguous.\n\nThis compensates for the loss of morphological case marking through fixed constituent order, paralleling the historical development of English.",
+      "i18n": {
+        "de": {
+          "title": "Subjekt-vor-Objekt-Stellung bei vollen Nominalphrasen",
+          "description": "Im <sd /> erlaubt die Kasusmarkierung an den Artikeln eine flexible Konstituentenfolge: Ein Objekt kann vorangestellt werden (z. B. *Den Mann beißt der Hund*), weil der Akkusativartikel es eindeutig ausweist. Da <alman /> die Kasusmarkierung an Artikeln und Substantiven beseitigt, geht diese Disambiguierung verloren.\n\nWenn daher Subjekt und Objekt eines Satzes beide volle Nominalphrasen sind, muss das Subjekt dem Objekt vorangehen. Die Objektvoranstellung bleibt möglich, wenn mindestens ein Argument ein Personalpronomen ist (das die Kasusmarkierung behält, siehe den Abschnitt über Pronomen) oder wenn der Kontext die Rollen eindeutig macht.\n\nDies kompensiert den Verlust der morphologischen Kasusmarkierung durch eine feste Konstituentenfolge, parallel zur historischen Entwicklung des Englischen."
+        },
+        "al": {
+          "title": "Subjekt-vor-Objekt-Stellung bei volle Nominalphrasen",
+          "description": "In die <sd /> erlaubt die Kasusmarkierung an die Artikel ein flexible Konstituentenfolge: Ein Objekt kann vorangestellt werden (z. B. *Den Mann beißt der Hund*), weil die Akkusativartikel es eindeutig ausweist. Da <alman /> die Kasusmarkierung an Artikel und Substantive beseitigt, geht diese Disambiguierung verloren.\n\nWenn daher Subjekt und Objekt von ein Satz beide volle Nominalphrasen sind, muss die Subjekt die Objekt vorangehen. Die Objektvoranstellung bleibt möglich, wenn mindestens ein Argument ein Personalpronomen ist (die die Kasusmarkierung behält, siehe die Abschnitt über Pronomen) oder wenn die Kontext die Rollen eindeutig macht.\n\nDies kompensiert die Verlust der morphologische Kasusmarkierung durch ein feste Konstituentenfolge, parallel zu die historische Entwicklung der Englische."
+        }
+      },
       "examples": [
         {
           "standard": "Der Hund beißt den Mann.",
@@ -60,6 +90,16 @@
       "id": "ditransitive-order",
       "title": "Ditransitive Constructions",
       "description": "With ditransitive verbs such as **geben**, **zeigen**, and **schicken**, <sd /> distinguishes the indirect object (dative) from the direct object (accusative) through case marking, while also placing the indirect object before the direct object by default when both are full noun phrases. <alman /> retains this default order, and the loss of case marking is accepted: in a sequence of two full-noun-phrase objects, the first is interpreted as the recipient and the second as the theme.\n\nThis mirrors the English double-object construction (\"I give the woman the book\"), which likewise functions without case marking. No strict rule is imposed; verb semantics and context resolve the roles in practice, and residual ambiguity is tolerated as it is in English.\n\nWhere explicit marking is desired, or when the theme is to precede the recipient, the recipient may instead be expressed with the preposition **an** (paralleling English \"to\"), and personal pronouns retain their case forms as usual (see the section on pronouns).",
+      "i18n": {
+        "de": {
+          "title": "Ditransitive Konstruktionen",
+          "description": "Bei ditransitiven Verben wie **geben**, **zeigen** und **schicken** unterscheidet das <sd /> das indirekte Objekt (Dativ) vom direkten Objekt (Akkusativ) durch Kasusmarkierung und stellt zugleich das indirekte Objekt standardmäßig vor das direkte, wenn beide volle Nominalphrasen sind. <alman /> behält diese Grundabfolge bei, und der Verlust der Kasusmarkierung wird akzeptiert: In einer Folge von zwei vollen Nominalphrasen-Objekten wird das erste als Empfänger und das zweite als Thema interpretiert.\n\nDies entspricht der englischen Doppelobjekt-Konstruktion („I give the woman the book“), die ebenfalls ohne Kasusmarkierung funktioniert. Es wird keine strikte Regel auferlegt; Verbsemantik und Kontext klären die Rollen in der Praxis, und verbleibende Mehrdeutigkeit wird toleriert, wie im Englischen.\n\nWo eine explizite Markierung gewünscht ist oder das Thema dem Empfänger vorangehen soll, kann der Empfänger stattdessen mit der Präposition **an** ausgedrückt werden (parallel zum englischen „to“), und Personalpronomen behalten wie üblich ihre Kasusformen (siehe den Abschnitt über Pronomen)."
+        },
+        "al": {
+          "title": "Ditransitive Konstruktionen",
+          "description": "Bei ditransitive Verben wie **geben**, **zeigen** und **schicken** unterscheidet die <sd /> die indirekte Objekt (Dativ) von die direkte Objekt (Akkusativ) durch Kasusmarkierung und stellt zugleich die indirekte Objekt standardmäßig vor die direkte, wenn beide volle Nominalphrasen sind. <alman /> behält diese Grundabfolge bei, und die Verlust der Kasusmarkierung wird akzeptiert: In ein Folge von zwei volle Nominalphrasen-Objekte wird die erste als Empfänger und die zweite als Thema interpretiert.\n\nDies entspricht die englische Doppelobjekt-Konstruktion („I give the woman the book“), das ebenfalls ohne Kasusmarkierung funktioniert. Es wird kein strikte Regel auferlegt; Verbsemantik und Kontext klären die Rollen in die Praxis, und verbleibende Mehrdeutigkeit wird toleriert, wie in die Englische.\n\nWo ein explizite Markierung gewünscht ist oder die Thema die Empfänger vorangehen soll, kann die Empfänger stattdessen mit die Präposition **an** ausgedrückt werden (parallel zu die englische „to“), und Personalpronomen behalten wie üblich ihr Kasusformen (siehe die Abschnitt über Pronomen)."
+        }
+      },
       "examples": [
         {
           "standard": "Ich gebe der Frau das Buch.",

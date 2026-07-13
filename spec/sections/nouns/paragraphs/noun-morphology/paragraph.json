@@ -2,11 +2,31 @@
   "id": "noun-morphology",
   "title": "Noun Morphology Simplification",
   "body": "The <alman /> dialect systematically eliminates grammatical gender distinctions and case-based noun inflections through morphological regularization. Nouns maintain a single invariant form across nominative, accusative, and dative cases, with genitive constructions employing a distinct analytical marker. Plural forms preserve their standard nominative/accusative morphology across all syntactic contexts.",
+  "i18n": {
+    "de": {
+      "title": "Vereinfachung der Substantivmorphologie",
+      "body": "Der <alman />-Dialekt beseitigt systematisch Genusunterscheidungen und kasusbasierte Substantivflexionen durch morphologische Regularisierung. Substantive behalten eine einzige invariante Form über Nominativ, Akkusativ und Dativ hinweg; Genitivkonstruktionen verwenden einen eigenen analytischen Marker. Pluralformen bewahren ihre standardsprachliche Nominativ-/Akkusativmorphologie in allen syntaktischen Kontexten."
+    },
+    "al": {
+      "title": "Vereinfachung der Substantivmorphologie",
+      "body": "Die <alman />-Dialekt beseitigt systematisch Genusunterscheidungen und kasusbasierte Substantivflexionen durch morphologische Regularisierung. Substantive behalten ein einzige invariante Form über Nominativ, Akkusativ und Dativ hinweg; Genitivkonstruktionen verwenden ein eigene analytische Marker. Pluralformen bewahren ihr standardsprachliche Nominativ-/Akkusativmorphologie in alle syntaktische Kontexte."
+    }
+  },
   "rules": [
     {
       "id": "case-neutralization",
       "title": "Case Ending Elimination",
       "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers on common nouns (des Mannes → der Mann); the prenominal genitive -s of proper names is exempt and retained (see the rule on the proper-name genitive)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.",
+      "i18n": {
+        "de": {
+          "title": "Beseitigung der Kasusendungen",
+          "description": "Alle kasusspezifischen Substantivendungen werden entfernt, darunter:\n- Genitiv-Marker -s/-es an Gattungsnamen (des Mannes → der Mann); das pränominale Genitiv-s von Eigennamen ist ausgenommen und bleibt erhalten (siehe die Regel zum Eigennamen-Genitiv)\n- Dativ-Plural-Suffixe -n (den Bränden → die Brände)\n- Schwache Deklinationsmuster: Die -n/-en-Endungen, die schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativischen Singularkasus annehmen, entfallen; der Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Der -n/-en-Plural dieser Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invarianten Pluralformen), sodass der Singular *die Kollege* vom Plural *die Kollegen* unterschieden bleibt."
+        },
+        "al": {
+          "title": "Beseitigung der Kasusendungen",
+          "description": "Alle kasusspezifische Substantivendungen werden entfernt, darunter:\n- Genitiv-Marker -s/-es an Gattungsnamen (des Mannes → der Mann); die pränominale Genitiv-s von Eigennamen ist ausgenommen und bleibt erhalten (siehe die Regel zu die Eigennamen-Genitiv)\n- Dativ-Plural-Suffixe -n (den Bränden → die Brände)\n- Schwache Deklinationsmuster: Die -n/-en-Endungen, das schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativische Singularkasus annehmen, entfallen; die Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Die -n/-en-Plural von diese Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invariante Pluralformen), sodass die Singular *die Kollege* von die Plural *die Kollegen* unterschieden bleibt."
+        }
+      },
       "examples": [
         {
           "standard": "des Hundes (Genitive)",
@@ -42,6 +62,16 @@
       "id": "proper-name-genitive",
       "title": "Retention of the Proper-Name Genitive -s",
       "description": "The prenominal genitive -s of proper names is exempt from case ending elimination and is retained unchanged, mirroring the English possessive *'s* (*Annas Buch* \"Anna's book\"). Since proper names take no article, the analytical genitive marker **der** cannot apply to them; the name-final -s is therefore not part of the article-and-case system that <alman /> eliminates, and it carries no additional learning burden for speakers familiar with the English construction.\n\nThis applies to personal names as well as place names and other proper nouns used possessively. The <sd /> orthographic convention for names ending in an s-sound — a bare apostrophe in place of -s (*Hans' Fahrrad*) — is likewise retained.\n\nAs with other possessive constructions, the periphrastic **von** construction remains available as an alternative (see the rule on the optional use of 'von die' for possession in the section on articles).",
+      "i18n": {
+        "de": {
+          "title": "Beibehaltung des Eigennamen-Genitivs -s",
+          "description": "Das pränominale Genitiv-s von Eigennamen ist von der Beseitigung der Kasusendungen ausgenommen und bleibt unverändert erhalten, analog zum englischen Possessiv *'s* (*Annas Buch* „Anna's book“). Da Eigennamen keinen Artikel tragen, kann der analytische Genitivmarker **der** auf sie nicht angewendet werden; das namensfinale -s gehört daher nicht zu dem Artikel-und-Kasus-System, das <alman /> beseitigt, und stellt für Sprecher, die mit der englischen Konstruktion vertraut sind, keine zusätzliche Lernlast dar.\n\nDies gilt für Personennamen ebenso wie für Ortsnamen und andere possessiv gebrauchte Eigennamen. Die orthographische Konvention des <sd /> für Namen, die auf einen s-Laut enden — ein bloßer Apostroph anstelle des -s (*Hans' Fahrrad*) —, bleibt ebenfalls erhalten.\n\nWie bei anderen Possessivkonstruktionen bleibt die periphrastische **von**-Konstruktion als Alternative verfügbar (siehe die Regel zum fakultativen 'von die' für Besitz im Abschnitt über Artikel)."
+        },
+        "al": {
+          "title": "Beibehaltung der Eigennamen-Genitiv -s",
+          "description": "Die pränominale Genitiv-s von Eigennamen ist von die Beseitigung der Kasusendungen ausgenommen und bleibt unverändert erhalten, analog zu die englische Possessiv *'s* (*Annas Buch* „Anna's book“). Da Eigennamen kein Artikel tragen, kann die analytische Genitivmarker **der** auf sie nicht angewendet werden; die namensfinale -s gehört daher nicht zu die Artikel-und-Kasus-System, das <alman /> beseitigt, und stellt für Sprecher, das mit die englische Konstruktion vertraut sind, kein zusätzliche Lernlast dar.\n\nDies gilt für Personennamen ebenso wie für Ortsnamen und andere possessiv gebrauchte Eigennamen. Die orthographische Konvention der <sd /> für Namen, das auf ein s-Laut enden — ein bloße Apostroph anstelle der -s (*Hans' Fahrrad*) —, bleibt ebenfalls erhalten.\n\nWie bei andere Possessivkonstruktionen bleibt die periphrastische **von**-Konstruktion als Alternative verfügbar (siehe die Regel zu die fakultative 'von die' für Besitz in die Abschnitt über Artikel)."
+        }
+      },
       "examples": [
         {
           "standard": "Annas Buch",
@@ -69,6 +99,16 @@
       "id": "plural-uniformity",
       "title": "Invariant Plural Forms",
       "description": "Standard nominative/accusative plural forms serve as universal plural markers, remaining unchanged in dative and genitive contexts. This preserves recognizable plural morphology while eliminating case-based modifications.",
+      "i18n": {
+        "de": {
+          "title": "Invariante Pluralformen",
+          "description": "Die standardsprachlichen Nominativ-/Akkusativ-Pluralformen dienen als universelle Pluralmarker und bleiben in dativischen und genitivischen Kontexten unverändert. Dies bewahrt eine wiedererkennbare Pluralmorphologie und beseitigt zugleich kasusbedingte Veränderungen."
+        },
+        "al": {
+          "title": "Invariante Pluralformen",
+          "description": "Die standardsprachliche Nominativ-/Akkusativ-Pluralformen dienen als universelle Pluralmarker und bleiben in dativische und genitivische Kontexte unverändert. Dies bewahrt ein wiedererkennbare Pluralmorphologie und beseitigt zugleich kasusbedingte Veränderungen."
+        }
+      },
       "examples": [
         {
           "standard": "mit den Kindern (Dative Plural)",
@@ -84,6 +124,16 @@
       "id": "no-plural-morphology-regularization",
       "title": "No Regularization of Plural Morphology",
       "description": "<alman /> preserves <sd /> plural morphology without systematic regularization, maintaining existing plural forms in all non-conflicting contexts. The dialect only intervenes in plural formation when its grammatical simplifications create morphological ambiguity between singular and plural forms, as described in the next rule.",
+      "i18n": {
+        "de": {
+          "title": "Keine Regularisierung der Pluralmorphologie",
+          "description": "<alman /> bewahrt die Pluralmorphologie des <sd /> ohne systematische Regularisierung und behält bestehende Pluralformen in allen konfliktfreien Kontexten bei. Der Dialekt greift nur dann in die Pluralbildung ein, wenn seine grammatischen Vereinfachungen morphologische Mehrdeutigkeit zwischen Singular- und Pluralformen erzeugen, wie in der nächsten Regel beschrieben."
+        },
+        "al": {
+          "title": "Keine Regularisierung der Pluralmorphologie",
+          "description": "<alman /> bewahrt die Pluralmorphologie der <sd /> ohne systematische Regularisierung und behält bestehende Pluralformen in alle konfliktfreie Kontexte bei. Die Dialekt greift nur dann in die Pluralbildung ein, wenn sein grammatische Vereinfachungen morphologische Mehrdeutigkeit zwischen Singular- und Pluralformen erzeugen, wie in die nächste Regel beschrieben."
+        }
+      },
       "examples": [
         {
           "standard": "die Blumen (plural)",
@@ -107,6 +157,16 @@
       "id": "optional-plural-marking",
       "title": "Optional Plural Disambiguation",
       "description": "To resolve potential ambiguity in nouns with identical singular/plural forms, <alman /> permits optional plural marking with the suffix **-s**, mirroring the English plural. When clarity requires explicit plurality indication, the -s suffix is appended to the invariant form.\n\nThe -s suffix is the sole disambiguation marker. The -n suffix is not used for this purpose: since case ending elimination abolishes the <sd /> dative plural -n, reusing -n as a plural marker would give the same ending two different meanings across the two languages.\n\nThis disambiguation preserves simplified morphology while accommodating lexical items where number distinction proves pragmatically essential.",
+      "i18n": {
+        "de": {
+          "title": "Fakultative Pluraldisambiguierung",
+          "description": "Um mögliche Mehrdeutigkeit bei Substantiven mit identischen Singular- und Pluralformen aufzulösen, erlaubt <alman /> eine fakultative Pluralmarkierung mit dem Suffix **-s**, analog zum englischen Plural. Wenn die Klarheit eine explizite Pluralkennzeichnung erfordert, wird das -s-Suffix an die invariante Form angehängt.\n\nDas -s-Suffix ist der einzige Disambiguierungsmarker. Das -n-Suffix wird für diesen Zweck nicht verwendet: Da die Beseitigung der Kasusendungen das Dativ-Plural-n des <sd /> abschafft, würde die Wiederverwendung von -n als Pluralmarker derselben Endung in den beiden Sprachen zwei verschiedene Bedeutungen geben.\n\nDiese Disambiguierung bewahrt die vereinfachte Morphologie und trägt zugleich lexikalischen Einheiten Rechnung, bei denen die Numerusunterscheidung pragmatisch wesentlich ist."
+        },
+        "al": {
+          "title": "Fakultative Pluraldisambiguierung",
+          "description": "Um mögliche Mehrdeutigkeit bei Substantive mit identische Singular- und Pluralformen aufzulösen, erlaubt <alman /> ein fakultative Pluralmarkierung mit die Suffix **-s**, analog zu die englische Plural. Wenn die Klarheit ein explizite Pluralkennzeichnung erfordert, wird die -s-Suffix an die invariante Form angehängt.\n\nDie -s-Suffix ist die einzige Disambiguierungsmarker. Die -n-Suffix wird für diese Zweck nicht verwendet: Da die Beseitigung der Kasusendungen die Dativ-Plural-n der <sd /> abschafft, würde die Wiederverwendung von -n als Pluralmarker dieselbe Endung in die beide Sprachen zwei verschiedene Bedeutungen geben.\n\nDiese Disambiguierung bewahrt die vereinfachte Morphologie und trägt zugleich lexikalische Einheiten Rechnung, bei die die Numerusunterscheidung pragmatisch wesentlich ist."
+        }
+      },
       "examples": [
         {
           "standard": "die Computer (plural)",

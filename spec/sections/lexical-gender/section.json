@@ -2,6 +2,16 @@
   "id": "lexical-gender",
   "title": "Lexical Gender Simplifications",
   "body": "This section outlines the systematic elimination of gender-specific lexical forms in <alman />, covering person-denoting nouns such as occupational titles, nationalities, and role descriptions. It describes how traditionally gendered word pairs are consolidated into a single form, using the historically masculine base form with the invariant article system to denote all referents regardless of gender.",
+  "i18n": {
+    "de": {
+      "title": "Lexikalische Genus-Vereinfachungen",
+      "body": "Dieser Abschnitt beschreibt die systematische Beseitigung geschlechtsspezifischer lexikalischer Formen in <alman /> und erfasst personenbezeichnende Substantive wie Berufsbezeichnungen, Nationalitäten und Rollenbeschreibungen. Er beschreibt, wie traditionell nach Geschlecht unterschiedene Wortpaare zu einer einzigen Form zusammengeführt werden, wobei die historisch maskuline Grundform mit dem invarianten Artikelsystem alle Referenten unabhängig vom Geschlecht bezeichnet."
+    },
+    "al": {
+      "title": "Lexikalische Genus-Vereinfachungen",
+      "body": "Diese Abschnitt beschreibt die systematische Beseitigung von geschlechtsspezifische lexikalische Formen in <alman /> und erfasst personenbezeichnende Substantive wie Berufsbezeichnungen, Nationalitäten und Rollenbeschreibungen. Es beschreibt, wie traditionell nach Geschlecht unterschiedene Wortpaare zu ein einzige Form zusammengeführt werden, wobei die historisch maskuline Grundform mit die invariante Artikelsystem alle Referenten unabhängig von die Geschlecht bezeichnet."
+    }
+  },
   "paragraphs": [
     {
       "id": "job-titles"

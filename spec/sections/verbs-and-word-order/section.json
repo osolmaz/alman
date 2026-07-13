@@ -2,6 +2,16 @@
     "id": "verbs-and-word-order",
     "title": "Verbs and Word Order",
     "body": "This section describes the verbal system and syntactic structure of <alman />, which maintains full fidelity to <sd /> patterns. While other aspects of the grammar may be simplified, verb conjugations and word order rules remain unchanged to preserve the essential character of German syntax and ensure clear communication. One addition compensates for the loss of case marking: when both subject and object are full noun phrases, the subject must precede the object. In ditransitive constructions, the <sd /> default of recipient before theme is retained as an interpretation convention, mirroring the English double-object construction.",
+    "i18n": {
+      "de": {
+        "title": "Verben und Wortstellung",
+        "body": "Dieser Abschnitt beschreibt das Verbalsystem und die syntaktische Struktur von <alman />, die den <sd />-Mustern vollständig treu bleiben. Während andere Aspekte der Grammatik vereinfacht werden, bleiben Verbkonjugationen und Wortstellungsregeln unverändert, um den wesentlichen Charakter der deutschen Syntax zu bewahren und klare Kommunikation zu gewährleisten. Eine Ergänzung kompensiert den Verlust der Kasusmarkierung: Wenn Subjekt und Objekt beide volle Nominalphrasen sind, muss das Subjekt dem Objekt vorangehen. In ditransitiven Konstruktionen wird die <sd />-Grundabfolge Empfänger vor Thema als Interpretationskonvention beibehalten, analog zur englischen Doppelobjekt-Konstruktion."
+      },
+      "al": {
+        "title": "Verben und Wortstellung",
+        "body": "Diese Abschnitt beschreibt die Verbalsystem und die syntaktische Struktur von <alman />, das die <sd />-Muster vollständig treu bleiben. Während andere Aspekte der Grammatik vereinfacht werden, bleiben Verbkonjugationen und Wortstellungsregeln unverändert, um die wesentliche Charakter der deutsche Syntax zu bewahren und klare Kommunikation zu gewährleisten. Ein Ergänzung kompensiert die Verlust der Kasusmarkierung: Wenn Subjekt und Objekt beide volle Nominalphrasen sind, muss die Subjekt die Objekt vorangehen. In ditransitive Konstruktionen wird die <sd />-Grundabfolge Empfänger vor Thema als Interpretationskonvention beibehalten, analog zu die englische Doppelobjekt-Konstruktion."
+      }
+    },
     "paragraphs": [
       {
         "id": "verbs"

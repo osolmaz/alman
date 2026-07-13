@@ -69,7 +69,7 @@ This specification provides a formal account of **Alman** grammar, detailing the
 
 ## Articles {#articles}
 
-This section outlines the simplification of **Standard German** articles in **Alman**, eliminating grammatical gender and case distinctions. Definite articles use **die** for all non-genitive contexts and **der** for genitive, with **das** retained as a neutral demonstrative. Possession may alternatively use **von die** instead of genitive constructions. Indefinite articles adopt **ein** universally in non-genitive cases, while genitive employs **von ein** or retains **ein** with prepositions. Preposition-article contractions are resolved to full forms without exception (e.g., *vom* → *von die*), and nominalized articles preserve **ein** as standalone forms. The case distinction after two-way prepositions is abolished for noun phrases.
+This section outlines the simplification of **Standard German** articles in **Alman**, eliminating grammatical gender and case distinctions. Definite articles use **die** for all non-genitive contexts and **der** for genitive, with **das** retained as a neutral demonstrative and serving as the invariant relativizer (see the section on pronouns). Possession may alternatively use **von die** instead of genitive constructions. Indefinite articles adopt **ein** universally in non-genitive cases, while genitive employs **von ein** or retains **ein** with prepositions. Preposition-article contractions are resolved to full forms without exception (e.g., *vom* → *von die*), and nominalized articles preserve **ein** as standalone forms. The case distinction after two-way prepositions is abolished for noun phrases.
 
 
 ### §1. Definite Article Simplification {#definite-articles}
@@ -120,7 +120,7 @@ The genitive **der** is the single case-marked article form that **Alman** retai
 
 The demonstrative pronoun 'das' retains its form in nominative, accusative, and dative contexts when functioning as a neutral demonstrative ('that'). In genitive constructions, the form 'dessen' is replaced by 'deren' while maintaining the invariant article system.
 
-This exception is strictly positional: it applies only when 'das' stands alone, without a following noun. Directly before a noun, the article rules always apply and every definite article form becomes **die**, regardless of stress or demonstrative intent. Demonstrative force before a noun is expressed with **diese** or **jene** (see the section on determiners), mirroring English *this/that* + noun. Likewise, the **Standard German** demonstrative pronouns 'der', 'den', and 'dem' used standalone (*Der war's!*) are replaced by the invariant **die**, consistent with the treatment of relative pronouns.
+This exception is strictly positional: it applies only when 'das' stands alone, without a following noun. Directly before a noun, the article rules always apply and every definite article form becomes **die**, regardless of stress or demonstrative intent. Demonstrative force before a noun is expressed with **diese** or **jene** (see the section on determiners), mirroring English *this/that* + noun. Likewise, the **Standard German** demonstrative pronouns 'der', 'den', and 'dem' used standalone (*Der war's!*) are replaced by the neutral **das** (*Das war's!*), with the article-aligned **die** as an accepted variant, consistent with the treatment of relative pronouns.
 
 
 **Examples:**
@@ -130,7 +130,7 @@ This exception is strictly positional: it applies only when 'das' stands alone, 
 | das ist gut (demonstrative) | das ist gut |
 | dessen Haus | deren Haus |
 | DAS Buch will ich! (stressed, attributive) | Diese Buch will ich! |
-| Der war's! (standalone demonstrative) | Die war's! |
+| Der war's! (standalone demonstrative) | Das war's! / Die war's! |
 
 
 
@@ -471,7 +471,7 @@ This rule takes precedence over the contraction resolution rule in the section o
 
 ## Pronouns and Determiners {#pronouns-and-determiners}
 
-This section outlines modifications to **Standard German**'s pronominal system that prioritize natural gender attribution while maintaining case distinctions for referential clarity. Personal pronouns retain **Standard German** case forms but reference biological/social gender rather than grammatical gender; for persons of unknown or generic gender, the plural **sie** functions as a singular *they*, mirroring English. Relative pronouns collapse to the invariant **die** (genitive **deren**), following the article system. Determiners, possessive determiners, the negative article **kein**, and other **ein**-compounds undergo simplification through invariant forms in non-genitive contexts, with preserved case inflection only in personal pronouns.
+This section outlines modifications to **Standard German**'s pronominal system that prioritize natural gender attribution while maintaining case distinctions for referential clarity. Personal pronouns retain **Standard German** case forms but reference biological/social gender rather than grammatical gender; for persons of unknown or generic gender, the plural **sie** functions as a singular *they*, mirroring English. Relative pronouns collapse to the invariant neutral **das** (genitive **deren**), mirroring the English relativizer *that*, with the article-aligned **die** as an accepted variant. Determiners, possessive determiners, the negative article **kein**, and other **ein**-compounds undergo simplification through invariant forms in non-genitive contexts, with preserved case inflection only in personal pronouns.
 
 
 ### §6. Pronouns {#pronouns}
@@ -591,19 +591,24 @@ The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, 
 
 #### §6f. Relative Pronouns
 
-Relative pronouns follow the same simplification as definite articles. All non-genitive relative pronoun forms (der/die/das/den/dem) are replaced by the invariant form **die**, regardless of the gender, number, or case role of the referent within the relative clause. The genitive relative pronouns **dessen** and **deren** are both replaced by **deren**, consistent with the treatment of genitive demonstratives in the section on articles.
+Relative pronouns are simplified to a single invariant relativizer: the neutral form **das**, used regardless of the gender, number, or case role of the referent within the relative clause. This mirrors the English relativizer *that*, which likewise introduces relative clauses without inflecting (*the man that stands there* → *die Mann, das dort steht*). Since **das** is already retained as the neutral demonstrative (see the section on articles), a single form covers both pointing and clause-linking.
 
-Since the invariant **die** no longer marks the case role of the relativized element, ambiguity between subject and object relative clauses is resolved by verb agreement and context; where genuine ambiguity arises, speakers may rephrase using a personal pronoun in the relative clause or a periphrastic construction.
+The article-aligned form **die** is also acceptable in all non-genitive positions (*die Mann, die dort steht*). **das** is preferred because it keeps the relativizer visually and audibly distinct from the invariant article **die**, avoiding stacked identical forms where the two meet (*die Frau, das die Kinder sieht* rather than *die Frau, die die Kinder sieht*).
+
+The genitive relative pronouns **dessen** and **deren** are both replaced by **deren**, consistent with the treatment of genitive demonstratives in the section on articles.
+
+Since the invariant relativizer no longer marks the case role of the relativized element, ambiguity between subject and object relative clauses is resolved by verb agreement and context; where genuine ambiguity arises, speakers may rephrase using a personal pronoun in the relative clause or a periphrastic construction.
 
 
 **Examples:**
 
 | Standard German | Alman | English |
 |------------------|--------|---------|
-| der Mann, der dort steht | die Mann, die dort steht | the man who is standing there |
-| der Mann, den ich sehe | die Mann, die ich sehe | the man whom I see |
-| der Mann, dem ich helfe | die Mann, die ich helfe | the man whom I help |
-| das Kind, das spielt | die Kind, die spielt | the child who is playing |
+| der Mann, der dort steht | die Mann, das dort steht / die Mann, die dort steht | the man that is standing there |
+| der Mann, den ich sehe | die Mann, das ich sehe / die Mann, die ich sehe | the man that I see |
+| der Mann, dem ich helfe | die Mann, das ich helfe / die Mann, die ich helfe | the man that I help |
+| das Kind, das spielt | die Kind, das spielt / die Kind, die spielt | the child that is playing |
+| die Frau, die die Kinder sieht | die Frau, das die Kinder sieht / die Frau, die die Kinder sieht | the woman that sees the children |
 | die Frau, deren Auto kaputt ist | die Frau, deren Auto kaputt ist | the woman whose car is broken |
 | der Mann, dessen Haus groß ist | die Mann, deren Haus groß ist | the man whose house is large |
 
@@ -679,7 +684,7 @@ The paired quantifiers described in the rule on indefinite and negative quantifi
 | dieser, diese, dieses, diesen, diesem (Nominativ, Akkusativ, Dativ) | diese |
 | derjenige (Nominativ, Dativ), diejenige (Nominativ, Akkusativ), dasjenige (Nominativ), denjenigen (Akkusativ), demjenigen (Dativ) | diejenige |
 | derselbe (Nominativ, Dativ), dieselbe (Nominativ, Akkusativ), dasselbe (Nominativ), denselben (Akkusativ), demselben (Dativ) | dieselbe |
-| derjenige Mann, der kommt | diejenige Mann, die kommt |
+| derjenige Mann, der kommt | diejenige Mann, das kommt / diejenige Mann, die kommt |
 | dieser Weg | diese Weg |
 | jener Tag | jene Tag |
 | jeder Tag, jeden Tag, jedem Tag | jede Tag |

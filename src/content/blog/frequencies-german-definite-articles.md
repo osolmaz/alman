@@ -85,57 +85,12 @@ for $i=1,2$, $j=1,2,3$ and $k=1,2,3,4$ correspond to the elements in the order s
 
 Elements of $S$ can be shown in a single table, like below:
 
-<table border="1">
-  <tr>
-    <th rowspan="2">Case</th>
-    <th colspan="3" style="text-align:center;">Singular</th>
-    <th colspan="3" style="text-align:center;">Plural</th>
-  </tr>
-  <tr>
-    <th>Masculine</th>
-    <th>Feminine</th>
-    <th>Neuter</th>
-    <th>Masculine</th>
-    <th>Feminine</th>
-    <th>Neuter</th>
-  </tr>
-  <tr>
-    <td>Nominative</td>
-    <td>$S_{111}$</td>
-    <td>$S_{121}$</td>
-    <td>$S_{131}$</td>
-    <td>$S_{211}$</td>
-    <td>$S_{221}$</td>
-    <td>$S_{231}$</td>
-  </tr>
-  <tr>
-    <td>Accusative</td>
-    <td>$S_{112}$</td>
-    <td>$S_{122}$</td>
-    <td>$S_{132}$</td>
-    <td>$S_{212}$</td>
-    <td>$S_{222}$</td>
-    <td>$S_{232}$</td>
-  </tr>
-  <tr>
-    <td>Dative</td>
-    <td>$S_{113}$</td>
-    <td>$S_{123}$</td>
-    <td>$S_{133}$</td>
-    <td>$S_{213}$</td>
-    <td>$S_{223}$</td>
-    <td>$S_{233}$</td>
-  </tr>
-  <tr>
-    <td>Genitive</td>
-    <td>$S_{114}$</td>
-    <td>$S_{124}$</td>
-    <td>$S_{134}$</td>
-    <td>$S_{214}$</td>
-    <td>$S_{224}$</td>
-    <td>$S_{234}$</td>
-  </tr>
-</table>
+| Case       | Masc. (Sg.) | Fem. (Sg.) | Neut. (Sg.) | Masc. (Pl.) | Fem. (Pl.) | Neut. (Pl.) |
+| ---------- | ----------- | ---------- | ----------- | ----------- | ---------- | ----------- |
+| Nominative | $S_{111}$   | $S_{121}$  | $S_{131}$   | $S_{211}$   | $S_{221}$  | $S_{231}$   |
+| Accusative | $S_{112}$   | $S_{122}$  | $S_{132}$   | $S_{212}$   | $S_{222}$  | $S_{232}$   |
+| Dative     | $S_{113}$   | $S_{123}$  | $S_{133}$   | $S_{213}$   | $S_{223}$  | $S_{233}$   |
+| Genitive   | $S_{114}$   | $S_{124}$  | $S_{134}$   | $S_{214}$   | $S_{224}$  | $S_{234}$   |
 
 <figure>
 
