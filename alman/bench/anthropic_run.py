@@ -200,8 +200,8 @@ def _prewarm(
         system=_system_blocks(profile["cache_ttl"]),
         messages=[{"role": "user", "content": "Acknowledge with one character."}],
         max_tokens=1,
-        thinking={"type": "disabled"},
-        effort="low",
+        thinking={"type": "adaptive", "display": "omitted"},
+        effort=profile["reasoning_effort"],
     )
     tokens = response["tokens"]
     if not (tokens["cache_creation_input"] or tokens["cache_read_input"]):
@@ -580,6 +580,22 @@ def run_profile(
         )
         remaining = [item for item in items if item.id not in completed]
         max_concurrency = profile["max_concurrency"]
+        if not completed and remaining:
+            first_item = remaining.pop(0)
+            try:
+                first_sample = _run_sample(client, profile, first_item)
+            except Exception as error:
+                raise RuntimeError(
+                    "Anthropic cache verification failed for "
+                    f"{profile['name']} / {first_item.id}"
+                ) from error
+            first_sample["completed_at"] = datetime.now(UTC).isoformat()
+            _append_jsonl(samples_path, first_sample)
+            completed[first_item.id] = first_sample
+            print(
+                f"cache verified; {profile['name']}: {len(completed)}/48",
+                flush=True,
+            )
         with ThreadPoolExecutor(max_workers=max_concurrency) as executor:
             for offset in range(0, len(remaining), max_concurrency):
                 chunk = remaining[offset : offset + max_concurrency]

@@ -6,6 +6,7 @@ from jsonschema import ValidationError
 
 from alman.bench.anthropic_run import (
     _aggregate,
+    _prewarm,
     _response_data,
     _run_sample,
     _system_blocks,
@@ -106,6 +107,35 @@ def test_anthropic_response_extracts_cache_and_reasoning_tokens():
         "reasoning": 12,
         "total": 135,
     }
+
+
+def test_anthropic_prewarm_matches_primary_thinking_configuration(monkeypatch):
+    calls = []
+
+    def fake_request(*args, **kwargs):
+        calls.append(kwargs)
+        return {
+            "response_id": "prewarm",
+            "returned_model": "claude-sonnet-5",
+            "stop_reason": "max_tokens",
+            "content": "",
+            "tokens": _tokens(
+                input=5,
+                cache_read_input=0,
+                cache_creation_input=100,
+                cache_creation_1h_input=100,
+                output=1,
+                reasoning=1,
+                total=106,
+            ),
+        }
+
+    monkeypatch.setattr("alman.bench.anthropic_run._request", fake_request)
+
+    _prewarm(object(), _profile())
+
+    assert calls[0]["thinking"] == {"type": "adaptive", "display": "omitted"}
+    assert calls[0]["effort"] == "xhigh"
 
 
 def test_anthropic_forced_final_disables_thinking(monkeypatch):
