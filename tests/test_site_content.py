@@ -15,7 +15,7 @@ from alman.bench.scoring import lint
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-ALMAN_PAGES = sorted((REPO_ROOT / "src" / "content").glob("**/alman.md"))
+ALMAN_PAGES = sorted((REPO_ROOT / "src" / "content").glob("**/al.md"))
 
 
 def test_alman_pages_exist():

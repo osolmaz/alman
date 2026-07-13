@@ -24,7 +24,7 @@ const spec = defineCollection({
   }),
 });
 
-// The About page, one entry per locale (en.md, de.md, alman.md).
+// The About page, one entry per locale (en.md, de.md, al.md).
 // The German and Alman entries are faithful translations of the English
 // text and must stay structurally parallel: the Alman page renders a
 // word-level diff against the German entry.

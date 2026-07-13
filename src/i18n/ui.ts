@@ -1,31 +1,34 @@
 // Locale metadata and UI strings for localized pages.
 // Locale keys match the URL path segments configured in astro.config.mjs.
 
-export type Locale = "en" | "de" | "alman";
+export type Locale = "en" | "de" | "al";
 
-// BCP 47 language tags. Alman has no ISO 639 code of its own; it is
-// tagged as German with a private-use subtag, so browsers, search
-// engines, and screen readers treat it as German.
+// BCP 47 language tags. Alman has no ISO 639 code of its own yet: this
+// project petitions for the official language tag "de-AL". Until that is
+// granted, the markup uses the standards-compliant private-use tag
+// "de-x-alman", so browsers, search engines, and screen readers treat the
+// text as German. In URLs we use the bare "al" prefix regardless, because
+// it is shorter and simpler.
 export const langCodes: Record<Locale, string> = {
   en: "en",
   de: "de",
-  alman: "de-x-alman",
+  al: "de-x-alman",
 };
 
 export const localeNames: Record<Locale, string> = {
   en: "English",
   de: "Deutsch",
-  alman: "Alman",
+  al: "Alman",
 };
 
 // Short codes for the compact switcher in the navbar.
 export const localeShort: Record<Locale, string> = {
   en: "EN",
   de: "DE",
-  alman: "AL",
+  al: "AL",
 };
 
-export const locales: Locale[] = ["en", "de", "alman"];
+export const locales: Locale[] = ["en", "de", "al"];
 
 /** Home page of a locale, the fallback target for untranslated pages. */
 export const localeHome = (locale: Locale): string =>
@@ -38,7 +41,7 @@ export const localePrefix = (locale: Locale): string =>
 export const translationsFor = (slug: string): Record<Locale, string> => ({
   en: `/${slug}/`,
   de: `/de/${slug}/`,
-  alman: `/alman/${slug}/`,
+  al: `/al/${slug}/`,
 });
 
 export const ui: Record<Locale, Record<string, string>> = {
@@ -61,7 +64,7 @@ export const ui: Record<Locale, Record<string, string>> = {
     "spec.edit":
       "Die Alman-Spezifikation ist Open Source und kann bearbeitet werden auf",
   },
-  alman: {
+  al: {
     "nav.spec": "Spezifikation",
     "nav.blog": "Blog",
     "nav.about": "Über uns",

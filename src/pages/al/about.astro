@@ -6,9 +6,9 @@ import { translationsFor } from "../../i18n/ui";
 import { diffMarkdown } from "../../lib/wordDiff";
 import { markdownConfig } from "../../../markdown.config.mjs";
 
-const entry = await getEntry("about", "alman");
+const entry = await getEntry("about", "al");
 const deEntry = await getEntry("about", "de");
-if (!entry || !deEntry) throw new Error("About entries 'alman'/'de' not found.");
+if (!entry || !deEntry) throw new Error("About entries 'al'/'de' not found.");
 const { Content } = await render(entry);
 
 // Build-time word diff against the German version, so the reader can
@@ -20,7 +20,7 @@ const diffHtml = (await processor.render(merged)).code;
 const translations = translationsFor("about");
 ---
 
-<Base title={entry.data.title} locale="alman" translations={translations}>
+<Base title={entry.data.title} locale="al" translations={translations}>
   <h1>{entry.data.title}</h1>
   <div class="al-view">
     <label class="diff-toggle">
