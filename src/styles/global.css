@@ -355,6 +355,19 @@ tr:last-child td {
   color: var(--form-blue);
 }
 
+/* Official-looking notice shown when a page has no translation in the
+   selected language and the English original is displayed instead. */
+.i18n-notice {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--grey-1);
+  border: 1px solid var(--grey-2);
+  border-left: 3px solid var(--form-blue);
+  padding: 0.7rem 1rem;
+  margin: 0 0 2.25rem;
+}
+
 .post-meta {
   font-family: var(--font-mono);
   font-size: 0.8rem;

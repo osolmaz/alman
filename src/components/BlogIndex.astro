@@ -1,0 +1,41 @@
+---
+// The blog listing for a locale. Every English post is listed; where a
+// translation exists, its title is shown and the link resolves to it.
+// Untranslated posts link to the same localized route, which renders the
+// English original with a notice.
+import type { CollectionEntry } from "astro:content";
+import Base from "../layouts/Base.astro";
+import { englishPosts, translatedPost } from "../i18n/blog";
+import { localePrefix, translationsFor, ui, type Locale } from "../i18n/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = ui[locale];
+
+const posts: { slug: string; entry: CollectionEntry<"blog"> }[] = [];
+for (const post of await englishPosts()) {
+  const translated = await translatedPost(post.id, locale);
+  posts.push({ slug: post.id, entry: translated ?? post });
+}
+
+const formatDate = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<Base title={t["nav.blog"]} locale={locale} translations={translationsFor("blog")}>
+  <h1>{t["nav.blog"]}</h1>
+  <ul class="post-list">
+    {
+      posts.map(({ slug, entry }) => (
+        <li>
+          <time datetime={entry.data.date.toISOString()}>
+            {formatDate(entry.data.date)}
+          </time>
+          <a href={`${localePrefix(locale)}/blog/${slug}/`}>{entry.data.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

@@ -50,6 +50,8 @@ export const ui: Record<Locale, Record<string, string>> = {
     "spec.description": "The Alman specification: a simplified German dialect.",
     "spec.edit":
       "The Alman specification is open source and can be edited on",
+    "blog.untranslated":
+      "Note: This post is not yet available in English. The original version follows.",
   },
   de: {
     "nav.spec": "Spezifikation",
@@ -60,6 +62,8 @@ export const ui: Record<Locale, Record<string, string>> = {
       "Die Alman-Spezifikation: ein vereinfachter deutscher Dialekt.",
     "spec.edit":
       "Die Alman-Spezifikation ist Open Source und kann bearbeitet werden auf",
+    "blog.untranslated":
+      "Hinweis: Dieser Beitrag liegt noch nicht auf Deutsch vor. Es folgt die englische Originalfassung.",
   },
   al: {
     "nav.spec": "Spezifikation",
@@ -70,5 +74,7 @@ export const ui: Record<Locale, Record<string, string>> = {
       "Die Alman-Spezifikation: ein vereinfachte deutsche Dialekt.",
     "spec.edit":
       "Die Alman-Spezifikation ist Open Source und kann bearbeitet werden auf",
+    "blog.untranslated":
+      "Hinweis: Diese Beitrag liegt noch nicht auf Alman vor. Es folgt die englische Originalfassung.",
   },
 };
