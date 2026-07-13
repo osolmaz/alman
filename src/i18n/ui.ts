@@ -25,7 +25,8 @@ export const localeShort: Record<Locale, string> = {
   al: "AL",
 };
 
-export const locales: Locale[] = ["en", "de", "al"];
+// Order here is the display order of the navbar language switcher.
+export const locales: Locale[] = ["en", "al", "de"];
 
 /** Home page of a locale, the fallback target for untranslated pages. */
 export const localeHome = (locale: Locale): string =>
