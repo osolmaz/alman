@@ -5,6 +5,10 @@
 - German (`de`) and Alman (`al`) spec translations live in `i18n` objects next to the English prose fields. Keep them faithful to the English text, and keep the `al` text compliant with the Alman grammar itself (quoted Standard German forms are mentions and are exempt).
 - Alman's language code is `al` (URL prefix `/al/`, internal locale key, spec i18n key). The BCP 47 tag is `de-AL` — petitioned as official and used in markup as if already granted. Do not use private-use tags like `de-x-alman`.
 
+## Writing style
+
+- Avoid em dashes in prose written for this project (blog posts, site copy, documentation). Heavy em-dash use is a tell for AI writing. Hard limit: at most one set of em dashes per 1000 words. Restructure with commas, parentheses, colons, or separate sentences instead.
+
 ## Translation style
 
 - No language purism. When translating into German or Alman, use the terms actually used in practice, especially for technical vocabulary — e.g. **Open Source**, not *quelloffen*. Avoid purist "Reindeutsch" coinages; we are not the Goethe-Institut. The test: what would a German developer or a mainstream German tech publication write today?
