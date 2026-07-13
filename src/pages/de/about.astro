@@ -1,7 +1,6 @@
 ---
 import { getEntry, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import LangSwitcher from "../../components/LangSwitcher.astro";
 import { translationsFor } from "../../i18n/ui";
 
 const entry = await getEntry("about", "de");
@@ -11,7 +10,6 @@ const translations = translationsFor("about");
 ---
 
 <Base title={entry.data.title} locale="de" translations={translations}>
-  <LangSwitcher locale="de" translations={translations} />
   <h1>{entry.data.title}</h1>
   <Content />
 </Base>

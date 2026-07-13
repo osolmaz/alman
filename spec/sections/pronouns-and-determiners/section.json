@@ -2,6 +2,16 @@
   "id": "pronouns-and-determiners",
   "title": "Pronouns and Determiners",
   "body": "This section outlines modifications to <sd />'s pronominal system that prioritize natural gender attribution while maintaining case distinctions for referential clarity. Personal pronouns retain <sd /> case forms but reference biological/social gender rather than grammatical gender; for persons of unknown or generic gender, the plural **sie** functions as a singular *they*, mirroring English. Relative pronouns collapse to the invariant **die** (genitive **deren**), following the article system. Determiners, possessive determiners, the negative article **kein**, and other **ein**-compounds undergo simplification through invariant forms in non-genitive contexts, with preserved case inflection only in personal pronouns.",
+  "i18n": {
+    "de": {
+      "title": "Pronomen und Begleiter",
+      "body": "Dieser Abschnitt beschreibt Änderungen am Pronominalsystem des <sd />, die der Zuweisung nach natürlichem Geschlecht Vorrang geben und zugleich Kasusunterscheidungen für referentielle Klarheit bewahren. Personalpronomen behalten die <sd />-Kasusformen, beziehen sich aber auf das biologische/soziale Geschlecht statt auf das grammatische Genus; für Personen unbekannten oder generischen Geschlechts fungiert das plurale **sie** als singulares *they*, analog zum Englischen. Relativpronomen fallen im invarianten **die** zusammen (Genitiv **deren**) und folgen damit dem Artikelsystem. Begleiter, Possessivbegleiter, der Negativartikel **kein** und andere **ein**-Komposita werden durch invariante Formen in nicht-genitivischen Kontexten vereinfacht; Kasusflexion bleibt nur bei den Personalpronomen erhalten."
+    },
+    "al": {
+      "title": "Pronomen und Begleiter",
+      "body": "Diese Abschnitt beschreibt Änderungen an die Pronominalsystem der <sd />, die die Zuweisung nach natürliche Geschlecht Vorrang geben und zugleich Kasusunterscheidungen für referentielle Klarheit bewahren. Personalpronomen behalten die <sd />-Kasusformen, beziehen sich aber auf die biologische/soziale Geschlecht statt auf die grammatische Genus; für Personen von unbekannte oder generische Geschlecht fungiert die plurale **sie** als singulare *they*, analog zu die Englische. Relativpronomen fallen in die invariante **die** zusammen (Genitiv **deren**) und folgen damit die Artikelsystem. Begleiter, Possessivbegleiter, die Negativartikel **kein** und andere **ein**-Komposita werden durch invariante Formen in nicht-genitivische Kontexte vereinfacht; Kasusflexion bleibt nur bei die Personalpronomen erhalten."
+    }
+  },
   "paragraphs": [
     {
       "id": "pronouns"

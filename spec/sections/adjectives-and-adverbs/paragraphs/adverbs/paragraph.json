@@ -2,11 +2,31 @@
   "id": "adverbs",
   "title": "Adverbs",
   "body": "Adverbs carry no declensional endings in <sd /> and therefore remain unchanged in <alman />. This is a direct consequence of the form-based principle in the section on adjectives — endings become -e, ending-less forms stay as they are — rather than a separate mechanism. The one special construction is the adverbial superlative, where the case-marked construction **am** + superlative is replaced by the bare superlative stem.",
+  "i18n": {
+    "de": {
+      "title": "Adverbien",
+      "body": "Adverbien tragen im <sd /> keine Deklinationsendungen und bleiben daher in <alman /> unverändert. Dies ist eine direkte Folge des formbasierten Prinzips im Abschnitt über Adjektive — Endungen werden zu -e, endungslose Formen bleiben, wie sie sind — und kein eigener Mechanismus. Die eine Sonderkonstruktion ist der adverbiale Superlativ, bei dem die kasusmarkierte Konstruktion **am** + Superlativ durch den bloßen Superlativstamm ersetzt wird."
+    },
+    "al": {
+      "title": "Adverbien",
+      "body": "Adverbien tragen in die <sd /> kein Deklinationsendungen und bleiben daher in <alman /> unverändert. Dies ist ein direkte Folge der formbasierte Prinzip in die Abschnitt über Adjektive — Endungen werden zu -e, endungslose Formen bleiben, wie sie sind — und kein eigene Mechanismus. Die eine Sonderkonstruktion ist die adverbiale Superlativ, bei die die kasusmarkierte Konstruktion **am** + Superlativ durch die bloße Superlativstamm ersetzt wird."
+    }
+  },
   "rules": [
     {
       "id": "non-inflected-adverbs",
       "title": "Adverbs Stay the Same",
       "description": "Words functioning adverbially carry no declensional ending in <sd /> and therefore remain unchanged in <alman />. This follows directly from the form-based principle in the section on adjectives: only existing declensional endings are replaced by -e, and where there is no ending, nothing changes. This applies to:\n- Adverbs modifying verbs\n- Adjectives modifying other adjectives\n- Phrasal modifiers not directly preceding a noun\n\nFixed adverbial expressions that do contain a declined adjective (**unter anderem**, **vor kurzem**, and similar) are not exempt: their endings become the invariant -e (unter andere, vor kurze) per the same principle.",
+      "i18n": {
+        "de": {
+          "title": "Adverbien bleiben unverändert",
+          "description": "Adverbial gebrauchte Wörter tragen im <sd /> keine Deklinationsendung und bleiben daher in <alman /> unverändert. Dies folgt unmittelbar aus dem formbasierten Prinzip im Abschnitt über Adjektive: Nur vorhandene Deklinationsendungen werden durch -e ersetzt, und wo keine Endung ist, ändert sich nichts. Dies gilt für:\n- Adverbien, die Verben modifizieren\n- Adjektive, die andere Adjektive modifizieren\n- Phrasale Modifikatoren, die nicht unmittelbar vor einem Substantiv stehen\n\nFeste adverbiale Wendungen, die ein dekliniertes Adjektiv enthalten (**unter anderem**, **vor kurzem** und ähnliche), sind nicht ausgenommen: Ihre Endungen werden nach demselben Prinzip zum invarianten -e (unter andere, vor kurze)."
+        },
+        "al": {
+          "title": "Adverbien bleiben unverändert",
+          "description": "Adverbial gebrauchte Wörter tragen in die <sd /> kein Deklinationsendung und bleiben daher in <alman /> unverändert. Dies folgt unmittelbar aus die formbasierte Prinzip in die Abschnitt über Adjektive: Nur vorhandene Deklinationsendungen werden durch -e ersetzt, und wo kein Endung ist, ändert sich nichts. Dies gilt für:\n- Adverbien, die Verben modifizieren\n- Adjektive, die andere Adjektive modifizieren\n- Phrasale Modifikatoren, die nicht unmittelbar vor ein Substantiv stehen\n\nFeste adverbiale Wendungen, die ein dekliniertes Adjektiv enthalten (**unter anderem**, **vor kurzem** und ähnliche), sind nicht ausgenommen: Ihr Endungen werden nach dieselbe Prinzip zu die invariante -e (unter andere, vor kurze)."
+        }
+      },
       "examples": [
         {
           "standard": "schnell laufen",
@@ -26,6 +46,16 @@
       "id": "adverbial-superlatives",
       "title": "Bare-Stem Adverbial Superlatives",
       "description": "The <sd /> adverbial superlative construction **am** + superlative (am besten, am schnellsten) is replaced by the bare superlative stem: **best**, **schnellst**, and so on. This mirrors the English adverbial superlative (\"I swim best\") and removes the case-marked contraction **am** (an + dem) from the construction entirely, consistent with the elimination of case-marked articles elsewhere in <alman />.\n\nThe variant **an** + bare stem (e.g., **an best**) is also acceptable, preserving the prepositional rhythm of the <sd /> construction for speakers who prefer it. The bare stem is the preferred form.\n\nThis rule takes precedence over the contraction resolution rule in the section on articles: **am** in adverbial superlatives is not expanded to **an die**. Attributive superlatives are unaffected and follow the regular invariant -e ending rule (die beste Schwimmer).",
+      "i18n": {
+        "de": {
+          "title": "Adverbiale Superlative mit bloßem Stamm",
+          "description": "Die adverbiale Superlativkonstruktion des <sd /> **am** + Superlativ (am besten, am schnellsten) wird durch den bloßen Superlativstamm ersetzt: **best**, **schnellst** und so weiter. Dies entspricht dem englischen adverbialen Superlativ („I swim best“) und entfernt die kasusmarkierte Verschmelzung **am** (an + dem) vollständig aus der Konstruktion, im Einklang mit der Beseitigung kasusmarkierter Artikel an anderer Stelle in <alman />.\n\nDie Variante **an** + bloßer Stamm (z. B. **an best**) ist ebenfalls akzeptabel und bewahrt den präpositionalen Rhythmus der <sd />-Konstruktion für Sprecher, die ihn bevorzugen. Der bloße Stamm ist die bevorzugte Form.\n\nDiese Regel hat Vorrang vor der Regel zur Auflösung von Verschmelzungen im Abschnitt über Artikel: **am** in adverbialen Superlativen wird nicht zu **an die** aufgelöst. Attributive Superlative sind nicht betroffen und folgen der regulären Regel der invarianten -e-Endung (die beste Schwimmer)."
+        },
+        "al": {
+          "title": "Adverbiale Superlative mit bloße Stamm",
+          "description": "Die adverbiale Superlativkonstruktion der <sd /> **am** + Superlativ (am besten, am schnellsten) wird durch die bloße Superlativstamm ersetzt: **best**, **schnellst** und so weiter. Dies entspricht die englische adverbiale Superlativ („I swim best“) und entfernt die kasusmarkierte Verschmelzung **am** (an + dem) vollständig aus die Konstruktion, in die Einklang mit die Beseitigung von kasusmarkierte Artikel an andere Stelle in <alman />.\n\nDie Variante **an** + bloße Stamm (z. B. **an best**) ist ebenfalls akzeptabel und bewahrt die präpositionale Rhythmus der <sd />-Konstruktion für Sprecher, die ihn bevorzugen. Die bloße Stamm ist die bevorzugte Form.\n\nDiese Regel hat Vorrang vor die Regel zu die Auflösung von Verschmelzungen in die Abschnitt über Artikel: **am** in adverbiale Superlative wird nicht zu **an die** aufgelöst. Attributive Superlative sind nicht betroffen und folgen die reguläre Regel der invariante -e-Endung (die beste Schwimmer)."
+        }
+      },
       "examples": [
         {
           "standard": "Ich schwimme am besten.",

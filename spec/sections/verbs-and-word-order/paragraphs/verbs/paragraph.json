@@ -2,11 +2,31 @@
   "id": "verbs",
   "title": "Verb Conjugations and Forms",
   "body": "This paragraph details the retention of <sd /> verb conjugation patterns in <alman />, preserving both regular and irregular forms.",
+  "i18n": {
+    "de": {
+      "title": "Verbkonjugationen und -formen",
+      "body": "Dieser Paragraph beschreibt die Beibehaltung der <sd />-Konjugationsmuster in <alman />, unter Bewahrung sowohl regelmäßiger als auch unregelmäßiger Formen."
+    },
+    "al": {
+      "title": "Verbkonjugationen und -formen",
+      "body": "Diese Paragraph beschreibt die Beibehaltung der <sd />-Konjugationsmuster in <alman />, unter Bewahrung von sowohl regelmäßige als auch unregelmäßige Formen."
+    }
+  },
   "rules": [
     {
       "id": "verb-conjugations",
       "title": "Verb Conjugations",
       "description": "The <alman /> dialect retains the full complexity of <sd /> verb conjugations. Both regular and irregular verb forms remain unaltered, and no further simplification or regularization is introduced. All conjugated forms are used exactly as in <sd />.",
+      "i18n": {
+        "de": {
+          "title": "Verbkonjugationen",
+          "description": "Der <alman />-Dialekt behält die volle Komplexität der <sd />-Verbkonjugationen bei. Sowohl regelmäßige als auch unregelmäßige Verbformen bleiben unverändert, und es wird keine weitere Vereinfachung oder Regularisierung eingeführt. Alle konjugierten Formen werden genau wie im <sd /> verwendet."
+        },
+        "al": {
+          "title": "Verbkonjugationen",
+          "description": "Die <alman />-Dialekt behält die volle Komplexität der <sd />-Verbkonjugationen bei. Sowohl regelmäßige als auch unregelmäßige Verbformen bleiben unverändert, und es wird kein weitere Vereinfachung oder Regularisierung eingeführt. Alle konjugierte Formen werden genau wie in die <sd /> verwendet."
+        }
+      },
       "examples": [
         {
           "standard": "ich gehe, du gehst, er geht, wir gehen, ihr geht, sie gehen",
@@ -26,6 +46,16 @@
       "id": "nominalized-verbs",
       "title": "Nominalized Verbs",
       "description": "In <sd />, nominalized verbs are assigned neuter gender. In <alman />, however, nominalized verbs adhere to the same gender-collapsing principles applied to other nouns, and therefore use the invariant **die** form in non-genitive contexts. This change simplifies agreement by unifying the treatment of nominalized verbs with that of other nominal forms.\n\nThis rule ensures consistency in the treatment of nominalized forms throughout <alman />, aligning them with the broader system of gender collapsing. Contractions involving nominalized verbs (e.g., *zum Lernen*) are resolved and simplified like any other contraction, per the contraction resolution rule in the section on articles.",
+      "i18n": {
+        "de": {
+          "title": "Nominalisierte Verben",
+          "description": "Im <sd /> erhalten nominalisierte Verben das neutrale Genus. In <alman /> folgen nominalisierte Verben dagegen denselben Genus-Vereinheitlichungsprinzipien wie andere Substantive und verwenden daher in nicht-genitivischen Kontexten die invariante **die**-Form. Diese Änderung vereinfacht die Kongruenz, indem sie die Behandlung nominalisierter Verben mit der anderer nominaler Formen vereinheitlicht.\n\nDiese Regel gewährleistet Konsistenz in der Behandlung nominalisierter Formen in ganz <alman /> und richtet sie am umfassenderen System der Genus-Vereinheitlichung aus. Verschmelzungen mit nominalisierten Verben (z. B. *zum Lernen*) werden wie jede andere Verschmelzung aufgelöst und vereinfacht, gemäß der Regel zur Auflösung von Verschmelzungen im Abschnitt über Artikel."
+        },
+        "al": {
+          "title": "Nominalisierte Verben",
+          "description": "In die <sd /> erhalten nominalisierte Verben die neutrale Genus. In <alman /> folgen nominalisierte Verben dagegen dieselbe Genus-Vereinheitlichungsprinzipien wie andere Substantive und verwenden daher in nicht-genitivische Kontexte die invariante **die**-Form. Diese Änderung vereinfacht die Kongruenz, indem sie die Behandlung von nominalisierte Verben mit die von andere nominale Formen vereinheitlicht.\n\nDiese Regel gewährleistet Konsistenz in die Behandlung von nominalisierte Formen in ganz <alman /> und richtet sie an die umfassendere System der Genus-Vereinheitlichung aus. Verschmelzungen mit nominalisierte Verben (z. B. *zum Lernen*) werden wie jede andere Verschmelzung aufgelöst und vereinfacht, gemäß die Regel zu die Auflösung von Verschmelzungen in die Abschnitt über Artikel."
+        }
+      },
       "examples": [
         {
           "standard": "Das Lernen fällt mir leicht.",

@@ -2,11 +2,31 @@
   "id": "pronouns",
   "title": "Pronouns",
   "body": "This paragraph outlines the retention of <sd /> personal pronoun case forms while reorienting referential assignment to natural gender, rather than grammatical gender, preserving case distinctions for referential clarity.",
+  "i18n": {
+    "de": {
+      "title": "Pronomen",
+      "body": "Dieser Paragraph beschreibt die Beibehaltung der <sd />-Kasusformen der Personalpronomen bei gleichzeitiger Neuausrichtung der referentiellen Zuweisung auf das natürliche Geschlecht statt auf das grammatische Genus; Kasusunterscheidungen bleiben für referentielle Klarheit erhalten."
+    },
+    "al": {
+      "title": "Pronomen",
+      "body": "Diese Paragraph beschreibt die Beibehaltung der <sd />-Kasusformen der Personalpronomen bei gleichzeitige Neuausrichtung der referentielle Zuweisung auf die natürliche Geschlecht statt auf die grammatische Genus; Kasusunterscheidungen bleiben für referentielle Klarheit erhalten."
+    }
+  },
   "rules": [
     {
       "id": "natural-gender-attribution",
       "title": "Personal Pronouns: Natural Gender Attribution",
       "description": "Personal pronouns maintain their <sd /> case forms but are interpreted through natural gender assignment (mirroring English conventions):\n1. **er/ihn/ihm** → Refers exclusively to male persons or male-identifying entities\n2. **sie/sie/ihr** → Refers exclusively to female persons or female-identifying entities\n3. **es/es/ihm** → Refers to inanimate objects, abstract concepts, or other non-person entities without natural gender\n\nPersons whose gender is unknown, unspecified, or generic are referred to with the plural **sie** used as a singular *they*, as described in the rule on gender-neutral referents.\n\nNote that when the referent is described by an occupational title, the title itself follows the uniformity rules described in the section on lexical gender simplifications, while the pronoun follows natural gender.",
+      "i18n": {
+        "de": {
+          "title": "Personalpronomen: Zuweisung nach natürlichem Geschlecht",
+          "description": "Personalpronomen behalten ihre <sd />-Kasusformen, werden aber nach natürlichem Geschlecht interpretiert (analog zu den englischen Konventionen):\n1. **er/ihn/ihm** → bezieht sich ausschließlich auf männliche Personen oder sich männlich identifizierende Wesen\n2. **sie/sie/ihr** → bezieht sich ausschließlich auf weibliche Personen oder sich weiblich identifizierende Wesen\n3. **es/es/ihm** → bezieht sich auf unbelebte Gegenstände, abstrakte Konzepte oder andere Nicht-Personen ohne natürliches Geschlecht\n\nPersonen, deren Geschlecht unbekannt, unbestimmt oder generisch ist, werden mit dem pluralen **sie** als singularem *they* bezeichnet, wie in der Regel zu geschlechtsneutralen Referenten beschrieben.\n\nMan beachte: Wird der Referent durch eine Berufsbezeichnung beschrieben, folgt die Bezeichnung selbst den Einheitlichkeitsregeln im Abschnitt über lexikalische Genus-Vereinfachungen, während das Pronomen dem natürlichen Geschlecht folgt."
+        },
+        "al": {
+          "title": "Personalpronomen: Zuweisung nach natürliche Geschlecht",
+          "description": "Personalpronomen behalten ihr <sd />-Kasusformen, werden aber nach natürliche Geschlecht interpretiert (analog zu die englische Konventionen):\n1. **er/ihn/ihm** → bezieht sich ausschließlich auf männliche Personen oder sich männlich identifizierende Wesen\n2. **sie/sie/ihr** → bezieht sich ausschließlich auf weibliche Personen oder sich weiblich identifizierende Wesen\n3. **es/es/ihm** → bezieht sich auf unbelebte Gegenstände, abstrakte Konzepte oder andere Nicht-Personen ohne natürliche Geschlecht\n\nPersonen, deren Geschlecht unbekannt, unbestimmt oder generisch ist, werden mit die plurale **sie** als singulare *they* bezeichnet, wie in die Regel zu geschlechtsneutrale Referenten beschrieben.\n\nMan beachte: Wird die Referent durch ein Berufsbezeichnung beschrieben, folgt die Bezeichnung selbst die Einheitlichkeitsregeln in die Abschnitt über lexikalische Genus-Vereinfachungen, während die Pronomen die natürliche Geschlecht folgt."
+        }
+      },
       "examples": [
         {
           "standard": "Sie ist nett. (die Frau, f.)",
@@ -34,6 +54,16 @@
       "id": "case-inflection-retention",
       "title": "Case Inflection Retention",
       "description": "Personal pronouns retain full case inflection to preserve referential clarity and syntactic precision, particularly for animate entities. The case system is intentionally aligned with <sd /> forms, in order to preserve mutual intelligibility.\n\n| Person        | Nominative | Accusative | Dative |\n|---------------|------------|------------|--------|\n| 1st Singular  | ich        | mich       | mir    |\n| 2nd Singular  | du         | dich       | dir    |\n| 3rd Masc.     | er         | ihn        | ihm    |\n| 3rd Fem.      | sie        | sie        | ihr    |\n| 3rd Neut.     | es         | es         | ihm    |\n| 1st Plural    | wir        | uns        | uns    |\n| 2nd Plural    | ihr        | euch       | euch   |\n| 3rd Plural    | sie        | sie        | ihnen  |\n| Formal (2nd)  | Sie        | Sie        | Ihnen  |\n\nThe formal address pronoun **Sie** (with dative **Ihnen** and possessive **Ihr**) is retained exactly as in <sd />, including its capitalization.\n\nThe indefinite pronoun **man** likewise retains its full <sd /> paradigm, including its oblique forms **einen** (accusative) and **einem** (dative). These are pronoun forms, not articles, and are therefore not affected by the indefinite article simplification described in the section on articles.",
+      "i18n": {
+        "de": {
+          "title": "Beibehaltung der Kasusflexion",
+          "description": "Personalpronomen behalten die vollständige Kasusflexion, um referentielle Klarheit und syntaktische Präzision zu bewahren, insbesondere bei belebten Wesen. Das Kasussystem ist bewusst an den <sd />-Formen ausgerichtet, um die gegenseitige Verständlichkeit zu erhalten.\n\n| Person        | Nominativ | Akkusativ | Dativ |\n|---------------|------------|------------|--------|\n| 1. Singular  | ich        | mich       | mir    |\n| 2. Singular  | du         | dich       | dir    |\n| 3. Mask.     | er         | ihn        | ihm    |\n| 3. Fem.      | sie        | sie        | ihr    |\n| 3. Neut.     | es         | es         | ihm    |\n| 1. Plural    | wir        | uns        | uns    |\n| 2. Plural    | ihr        | euch       | euch   |\n| 3. Plural    | sie        | sie        | ihnen  |\n| Höflichkeitsform (2.)  | Sie        | Sie        | Ihnen  |\n\nDas Anredepronomen **Sie** (mit Dativ **Ihnen** und Possessiv **Ihr**) bleibt genau wie im <sd /> erhalten, einschließlich seiner Großschreibung.\n\nDas Indefinitpronomen **man** behält ebenfalls sein vollständiges <sd />-Paradigma, einschließlich seiner obliquen Formen **einen** (Akkusativ) und **einem** (Dativ). Dies sind Pronomenformen, keine Artikel, und sie sind daher von der Vereinfachung des unbestimmten Artikels im Abschnitt über Artikel nicht betroffen."
+        },
+        "al": {
+          "title": "Beibehaltung der Kasusflexion",
+          "description": "Personalpronomen behalten die vollständige Kasusflexion, um referentielle Klarheit und syntaktische Präzision zu bewahren, insbesondere bei belebte Wesen. Die Kasussystem ist bewusst an die <sd />-Formen ausgerichtet, um die gegenseitige Verständlichkeit zu erhalten.\n\n| Person        | Nominativ | Akkusativ | Dativ |\n|---------------|------------|------------|--------|\n| 1. Singular  | ich        | mich       | mir    |\n| 2. Singular  | du         | dich       | dir    |\n| 3. Mask.     | er         | ihn        | ihm    |\n| 3. Fem.      | sie        | sie        | ihr    |\n| 3. Neut.     | es         | es         | ihm    |\n| 1. Plural    | wir        | uns        | uns    |\n| 2. Plural    | ihr        | euch       | euch   |\n| 3. Plural    | sie        | sie        | ihnen  |\n| Höflichkeitsform (2.)  | Sie        | Sie        | Ihnen  |\n\nDie Anredepronomen **Sie** (mit Dativ **Ihnen** und Possessiv **Ihr**) bleibt genau wie in die <sd /> erhalten, einschließlich sein Großschreibung.\n\nDie Indefinitpronomen **man** behält ebenfalls sein vollständige <sd />-Paradigma, einschließlich sein oblique Formen **einen** (Akkusativ) und **einem** (Dativ). Dies sind Pronomenformen, kein Artikel, und sie sind daher von die Vereinfachung der unbestimmte Artikel in die Abschnitt über Artikel nicht betroffen."
+        }
+      },
       "examples": [
         {
           "standard": "Ich sehe ihn. (den Mann)",
@@ -71,6 +101,16 @@
       "id": "gender-neutral-referents",
       "title": "Gender-Neutral Referents",
       "description": "For entities without natural gender (objects, abstract concepts, institutions):\n- **es** serves as the default singular pronoun\n- <sd /> plural pronoun forms are retained (**sie** for plural referents, including groups of mixed or unspecified gender)\n\nFor **persons** whose gender is unknown, unspecified, or generic, the third-person plural **sie** is used with plural verb agreement, even when the referent is singular. This mirrors the English singular *they* (\"Someone called. They were friendly.\") and applies both to generic person-denoting expressions (*der Mensch*, *jeder*, *jemand*, *niemand*) and to specific persons of unknown gender. Accusative and dative follow the plural paradigm (**sie**/**ihnen**), and the corresponding possessive is **ihr**. Where the plural reading would genuinely mislead, speakers may rephrase, exactly as in English.",
+      "i18n": {
+        "de": {
+          "title": "Geschlechtsneutrale Referenten",
+          "description": "Für Wesen ohne natürliches Geschlecht (Gegenstände, abstrakte Konzepte, Institutionen):\n- **es** dient als Standard-Singularpronomen\n- die <sd />-Pluralpronomen bleiben erhalten (**sie** für plurale Referenten, einschließlich Gruppen gemischten oder unbestimmten Geschlechts)\n\nFür **Personen**, deren Geschlecht unbekannt, unbestimmt oder generisch ist, wird die dritte Person Plural **sie** mit pluraler Verbkongruenz verwendet, auch wenn der Referent singularisch ist. Dies entspricht dem englischen singularen *they* („Someone called. They were friendly.“) und gilt sowohl für generische personenbezeichnende Ausdrücke (*der Mensch*, *jeder*, *jemand*, *niemand*) als auch für bestimmte Personen unbekannten Geschlechts. Akkusativ und Dativ folgen dem Pluralparadigma (**sie**/**ihnen**), und das zugehörige Possessiv ist **ihr**. Wo die plurale Lesart tatsächlich irreführen würde, können Sprecher umformulieren, genau wie im Englischen."
+        },
+        "al": {
+          "title": "Geschlechtsneutrale Referenten",
+          "description": "Für Wesen ohne natürliche Geschlecht (Gegenstände, abstrakte Konzepte, Institutionen):\n- **es** dient als Standard-Singularpronomen\n- die <sd />-Pluralpronomen bleiben erhalten (**sie** für plurale Referenten, einschließlich Gruppen von gemischte oder unbestimmte Geschlecht)\n\nFür **Personen**, deren Geschlecht unbekannt, unbestimmt oder generisch ist, wird die dritte Person Plural **sie** mit plurale Verbkongruenz verwendet, auch wenn die Referent singularisch ist. Dies entspricht die englische singulare *they* („Someone called. They were friendly.“) und gilt sowohl für generische personenbezeichnende Ausdrücke (*der Mensch*, *jeder*, *jemand*, *niemand*) als auch für bestimmte Personen von unbekannte Geschlecht. Akkusativ und Dativ folgen die Pluralparadigma (**sie**/**ihnen**), und die zugehörige Possessiv ist **ihr**. Wo die plurale Lesart tatsächlich irreführen würde, können Sprecher umformulieren, genau wie in die Englische."
+        }
+      },
       "examples": [
         {
           "standard": "Der Computer? Er ist kaputt.",
@@ -113,6 +153,16 @@
       "id": "reflexive-pronouns",
       "title": "Reflexive Pronouns",
       "description": "Reflexive pronouns follow <sd /> case forms (mich, dich, sich, uns, euch) while adhering to natural gender principles for third-person referents.",
+      "i18n": {
+        "de": {
+          "title": "Reflexivpronomen",
+          "description": "Reflexivpronomen folgen den <sd />-Kasusformen (mich, dich, sich, uns, euch) und richten sich bei Referenten in der dritten Person nach den Prinzipien des natürlichen Geschlechts."
+        },
+        "al": {
+          "title": "Reflexivpronomen",
+          "description": "Reflexivpronomen folgen die <sd />-Kasusformen (mich, dich, sich, uns, euch) und richten sich bei Referenten in die dritte Person nach die Prinzipien der natürliche Geschlecht."
+        }
+      },
       "examples": [
         {
           "standard": "Er wäscht sich.",
@@ -135,6 +185,16 @@
       "id": "possessive-pronouns",
       "title": "Possessive Pronouns",
       "description": "The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, Ihr**) follows natural gender attribution of the possessor. For possessors of unknown, unspecified, or generic gender, **ihr** is used, consistent with the singular *they* described in the rule on gender-neutral referents. Their endings follow the determiner rules: the invariant base form is used in all non-genitive contexts (see the section on determiners).",
+      "i18n": {
+        "de": {
+          "title": "Possessivpronomen",
+          "description": "Die Wahl unter den Possessivpronomen (**mein, dein, sein, ihr, unser, euer, Ihr**) folgt der Zuweisung nach dem natürlichen Geschlecht des Besitzers. Für Besitzer unbekannten, unbestimmten oder generischen Geschlechts wird **ihr** verwendet, im Einklang mit dem singularen *they* aus der Regel zu geschlechtsneutralen Referenten. Ihre Endungen folgen den Begleiterregeln: In allen nicht-genitivischen Kontexten wird die invariante Grundform verwendet (siehe den Abschnitt über Begleiter)."
+        },
+        "al": {
+          "title": "Possessivpronomen",
+          "description": "Die Wahl unter die Possessivpronomen (**mein, dein, sein, ihr, unser, euer, Ihr**) folgt die Zuweisung nach die natürliche Geschlecht der Besitzer. Für Besitzer von unbekannte, unbestimmte oder generische Geschlecht wird **ihr** verwendet, in die Einklang mit die singulare *they* aus die Regel zu geschlechtsneutrale Referenten. Ihr Endungen folgen die Begleiterregeln: In alle nicht-genitivische Kontexte wird die invariante Grundform verwendet (siehe die Abschnitt über Begleiter)."
+        }
+      },
       "examples": [
         {
           "standard": "Sein Buch (des Mannes)",
@@ -157,6 +217,16 @@
       "id": "relative-pronouns",
       "title": "Relative Pronouns",
       "description": "Relative pronouns follow the same simplification as definite articles. All non-genitive relative pronoun forms (der/die/das/den/dem) are replaced by the invariant form **die**, regardless of the gender, number, or case role of the referent within the relative clause. The genitive relative pronouns **dessen** and **deren** are both replaced by **deren**, consistent with the treatment of genitive demonstratives in the section on articles.\n\nSince the invariant **die** no longer marks the case role of the relativized element, ambiguity between subject and object relative clauses is resolved by verb agreement and context; where genuine ambiguity arises, speakers may rephrase using a personal pronoun in the relative clause or a periphrastic construction.",
+      "i18n": {
+        "de": {
+          "title": "Relativpronomen",
+          "description": "Relativpronomen folgen derselben Vereinfachung wie die bestimmten Artikel. Alle nicht-genitivischen Relativpronomenformen (der/die/das/den/dem) werden durch die invariante Form **die** ersetzt, unabhängig von Genus, Numerus oder Kasusrolle des Referenten im Relativsatz. Die genitivischen Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, im Einklang mit der Behandlung der genitivischen Demonstrativa im Abschnitt über Artikel.\n\nDa das invariante **die** die Kasusrolle des relativierten Elements nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätzen durch Verbkongruenz und Kontext aufgelöst; bei echter Mehrdeutigkeit können Sprecher mit einem Personalpronomen im Relativsatz oder einer periphrastischen Konstruktion umformulieren."
+        },
+        "al": {
+          "title": "Relativpronomen",
+          "description": "Relativpronomen folgen dieselbe Vereinfachung wie die bestimmte Artikel. Alle nicht-genitivische Relativpronomenformen (der/die/das/den/dem) werden durch die invariante Form **die** ersetzt, unabhängig von Genus, Numerus oder Kasusrolle der Referent in die Relativsatz. Die genitivische Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, in die Einklang mit die Behandlung der genitivische Demonstrativa in die Abschnitt über Artikel.\n\nDa die invariante **die** die Kasusrolle der relativierte Element nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätze durch Verbkongruenz und Kontext aufgelöst; bei echte Mehrdeutigkeit können Sprecher mit ein Personalpronomen in die Relativsatz oder ein periphrastische Konstruktion umformulieren."
+        }
+      },
       "examples": [
         {
           "standard": "der Mann, der dort steht",
@@ -194,6 +264,16 @@
       "id": "interrogative-pronouns",
       "title": "Retention of Standard Interrogative Pronouns",
       "description": "The interrogative pronouns **wer, was, wen, wem, wessen** are retained in their <sd /> forms without modification. These pronouns function as in <sd /> in all contexts.",
+      "i18n": {
+        "de": {
+          "title": "Beibehaltung der standardsprachlichen Interrogativpronomen",
+          "description": "Die Interrogativpronomen **wer, was, wen, wem, wessen** bleiben in ihren <sd />-Formen unverändert erhalten. Diese Pronomen funktionieren in allen Kontexten wie im <sd />."
+        },
+        "al": {
+          "title": "Beibehaltung der standardsprachliche Interrogativpronomen",
+          "description": "Die Interrogativpronomen **wer, was, wen, wem, wessen** bleiben in ihr <sd />-Formen unverändert erhalten. Diese Pronomen funktionieren in alle Kontexte wie in die <sd />."
+        }
+      },
       "examples": [
         {
           "standard": "Wer bist du?",
@@ -213,6 +293,16 @@
       "id": "prepositional-interrogatives",
       "title": "Prepositional Interrogative Constructions",
       "description": "In interrogative constructions involving prepositions, an uncontracted preposition preceding **was** may be used in place of the compound *wo-* forms: **zu was, von was, mit was, über was, durch was**, and similar variants. This mirrors the usage of preposition + *what* in English, like *to what*, *from what*, and so on.\n\nThe <sd /> *wo-* compounds remain fully acceptable, as they carry no gender or case inflection and pose no additional learning burden. Both variants may be used interchangeably, exactly as with the pronominal *da-* compounds described in the following rule.",
+      "i18n": {
+        "de": {
+          "title": "Präpositionale Interrogativkonstruktionen",
+          "description": "In Interrogativkonstruktionen mit Präpositionen kann anstelle der zusammengesetzten *wo-*Formen eine unverschmolzene Präposition vor **was** verwendet werden: **zu was, von was, mit was, über was, durch was** und ähnliche Varianten. Dies entspricht dem Gebrauch von Präposition + *what* im Englischen, etwa *to what*, *from what* und so weiter.\n\nDie *wo-*Komposita des <sd /> bleiben voll akzeptabel, da sie keine Genus- oder Kasusflexion tragen und keine zusätzliche Lernlast darstellen. Beide Varianten sind frei austauschbar, genau wie bei den pronominalen *da-*Komposita in der folgenden Regel."
+        },
+        "al": {
+          "title": "Präpositionale Interrogativkonstruktionen",
+          "description": "In Interrogativkonstruktionen mit Präpositionen kann anstelle der zusammengesetzte *wo-*Formen ein unverschmolzene Präposition vor **was** verwendet werden: **zu was, von was, mit was, über was, durch was** und ähnliche Varianten. Dies entspricht die Gebrauch von Präposition + *what* in die Englische, etwa *to what*, *from what* und so weiter.\n\nDie *wo-*Komposita der <sd /> bleiben voll akzeptabel, da sie kein Genus- oder Kasusflexion tragen und kein zusätzliche Lernlast darstellen. Beide Varianten sind frei austauschbar, genau wie bei die pronominale *da-*Komposita in die folgende Regel."
+        }
+      },
       "examples": [
         {
           "standard": "Womit hilfst du mir?",
@@ -232,6 +322,16 @@
       "id": "pronominal-adverbs",
       "title": "Pronominal Adverbs (da- Compounds)",
       "description": "Parallel to the treatment of interrogative *wo-* forms, the pronominal adverbs formed with *da-* (**damit, davon, darüber, dafür, daran**, and similar variants) may be replaced by the uncontracted preposition followed by the demonstrative **das** (e.g., **mit das, von das, über das**), consistent with the retention of the neutral demonstrative described in the section on articles.\n\nThe <sd /> *da-* compounds remain fully acceptable, as they carry no gender or case inflection and pose no additional learning burden. Both variants may be used interchangeably.",
+      "i18n": {
+        "de": {
+          "title": "Pronominaladverbien (da-Komposita)",
+          "description": "Parallel zur Behandlung der interrogativen *wo-*Formen können die mit *da-* gebildeten Pronominaladverbien (**damit, davon, darüber, dafür, daran** und ähnliche Varianten) durch die unverschmolzene Präposition gefolgt vom Demonstrativum **das** ersetzt werden (z. B. **mit das, von das, über das**), im Einklang mit der Beibehaltung des neutralen Demonstrativums im Abschnitt über Artikel.\n\nDie *da-*Komposita des <sd /> bleiben voll akzeptabel, da sie keine Genus- oder Kasusflexion tragen und keine zusätzliche Lernlast darstellen. Beide Varianten sind frei austauschbar."
+        },
+        "al": {
+          "title": "Pronominaladverbien (da-Komposita)",
+          "description": "Parallel zu die Behandlung der interrogative *wo-*Formen können die mit *da-* gebildete Pronominaladverbien (**damit, davon, darüber, dafür, daran** und ähnliche Varianten) durch die unverschmolzene Präposition gefolgt von die Demonstrativum **das** ersetzt werden (z. B. **mit das, von das, über das**), in die Einklang mit die Beibehaltung der neutrale Demonstrativum in die Abschnitt über Artikel.\n\nDie *da-*Komposita der <sd /> bleiben voll akzeptabel, da sie kein Genus- oder Kasusflexion tragen und kein zusätzliche Lernlast darstellen. Beide Varianten sind frei austauschbar."
+        }
+      },
       "examples": [
         {
           "standard": "Ich bin damit einverstanden.",

@@ -2,7 +2,6 @@
 import { getEntry, render } from "astro:content";
 import { createMarkdownProcessor } from "@astrojs/markdown-remark";
 import Base from "../../layouts/Base.astro";
-import LangSwitcher from "../../components/LangSwitcher.astro";
 import { translationsFor } from "../../i18n/ui";
 import { diffMarkdown } from "../../lib/wordDiff";
 import { markdownConfig } from "../../../markdown.config.mjs";
@@ -22,7 +21,6 @@ const translations = translationsFor("about");
 ---
 
 <Base title={entry.data.title} locale="alman" translations={translations}>
-  <LangSwitcher locale="alman" translations={translations} />
   <h1>{entry.data.title}</h1>
   <div class="al-view">
     <label class="diff-toggle">

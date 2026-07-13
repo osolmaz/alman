@@ -2,6 +2,16 @@
   "id": "nouns",
   "title": "Nouns",
   "body": "This section details <alman />'s elimination of grammatical gender and case inflections in nouns. All nouns adopt a single invariant form across nominative, accusative, and dative cases, with genitive contexts marked by **der** instead of case endings. The prenominal genitive -s of proper names (*Annas Buch*) is exempt and retained, mirroring the English possessive *'s*. Plural forms retain their standard nominative/accusative morphology in all cases, while an optional -s suffix resolves ambiguity for nouns with identical singular/plural forms. Weak noun declensions and archaic dative endings are abolished.",
+  "i18n": {
+    "de": {
+      "title": "Substantive",
+      "body": "Dieser Abschnitt beschreibt im Einzelnen, wie <alman /> grammatisches Genus und Kasusflexion bei Substantiven beseitigt. Alle Substantive nehmen eine einzige invariante Form über Nominativ, Akkusativ und Dativ hinweg an; genitivische Kontexte werden durch **der** statt durch Kasusendungen markiert. Das pränominale Genitiv-s von Eigennamen (*Annas Buch*) ist ausgenommen und bleibt erhalten, analog zum englischen Possessiv *'s*. Pluralformen behalten in allen Kasus ihre standardsprachliche Nominativ-/Akkusativmorphologie, während ein fakultatives -s-Suffix Mehrdeutigkeit bei Substantiven mit identischen Singular- und Pluralformen auflöst. Schwache Substantivdeklinationen und archaische Dativendungen werden abgeschafft."
+    },
+    "al": {
+      "title": "Substantive",
+      "body": "Diese Abschnitt beschreibt in die Einzelne, wie <alman /> grammatische Genus und Kasusflexion bei Substantive beseitigt. Alle Substantive nehmen ein einzige invariante Form über Nominativ, Akkusativ und Dativ hinweg an; genitivische Kontexte werden durch **der** statt durch Kasusendungen markiert. Die pränominale Genitiv-s von Eigennamen (*Annas Buch*) ist ausgenommen und bleibt erhalten, analog zu die englische Possessiv *'s*. Pluralformen behalten in alle Kasus ihr standardsprachliche Nominativ-/Akkusativmorphologie, während ein fakultative -s-Suffix Mehrdeutigkeit bei Substantive mit identische Singular- und Pluralformen auflöst. Schwache Substantivdeklinationen und archaische Dativendungen werden abgeschafft."
+    }
+  },
   "paragraphs": [
     {
       "id": "noun-morphology"

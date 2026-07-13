@@ -18,6 +18,19 @@ export const localeNames: Record<Locale, string> = {
   alman: "Alman",
 };
 
+// Short codes for the compact switcher in the navbar.
+export const localeShort: Record<Locale, string> = {
+  en: "EN",
+  de: "DE",
+  alman: "AL",
+};
+
+export const locales: Locale[] = ["en", "de", "alman"];
+
+/** Home page of a locale, the fallback target for untranslated pages. */
+export const localeHome = (locale: Locale): string =>
+  locale === "en" ? "/" : `/${locale}/`;
+
 export const localePrefix = (locale: Locale): string =>
   locale === "en" ? "" : `/${locale}`;
 
@@ -33,15 +46,29 @@ export const ui: Record<Locale, Record<string, string>> = {
     "nav.spec": "Specification",
     "nav.blog": "Blog",
     "nav.about": "About",
+    "spec.title": "Specification",
+    "spec.description": "The Alman specification: a simplified German dialect.",
+    "spec.edit":
+      "The Alman specification is open source and can be edited on",
   },
   de: {
     "nav.spec": "Spezifikation",
     "nav.blog": "Blog",
     "nav.about": "Über uns",
+    "spec.title": "Spezifikation",
+    "spec.description":
+      "Die Alman-Spezifikation: ein vereinfachter deutscher Dialekt.",
+    "spec.edit":
+      "Die Alman-Spezifikation ist quelloffen und kann bearbeitet werden auf",
   },
   alman: {
     "nav.spec": "Spezifikation",
     "nav.blog": "Blog",
     "nav.about": "Über uns",
+    "spec.title": "Spezifikation",
+    "spec.description":
+      "Die Alman-Spezifikation: ein vereinfachte deutsche Dialekt.",
+    "spec.edit":
+      "Die Alman-Spezifikation ist quelloffen und kann bearbeitet werden auf",
   },
 };

@@ -7,6 +7,20 @@
       "type": "string",
       "description": "The title of the Alman grammar rules document"
     },
+    "i18n": {
+      "type": "object",
+      "description": "Translations of prose fields, keyed by locale (de, al)",
+      "properties": {
+        "de": {
+          "type": "object",
+          "properties": { "documentTitle": { "type": "string" } }
+        },
+        "al": {
+          "type": "object",
+          "properties": { "documentTitle": { "type": "string" } }
+        }
+      }
+    },
     "documentVersion": {
       "type": "string",
       "pattern": "^v?\\d+\\.\\d+\\.\\d+$",

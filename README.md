@@ -13,10 +13,13 @@ npm run dev       # local dev server
 npm run build     # static build into dist/
 ```
 
-The specification page renders `_includes/spec.md`, which is generated from
-the JSON files under `spec/` (the source of truth) with
-`uv run python -m alman.build` — never edit it by hand. Blog posts live in
-`src/content/blog/`, and the visual identity is documented in
+The specification pages render `_includes/spec.md` (English), `spec.de.md`
+(German), and `spec.al.md` (Alman), which are generated from the JSON files
+under `spec/` (the source of truth) with `uv run python -m alman.build` —
+never edit them by hand. Translations live in the `i18n` blocks of the spec
+JSON files. The site is served in three language versions (`/`, `/de/`,
+`/alman/`); localized About pages live in `src/content/about/`. Blog posts
+live in `src/content/blog/`, and the visual identity is documented in
 `docs/design-guide.md`.
 
 ## Translation benchmark

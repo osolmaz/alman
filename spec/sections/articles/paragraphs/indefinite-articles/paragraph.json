@@ -2,11 +2,31 @@
   "id": "indefinite-articles",
   "title": "Indefinite Article Simplification",
   "body": "The <alman /> dialect regularizes indefinite article usage through morphological simplification, eliminating case and gender distinctions present in <sd /> while maintaining semantic clarity through prepositional constructions.",
+  "i18n": {
+    "de": {
+      "title": "Vereinfachung des unbestimmten Artikels",
+      "body": "Der <alman />-Dialekt regularisiert den Gebrauch des unbestimmten Artikels durch morphologische Vereinfachung: Die im <sd /> vorhandenen Kasus- und Genusunterscheidungen werden beseitigt, während die semantische Klarheit durch präpositionale Konstruktionen erhalten bleibt."
+    },
+    "al": {
+      "title": "Vereinfachung der unbestimmte Artikel",
+      "body": "Die <alman />-Dialekt regularisiert die Gebrauch der unbestimmte Artikel durch morphologische Vereinfachung: Die in die <sd /> vorhandene Kasus- und Genusunterscheidungen werden beseitigt, während die semantische Klarheit durch präpositionale Konstruktionen erhalten bleibt."
+    }
+  },
   "rules": [
     {
       "id": "non-genitive-forms",
       "title": "Unified 'ein' for Non-Genitive Cases",
       "description": "The invariant form **ein** replaces all nominative, accusative, and dative indefinite articles (ein/eine/einen/einem), neutralizing gender and case distinctions.\n\nThis rule applies to the indefinite article only. The homographic oblique forms of the indefinite pronoun **man** (*Das ärgert einen*) are pronouns, retain their case marking, and are described in the section on pronouns.",
+      "i18n": {
+        "de": {
+          "title": "Einheitliches 'ein' für nicht-genitivische Kasus",
+          "description": "Die invariante Form **ein** ersetzt alle unbestimmten Artikel im Nominativ, Akkusativ und Dativ (ein/eine/einen/einem); Genus- und Kasusunterscheidungen werden damit neutralisiert.\n\nDiese Regel gilt nur für den unbestimmten Artikel. Die homographen obliquen Formen des Indefinitpronomens **man** (*Das ärgert einen*) sind Pronomen, behalten ihre Kasusmarkierung und werden im Abschnitt über Pronomen beschrieben."
+        },
+        "al": {
+          "title": "Einheitliche 'ein' für nicht-genitivische Kasus",
+          "description": "Die invariante Form **ein** ersetzt alle unbestimmte Artikel in die Nominativ, Akkusativ und Dativ (ein/eine/einen/einem); Genus- und Kasusunterscheidungen werden damit neutralisiert.\n\nDiese Regel gilt nur für die unbestimmte Artikel. Die homographe oblique Formen der Indefinitpronomen **man** (*Das ärgert einen*) sind Pronomen, behalten ihr Kasusmarkierung und werden in die Abschnitt über Pronomen beschrieben."
+        }
+      },
       "examples": [
         {
           "standard": "ein Mann (Nominative)",
@@ -30,6 +50,16 @@
       "id": "genitive-constructions",
       "title": "Genitive Case",
       "description": "Indefinite genitive constructions employ either:\n1. Prepositional phrase **von ein** + Noun\n2. Only **ein**, depending on the context, e.g. when used with a genitive prepositions such as **wegen**, **trotz**, **statt**, **innerhalb** and so on.\n\nThe periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.\n\nThis systematizes existing colloquial patterns that use prepositional phrases with dative forms, while replacing them with the invariant **ein**.",
+      "i18n": {
+        "de": {
+          "title": "Genitiv",
+          "description": "Unbestimmte Genitivkonstruktionen verwenden entweder:\n1. die Präpositionalphrase **von ein** + Substantiv\n2. nur **ein**, je nach Kontext, z. B. nach genitivischen Präpositionen wie **wegen**, **trotz**, **statt**, **innerhalb** und so weiter.\n\nDie periphrastische **von ein**-Konstruktion wird bevorzugt, wenn die Wahrung der Unbestimmtheit entscheidend ist.\n\nDies systematisiert bestehende umgangssprachliche Muster, die Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch das invariante **ein**."
+        },
+        "al": {
+          "title": "Genitiv",
+          "description": "Unbestimmte Genitivkonstruktionen verwenden entweder:\n1. die Präpositionalphrase **von ein** + Substantiv\n2. nur **ein**, je nach Kontext, z. B. nach genitivische Präpositionen wie **wegen**, **trotz**, **statt**, **innerhalb** und so weiter.\n\nDie periphrastische **von ein**-Konstruktion wird bevorzugt, wenn die Wahrung der Unbestimmtheit entscheidend ist.\n\nDies systematisiert bestehende umgangssprachliche Muster, die Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch die invariante **ein**."
+        }
+      },
       "examples": [
         {
           "standard": "das Buch eines Freundes",
@@ -45,6 +75,16 @@
       "id": "nominalized-usage",
       "title": "Nominalized Articles",
       "description": "The **ein** form persists in nominalized constructions where the article functions independently without a subsequent noun.",
+      "i18n": {
+        "de": {
+          "title": "Nominalisierte Artikel",
+          "description": "Die Form **ein** bleibt in nominalisierten Konstruktionen erhalten, in denen der Artikel eigenständig ohne nachfolgendes Substantiv fungiert."
+        },
+        "al": {
+          "title": "Nominalisierte Artikel",
+          "description": "Die Form **ein** bleibt in nominalisierte Konstruktionen erhalten, in die die Artikel eigenständig ohne nachfolgende Substantiv fungiert."
+        }
+      },
       "examples": [
         {
           "standard": "Diese Erfindung war eine der wichtigsten Leistungen des 20. Jahrhunderts.",

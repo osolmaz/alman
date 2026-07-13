@@ -11,9 +11,15 @@ if (!entry) {
   );
 }
 const { Content } = await render(entry);
+const translations = { en: "/", de: "/de/", alman: "/alman/" };
 ---
 
-<Base title="Specification" description="The Alman specification: a simplified German dialect.">
+<Base
+  title="Specification"
+  description="The Alman specification: a simplified German dialect."
+  locale="en"
+  translations={translations}
+>
   <Scrolly />
   <div class="doc-band" id="spec">
     <span>Amtliche Fassung</span>

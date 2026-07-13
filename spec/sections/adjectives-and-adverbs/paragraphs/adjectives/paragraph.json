@@ -2,11 +2,31 @@
   "id": "adjectives",
   "title": "Adjectival Ending Regularization",
   "body": "The <alman /> dialect governs adjective morphology through a single form-based principle: every declensional adjective ending of <sd /> is replaced by the invariant -e, and forms that carry no declensional ending remain unchanged. The learner never needs to classify an adjective by its syntactic function; the surface form alone determines the outcome.",
+  "i18n": {
+    "de": {
+      "title": "Regularisierung der Adjektivendungen",
+      "body": "Der <alman />-Dialekt regelt die Adjektivmorphologie über ein einziges formbasiertes Prinzip: Jede deklinierte Adjektivendung des <sd /> wird durch das invariante -e ersetzt, und Formen ohne Deklinationsendung bleiben unverändert. Lernende müssen ein Adjektiv nie nach seiner syntaktischen Funktion klassifizieren; die Oberflächenform allein bestimmt das Ergebnis."
+    },
+    "al": {
+      "title": "Regularisierung der Adjektivendungen",
+      "body": "Die <alman />-Dialekt regelt die Adjektivmorphologie über ein einzige formbasierte Prinzip: Jede deklinierte Adjektivendung der <sd /> wird durch die invariante -e ersetzt, und Formen ohne Deklinationsendung bleiben unverändert. Lernende müssen ein Adjektiv nie nach sein syntaktische Funktion klassifizieren; die Oberflächenform allein bestimmt die Ergebnis."
+    }
+  },
   "rules": [
     {
       "id": "morphological-regularization",
       "title": "Invariant -e for All Declensional Endings",
       "description": "Whenever an adjective carries a declensional ending in <sd /> — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in <alman />. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, adjectives nominalized after **etwas**, **nichts**, and **alles** (*etwas Gutes*, *nichts Neues*), and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically.\n\nAdjectives that carry no declensional ending in <sd /> — predicative adjectives and forms used adverbially — remain unchanged; no ending is added (see the section on adverbs).\n\nComparison suffixes (**-er**, **-st**) are word formation rather than declension and are preserved: *schneller laufen* remains *schneller laufen*. Likewise, lexicalized adverbs such as **anders** or **meistens** carry no declensional ending and remain unchanged.\n\nThe sole exception to this principle is the adverbial superlative **am** + superlative, which is replaced by the bare superlative stem (see the section on adverbs).",
+      "i18n": {
+        "de": {
+          "title": "Invariantes -e für alle Deklinationsendungen",
+          "description": "Wann immer ein Adjektiv im <sd /> eine Deklinationsendung trägt — eine Endung, die Kasus, Genus oder Numerus markiert —, wird diese Endung in <alman /> durch das invariante **-e** ersetzt. Dies gilt einheitlich, unabhängig von Funktion oder Position des Adjektivs: Attributive Adjektive vor Substantiven, nominalisierte Adjektive, nach **etwas**, **nichts** und **alles** nominalisierte Adjektive (*etwas Gutes*, *nichts Neues*) sowie Adjektive in festen adverbialen Wendungen (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) werden alle gleich behandelt.\n\nAdjektive, die im <sd /> keine Deklinationsendung tragen — prädikative Adjektive und adverbial gebrauchte Formen —, bleiben unverändert; es wird keine Endung hinzugefügt (siehe den Abschnitt über Adverbien).\n\nKomparationssuffixe (**-er**, **-st**) sind Wortbildung und keine Deklination und bleiben erhalten: *schneller laufen* bleibt *schneller laufen*. Ebenso tragen lexikalisierte Adverbien wie **anders** oder **meistens** keine Deklinationsendung und bleiben unverändert.\n\nDie einzige Ausnahme von diesem Prinzip ist der adverbiale Superlativ **am** + Superlativ, der durch den bloßen Superlativstamm ersetzt wird (siehe den Abschnitt über Adverbien)."
+        },
+        "al": {
+          "title": "Invariante -e für alle Deklinationsendungen",
+          "description": "Wann immer ein Adjektiv in die <sd /> ein Deklinationsendung trägt — ein Endung, die Kasus, Genus oder Numerus markiert —, wird diese Endung in <alman /> durch die invariante **-e** ersetzt. Dies gilt einheitlich, unabhängig von Funktion oder Position der Adjektiv: Attributive Adjektive vor Substantive, nominalisierte Adjektive, nach **etwas**, **nichts** und **alles** nominalisierte Adjektive (*etwas Gutes*, *nichts Neues*) sowie Adjektive in feste adverbiale Wendungen (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) werden alle gleich behandelt.\n\nAdjektive, die in die <sd /> kein Deklinationsendung tragen — prädikative Adjektive und adverbial gebrauchte Formen —, bleiben unverändert; es wird kein Endung hinzugefügt (siehe die Abschnitt über Adverbien).\n\nKomparationssuffixe (**-er**, **-st**) sind Wortbildung und kein Deklination und bleiben erhalten: *schneller laufen* bleibt *schneller laufen*. Ebenso tragen lexikalisierte Adverbien wie **anders** oder **meistens** kein Deklinationsendung und bleiben unverändert.\n\nDie einzige Ausnahme von diese Prinzip ist die adverbiale Superlativ **am** + Superlativ, die durch die bloße Superlativstamm ersetzt wird (siehe die Abschnitt über Adverbien)."
+        }
+      },
       "examples": [
         {
           "standard": "guter Mann (Masculine Nominative)",
@@ -54,6 +74,16 @@
       "id": "genitive-consistency",
       "title": "Genitive Construction Handling",
       "description": "Genitive constructions retain the analytical 'der' article while maintaining invariant adjectival -e endings, preserving morphological regularity across all cases.",
+      "i18n": {
+        "de": {
+          "title": "Behandlung von Genitivkonstruktionen",
+          "description": "Genitivkonstruktionen behalten den analytischen Artikel 'der' bei und bewahren zugleich die invarianten adjektivischen -e-Endungen; die morphologische Regelmäßigkeit bleibt so über alle Kasus hinweg erhalten."
+        },
+        "al": {
+          "title": "Behandlung von Genitivkonstruktionen",
+          "description": "Genitivkonstruktionen behalten die analytische Artikel 'der' bei und bewahren zugleich die invariante adjektivische -e-Endungen; die morphologische Regelmäßigkeit bleibt so über alle Kasus hinweg erhalten."
+        }
+      },
       "examples": [
         {
           "standard": "des guten Mannes",
@@ -69,6 +99,16 @@
       "id": "nominalized-adjectives",
       "title": "Nominalized Adjectives",
       "description": "Nominalized adjectives, when functioning as nouns, receive the invariant **-e** ending in the singular, irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms.\n\nIn the plural, nominalized adjectives behave as nouns: consistent with the preservation of noun plural morphology described in the section on nouns, they retain the **-en** ending as a plural marker (not a case marker). This distinguishes *die Schöne* (singular) from *die Schönen* (plural).",
+      "i18n": {
+        "de": {
+          "title": "Nominalisierte Adjektive",
+          "description": "Nominalisierte Adjektive erhalten, wenn sie als Substantive fungieren, im Singular die invariante Endung **-e**, unabhängig von ihrer syntaktischen Rolle; die Einheitlichkeit mit regulären Adjektivformen bleibt so gewahrt.\n\nIm Plural verhalten sich nominalisierte Adjektive wie Substantive: Im Einklang mit der Bewahrung der Substantiv-Pluralmorphologie, die im Abschnitt über Substantive beschrieben ist, behalten sie die Endung **-en** als Pluralmarker (nicht als Kasusmarker). Dies unterscheidet *die Schöne* (Singular) von *die Schönen* (Plural)."
+        },
+        "al": {
+          "title": "Nominalisierte Adjektive",
+          "description": "Nominalisierte Adjektive erhalten, wenn sie als Substantive fungieren, in die Singular die invariante Endung **-e**, unabhängig von ihr syntaktische Rolle; die Einheitlichkeit mit reguläre Adjektivformen bleibt so gewahrt.\n\nIn die Plural verhalten sich nominalisierte Adjektive wie Substantive: In die Einklang mit die Bewahrung der Substantiv-Pluralmorphologie, die in die Abschnitt über Substantive beschrieben ist, behalten sie die Endung **-en** als Pluralmarker (nicht als Kasusmarker). Dies unterscheidet *die Schöne* (Singular) von *die Schönen* (Plural)."
+        }
+      },
       "examples": [
         {
           "standard": "Das Gute im Menschen",

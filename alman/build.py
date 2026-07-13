@@ -1,10 +1,51 @@
 import argparse
 import json
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 SPEC_DIR = Path("spec")
-OUTPUT_FILE = Path("_includes/spec.md")
+
+# One generated document per locale. "en" is the canonical text; "de" and
+# "al" are read from the optional "i18n" blocks in the spec JSON files and
+# fall back to English where a translation is missing.
+OUTPUT_FILES = {
+    "en": Path("_includes/spec.md"),
+    "de": Path("_includes/spec.de.md"),
+    "al": Path("_includes/spec.al.md"),
+}
+
+STRINGS = {
+    "en": {
+        "toc": "Table of Contents",
+        "examples": "**Examples:**",
+        "version": "Version",
+        "updated": "Last Updated",
+        "col_standard": "Standard German",
+        "col_alman": "Alman",
+        "col_english": "English",
+        "sd": "**Standard German**",
+    },
+    "de": {
+        "toc": "Inhaltsverzeichnis",
+        "examples": "**Beispiele:**",
+        "version": "Version",
+        "updated": "Stand",
+        "col_standard": "Standarddeutsch",
+        "col_alman": "Alman",
+        "col_english": "Englisch",
+        "sd": "**Standarddeutsch**",
+    },
+    "al": {
+        "toc": "Inhaltsverzeichnis",
+        "examples": "**Beispiele:**",
+        "version": "Version",
+        "updated": "Stand",
+        "col_standard": "Standarddeutsch",
+        "col_alman": "Alman",
+        "col_english": "Englisch",
+        "sd": "**Standarddeutsch**",
+    },
+}
 
 
 def load_json(path: Path) -> dict:
@@ -17,17 +58,27 @@ def load_json(path: Path) -> dict:
         return {}
 
 
-def process_examples(examples: List[Dict]) -> str:
+def text(obj: dict, field: str, locale: str) -> str:
+    """Localized prose field with English fallback."""
+    if locale != "en":
+        localized = obj.get("i18n", {}).get(locale, {}).get(field)
+        if localized:
+            return localized
+    return obj.get(field, "")
+
+
+def process_examples(examples: List[Dict], locale: str) -> str:
     """Convert examples to markdown table."""
     if not examples:
         return ""
 
+    s = STRINGS[locale]
     # Check if any example has an English translation
     has_english = any("english" in ex for ex in examples)
 
     if has_english:
         table = [
-            "| Standard German | Alman | English |",
+            f"| {s['col_standard']} | {s['col_alman']} | {s['col_english']} |",
             "|------------------|--------|---------|",
         ]
         for ex in examples:
@@ -35,7 +86,10 @@ def process_examples(examples: List[Dict]) -> str:
                 f"| {ex['standard']} | {ex['alman']} | {ex.get('english', '')} |"
             )
     else:
-        table = ["| Standard German | Alman |", "|------------------|-------|"]
+        table = [
+            f"| {s['col_standard']} | {s['col_alman']} |",
+            "|------------------|-------|",
+        ]
         for ex in examples:
             table.append(f"| {ex['standard']} | {ex['alman']} |")
 
@@ -112,25 +166,18 @@ class NumberingSystem:
             json.dump(self.map, f, indent=2)
 
 
-def main():
-    # Set up argument parser
-    parser = argparse.ArgumentParser(description="Build Alman documentation")
-    parser.add_argument(
-        "--fill-missing-numbering",
-        action="store_true",
-        help="Save numbering map for missing entries",
-    )
-    args = parser.parse_args()
-
-    numbering = NumberingSystem()
+def build_document(locale: str, numbering: NumberingSystem) -> str:
+    s = STRINGS[locale]
     output = []
     toc = []
 
     # Load main document
     main_doc = load_json(SPEC_DIR / "main.json")
-    output.append(f"# {main_doc.get('documentTitle', 'Alman Documentation')}\n")
-    output.append(f"**Version**: {main_doc.get('documentVersion', '')}  \n")
-    output.append(f"**Last Updated**: {main_doc.get('lastUpdated', '')}\n")
+    output.append(
+        f"# {text(main_doc, 'documentTitle', locale) or 'Alman Documentation'}\n"
+    )
+    output.append(f"**{s['version']}**: {main_doc.get('documentVersion', '')}  \n")
+    output.append(f"**{s['updated']}**: {main_doc.get('lastUpdated', '')}\n")
 
     # Collect all sections for TOC
     all_sections = main_doc.get("sections", [])
@@ -142,7 +189,7 @@ def main():
         if section:
             # Start section list item
             section_item = [
-                f'<li><a href="#{section_id}">{section.get("title", "")}</a>'
+                f'<li><a href="#{section_id}">{text(section, "title", locale)}</a>'
             ]
             para_items = []
 
@@ -162,7 +209,7 @@ def main():
                 if paragraph:
                     para_num = numbering.get_paragraph_number(para_id)
                     para_items.append(
-                        f'<li><a href="#{para_id}">§{para_num} {paragraph.get("title", "")}</a></li>'
+                        f'<li><a href="#{para_id}">§{para_num} {text(paragraph, "title", locale)}</a></li>'
                     )
 
             # Add paragraphs if any
@@ -184,11 +231,11 @@ def main():
         section = load_json(section_path)
 
         if section:
-            output.append(f"\n## {section.get('title', '')} {{#{section_id}}}\n")
-            output.append(section.get("body", "") + "\n")
+            output.append(f"\n## {text(section, 'title', locale)} {{#{section_id}}}\n")
+            output.append(text(section, "body", locale) + "\n")
 
     # Add TOC after Introduction
-    output.append("\n## Table of Contents\n")
+    output.append(f"\n## {s['toc']}\n")
     output.append("""<div class="toc-container" style="
         list-style: none;
         padding-left: 0;
@@ -208,8 +255,8 @@ def main():
         if not section:
             continue
 
-        output.append(f"\n## {section.get('title', '')} {{#{section_id}}}\n")
-        output.append(section.get("body", "") + "\n")
+        output.append(f"\n## {text(section, 'title', locale)} {{#{section_id}}}\n")
+        output.append(text(section, "body", locale) + "\n")
 
         # Process paragraphs
         for para_ref in section.get("paragraphs", []):
@@ -230,9 +277,9 @@ def main():
             # Get global paragraph number
             para_num = numbering.get_paragraph_number(para_id)
             output.append(
-                f"\n### §{para_num}. {paragraph.get('title', '')} {{#{para_id}}}\n"
+                f"\n### §{para_num}. {text(paragraph, 'title', locale)} {{#{para_id}}}\n"
             )
-            output.append(paragraph.get("body", "") + "\n")
+            output.append(text(paragraph, "body", locale) + "\n")
 
             # Process rules
             rules = paragraph.get("rules", [])
@@ -243,34 +290,47 @@ def main():
                 if len(rules) == 1:
                     # If rule title matches paragraph title, don't show rule title
                     if rule.get("title") != paragraph.get("title"):
-                        output.append(f"\n#### {rule.get('title', '')}\n")
+                        output.append(f"\n#### {text(rule, 'title', locale)}\n")
                 else:
                     letter = numbering.get_rule_letter(para_id, rule_id)
                     output.append(
-                        f"\n#### §{para_num}{letter}. {rule.get('title', '')}\n"
+                        f"\n#### §{para_num}{letter}. {text(rule, 'title', locale)}\n"
                     )
 
-                output.append(rule.get("description", "") + "\n")
+                output.append(text(rule, "description", locale) + "\n")
 
                 # Add examples table
-                examples_md = process_examples(rule.get("examples", []))
+                examples_md = process_examples(rule.get("examples", []), locale)
                 if examples_md:
-                    output.append("\n**Examples:**\n")
+                    output.append(f"\n{s['examples']}\n")
                     output.append(examples_md)
                 output.append("\n")
+
+    final_md = "\n".join(output)
+    return final_md.replace("<alman />", "**Alman**").replace("<sd />", s["sd"])
+
+
+def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description="Build Alman documentation")
+    parser.add_argument(
+        "--fill-missing-numbering",
+        action="store_true",
+        help="Save numbering map for missing entries",
+    )
+    args = parser.parse_args()
+
+    numbering = NumberingSystem()
+
+    for locale, output_file in OUTPUT_FILES.items():
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(build_document(locale, numbering))
+        print(f"Document compiled to {output_file}")
 
     # Save numbering map only if flag is present
     if args.fill_missing_numbering:
         numbering.save()
 
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        final_md = "\n".join(output)
-        final_md = final_md.replace("<alman />", "**Alman**").replace(
-            "<sd />", "**Standard German**"
-        )
-        f.write(final_md)
-
 
 if __name__ == "__main__":
     main()
-    print(f"Document compiled to {OUTPUT_FILE}")

@@ -7,7 +7,16 @@ import "@fontsource/ibm-plex-sans/600.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "katex/dist/katex.min.css";
 import "../styles/global.css";
-import { langCodes, localePrefix, ui, type Locale } from "../i18n/ui";
+import {
+  langCodes,
+  localeHome,
+  localeNames,
+  localePrefix,
+  localeShort,
+  locales,
+  ui,
+  type Locale,
+} from "../i18n/ui";
 
 interface Props {
   title?: string;
@@ -27,12 +36,19 @@ const pageTitle = title ? `${title} | Alman Institut` : "Alman Institut";
 const currentPath = Astro.url.pathname;
 const t = ui[locale];
 
+const homePath = localeHome(locale);
 const aboutPath = `${localePrefix(locale)}/about/`;
 const navItems = [
-  { href: "/#spec", label: t["nav.spec"], match: "/" },
+  { href: `${homePath}#spec`, label: t["nav.spec"], match: homePath },
   { href: "/blog/", label: t["nav.blog"], match: "/blog/" },
   { href: aboutPath, label: t["nav.about"], match: aboutPath },
 ];
+
+// Global language switcher: on translated pages it links to the sibling
+// language versions; on untranslated pages it falls back to the locale
+// home page (the localized specification).
+const switcherTarget = (loc: Locale): string =>
+  translations?.[loc] ?? localeHome(loc);
 ---
 
 <!doctype html>
@@ -82,8 +98,8 @@ const navItems = [
               <a
                 href={item.href}
                 aria-current={
-                  (item.match === "/"
-                    ? currentPath === "/"
+                  (item.match === homePath
+                    ? currentPath === homePath
                     : currentPath.startsWith(item.match))
                     ? "page"
                     : undefined
@@ -93,6 +109,29 @@ const navItems = [
               </a>
             ))
           }
+          <span class="lang-nav" role="group" aria-label="Sprachfassung">
+            {
+              locales.map((loc) =>
+                loc === locale ? (
+                  <span
+                    class="lang-nav-current"
+                    aria-current="true"
+                    title={localeNames[loc]}
+                  >
+                    {localeShort[loc]}
+                  </span>
+                ) : (
+                  <a
+                    href={switcherTarget(loc)}
+                    title={localeNames[loc]}
+                    lang={langCodes[loc]}
+                  >
+                    {localeShort[loc]}
+                  </a>
+                ),
+              )
+            }
+          </span>
         </nav>
       </div>
     </header>

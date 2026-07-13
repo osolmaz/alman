@@ -16,6 +16,26 @@
       "type": "string",
       "description": "Description or content of the paragraph"
     },
+    "i18n": {
+      "type": "object",
+      "description": "Translations of prose fields, keyed by locale (de, al)",
+      "properties": {
+        "de": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "body": { "type": "string" }
+          }
+        },
+        "al": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "body": { "type": "string" }
+          }
+        }
+      }
+    },
     "ruleFiles": {
       "type": "array",
       "items": {
