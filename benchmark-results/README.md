@@ -32,6 +32,11 @@ The GPT-5.4 mini and GPT-5.6 Luna/Sol/Terra xhigh runs, including cached-token
 costs and the updated overall ranking, are in
 [`2026-07-12-openai-xhigh-comparison.md`](./2026-07-12-openai-xhigh-comparison.md).
 
+The same four GPT models were rerun against the updated Alman rules and the
+corrected invariant-relativizer target on 2026-07-13. Results, run conditions,
+costs, and the discarded initial-pass incident are in
+[`2026-07-13-openai-updated-rules-comparison.md`](./2026-07-13-openai-updated-rules-comparison.md).
+
 ## Minimal shape
 
 ```json
