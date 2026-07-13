@@ -192,7 +192,7 @@ class TestCurated:
     def test_task_uses_curated_items_by_default(self):
         task = alman_bench()
         assert task.dataset.name == "alman-bench-curated"
-        assert len(task.dataset) == 48
+        assert len(task.dataset) == 61
 
     def test_task_rejects_spec_examples_with_spec_in_prompt(self):
         with pytest.raises(ValueError, match="leaks its answers"):
@@ -204,7 +204,7 @@ class TestCurated:
         assert len(task.dataset) == len(items)
 
     def test_item_count(self, curated_items):
-        assert len(curated_items) == 48
+        assert len(curated_items) == 61
 
     def test_spec_examples_are_excluded(self, curated_items):
         assert find_spec_example_overlaps(curated_items) == []
@@ -221,6 +221,7 @@ class TestCurated:
             "berufe",
             "deutsch-alman",
             "die-verwandlung",
+            "relativsaetze",
             "siddhartha",
             "starke-flexion",
             "steppenwolf",
@@ -241,6 +242,41 @@ class TestCurated:
         assert "alles, das Siddhartha" in item.accepted[0]
         assert any("alles, die Siddhartha" in value for value in item.accepted)
         assert not any("alles, was Siddhartha" in value for value in item.accepted)
+
+    def test_relativsaetze_collection(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+
+        # Canonical rendering uses 'das', 'die' is accepted, and the SD
+        # case-marked forms are not.
+        object_rel = by_id["curated/relativsaetze/1"]
+        assert (
+            object_rel.accepted[0] == "Die Film, das wir gestern sahen, war langweilig."
+        )
+        assert "Die Film, die wir gestern sahen, war langweilig." in object_rel.accepted
+        assert not any(", den " in v for v in object_rel.accepted)
+
+        # Genitive: 'dessen' -> 'deren', no das/die alternation.
+        genitive = by_id["curated/relativsaetze/5"]
+        assert genitive.accepted == [
+            "Die Autor, deren Roman ich gerade lese, lebt in Berlin."
+        ]
+
+        # Plural 'deren' survives unchanged (identity translation).
+        identity = by_id["curated/relativsaetze/6"]
+        assert identity.accepted == [identity.source]
+
+        # 'was' after indefinite heads is replaced and not accepted.
+        was_rel = by_id["curated/relativsaetze/7"]
+        assert was_rel.accepted[0] == "Nichts, das er sagte, war neu."
+        assert not any(", was " in v for v in was_rel.accepted)
+
+        # Two clauses choose independently: 2 x 2 variants.
+        independent = by_id["curated/relativsaetze/12"]
+        assert len(independent.accepted) == 4
+        assert any(
+            ", das er baute" in v and ", die er pflanzte" in v
+            for v in independent.accepted
+        )
 
     def test_ids_unique_across_tiers(self, items, curated_items):
         ids = [item.id for item in items] + [item.id for item in curated_items]

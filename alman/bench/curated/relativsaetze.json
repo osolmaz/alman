@@ -1,0 +1,86 @@
+{
+  "collection": "relativsaetze",
+  "provenance": "Hand-authored under spec v0.4.2 to exercise the invariant relativizer 'das' (rule relative-pronouns, with 'die' accepted) across case roles, stacked-article contexts, the genitive 'deren', was-clauses, prepositional relatives, and interactions with other rules.",
+  "items": [
+    {
+      "source": "Der Mann, der neben mir wohnt, ist Lehrer.",
+      "pattern": "Die Mann, {das|die}@6f neben mir wohnt, ist Lehrer.",
+      "rule": "relative-pronouns",
+      "note": "Subject relative on a masculine antecedent: SD 'der' becomes the invariant relativizer, canonical 'das'."
+    },
+    {
+      "source": "Der Film, den wir gestern sahen, war langweilig.",
+      "pattern": "Die Film, {das|die}@6f wir gestern sahen, war langweilig.",
+      "rule": "relative-pronouns",
+      "note": "Object (accusative) relative: SD 'den' carries the case role, which the invariant relativizer drops."
+    },
+    {
+      "source": "Der Kollege, dem ich das Buch geliehen habe, ist verreist.",
+      "pattern": "Die Kollege, {das|die}@6f ich die Buch geliehen habe, ist verreist.",
+      "rule": "relative-pronouns",
+      "note": "Dative relative: SD 'dem' becomes the invariant relativizer; the article of 'das Buch' independently becomes 'die'."
+    },
+    {
+      "source": "Die Frau, die die Katzen füttert, wohnt nebenan.",
+      "pattern": "Die Frau, {das|die}@6f die Katzen füttert, wohnt nebenan.",
+      "rule": "relative-pronouns",
+      "note": "The stacked-forms case that motivates canonical 'das': 'die Frau, die die Katzen' is accepted but 'das' keeps the relativizer distinct from the invariant article."
+    },
+    {
+      "source": "Das Kind, das das Eis will, weint.",
+      "pattern": "Die Kind, {das|die}@6f die Eis will, weint.",
+      "rule": "relative-pronouns",
+      "note": "The mirror image of the die-die stack: SD 'das das' dissolves from the article side, since the neuter article becomes 'die' while the relativizer stays 'das'."
+    },
+    {
+      "source": "Der Autor, dessen Roman ich gerade lese, lebt in Berlin.",
+      "accepted": ["Die Autor, deren Roman ich gerade lese, lebt in Berlin."],
+      "rule": "relative-pronouns",
+      "note": "Genitive relative: 'dessen' is replaced by 'deren'; no das/die alternation exists in the genitive."
+    },
+    {
+      "source": "Die Nachbarn, deren Garten verwildert ist, sind selten zu Hause.",
+      "accepted": [
+        "Die Nachbarn, deren Garten verwildert ist, sind selten zu Hause."
+      ],
+      "rule": "relative-pronouns",
+      "note": "Identity translation: plural 'deren' is already the retained genitive relativizer, so nothing changes. Guards against models overcorrecting 'deren' to 'das'."
+    },
+    {
+      "source": "Nichts, was er sagte, war neu.",
+      "pattern": "Nichts, {das|die}@6f er sagte, war neu.",
+      "rule": "relative-pronouns",
+      "note": "The was-relative after indefinite heads (alles/nichts/etwas) also falls under the single invariant relativizer; 'was' itself is not in the acceptance set. Mirrors the siddhartha item ('alles, was' -> 'alles, das')."
+    },
+    {
+      "source": "Die Stadt, in der ich geboren wurde, liegt in Bayern.",
+      "pattern": "Die Stadt, in {das|die}@6f ich geboren wurde, liegt in Bayern.",
+      "rule": "relative-pronouns",
+      "note": "Preposition + relative: the relativizer stays invariant after 'in' (the rule applies regardless of the case role within the clause), matching the surface of 'mit das' in the pronominal-adverbs rule."
+    },
+    {
+      "source": "Der Freund, mit dem ich jeden Tag arbeite, kommt aus Köln.",
+      "pattern": "Die Freund, mit {das|die}@6f ich jede Tag arbeite, kommt aus Köln.",
+      "rule": "mixed",
+      "note": "Preposition + dative relative on a masculine antecedent, combined with the invariant determiner ('jeden Tag' -> 'jede Tag')."
+    },
+    {
+      "source": "Die Katze, die die Hunde jagen, versteckt sich unter dem Sofa.",
+      "pattern": "Die Katze, {das|die}@6f die Hunde jagen, versteckt sich unter die Sofa.",
+      "rule": "relative-pronouns",
+      "note": "Object relative whose reading the invariant relativizer no longer marks: plural verb agreement ('jagen') identifies 'die Hunde' as the subject, exactly the disambiguation mechanism the rule prescribes."
+    },
+    {
+      "source": "Diejenigen, die den Kurs bestanden haben, bekommen ein Zertifikat.",
+      "pattern": "Diejenige, {das|die}@6f die Kurs bestanden haben, bekommen ein Zertifikat.",
+      "rule": "mixed",
+      "note": "Demonstrative head plus relative clause: 'diejenigen' takes the unified determiner form 'diejenige' while the relativizer is chosen independently."
+    },
+    {
+      "source": "Das Haus, das er baute, und der Garten, den er pflanzte, sind verkauft.",
+      "pattern": "Die Haus, {das|die}@6f er baute, und die Garten, {das|die}@6f er pflanzte, sind verkauft.",
+      "rule": "relative-pronouns",
+      "note": "Two relative clauses with independent choice points: the spec does not require a speaker to pick the same relativizer throughout, so all four combinations are accepted."
+    }
+  ]
+}
