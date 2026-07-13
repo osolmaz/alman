@@ -23,7 +23,8 @@
     {
       "source": "Lange schon nahm Siddhartha am Gespräch der Weisen teil, übte sich mit Govinda im Redekampf, übte sich mit Govinda in der Kunst der Betrachtung, im Dienst der Versenkung.",
       "pattern": "Lange schon nahm Siddhartha an die Gespräch {der|von die}@1d Weisen teil, übte sich mit Govinda in die Redekampf, übte sich mit Govinda in die Kunst {der|von die} Betrachtung, in die Dienst {der|von die} Versenkung.",
-      "rule": "mixed"
+      "rule": "mixed",
+      "covers": ["reflexive-pronouns"]
     },
     {
       "source": "Schon verstand er, lautlos das Om zu sprechen, das Wort der Worte, es lautlos in sich hinein zu sprechen mit dem Einhauch, es lautlos aus sich heraus zu sprechen mit dem Aushauch, mit gesammelter Seele, die Stirn umgeben vom Glanz des klardenkenden Geistes.",
@@ -42,7 +43,8 @@
       "accepted": [
         "Freude sprang in die Herz von sein Vater über die Sohn, die Gelehrige, die Wissensdurstige, ein große Weise und Priester sah er in ihm heranwachsen, ein Fürst unter die Brahmanen."
       ],
-      "rule": "mixed"
+      "rule": "mixed",
+      "covers": ["nominalized-adjectives"]
     },
     {
       "source": "Wonne sprang in seiner Mutter Brust, wenn sie ihn sah, wenn sie ihn schreiten, wenn sie ihn niedersitzen und aufstehen sah, Siddhartha, den Starken, den Schönen, den auf schlanken Beinen Schreitenden, den mit vollkommenem Anstand sie Begrüßenden.",
@@ -74,7 +76,8 @@
       "accepted": [
         "An die Abend von diese Tag holten sie die Asketen ein, die dürre Samanas, und boten ihnen Begleitschaft und Gehorsam an. Sie wurden angenommen."
       ],
-      "rule": "mixed"
+      "rule": "mixed",
+      "covers": ["genitive-handling"]
     },
     {
       "source": "Siddhartha schenkte sein Gewand einem armen Brahmanen auf der Straße.",
@@ -98,9 +101,10 @@
     },
     {
       "source": "Diese Sage, dies Gerücht, dies Märchen klang auf, duftete empor, hier und dort, in den Städten sprachen die Brahmanen davon, im Wald die Samanas, immer wieder drang der Name Gotamas, des Buddha, zu den Ohren der Jünglinge, im Guten und im Bösen, in Lobpreisung und in Schmähung.",
-      "pattern": "Diese Sage, diese Gerücht, diese Märchen klang auf, duftete empor, hier und dort, in die Städte sprachen die Brahmanen davon, in die Wald die Samanas, immer wieder drang die Name {g:Gotamas|von Gotama}@3b, {g:der|die} Buddha, zu die Ohren {der|von die}@1d Jünglinge, in die Gute und in die Böse, in Lobpreisung und in Schmähung.",
+      "pattern": "Diese Sage, diese Gerücht, diese Märchen klang auf, duftete empor, hier und dort, in die Städte sprachen die Brahmanen {davon|von das}@6i, in die Wald die Samanas, immer wieder drang die Name {g:Gotamas|von Gotama}@3b, {g:der|die} Buddha, zu die Ohren {der|von die}@1d Jünglinge, in die Gute und in die Böse, in Lobpreisung und in Schmähung.",
       "rule": "mixed",
-      "note": "The apposition 'des Buddha' covaries with the rendering of the name genitive (linked group): genitive 'der Buddha' after retained 'Gotamas', non-genitive 'die Buddha' after the von-construction."
+      "covers": ["proper-name-genitive", "pronominal-adverbs"],
+      "note": "The apposition 'des Buddha' covaries with the rendering of the name genitive (linked group): genitive 'der Buddha' after retained 'Gotamas', non-genitive 'die Buddha' after the von-construction. The da- compound 'davon' may be retained or uncontracted to 'von das'."
     }
   ]
 }

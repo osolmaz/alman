@@ -6,6 +6,7 @@ from alman.bench.dataset import (
     find_spec_example_overlaps,
     load_curated_items,
     load_items,
+    spec_rule_ids,
 )
 from alman.bench.pattern import PatternError, expand_pattern
 from alman.bench.scoring import is_accepted, lint, normalize
@@ -192,7 +193,7 @@ class TestCurated:
     def test_task_uses_curated_items_by_default(self):
         task = alman_bench()
         assert task.dataset.name == "alman-bench-curated"
-        assert len(task.dataset) == 61
+        assert len(task.dataset) == 87
 
     def test_task_rejects_spec_examples_with_spec_in_prompt(self):
         with pytest.raises(ValueError, match="leaks its answers"):
@@ -204,7 +205,7 @@ class TestCurated:
         assert len(task.dataset) == len(items)
 
     def test_item_count(self, curated_items):
-        assert len(curated_items) == 61
+        assert len(curated_items) == 87
 
     def test_spec_examples_are_excluded(self, curated_items):
         assert find_spec_example_overlaps(curated_items) == []
@@ -221,6 +222,7 @@ class TestCurated:
             "berufe",
             "deutsch-alman",
             "die-verwandlung",
+            "regelabdeckung",
             "relativsaetze",
             "siddhartha",
             "starke-flexion",
@@ -277,6 +279,61 @@ class TestCurated:
             ", das er baute" in v and ", die er pflanzte" in v
             for v in independent.accepted
         )
+
+    def test_every_spec_rule_covered(self, curated_items):
+        """The curated tier is a minimum demonstrative set: every rule in the
+        spec must be the designated target of at least one curated item."""
+        covered = {rule for item in curated_items for rule in item.covers}
+        uncovered = [rule for rule in spec_rule_ids() if rule not in covered]
+        assert uncovered == []
+
+    def test_covers_names_known_rules(self, tmp_path):
+        (tmp_path / "x.json").write_text(
+            json.dumps(
+                {
+                    "collection": "x",
+                    "items": [
+                        {
+                            "source": "a",
+                            "accepted": ["b"],
+                            "covers": ["no-such-rule"],
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        with pytest.raises(ValueError, match="unknown spec rules"):
+            load_curated_items(tmp_path)
+
+    def test_regelabdeckung_collection(self, curated_items):
+        by_id = {item.id: item for item in curated_items}
+
+        # Stressed attributive DAS becomes 'diese'; standalone 'den' becomes
+        # the neutral demonstrative 'das' (article-aligned 'die' accepted).
+        stressed = by_id["curated/regelabdeckung/1"]
+        assert stressed.accepted == ["Diese Auto will sie haben, kein andere."]
+        standalone = by_id["curated/regelabdeckung/2"]
+        assert standalone.accepted[0].startswith("Das habe ich")
+        assert any(v.startswith("Die habe ich") for v in standalone.accepted)
+
+        # Motion and location collapse onto the same surface form.
+        motion = by_id["curated/regelabdeckung/3"]
+        location = by_id["curated/regelabdeckung/4"]
+        assert motion.accepted == ["Sie geht in die Keller."]
+        assert location.accepted == ["Die Fahrräder stehen in die Keller."]
+
+        # Weak noun in the accusative: singular form, not the -en oblique.
+        weak = by_id["curated/regelabdeckung/8"]
+        assert weak.accepted == ["Ich habe die Student nach die Weg gefragt."]
+
+        # Object-fronted SD source must be reordered subject-first.
+        reorder = by_id["curated/regelabdeckung/24"]
+        assert reorder.accepted == ["Die Firma hat die Vertrag nie unterschrieben."]
+
+        # Pronoun object may stay fronted (identity).
+        pronoun = by_id["curated/regelabdeckung/25"]
+        assert pronoun.accepted == [pronoun.source]
 
     def test_ids_unique_across_tiers(self, items, curated_items):
         ids = [item.id for item in items] + [item.id for item in curated_items]
