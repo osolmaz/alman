@@ -234,7 +234,6 @@ def find_spec_example_overlaps(
 def load_curated_items(
     curated_dir: Path = CURATED_DIR,
     *,
-    exclude_spec_examples: bool = True,
     spec_dir: Path = SPEC_DIR,
 ) -> list[BenchItem]:
     """Load the hand-curated sentence-level items (tier 2 of the benchmark)."""
@@ -244,7 +243,7 @@ def load_curated_items(
         data = _load_json(path)
         collection = data["collection"]
         for index, entry in enumerate(data["items"]):
-            item_id = f"curated/{collection}/{index}"
+            item_id = f"curated/{collection}/{entry.get('id', index)}"
             if ("pattern" in entry) == ("accepted" in entry):
                 raise ValueError(
                     f"{item_id}: provide exactly one of 'pattern' or 'accepted'"
@@ -277,7 +276,11 @@ def load_curated_items(
                     covers=covers,
                 )
             )
-    if not exclude_spec_examples:
-        return items
-    overlaps = {item.id for item in find_spec_example_overlaps(items, spec_dir)}
-    return [item for item in items if item.id not in overlaps]
+    overlaps = find_spec_example_overlaps(items, spec_dir)
+    if overlaps:
+        overlap_ids = [item.id for item in overlaps]
+        raise ValueError(
+            "curated items duplicate specification examples: "
+            f"{overlap_ids}"
+        )
+    return items

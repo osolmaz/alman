@@ -19,6 +19,7 @@ from alman.bench.dataset import load_curated_items
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SCHEMA = REPO_ROOT / "benchmark-results" / "result.schema.json"
+LEGACY_SPEC_EXAMPLE_IDS = {"curated/berufe/0", "curated/berufe/1"}
 
 
 def _score(correct: int, total: int) -> dict[str, int | float]:
@@ -110,16 +111,17 @@ def _evaluated_samples(log: EvalLog) -> tuple[list[Any], list[str]]:
     logged = {str(sample.id): sample for sample in log.samples or []}
     if len(logged) != len(log.samples or []):
         raise ValueError("curated sample ids must be unique")
-    all_ids = {item.id for item in load_curated_items(exclude_spec_examples=False)}
     evaluated_ids = {item.id for item in load_curated_items()}
     logged_ids = set(logged)
-    if logged_ids == all_ids:
-        excluded_ids = sorted(all_ids - evaluated_ids)
-    elif logged_ids == evaluated_ids:
+    if logged_ids == evaluated_ids:
         excluded_ids = []
+    elif logged_ids == evaluated_ids | LEGACY_SPEC_EXAMPLE_IDS:
+        excluded_ids = sorted(LEGACY_SPEC_EXAMPLE_IDS)
     else:
         missing = sorted(evaluated_ids - logged_ids)
-        unexpected = sorted(logged_ids - all_ids)
+        unexpected = sorted(
+            logged_ids - evaluated_ids - LEGACY_SPEC_EXAMPLE_IDS
+        )
         raise ValueError(
             f"curated sample ids do not match the dataset; "
             f"missing={missing}, unexpected={unexpected}"
@@ -217,8 +219,7 @@ def validate_result(result: dict[str, Any], schema_path: Path = DEFAULT_SCHEMA) 
         raise ValueError("raw sample count must equal evaluated plus excluded samples")
     if excluded_count != len(excluded_ids):
         raise ValueError("excluded spec-example count must match its id list")
-    known_overlap_ids = {"curated/berufe/0", "curated/berufe/1"}
-    if excluded_ids and set(excluded_ids) != known_overlap_ids:
+    if excluded_ids and set(excluded_ids) != LEGACY_SPEC_EXAMPLE_IDS:
         raise ValueError(
             "excluded spec-example ids must contain the complete known pair"
         )

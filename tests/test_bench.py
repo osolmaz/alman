@@ -207,13 +207,26 @@ class TestCurated:
     def test_item_count(self, curated_items):
         assert len(curated_items) == 87
 
-    def test_spec_examples_are_excluded(self, curated_items):
+    def test_curated_items_do_not_duplicate_spec_examples(self, curated_items):
         assert find_spec_example_overlaps(curated_items) == []
-        all_items = load_curated_items(exclude_spec_examples=False)
-        assert [item.id for item in find_spec_example_overlaps(all_items)] == [
-            "curated/berufe/0",
-            "curated/berufe/1",
-        ]
+
+    def test_spec_example_overlap_is_rejected(self, tmp_path):
+        (tmp_path / "overlap.json").write_text(
+            json.dumps(
+                {
+                    "collection": "overlap",
+                    "items": [
+                        {
+                            "source": "die Ärztin",
+                            "accepted": ["die Arzt"],
+                        }
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        with pytest.raises(ValueError, match="duplicate specification examples"):
+            load_curated_items(tmp_path)
 
     def test_collections(self, curated_items):
         collections = {item.paragraph for item in curated_items}

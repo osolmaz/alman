@@ -18,11 +18,10 @@ spec rule is claimed by at least one item via its `covers` field, enforced by
 The 179 examples embedded in the spec are not benchmark rows when the spec is
 provided to the model. Their source text and answers both appear verbatim in
 the prompt, so scoring them would measure lookup rather than rule application.
-The loader automatically discards any curated source/answer pair that also
-appears in those examples; two short occupational-title rows are excluded.
-They remain available through `dataset=spec` for extraction validation and
-no-spec contamination diagnostics, but their scores must not be mixed into a
-benchmark headline.
+The curated files contain no spec examples, and the loader fails if an overlap
+is introduced. Spec examples remain available through `dataset=spec` for
+extraction validation and no-spec contamination diagnostics, but their scores
+must not be mixed into a benchmark headline.
 
 Each run reports two metrics:
 
@@ -57,7 +56,7 @@ stricter canonical-match scorer can be added without changing the data.
      --reasoning-effort xhigh --max-connections 1 --limit 2
    ```
 
-2. **Full run** (all non-overlapping curated items, strictly sequential):
+2. **Full run** (all curated items, strictly sequential):
 
    ```bash
    uv run inspect eval alman/bench/task.py --model openai/gpt-5.5 \

@@ -43,9 +43,9 @@ single-rule items authored to close coverage gaps.
 
 The spec examples are also available as extraction fixtures for scoring and
 training-data validation, but they are not evaluation rows when the full spec
-is in the model context: the spec contains their answers verbatim. The curated
-loader removes any overlapping source/answer pair automatically. Spec examples
-may be used as a diagnostic only when `include_spec=false`.
+is in the model context because the spec contains their answers verbatim. The
+curated data contains no spec examples, and the loader rejects any overlap.
+Spec examples may be used as a diagnostic only when `include_spec=false`.
 
 Run it against any model supported by Inspect — the model is a drop-in
 parameter:
