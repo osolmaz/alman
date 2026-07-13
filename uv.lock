@@ -195,6 +195,7 @@ name = "alman"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "httpx" },
     { name = "huggingface-hub" },
     { name = "inspect-ai" },
     { name = "jsonschema" },
@@ -213,6 +214,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "huggingface-hub", specifier = ">=0.34.0" },
     { name = "inspect-ai", specifier = ">=0.3.245" },
     { name = "jsonschema", specifier = ">=4.23.0" },

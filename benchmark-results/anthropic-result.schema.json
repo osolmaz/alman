@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://alman.ai/schemas/anthropic-benchmark-result-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "run", "benchmark", "model", "endpoint", "cache", "generation", "results", "pricing", "artifacts"],
+  "properties": {
+    "$schema": {"const": "./anthropic-result.schema.json"},
+    "schema_version": {"const": 1},
+    "run": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "started_at", "completed_at", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"},
+        "status": {"const": "success"}
+      }
+    },
+    "benchmark": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task", "dataset", "sample_count", "spec_in_context", "spec_examples_in_dataset", "commit", "working_tree_dirty"],
+      "properties": {
+        "task": {"const": "alman_bench"},
+        "dataset": {"const": "curated"},
+        "sample_count": {"const": 48},
+        "spec_in_context": {"const": true},
+        "spec_examples_in_dataset": {"const": false},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "working_tree_dirty": {"const": false}
+      }
+    },
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["requested", "label", "returned_models", "snapshot_pinned", "reasoning"],
+      "properties": {
+        "requested": {"const": "claude-sonnet-5"},
+        "label": {"const": "Claude Sonnet 5"},
+        "returned_models": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
+        "snapshot_pinned": {"const": true},
+        "reasoning": {
+          "type": "object", "additionalProperties": false,
+          "required": ["enabled", "type", "effort", "display", "primary_call_max_output_tokens", "samples_with_reasoning", "max_primary_output_tokens", "max_primary_reasoning_tokens", "forced_final_fallback_count", "forced_final_thinking_disabled", "forced_final_effort"],
+          "properties": {
+            "enabled": {"const": true},
+            "type": {"const": "adaptive"},
+            "effort": {"const": "xhigh"},
+            "display": {"const": "omitted"},
+            "primary_call_max_output_tokens": {"const": 4096},
+            "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 48},
+            "max_primary_output_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
+            "max_primary_reasoning_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
+            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 48},
+            "forced_final_thinking_disabled": {"const": true},
+            "forced_final_effort": {"const": "low"}
+          }
+        }
+      }
+    },
+    "endpoint": {
+      "type": "object", "additionalProperties": false,
+      "required": ["platform", "provider", "api", "anthropic_version", "max_concurrency"],
+      "properties": {
+        "platform": {"const": "anthropic-api"},
+        "provider": {"const": "anthropic"},
+        "api": {"const": "messages"},
+        "anthropic_version": {"const": "2023-06-01"},
+        "max_concurrency": {"type": "integer", "minimum": 1, "maximum": 8}
+      }
+    },
+    "cache": {
+      "type": "object", "additionalProperties": false,
+      "required": ["enabled", "type", "scope", "ttl", "prewarm", "sample_cache_hit_count", "sample_cache_hit_rate"],
+      "properties": {
+        "enabled": {"const": true},
+        "type": {"const": "explicit"},
+        "scope": {"const": "system"},
+        "ttl": {"const": "1h"},
+        "prewarm": {"$ref": "#/$defs/cacheOperation"},
+        "sample_cache_hit_count": {"const": 48},
+        "sample_cache_hit_rate": {"const": 1.0}
+      }
+    },
+    "generation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["primary_max_output_tokens", "forced_final_max_output_tokens", "max_retries"],
+      "properties": {
+        "primary_max_output_tokens": {"const": 4096},
+        "forced_final_max_output_tokens": {"const": 512},
+        "max_retries": {"const": 2}
+      }
+    },
+    "results": {
+      "type": "object", "additionalProperties": false,
+      "required": ["acceptance", "compliance", "groups", "tokens", "estimated_cost_usd"],
+      "properties": {
+        "acceptance": {"$ref": "#/$defs/score"},
+        "compliance": {"$ref": "#/$defs/score"},
+        "groups": {"type": "object", "additionalProperties": {"$ref": "#/$defs/score"}},
+        "tokens": {"$ref": "#/$defs/tokens"},
+        "estimated_cost_usd": {"type": "number", "minimum": 0}
+      }
+    },
+    "pricing": {
+      "type": "object", "additionalProperties": false,
+      "required": ["currency", "input_per_million_tokens", "cache_write_5m_per_million_tokens", "cache_write_1h_per_million_tokens", "cache_read_per_million_tokens", "output_per_million_tokens", "observed_at", "introductory_pricing_ends"],
+      "properties": {
+        "currency": {"const": "USD"},
+        "input_per_million_tokens": {"const": 2.0},
+        "cache_write_5m_per_million_tokens": {"const": 2.5},
+        "cache_write_1h_per_million_tokens": {"const": 4.0},
+        "cache_read_per_million_tokens": {"const": 0.2},
+        "output_per_million_tokens": {"const": 10.0},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "introductory_pricing_ends": {"const": "2026-08-31"}
+      }
+    },
+    "artifacts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["samples_jsonl"],
+      "properties": {"samples_jsonl": {"type": "string", "minLength": 1}}
+    }
+  },
+  "$defs": {
+    "score": {
+      "type": "object", "additionalProperties": false,
+      "required": ["correct", "total", "rate", "stderr"],
+      "properties": {
+        "correct": {"type": "integer", "minimum": 0},
+        "total": {"type": "integer", "minimum": 1},
+        "rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "stderr": {"type": "number", "minimum": 0}
+      }
+    },
+    "tokens": {
+      "type": "object", "additionalProperties": false,
+      "required": ["input", "cache_read_input", "cache_creation_input", "cache_creation_5m_input", "cache_creation_1h_input", "output", "reasoning", "total"],
+      "properties": {
+        "input": {"type": "integer", "minimum": 0},
+        "cache_read_input": {"type": "integer", "minimum": 0},
+        "cache_creation_input": {"type": "integer", "minimum": 0},
+        "cache_creation_5m_input": {"type": "integer", "minimum": 0},
+        "cache_creation_1h_input": {"type": "integer", "minimum": 0},
+        "output": {"type": "integer", "minimum": 0},
+        "reasoning": {"type": "integer", "minimum": 0},
+        "total": {"type": "integer", "minimum": 0}
+      }
+    },
+    "cacheOperation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["response_id", "returned_model", "tokens", "estimated_cost_usd"],
+      "properties": {
+        "response_id": {"type": "string", "minLength": 1},
+        "returned_model": {"type": "string", "minLength": 1},
+        "tokens": {"$ref": "#/$defs/tokens"},
+        "estimated_cost_usd": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}
