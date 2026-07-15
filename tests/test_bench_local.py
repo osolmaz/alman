@@ -15,6 +15,7 @@ from alman.bench.local_run import (
     _redact_server_args,
     _inspect_command,
     _serve_args,
+    _wait_for_server,
     guarded_command,
 )
 from alman.bench.hf_run import (
@@ -527,6 +528,54 @@ def test_zombie_descendant_detection(monkeypatch):
     )
     assert _has_zombie_descendant(10)
     assert not _has_zombie_descendant(20)
+
+
+def test_wait_for_server_tolerates_transient_zombie(monkeypatch):
+    class Process:
+        pid = 10
+        returncode = None
+
+        def poll(self):
+            return None
+
+    class Models:
+        calls = 0
+
+        def list(self):
+            self.calls += 1
+            if self.calls == 1:
+                raise RuntimeError("starting")
+
+    zombies = iter([True, False])
+    monkeypatch.setattr(
+        "alman.bench.local_run._has_zombie_descendant",
+        lambda _pid: next(zombies),
+    )
+    monkeypatch.setattr("alman.bench.local_run.time.sleep", lambda _seconds: None)
+
+    _wait_for_server(type("Client", (), {"models": Models()})(), Process(), 10)
+
+
+def test_wait_for_server_rejects_persistent_zombie(monkeypatch):
+    class Process:
+        pid = 10
+        returncode = None
+
+        def poll(self):
+            return None
+
+    class Models:
+        def list(self):
+            raise RuntimeError("starting")
+
+    monkeypatch.setattr(
+        "alman.bench.local_run._has_zombie_descendant",
+        lambda _pid: True,
+    )
+    monkeypatch.setattr("alman.bench.local_run.time.sleep", lambda _seconds: None)
+
+    with pytest.raises(RuntimeError, match="persistently exited"):
+        _wait_for_server(type("Client", (), {"models": Models()})(), Process(), 10)
 
 
 @pytest.mark.parametrize(

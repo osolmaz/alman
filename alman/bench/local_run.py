@@ -303,13 +303,20 @@ def _wait_for_server(
 ) -> None:
     deadline = time.monotonic() + timeout
     last_error: Exception | None = None
+    zombie_observations = 0
     while time.monotonic() < deadline:
         if process.poll() is not None:
             raise RuntimeError(
                 f"guarded server exited with status {process.returncode}"
             )
         if _has_zombie_descendant(process.pid):
-            raise RuntimeError("server worker exited during guarded startup")
+            zombie_observations += 1
+            if zombie_observations >= 3:
+                raise RuntimeError(
+                    "server worker persistently exited during guarded startup"
+                )
+        else:
+            zombie_observations = 0
         try:
             client.models.list()
             return
