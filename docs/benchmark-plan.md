@@ -91,15 +91,19 @@ carry over unchanged.
 | Tier | Items | Source | Job |
 |---|---|---|---|
 | Naturalistic | ~600 | ~300 corpus rows from held-out works, ~300 modern-source sentences | Headline score on real prose with interacting rules |
-| Targeted | ~200 | Selected corpus rows, hand-authored as fallback | Lift rare rules to the coverage floor |
+| Targeted | ~200 | Hand-authored (see note below) | Lift rare rules to the coverage floor |
 | Guards | ~120 | Mostly hand-authored, modern register | Overcorrection traps |
 | Curated | 87 | Existing `alman/bench/curated/` | Modern-register diagnostic core |
 
-The naturalistic split holds the whole benchmark near an even balance between
-canonical and contemporary German. Counting the curated 87, the guards, and
-the authored share of the targeted tier, roughly half of all items are modern
-text, and reports slice scores by the register flag so the two halves stay
-individually readable.
+The naturalistic tier holds an even balance between canonical and
+contemporary German, and reports slice scores by the register flag so the
+two halves stay individually readable. The original plan expected most
+targeted items to be corpus rows, but coverage measurement during the build
+showed the rare rules are rare precisely because natural prose almost never
+uses them: the ten under-floor rules together appeared in only a handful of
+held-out corpus rows. The targeted tier is therefore fully authored, and the
+whole-set modern share runs near 70% while the headline naturalistic tier
+stays at 50/50.
 
 ## Composition bins
 
@@ -117,8 +121,8 @@ Public set, 1,007 items:
 | naturalistic-canonical, 1900–1955 | 120 | Same, publication year 1900–1955 |
 | naturalistic-modern, Wikipedia | 120 | German Wikipedia sentence (CC BY-SA) with the article recorded, contemporary orthography |
 | naturalistic-modern, Tatoeba | 120 | Tatoeba sentence (CC-BY) with sentence id and contributor recorded |
-| naturalistic-modern, authored | 60 | Hand-written, register label from {instructions, casual speech, correspondence, news-like} |
-| targeted | 200 | Lifts a named rule that was under the 25-floor at selection time, with the tagger confirming the source genuinely exercises that rule. At most 50 authored, the rest corpus rows from held-out works |
+| naturalistic-modern, authored | 60 | Hand-written, register label from {instructions, casual, correspondence, news} |
+| targeted | 200 | Lifts a named rule that was under the 25-floor at selection time, with the tagger confirming the source genuinely exercises that rule. Hand-authored, since the held-out corpus could not supply the rare rules (see the tier structure note) |
 | guards | 120 | Guard family label from the eight families below, 15 items each |
 | curated | 87 | The existing `alman/bench/curated/` collections, unchanged membership |
 
@@ -167,10 +171,14 @@ and correctness of composition means exactly this list:
    in any training data manifest.
 7. No item source or reference matches a spec example (the existing loader
    guarantee, extended to all tiers).
-8. Items touching the enumerated choice-point rules (relativizer, pronominal
-   adverbs, genitive constructions) carry at least two accepted renderings or
-   a pattern expansion.
-9. The modern-register share of the public set lies between 45% and 55%.
+8. Items whose canonical rendering contains a choice site for the
+   enumerated choice-point rules (relativizer, pronominal and interrogative
+   compounds, interchangeable genitives) carry at least two accepted
+   renderings. Items tagged with a choice-point rule whose reference
+   contains no such site have no second legal rendering and are exempt.
+9. The modern-register share of the naturalistic tier lies between 45% and
+   55%. The whole-set share is reported but not bounded, since the fully
+   authored targeted tier pushes it up (see the tier structure note).
 10. Every public data file contains the canary GUID; no private item text
     appears in any public file.
 
