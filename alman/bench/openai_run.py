@@ -481,7 +481,7 @@ def run_profiles(
                     ) from error
         samples = [completed[item.id] for item in items]
         _rewrite_jsonl(samples_path, samples)
-        completed_at = max(sample["completed_at"] for sample in samples)
+        completed_at = max(sample.get("completed_at", started_at) for sample in samples)
         result = _aggregate(
             profile=profile,
             samples=samples,
