@@ -23,7 +23,7 @@
       "properties": {
         "task": {"const": "alman_bench"},
         "dataset": {"const": "curated"},
-        "sample_count": {"const": 48},
+        "sample_count": {"enum": [48, 87]},
         "spec_in_context": {"const": true},
         "spec_examples_in_dataset": {"const": false},
         "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
@@ -45,10 +45,10 @@
             "enabled": {"const": true},
             "effort": {"const": "xhigh"},
             "primary_call_max_completion_tokens": {"const": 4096},
-            "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 48},
+            "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 87},
             "max_primary_completion_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
             "max_primary_reasoning_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
-            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 48},
+            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 87},
             "forced_final_effort": {"const": "none"}
           }
         }

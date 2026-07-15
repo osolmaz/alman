@@ -111,7 +111,17 @@ def _evaluated_samples(log: EvalLog) -> tuple[list[Any], list[str]]:
     logged = {str(sample.id): sample for sample in log.samples or []}
     if len(logged) != len(log.samples or []):
         raise ValueError("curated sample ids must be unique")
-    evaluated_ids = {item.id for item in load_curated_items()}
+    items = load_curated_items()
+    paragraph = log.eval.task_args.get("paragraph")
+    paragraphs = log.eval.task_args.get("paragraphs")
+    if paragraph is not None:
+        items = [item for item in items if item.paragraph == paragraph]
+    if paragraphs is not None:
+        selected = {
+            value.strip() for value in str(paragraphs).split(",") if value.strip()
+        }
+        items = [item for item in items if item.paragraph in selected]
+    evaluated_ids = {item.id for item in items}
     logged_ids = set(logged)
     if logged_ids == evaluated_ids:
         excluded_ids = []

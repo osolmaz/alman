@@ -23,6 +23,8 @@ from alman.bench.hf_run import (
     _external_artifact_root,
     _git_revision,
     _load_jsonl,
+    _refresh_completed_samples,
+    _rewrite_jsonl,
     _resumed_benchmark_commit,
     _score,
     _write_json,
@@ -415,8 +417,7 @@ def run_profiles(
     if dirty:
         raise RuntimeError("OpenAI benchmark runs require a clean Git working tree")
     items = load_curated_items()
-    if len(items) != 48:
-        raise RuntimeError(f"expected 48 curated items, found {len(items)}")
+    total_items = len(items)
     batch_id = batch_id or datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     batch_dir = _artifact_batch_dir(artifact_root, batch_id)
     batch_dir.mkdir(parents=True, exist_ok=True)
@@ -444,6 +445,7 @@ def run_profiles(
             }
             _write_json(manifest_path, manifest)
         completed = {sample["id"]: sample for sample in _load_jsonl(samples_path)}
+        _refresh_completed_samples(completed, items)
         profile_complete = all(item.id in completed for item in items)
         profile_commit = _resumed_benchmark_commit(
             manifest["commit"], commit, profile_complete
@@ -469,7 +471,7 @@ def run_profiles(
                     _append_jsonl(samples_path, sample)
                     completed[item.id] = sample
                     print(
-                        f"{profile['name']}: {len(completed)}/48",
+                        f"{profile['name']}: {len(completed)}/{total_items}",
                         flush=True,
                     )
                 if failures:
@@ -478,6 +480,7 @@ def run_profiles(
                         f"OpenAI inference failed for {profile['name']} / {item.id}"
                     ) from error
         samples = [completed[item.id] for item in items]
+        _rewrite_jsonl(samples_path, samples)
         completed_at = max(sample["completed_at"] for sample in samples)
         result = _aggregate(
             profile=profile,

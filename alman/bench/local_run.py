@@ -403,8 +403,9 @@ def _inspect_command(
     log_dir: Path,
     run_id: str,
     generate_config: Path,
+    paragraphs: list[str] | None = None,
 ) -> list[str]:
-    return [
+    command = [
         "uv",
         "run",
         "inspect",
@@ -437,6 +438,9 @@ def _inspect_command(
         "--metadata",
         f"reasoning_token_budget={profile.generation.reasoning_token_budget}",
     ]
+    if paragraphs:
+        command.extend(["-T", f"paragraphs={','.join(paragraphs)}"])
+    return command
 
 
 def _metadata(
@@ -498,7 +502,12 @@ def _metadata(
     }
 
 
-def run(profile: LocalBenchmarkProfile, output: Path, artifact_root: Path) -> None:
+def run(
+    profile: LocalBenchmarkProfile,
+    output: Path,
+    artifact_root: Path,
+    paragraphs: list[str] | None = None,
+) -> None:
     artifact_root = _external_artifact_root(artifact_root)
     preflight(profile, artifact_root)
     run_id = f"{datetime.now(UTC).strftime('%Y%m%dT%H%M%SZ')}-{profile.name}"
@@ -543,7 +552,9 @@ def run(profile: LocalBenchmarkProfile, output: Path, artifact_root: Path) -> No
             "LOCAL_BASE_URL": profile.endpoint.base_url,
         }
         subprocess.run(
-            _inspect_command(profile, log_dir, run_id, generate_config_path),
+            _inspect_command(
+                profile, log_dir, run_id, generate_config_path, paragraphs
+            ),
             cwd=REPO_ROOT,
             env=inspect_env,
             check=True,
@@ -577,6 +588,7 @@ def main() -> None:
         default=Path.home() / "scratch" / "alman-benchmark-runs",
     )
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--paragraph", action="append", dest="paragraphs")
     args = parser.parse_args()
 
     profile = LocalBenchmarkProfile.model_validate_json(
@@ -594,13 +606,14 @@ def main() -> None:
                         Path("<log-dir>"),
                         "<run-id>",
                         Path("<artifact-dir>/generate-config.json"),
+                        args.paragraphs,
                     ),
                 },
                 indent=2,
             )
         )
         return
-    run(profile, args.output, args.artifact_root)
+    run(profile, args.output, args.artifact_root, args.paragraphs)
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@
       "properties": {
         "task": {"const": "alman_bench"},
         "dataset": {"const": "curated"},
-        "sample_count": {"const": 48},
+        "sample_count": {"enum": [48, 87]},
         "spec_in_context": {"const": true},
         "spec_examples_in_dataset": {"const": false},
         "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
@@ -47,10 +47,10 @@
             "effort": {"const": "xhigh"},
             "display": {"const": "omitted"},
             "primary_call_max_output_tokens": {"const": 4096},
-            "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 48},
+            "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 87},
             "max_primary_output_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
             "max_primary_reasoning_tokens": {"type": "integer", "minimum": 1, "maximum": 4096},
-            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 48},
+            "forced_final_fallback_count": {"type": "integer", "minimum": 0, "maximum": 87},
             "forced_final_thinking_disabled": {"const": true},
             "forced_final_effort": {"const": "low"}
           }
@@ -77,7 +77,7 @@
         "scope": {"const": "system"},
         "ttl": {"const": "1h"},
         "prewarm": {"$ref": "#/$defs/cacheOperation"},
-        "sample_cache_hit_count": {"const": 48},
+        "sample_cache_hit_count": {"enum": [48, 87]},
         "sample_cache_hit_rate": {"const": 1.0}
       }
     },

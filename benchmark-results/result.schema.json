@@ -26,8 +26,8 @@
       "properties": {
         "task": {"const": "alman_bench"},
         "dataset": {"const": "curated"},
-        "raw_sample_count": {"type": "integer", "minimum": 48, "maximum": 50},
-        "sample_count": {"const": 48},
+        "raw_sample_count": {"type": "integer", "minimum": 39, "maximum": 89},
+        "sample_count": {"enum": [39, 48, 87]},
         "excluded_spec_example_count": {"type": "integer", "minimum": 0, "maximum": 2},
         "excluded_spec_example_ids": {
           "type": "array",
@@ -71,7 +71,7 @@
           "properties": {
             "enabled": {"const": true},
             "verification_method": {"type": "string", "minLength": 1},
-            "verified_sample_count": {"type": "integer", "minimum": 1, "maximum": 48}
+            "verified_sample_count": {"type": "integer", "minimum": 1, "maximum": 87}
           }
         }
       }
@@ -172,7 +172,7 @@
         "compliance": {"$ref": "#/$defs/score"},
         "groups": {"type": "object", "additionalProperties": {"$ref": "#/$defs/score"}},
         "tokens": {"$ref": "#/$defs/tokens"},
-        "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 48}
+        "samples_with_reasoning": {"type": "integer", "minimum": 1, "maximum": 87}
       }
     },
     "artifacts": {

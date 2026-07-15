@@ -366,6 +366,29 @@ def _load_jsonl(path: Path) -> list[dict[str, Any]]:
     return values
 
 
+def _refresh_completed_samples(
+    completed: dict[str, dict[str, Any]], items: list[Any]
+) -> None:
+    """Rescore retained samples against the current curated dataset."""
+    for item in items:
+        sample = completed.get(item.id)
+        if sample is None:
+            continue
+        if sample["source"] != item.source:
+            raise RuntimeError(f"retained sample source changed for {item.id}")
+        sample["accepted"] = item.accepted
+        sample["paragraph"] = item.paragraph
+        sample["correct"] = is_accepted(sample["output"], item.accepted)
+        sample["compliant"] = not lint(sample["output"])
+
+
+def _rewrite_jsonl(path: Path, values: list[dict[str, Any]]) -> None:
+    path.write_text(
+        "".join(json.dumps(value, ensure_ascii=False) + "\n" for value in values),
+        encoding="utf-8",
+    )
+
+
 def _validate_profiles(profiles: list[dict[str, Any]]) -> None:
     validator = Draft202012Validator(
         PROFILE_SCHEMA,
@@ -620,8 +643,7 @@ def run_profiles(
     if dirty:
         raise RuntimeError("hosted benchmark runs require a clean Git working tree")
     items = load_curated_items()
-    if len(items) != 48:
-        raise RuntimeError(f"expected 48 curated items, found {len(items)}")
+    total_items = len(items)
     batch_id = batch_id or datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     batch_dir = _artifact_batch_dir(artifact_root, batch_id)
     batch_dir.mkdir(parents=True, exist_ok=True)
@@ -652,6 +674,7 @@ def run_profiles(
                 encoding="utf-8",
             )
         completed = {sample["id"]: sample for sample in _load_jsonl(samples_path)}
+        _refresh_completed_samples(completed, items)
         profile_complete = all(item.id in completed for item in items)
         profile_commit = _resumed_benchmark_commit(
             manifest["commit"], commit, profile_complete
@@ -682,7 +705,7 @@ def run_profiles(
                     _append_jsonl(samples_path, sample)
                     completed[item.id] = sample
                     print(
-                        f"{profile['name']}: {len(completed)}/48",
+                        f"{profile['name']}: {len(completed)}/{total_items}",
                         flush=True,
                     )
                 if failures:
@@ -691,6 +714,7 @@ def run_profiles(
                         f"hosted inference failed for {profile['name']} / {item.id}"
                     ) from error
         samples = [completed[item.id] for item in items]
+        _rewrite_jsonl(samples_path, samples)
         completed_at = max(sample["completed_at"] for sample in samples)
         result = _aggregate(
             profile=profile,

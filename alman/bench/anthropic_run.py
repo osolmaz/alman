@@ -23,6 +23,8 @@ from alman.bench.hf_run import (
     _external_artifact_root,
     _git_revision,
     _load_jsonl,
+    _refresh_completed_samples,
+    _rewrite_jsonl,
     _resumed_benchmark_commit,
     _score,
     _write_json,
@@ -531,8 +533,7 @@ def run_profile(
     if dirty:
         raise RuntimeError("Anthropic benchmark runs require a clean Git working tree")
     items = load_curated_items()
-    if len(items) != 48:
-        raise RuntimeError(f"expected 48 curated items, found {len(items)}")
+    total_items = len(items)
     api_key = os.environ.get("ANTHROPIC_API_KEY")
     if not api_key:
         raise RuntimeError("ANTHROPIC_API_KEY is not set")
@@ -574,6 +575,7 @@ def run_profile(
             )
 
         completed = {sample["id"]: sample for sample in _load_jsonl(samples_path)}
+        _refresh_completed_samples(completed, items)
         profile_complete = all(item.id in completed for item in items)
         profile_commit = _resumed_benchmark_commit(
             manifest["commit"], commit, profile_complete
@@ -593,7 +595,7 @@ def run_profile(
             _append_jsonl(samples_path, first_sample)
             completed[first_item.id] = first_sample
             print(
-                f"cache verified; {profile['name']}: {len(completed)}/48",
+                f"cache verified; {profile['name']}: {len(completed)}/{total_items}",
                 flush=True,
             )
         with ThreadPoolExecutor(max_workers=max_concurrency) as executor:
@@ -614,7 +616,10 @@ def run_profile(
                     sample["completed_at"] = datetime.now(UTC).isoformat()
                     _append_jsonl(samples_path, sample)
                     completed[item.id] = sample
-                    print(f"{profile['name']}: {len(completed)}/48", flush=True)
+                    print(
+                        f"{profile['name']}: {len(completed)}/{total_items}",
+                        flush=True,
+                    )
                 if failures:
                     item, error = failures[0]
                     raise RuntimeError(
@@ -622,6 +627,7 @@ def run_profile(
                     ) from error
 
     samples = [completed[item.id] for item in items]
+    _rewrite_jsonl(samples_path, samples)
     completed_at = max(sample["completed_at"] for sample in samples)
     result = _aggregate(
         profile=profile,
