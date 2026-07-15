@@ -138,7 +138,7 @@ def alman_bench(
     dataset: str = "curated",
     section: str | None = None,
     paragraph: str | None = None,
-    paragraphs: str | None = None,
+    paragraphs: str | list[str] | None = None,
 ) -> Task:
     """Translate unseen Standard German sentences to Alman."""
     if dataset == "spec":
@@ -157,7 +157,8 @@ def alman_bench(
     if paragraph is not None:
         items = [item for item in items if item.paragraph == paragraph]
     if paragraphs is not None:
-        selected = {value.strip() for value in paragraphs.split(",") if value.strip()}
+        values = paragraphs.split(",") if isinstance(paragraphs, str) else paragraphs
+        selected = {value.strip() for value in values if value.strip()}
         if not selected:
             raise ValueError("paragraphs must name at least one collection")
         items = [item for item in items if item.paragraph in selected]

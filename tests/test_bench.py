@@ -195,6 +195,14 @@ class TestCurated:
         assert task.dataset.name == "alman-bench-curated"
         assert len(task.dataset) == 87
 
+    def test_task_accepts_inspect_paragraph_list(self):
+        task = alman_bench(paragraphs=["regelabdeckung", "relativsaetze"])
+        assert len(task.dataset) == 39
+        assert {sample.metadata["paragraph"] for sample in task.dataset} == {
+            "regelabdeckung",
+            "relativsaetze",
+        }
+
     def test_task_rejects_spec_examples_with_spec_in_prompt(self):
         with pytest.raises(ValueError, match="leaks its answers"):
             alman_bench(dataset="spec")

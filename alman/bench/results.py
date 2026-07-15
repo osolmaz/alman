@@ -117,8 +117,13 @@ def _evaluated_samples(log: EvalLog) -> tuple[list[Any], list[str]]:
     if paragraph is not None:
         items = [item for item in items if item.paragraph == paragraph]
     if paragraphs is not None:
+        values = (
+            paragraphs.split(",")
+            if isinstance(paragraphs, str)
+            else paragraphs
+        )
         selected = {
-            value.strip() for value in str(paragraphs).split(",") if value.strip()
+            value.strip() for value in values if value.strip()
         }
         items = [item for item in items if item.paragraph in selected]
     evaluated_ids = {item.id for item in items}
