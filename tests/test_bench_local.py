@@ -496,6 +496,7 @@ def test_llama_cpp_profile_builds_guarded_server_command(profile, tmp_path):
     payload["runtime"]["serve_args"].update(
         {
             "model_file": model_file,
+            "total_context_tokens": 131072,
             "gpu_layers": 999,
             "reasoning": "auto",
             "reasoning_budget": 4096,
@@ -510,7 +511,7 @@ def test_llama_cpp_profile_builds_guarded_server_command(profile, tmp_path):
 
     args = _serve_args(llama_profile)
     assert args[:3] == [str(profile.runtime.executable), "-m", str(model_file)]
-    assert args[args.index("--ctx-size") + 1] == "32768"
+    assert args[args.index("--ctx-size") + 1] == "131072"
     assert args[args.index("--parallel") + 1] == "4"
     assert args[args.index("--reasoning") + 1] == "auto"
     assert args[args.index("--reasoning-budget") + 1] == "4096"
@@ -527,6 +528,24 @@ def test_llama_cpp_profile_requires_model_file(profile):
     payload = profile.model_dump()
     payload["runtime"]["engine"] = "llama.cpp"
     with pytest.raises(ValueError, match="model_file"):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+def test_llama_cpp_profile_requires_context_for_every_slot(profile, tmp_path):
+    model_file = tmp_path / "model.gguf"
+    model_file.touch()
+    payload = profile.model_dump()
+    payload["runtime"]["engine"] = "llama.cpp"
+    payload["runtime"]["serve_args"].update(
+        {
+            "model_file": model_file,
+            "gpu_layers": 999,
+            "reasoning": "auto",
+            "reasoning_budget": 4096,
+            "total_context_tokens": 32768,
+        }
+    )
+    with pytest.raises(ValueError, match="every server slot"):
         LocalBenchmarkProfile.model_validate(payload)
 
 

@@ -58,6 +58,7 @@ class ServeProfile(BaseModel):
     attention_backend: str
     moe_backend: str
     enable_prefix_caching: bool
+    total_context_tokens: int | None = Field(default=None, gt=0)
     model_file: Path | None = None
     gpu_layers: int | None = Field(default=None, ge=0)
     reasoning: str | None = None
@@ -107,6 +108,17 @@ class RuntimeProfile(StrictModel):
                 raise ValueError("llama.cpp requires serve_args.reasoning")
             if self.serve_args.reasoning_budget is None:
                 raise ValueError("llama.cpp requires serve_args.reasoning_budget")
+            total_context = (
+                self.serve_args.total_context_tokens or self.serve_args.max_model_len
+            )
+            required_context = (
+                self.serve_args.max_model_len * self.serve_args.max_num_seqs
+            )
+            if total_context < required_context:
+                raise ValueError(
+                    "llama.cpp total_context_tokens must reserve max_model_len "
+                    "tokens for every server slot"
+                )
         return self
 
 
@@ -275,7 +287,7 @@ def _serve_args(profile: LocalBenchmarkProfile) -> list[str]:
             "--alias",
             profile.model.served_name,
             "--ctx-size",
-            str(serve.max_model_len),
+            str(serve.total_context_tokens or serve.max_model_len),
             "--parallel",
             str(serve.max_num_seqs),
             "--gpu-layers",
@@ -315,6 +327,7 @@ def _serve_args(profile: LocalBenchmarkProfile) -> list[str]:
     for name, value in profile.runtime.serve_args.model_dump().items():
         if name in {
             "model_file",
+            "total_context_tokens",
             "gpu_layers",
             "reasoning",
             "reasoning_budget",
