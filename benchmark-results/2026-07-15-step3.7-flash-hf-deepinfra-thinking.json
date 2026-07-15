@@ -1,0 +1,140 @@
+{
+  "$schema": "./hosted-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260715T120156Z-step3.7-flash-hf-deepinfra-thinking",
+    "started_at": "2026-07-15T12:01:56.017399+00:00",
+    "completed_at": "2026-07-15T12:03:50.397835+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 87,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "205283089cb7e1dc9583add406cf614b572838db",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "repository": "stepfun-ai/Step-3.7-Flash",
+    "hub_revision": "5f6244077ac62e04eec3f320501ff8c2b293373a",
+    "provider_model_id": "stepfun-ai/Step-3.7-Flash",
+    "served_revision_pinned": false,
+    "thinking": {
+      "enabled": true,
+      "mode": "think",
+      "provider_control": "chat_template_kwargs.reasoning_effort=high",
+      "thinking_call_max_tokens": 4096,
+      "samples_with_reasoning": 87,
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": null,
+      "forced_final_fallback_count": 11,
+      "forced_final_fallback_disables_thinking": true
+    }
+  },
+  "endpoint": {
+    "platform": "huggingface-inference-providers",
+    "provider": "deepinfra",
+    "api": "chat_completions",
+    "routing": "explicit-client-provider",
+    "max_concurrency": 4
+  },
+  "generation": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": null,
+    "presence_penalty": null,
+    "thinking_call_max_tokens": 4096,
+    "forced_final_max_tokens": 512,
+    "forced_final_strategy": "continue-prefilled-answer",
+    "forced_final_output_field": "reasoning",
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 69,
+      "total": 87,
+      "rate": 0.7931034482758621,
+      "stderr": 0.043429208960165694
+    },
+    "compliance": {
+      "correct": 84,
+      "total": 87,
+      "rate": 0.9655172413793104,
+      "stderr": 0.019562366514868108
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 4,
+        "total": 5,
+        "rate": 0.8,
+        "stderr": 0.17888543819998315
+      },
+      "deutsch-alman": {
+        "correct": 11,
+        "total": 11,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "die-verwandlung": {
+        "correct": 1,
+        "total": 4,
+        "rate": 0.25,
+        "stderr": 0.21650635094610965
+      },
+      "regelabdeckung": {
+        "correct": 23,
+        "total": 26,
+        "rate": 0.8846153846153846,
+        "stderr": 0.06265626800161944
+      },
+      "relativsaetze": {
+        "correct": 11,
+        "total": 13,
+        "rate": 0.8461538461538461,
+        "stderr": 0.10006825162892168
+      },
+      "siddhartha": {
+        "correct": 9,
+        "total": 16,
+        "rate": 0.5625,
+        "stderr": 0.12401959270615269
+      },
+      "starke-flexion": {
+        "correct": 8,
+        "total": 8,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 1315541,
+      "output": 123284,
+      "reasoning": null,
+      "total": 1438825
+    },
+    "estimated_cost_usd": 0.4048848
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 0.2,
+    "output_per_million_tokens": 1.15,
+    "observed_at": "2026-07-12T09:00:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/incremental-87/hf/20260715T120000Z-87/step3.7-flash-hf-deepinfra-thinking.samples.jsonl"
+  }
+}

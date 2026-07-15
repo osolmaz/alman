@@ -1,5 +1,10 @@
 # Benchmark results
 
+The current combined 87-row leaderboard is in the
+[expanded curated thinking comparison](../benchmark-results/2026-07-15-expanded-curated-thinking-comparison.md).
+The GPT-5.5 result below is the historical 48-row baseline retained as the
+source for that report's combined GPT-5.5 score.
+
 ## 2026-07-11: GPT-5.5 xhigh with the specification
 
 This is the curated-only informed-ceiling baseline from the

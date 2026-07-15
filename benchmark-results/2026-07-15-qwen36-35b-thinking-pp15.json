@@ -1,0 +1,230 @@
+{
+  "$schema": "./result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260715T124423Z-qwen36-35b-thinking-pp15-32k",
+    "started_at": "2026-07-15T12:57:02+00:00",
+    "completed_at": "2026-07-15T13:31:29+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "raw_sample_count": 87,
+    "sample_count": 87,
+    "excluded_spec_example_count": 0,
+    "excluded_spec_example_ids": [],
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "d0247cd",
+    "working_tree_dirty": false,
+    "working_tree_changes": []
+  },
+  "model": {
+    "repository": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+    "revision": "491c2f1ea524c639598bf8fa787a93fed5a6fbce",
+    "served_name": "qwen36-35b-thinking-pp15",
+    "quantization": "NVFP4",
+    "thinking": {
+      "enabled": true,
+      "verification_method": "nonempty reasoning_content or think block",
+      "verified_sample_count": 80
+    }
+  },
+  "endpoint": {
+    "provider": "inspect-openai-api",
+    "api": "chat_completions",
+    "base_url": "http://127.0.0.1:9232/v1",
+    "max_connections": 1,
+    "max_samples": 1
+  },
+  "runtime": {
+    "engine": "vllm",
+    "version": "0.23.1rc1.dev692+g4e5ca89cf.precompiled",
+    "executable": "/home/onur/runtimes/vllm/versions/vllm-0.23.1-gemma4-sm121/.venv/bin/vllm",
+    "manifest": "/home/onur/runtimes/vllm/versions/vllm-0.23.1-gemma4-sm121/manifest.json",
+    "recipe": {
+      "repository": "https://github.com/dutifuldev/localperf.git",
+      "commit": "e1570cea896765e84ddca6bbd82c9d0f3a083ada",
+      "path": "examples/gb10-dgx-spark-nvfp4-optimized/qwen35b.json",
+      "profile": "32k",
+      "deviations": [
+        "set default_chat_template_kwargs.enable_thinking=true",
+        "reduce max_num_seqs from 32 to 1 for the serial benchmark",
+        "reduce max_num_batched_tokens from 16384 to 1024 after larger eager warmups crossed the earlyoom floor",
+        "set an explicit 8 GiB KV cache, scaling the known-safe 2 GiB/8k smoke allocation to 32k",
+        "use the standard streaming safetensors loader because fastsafetensors crossed the earlyoom floor on this non-GDS host",
+        "use eager execution to avoid compile and CUDA-graph warmup peaks",
+        "reduce gpu_memory_utilization from 0.4 to 0.2 after the larger reservation crossed the earlyoom floor",
+        "use the Onur-owned vLLM 0.23.1 runtime after vLLM 0.24 V1 warmup repeatedly crossed the earlyoom floor",
+        "serve as qwen36-35b-thinking-pp15 on loopback port 9232",
+        "set presence_penalty=1.5 to match the previously reported benchmark configuration"
+      ]
+    },
+    "server": {
+      "arguments": [
+        "/home/onur/runtimes/vllm/versions/vllm-0.23.1-gemma4-sm121/.venv/bin/vllm",
+        "serve",
+        "nvidia/Qwen3.6-35B-A3B-NVFP4",
+        "--revision",
+        "491c2f1ea524c639598bf8fa787a93fed5a6fbce",
+        "--served-model-name",
+        "qwen36-35b-thinking-pp15",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "9232",
+        "--api-key",
+        "<redacted>",
+        "--max-model-len",
+        "32768",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "1024",
+        "--kv-cache-dtype",
+        "fp8",
+        "--attention-backend",
+        "flashinfer",
+        "--moe-backend",
+        "marlin",
+        "--no-enable-prefix-caching",
+        "--gpu-memory-utilization",
+        "0.2",
+        "--kv-cache-memory-bytes",
+        "8589934592",
+        "--quantization",
+        "modelopt",
+        "--load-format",
+        "safetensors",
+        "--enforce-eager",
+        "--trust-remote-code",
+        "--enable-chunked-prefill",
+        "--reasoning-parser",
+        "qwen3",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "qwen3_xml",
+        "--language-model-only",
+        "--mm-processor-cache-gb",
+        "0",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":true}",
+        "--no-enable-log-requests",
+        "--no-enable-flashinfer-autotune"
+      ],
+      "max_model_len": 32768,
+      "max_num_seqs": 1,
+      "max_num_batched_tokens": 1024,
+      "kv_cache_dtype": "fp8",
+      "attention_backend": "flashinfer",
+      "moe_backend": "marlin",
+      "prefix_caching": false
+    }
+  },
+  "generation": {
+    "max_tokens": 8192,
+    "reasoning_token_budget": 4096,
+    "sampling_source": "Qwen3.6 recommended thinking settings",
+    "do_sample": true,
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": 20,
+    "presence_penalty": 1.5
+  },
+  "hardware": {
+    "accelerator": "NVIDIA GB10",
+    "unified_memory_gib": 121.0
+  },
+  "memory_guard": {
+    "process_guard": "/home/onur/.codex/skills/safe-inference-launch/scripts/guarded-launch.sh",
+    "earlyoom": true,
+    "memory_available_floor_gib": 24.0,
+    "swap_free_floor_gib": 4.0,
+    "pressure_kill_occurred": false
+  },
+  "results": {
+    "duration_seconds": 2067.0,
+    "acceptance": {
+      "correct": 9,
+      "total": 87,
+      "rate": 0.10344827586206896,
+      "stderr": 0.032650488032689606
+    },
+    "compliance": {
+      "correct": 66,
+      "total": 87,
+      "rate": 0.7586206896551724,
+      "stderr": 0.04587781610038978
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 2,
+        "total": 5,
+        "rate": 0.4,
+        "stderr": 0.21908902300206645
+      },
+      "deutsch-alman": {
+        "correct": 2,
+        "total": 11,
+        "rate": 0.18181818181818182,
+        "stderr": 0.11629129983033297
+      },
+      "die-verwandlung": {
+        "correct": 0,
+        "total": 4,
+        "rate": 0.0,
+        "stderr": 0.0
+      },
+      "regelabdeckung": {
+        "correct": 2,
+        "total": 26,
+        "rate": 0.07692307692307693,
+        "stderr": 0.05225894003744288
+      },
+      "relativsaetze": {
+        "correct": 2,
+        "total": 13,
+        "rate": 0.15384615384615385,
+        "stderr": 0.10006825162892168
+      },
+      "siddhartha": {
+        "correct": 0,
+        "total": 16,
+        "rate": 0.0,
+        "stderr": 0.0
+      },
+      "starke-flexion": {
+        "correct": 1,
+        "total": 8,
+        "rate": 0.125,
+        "stderr": 0.11692679333668567
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 1158628,
+      "cached_input": null,
+      "output": 167704,
+      "reasoning": null,
+      "total": 1326332
+    },
+    "samples_with_reasoning": 80
+  },
+  "artifacts": {
+    "inspect_log": "/home/onur/scratch/alman-benchmark-runs/incremental-87/local-combined/qwen36-35b-thinking-pp15/qwen36-35b-thinking-pp15-87.eval",
+    "server_log": "/home/onur/scratch/alman-benchmark-runs/incremental-87/local/20260715T124423Z-qwen36-35b-thinking-pp15-32k/server.log",
+    "smoke_response": "/home/onur/scratch/alman-benchmark-runs/incremental-87/local/20260715T124423Z-qwen36-35b-thinking-pp15-32k/smoke-response.json"
+  }
+}

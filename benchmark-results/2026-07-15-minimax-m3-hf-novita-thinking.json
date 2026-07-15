@@ -1,0 +1,140 @@
+{
+  "$schema": "./hosted-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260715T115813Z-minimax-m3-hf-novita-thinking",
+    "started_at": "2026-07-15T11:58:13.084360+00:00",
+    "completed_at": "2026-07-15T12:00:24.753161+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 87,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "205283089cb7e1dc9583add406cf614b572838db",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "repository": "MiniMaxAI/MiniMax-M3",
+    "hub_revision": "50942730318c7943fe83db7ec8e9f9177ecb1cf8",
+    "provider_model_id": "minimax/minimax-m3",
+    "served_revision_pinned": false,
+    "thinking": {
+      "enabled": true,
+      "mode": "think",
+      "provider_control": "chat_template_kwargs.thinking_mode=enabled",
+      "thinking_call_max_tokens": 4096,
+      "samples_with_reasoning": 84,
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": null,
+      "forced_final_fallback_count": 4,
+      "forced_final_fallback_disables_thinking": true
+    }
+  },
+  "endpoint": {
+    "platform": "huggingface-inference-providers",
+    "provider": "novita",
+    "api": "chat_completions",
+    "routing": "explicit-client-provider",
+    "max_concurrency": 4
+  },
+  "generation": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": null,
+    "presence_penalty": null,
+    "thinking_call_max_tokens": 4096,
+    "forced_final_max_tokens": 512,
+    "forced_final_strategy": "new-turn-final-request",
+    "forced_final_output_field": "content",
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 68,
+      "total": 87,
+      "rate": 0.7816091954022989,
+      "stderr": 0.044294762548763904
+    },
+    "compliance": {
+      "correct": 85,
+      "total": 87,
+      "rate": 0.9770114942528736,
+      "stderr": 0.016067399116695302
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 4,
+        "total": 5,
+        "rate": 0.8,
+        "stderr": 0.17888543819998315
+      },
+      "deutsch-alman": {
+        "correct": 10,
+        "total": 11,
+        "rate": 0.9090909090909091,
+        "stderr": 0.08667841720414476
+      },
+      "die-verwandlung": {
+        "correct": 2,
+        "total": 4,
+        "rate": 0.5,
+        "stderr": 0.25
+      },
+      "regelabdeckung": {
+        "correct": 24,
+        "total": 26,
+        "rate": 0.9230769230769231,
+        "stderr": 0.052258940037442865
+      },
+      "relativsaetze": {
+        "correct": 12,
+        "total": 13,
+        "rate": 0.9230769230769231,
+        "stderr": 0.07390530175619404
+      },
+      "siddhartha": {
+        "correct": 7,
+        "total": 16,
+        "rate": 0.4375,
+        "stderr": 0.12401959270615269
+      },
+      "starke-flexion": {
+        "correct": 7,
+        "total": 8,
+        "rate": 0.875,
+        "stderr": 0.11692679333668567
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 1203933,
+      "output": 72165,
+      "reasoning": null,
+      "total": 1276098
+    },
+    "estimated_cost_usd": 0.44777789999999995
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 0.3,
+    "output_per_million_tokens": 1.2,
+    "observed_at": "2026-07-12T09:00:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/incremental-87/hf/20260715T120000Z-87/minimax-m3-hf-novita-thinking.samples.jsonl"
+  }
+}

@@ -20,6 +20,11 @@ Human-readable comparisons may accompany result records as dated Markdown
 files. They must link the exact input records and state metric direction and
 the selection decision.
 
+The current 87-row leaderboard, including the 39-row dataset expansion, all
+consolidated model scores, the two Bonsai variants, costs, and validation, is
+in
+[`2026-07-15-expanded-curated-thinking-comparison.md`](./2026-07-15-expanded-curated-thinking-comparison.md).
+
 The complete 2026-07-11 record, including every run mode, result, token total,
 cost, fallback, incident, caveat, and validation outcome, is in
 [`2026-07-11-complete-thinking-benchmark-report.md`](./2026-07-11-complete-thinking-benchmark-report.md).
@@ -109,8 +114,10 @@ complete field set.
   valid only when every change is identified by path and Git blob and none
   affects benchmark inputs.
 - Spec examples are forbidden from result records. The benchmark dataset must
-  be `curated`, contain exactly 48 evaluated items, and set
-  `spec_examples_in_dataset=false`.
+  be `curated` and set `spec_examples_in_dataset=false`. Historical complete
+  records contain 48 evaluated items; current complete records contain 87.
+  Partial 39-row checkpoints stay external and must not appear in a
+  leaderboard.
 - Unknown fields are validation errors. Version the schema before adding a
   required incompatible field.
 - Records must not contain API keys, authorization headers, raw prompts, or raw
@@ -118,8 +125,13 @@ complete field set.
 
 ## Validation
 
+Use the validator matching the record's declared `$schema`:
+
 ```bash
-uv run python -m alman.bench.results benchmark-results/<run>.json
+uv run bench-result benchmark-results/<local-run>.json
+uv run bench-hf --validate benchmark-results/<hosted-run>.json
+uv run bench-openai --validate benchmark-results/<openai-run>.json
+uv run bench-anthropic --validate benchmark-results/<anthropic-run>.json
 ```
 
 Validation checks JSON Schema constraints plus cross-field rules: raw counts

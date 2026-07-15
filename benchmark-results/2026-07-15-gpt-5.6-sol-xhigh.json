@@ -1,0 +1,136 @@
+{
+  "$schema": "./openai-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260715T184856Z-gpt-5.6-sol-xhigh",
+    "started_at": "2026-07-15T18:48:56.936724+00:00",
+    "completed_at": "2026-07-15T18:49:43.074665+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 87,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "f65b43920d1dabe931d1a2ef82a396297ed969a0",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "requested": "gpt-5.6-sol",
+    "label": "GPT-5.6 Sol",
+    "returned_models": [
+      "gpt-5.6-sol"
+    ],
+    "snapshot_pinned": false,
+    "reasoning": {
+      "enabled": true,
+      "effort": "xhigh",
+      "primary_call_max_completion_tokens": 4096,
+      "samples_with_reasoning": 69,
+      "max_primary_completion_tokens": 1105,
+      "max_primary_reasoning_tokens": 1024,
+      "forced_final_fallback_count": 0,
+      "forced_final_effort": "none"
+    }
+  },
+  "endpoint": {
+    "platform": "openai-api",
+    "provider": "openai",
+    "api": "chat_completions",
+    "max_concurrency": 4
+  },
+  "generation": {
+    "primary_max_completion_tokens": 4096,
+    "forced_final_max_completion_tokens": 512,
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 83,
+      "total": 87,
+      "rate": 0.9540229885057471,
+      "stderr": 0.022453816179328193
+    },
+    "compliance": {
+      "correct": 87,
+      "total": 87,
+      "rate": 1.0,
+      "stderr": 0.0
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "deutsch-alman": {
+        "correct": 11,
+        "total": 11,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "die-verwandlung": {
+        "correct": 4,
+        "total": 4,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "regelabdeckung": {
+        "correct": 25,
+        "total": 26,
+        "rate": 0.9615384615384616,
+        "stderr": 0.03771464137272768
+      },
+      "relativsaetze": {
+        "correct": 12,
+        "total": 13,
+        "rate": 0.9230769230769231,
+        "stderr": 0.07390530175619404
+      },
+      "siddhartha": {
+        "correct": 15,
+        "total": 16,
+        "rate": 0.9375,
+        "stderr": 0.06051536478449089
+      },
+      "starke-flexion": {
+        "correct": 8,
+        "total": 8,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "steppenwolf": {
+        "correct": 1,
+        "total": 2,
+        "rate": 0.5,
+        "stderr": 0.3535533905932738
+      }
+    },
+    "tokens": {
+      "input": 1161098,
+      "cached_input": 627455,
+      "output": 16906,
+      "reasoning": 14494,
+      "total": 1178004
+    },
+    "estimated_cost_usd": 3.4891225
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 5.0,
+    "cached_input_per_million_tokens": 0.5,
+    "output_per_million_tokens": 30.0,
+    "observed_at": "2026-07-12T10:10:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/incremental-87/openai/20260715T140000Z-87/gpt-5.6-sol-xhigh.samples.jsonl"
+  }
+}

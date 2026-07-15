@@ -28,6 +28,10 @@ live in `src/content/blog/`, and the visual identity is documented in
 A Standard German → Alman translation benchmark, built on
 [Inspect AI](https://inspect.aisi.org.uk/). Its evaluation set is:
 
+The latest [87-row benchmark leaderboard](benchmark-results/2026-07-15-expanded-curated-thinking-comparison.md)
+compares 18 model configurations, including the ternary and 1-bit Bonsai 27B
+variants.
+
 - **Curated sentences** (`alman/bench/curated/`) — hand-translated full
   sentences, mostly literary German (Kafka's *Die Verwandlung*, Hesse's
   *Siddhartha* and *Der Steppenwolf*), that exercise many rules at once:

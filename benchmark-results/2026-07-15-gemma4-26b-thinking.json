@@ -1,0 +1,221 @@
+{
+  "$schema": "./result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260715T120954Z-gemma4-26b-thinking-32k",
+    "started_at": "2026-07-15T12:12:25+00:00",
+    "completed_at": "2026-07-15T12:43:46+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "raw_sample_count": 87,
+    "sample_count": 87,
+    "excluded_spec_example_count": 0,
+    "excluded_spec_example_ids": [],
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "d0247cd",
+    "working_tree_dirty": false,
+    "working_tree_changes": []
+  },
+  "model": {
+    "repository": "nvidia/Gemma-4-26B-A4B-NVFP4",
+    "revision": "a19cfe00be84568a6867111c9a68c9c44fdcffe6",
+    "served_name": "gemma4-26b-thinking",
+    "quantization": "NVFP4",
+    "thinking": {
+      "enabled": true,
+      "verification_method": "nonempty reasoning_content or think block",
+      "verified_sample_count": 87
+    }
+  },
+  "endpoint": {
+    "provider": "inspect-openai-api",
+    "api": "chat_completions",
+    "base_url": "http://127.0.0.1:9332/v1",
+    "max_connections": 1,
+    "max_samples": 1
+  },
+  "runtime": {
+    "engine": "vllm",
+    "version": "0.23.1rc1.dev692+g4e5ca89cf.precompiled",
+    "executable": "/home/onur/runtimes/vllm/versions/vllm-0.23.1-gemma4-sm121/.venv/bin/vllm",
+    "manifest": "/home/onur/runtimes/vllm/versions/vllm-0.23.1-gemma4-sm121/manifest.json",
+    "recipe": {
+      "repository": "https://github.com/dutifuldev/localperf.git",
+      "commit": "e1570cea896765e84ddca6bbd82c9d0f3a083ada",
+      "path": "examples/gb10-dgx-spark-nvfp4-optimized/gemma4-26b.json",
+      "profile": "32k",
+      "deviations": [
+        "set default_chat_template_kwargs.enable_thinking=true",
+        "reduce max_num_seqs from 16 to 4",
+        "use an Onur-owned canonical vLLM 0.23.1 candidate compatible with Gemma 4",
+        "serve as gemma4-26b-thinking on loopback port 9332"
+      ]
+    },
+    "server": {
+      "arguments": [
+        "/home/onur/runtimes/vllm/versions/vllm-0.23.1-gemma4-sm121/.venv/bin/vllm",
+        "serve",
+        "nvidia/Gemma-4-26B-A4B-NVFP4",
+        "--revision",
+        "a19cfe00be84568a6867111c9a68c9c44fdcffe6",
+        "--served-model-name",
+        "gemma4-26b-thinking",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "9332",
+        "--api-key",
+        "<redacted>",
+        "--max-model-len",
+        "32768",
+        "--max-num-seqs",
+        "4",
+        "--max-num-batched-tokens",
+        "16384",
+        "--kv-cache-dtype",
+        "fp8",
+        "--attention-backend",
+        "TRITON_ATTN",
+        "--moe-backend",
+        "cutlass",
+        "--no-enable-prefix-caching",
+        "--gpu-memory-utilization",
+        "0.22",
+        "--kv-cache-memory-bytes",
+        "12884901888",
+        "--trust-remote-code",
+        "--enable-chunked-prefill",
+        "--reasoning-parser",
+        "gemma4",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "gemma4",
+        "--language-model-only",
+        "--mm-processor-cache-gb",
+        "0",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":true}",
+        "--no-enable-log-requests",
+        "--no-enable-flashinfer-autotune",
+        "--override-generation-config",
+        "{\"max_new_tokens\":null}"
+      ],
+      "max_model_len": 32768,
+      "max_num_seqs": 4,
+      "max_num_batched_tokens": 16384,
+      "kv_cache_dtype": "fp8",
+      "attention_backend": "TRITON_ATTN",
+      "moe_backend": "cutlass",
+      "prefix_caching": false
+    }
+  },
+  "generation": {
+    "max_tokens": 8192,
+    "reasoning_token_budget": 4096,
+    "sampling_source": "model_generation_config",
+    "do_sample": true,
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": 64,
+    "presence_penalty": 0
+  },
+  "hardware": {
+    "accelerator": "NVIDIA GB10",
+    "unified_memory_gib": 121.0
+  },
+  "memory_guard": {
+    "process_guard": "/home/onur/.codex/skills/safe-inference-launch/scripts/guarded-launch.sh",
+    "earlyoom": true,
+    "memory_available_floor_gib": 24.0,
+    "swap_free_floor_gib": 4.0,
+    "pressure_kill_occurred": false
+  },
+  "results": {
+    "duration_seconds": 1881.0,
+    "acceptance": {
+      "correct": 59,
+      "total": 87,
+      "rate": 0.6781609195402298,
+      "stderr": 0.050087129457975506
+    },
+    "compliance": {
+      "correct": 84,
+      "total": 87,
+      "rate": 0.9655172413793104,
+      "stderr": 0.019562366514868108
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 2,
+        "total": 5,
+        "rate": 0.4,
+        "stderr": 0.21908902300206645
+      },
+      "deutsch-alman": {
+        "correct": 9,
+        "total": 11,
+        "rate": 0.8181818181818182,
+        "stderr": 0.11629129983033296
+      },
+      "die-verwandlung": {
+        "correct": 3,
+        "total": 4,
+        "rate": 0.75,
+        "stderr": 0.21650635094610965
+      },
+      "regelabdeckung": {
+        "correct": 22,
+        "total": 26,
+        "rate": 0.8461538461538461,
+        "stderr": 0.0707589393082923
+      },
+      "relativsaetze": {
+        "correct": 10,
+        "total": 13,
+        "rate": 0.7692307692307693,
+        "stderr": 0.11685454235580768
+      },
+      "siddhartha": {
+        "correct": 6,
+        "total": 16,
+        "rate": 0.375,
+        "stderr": 0.12103072956898178
+      },
+      "starke-flexion": {
+        "correct": 5,
+        "total": 8,
+        "rate": 0.625,
+        "stderr": 0.1711632992203644
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 1171127,
+      "cached_input": null,
+      "output": 145879,
+      "reasoning": null,
+      "total": 1317006
+    },
+    "samples_with_reasoning": 87
+  },
+  "artifacts": {
+    "inspect_log": "/home/onur/scratch/alman-benchmark-runs/incremental-87/local-combined/gemma4-26b-thinking/gemma4-26b-thinking-87.eval",
+    "server_log": "/home/onur/scratch/alman-benchmark-runs/incremental-87/local/20260715T120954Z-gemma4-26b-thinking-32k/server.log",
+    "smoke_response": "/home/onur/scratch/alman-benchmark-runs/incremental-87/local/20260715T120954Z-gemma4-26b-thinking-32k/smoke-response.json"
+  }
+}

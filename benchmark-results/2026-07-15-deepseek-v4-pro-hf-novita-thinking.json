@@ -1,0 +1,140 @@
+{
+  "$schema": "./hosted-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260715T104346Z-deepseek-v4-pro-hf-novita-thinking",
+    "started_at": "2026-07-15T10:43:46.879821+00:00",
+    "completed_at": "2026-07-15T11:13:11.536051+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 87,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "fe520c9ab5062b822ba259afc173bfbdf6adf54d",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "repository": "deepseek-ai/DeepSeek-V4-Pro",
+    "hub_revision": "b5968e9190ef611bbf34a7229255be88a0e937c1",
+    "provider_model_id": "deepseek/deepseek-v4-pro",
+    "served_revision_pinned": false,
+    "thinking": {
+      "enabled": true,
+      "mode": "think",
+      "provider_control": "reasoning.effort=low",
+      "thinking_call_max_tokens": 4096,
+      "samples_with_reasoning": 87,
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": 4096,
+      "forced_final_fallback_count": 1,
+      "forced_final_fallback_disables_thinking": true
+    }
+  },
+  "endpoint": {
+    "platform": "huggingface-inference-providers",
+    "provider": "novita",
+    "api": "chat_completions",
+    "routing": "explicit-client-provider",
+    "max_concurrency": 1
+  },
+  "generation": {
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "top_k": null,
+    "presence_penalty": null,
+    "thinking_call_max_tokens": 4096,
+    "forced_final_max_tokens": 512,
+    "forced_final_strategy": "new-turn-final-request",
+    "forced_final_output_field": "content",
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 79,
+      "total": 87,
+      "rate": 0.9080459770114943,
+      "stderr": 0.03097987493662473
+    },
+    "compliance": {
+      "correct": 86,
+      "total": 87,
+      "rate": 0.9885057471264368,
+      "stderr": 0.011428003025660402
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "deutsch-alman": {
+        "correct": 11,
+        "total": 11,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "die-verwandlung": {
+        "correct": 3,
+        "total": 4,
+        "rate": 0.75,
+        "stderr": 0.21650635094610965
+      },
+      "regelabdeckung": {
+        "correct": 25,
+        "total": 26,
+        "rate": 0.9615384615384616,
+        "stderr": 0.03771464137272768
+      },
+      "relativsaetze": {
+        "correct": 12,
+        "total": 13,
+        "rate": 0.9230769230769231,
+        "stderr": 0.07390530175619404
+      },
+      "siddhartha": {
+        "correct": 13,
+        "total": 16,
+        "rate": 0.8125,
+        "stderr": 0.09757809372497497
+      },
+      "starke-flexion": {
+        "correct": 8,
+        "total": 8,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 1141751,
+      "output": 73553,
+      "reasoning": 71529,
+      "total": 1215304
+    },
+    "estimated_cost_usd": 2.0621712
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 1.6,
+    "output_per_million_tokens": 3.2,
+    "observed_at": "2026-07-11T14:36:11Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/incremental-87/hf/20260715T120000Z-87/deepseek-v4-pro-hf-novita-thinking.samples.jsonl"
+  }
+}

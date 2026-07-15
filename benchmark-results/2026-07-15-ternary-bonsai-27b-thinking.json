@@ -1,0 +1,201 @@
+{
+  "$schema": "./result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260715T134318Z-ternary-bonsai-27b-q2_0-alman-32k",
+    "started_at": "2026-07-15T13:44:19+00:00",
+    "completed_at": "2026-07-15T16:27:50+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "raw_sample_count": 87,
+    "sample_count": 87,
+    "excluded_spec_example_count": 0,
+    "excluded_spec_example_ids": [],
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "61138bb",
+    "working_tree_dirty": false,
+    "working_tree_changes": []
+  },
+  "model": {
+    "repository": "prism-ml/Ternary-Bonsai-27B-gguf",
+    "revision": "20e435f518bd5b882795954aba81e80a91894321",
+    "served_name": "ternary-bonsai-27b",
+    "quantization": "Q2_0_g128 ternary",
+    "thinking": {
+      "enabled": true,
+      "verification_method": "nonempty reasoning_content or think block",
+      "verified_sample_count": 87
+    }
+  },
+  "endpoint": {
+    "provider": "inspect-openai-api",
+    "api": "chat_completions",
+    "base_url": "http://127.0.0.1:8000/v1",
+    "max_connections": 1,
+    "max_samples": 1
+  },
+  "runtime": {
+    "engine": "llama.cpp",
+    "version": "62061f9",
+    "executable": "/home/onur/runtimes/llama-cpp/versions/llama-cpp-prism-62061f9-sm121/build/bin/llama-server",
+    "manifest": "/home/onur/runtimes/llama-cpp/versions/llama-cpp-prism-62061f9-sm121/manifest.json",
+    "recipe": {
+      "repository": "https://github.com/PrismML-Eng/llama.cpp.git",
+      "commit": "62061f91088281e65071cc38c5f69ee95c39f14e",
+      "path": "tools/server/README.md",
+      "profile": "alman-32k-serial",
+      "deviations": [
+        "increase context from the initial 16k smoke profile to 32k for the benchmark prompt plus an 8k generation ceiling",
+        "use one server slot and one benchmark sample at a time",
+        "leave the KV cache at the llama.cpp f16 default",
+        "omit the optional DSpark drafter so both Bonsai variants use ordinary target-model decoding"
+      ]
+    },
+    "server": {
+      "arguments": [
+        "/home/onur/runtimes/llama-cpp/versions/llama-cpp-prism-62061f9-sm121/build/bin/llama-server",
+        "-m",
+        "/srv/huggingface/hub/models--prism-ml--Ternary-Bonsai-27B-gguf/snapshots/20e435f518bd5b882795954aba81e80a91894321/Ternary-Bonsai-27B-Q2_0.gguf",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000",
+        "--alias",
+        "ternary-bonsai-27b",
+        "--ctx-size",
+        "32768",
+        "--parallel",
+        "1",
+        "--gpu-layers",
+        "999",
+        "--reasoning",
+        "auto",
+        "--reasoning-budget",
+        "4096",
+        "--cache-type-k",
+        "f16",
+        "--cache-type-v",
+        "f16",
+        "--cache-prompt",
+        "--jinja",
+        "--metrics"
+      ],
+      "max_model_len": 32768,
+      "max_num_seqs": 1,
+      "max_num_batched_tokens": 32768,
+      "kv_cache_dtype": "f16",
+      "attention_backend": "PrismML CUDA hybrid-attention",
+      "moe_backend": "none",
+      "prefix_caching": true
+    }
+  },
+  "generation": {
+    "max_tokens": 8192,
+    "reasoning_token_budget": 4096,
+    "sampling_source": "PrismML recommended thinking-mode settings",
+    "do_sample": true,
+    "temperature": 0.7,
+    "top_p": 0.95,
+    "top_k": 20,
+    "presence_penalty": 0.0
+  },
+  "hardware": {
+    "accelerator": "NVIDIA GB10",
+    "unified_memory_gib": 121.0
+  },
+  "memory_guard": {
+    "process_guard": "/home/onur/.codex/skills/safe-inference-launch/scripts/guarded-launch.sh",
+    "earlyoom": true,
+    "memory_available_floor_gib": 24.0,
+    "swap_free_floor_gib": 4.0,
+    "pressure_kill_occurred": false
+  },
+  "results": {
+    "duration_seconds": 9811.0,
+    "acceptance": {
+      "correct": 41,
+      "total": 87,
+      "rate": 0.47126436781609193,
+      "stderr": 0.05351702526857784
+    },
+    "compliance": {
+      "correct": 82,
+      "total": 87,
+      "rate": 0.9425287356321839,
+      "stderr": 0.024952441692833612
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 2,
+        "total": 5,
+        "rate": 0.4,
+        "stderr": 0.21908902300206645
+      },
+      "deutsch-alman": {
+        "correct": 5,
+        "total": 11,
+        "rate": 0.45454545454545453,
+        "stderr": 0.150131422517231
+      },
+      "die-verwandlung": {
+        "correct": 2,
+        "total": 4,
+        "rate": 0.5,
+        "stderr": 0.25
+      },
+      "regelabdeckung": {
+        "correct": 18,
+        "total": 26,
+        "rate": 0.6923076923076923,
+        "stderr": 0.09051513929454648
+      },
+      "relativsaetze": {
+        "correct": 3,
+        "total": 13,
+        "rate": 0.23076923076923078,
+        "stderr": 0.11685454235580768
+      },
+      "siddhartha": {
+        "correct": 3,
+        "total": 16,
+        "rate": 0.1875,
+        "stderr": 0.09757809372497497
+      },
+      "starke-flexion": {
+        "correct": 6,
+        "total": 8,
+        "rate": 0.75,
+        "stderr": 0.15309310892394862
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 2632,
+      "cached_input": 1200252,
+      "output": 237572,
+      "reasoning": null,
+      "total": 1440456
+    },
+    "samples_with_reasoning": 87
+  },
+  "artifacts": {
+    "inspect_log": "/home/onur/scratch/alman-benchmark-runs/incremental-87/bonsai/20260715T134318Z-ternary-bonsai-27b-q2_0-alman-32k/inspect/2026-07-15T13-44-19-00-00_alman-bench_9yhMZBqQHUKvqtydSiEeF4.eval",
+    "server_log": "/home/onur/scratch/alman-benchmark-runs/incremental-87/bonsai/20260715T134318Z-ternary-bonsai-27b-q2_0-alman-32k/server.log",
+    "smoke_response": "/home/onur/scratch/alman-benchmark-runs/incremental-87/bonsai/20260715T134318Z-ternary-bonsai-27b-q2_0-alman-32k/smoke-response.json"
+  }
+}

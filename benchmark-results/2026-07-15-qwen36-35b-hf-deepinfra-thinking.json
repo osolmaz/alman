@@ -1,0 +1,140 @@
+{
+  "$schema": "./hosted-result.schema.json",
+  "schema_version": 1,
+  "run": {
+    "id": "20260715T121023Z-qwen36-35b-hf-deepinfra-thinking",
+    "started_at": "2026-07-15T12:10:23.159296+00:00",
+    "completed_at": "2026-07-15T13:01:06.411863+00:00",
+    "status": "success"
+  },
+  "benchmark": {
+    "task": "alman_bench",
+    "dataset": "curated",
+    "sample_count": 87,
+    "spec_in_context": true,
+    "spec_examples_in_dataset": false,
+    "commit": "d0247cd54fd21f886d4ecf1ff544b448a6c0c32d",
+    "working_tree_dirty": false
+  },
+  "model": {
+    "repository": "Qwen/Qwen3.6-35B-A3B",
+    "hub_revision": "995ad96eacd98c81ed38be0c5b274b04031597b0",
+    "provider_model_id": "Qwen/Qwen3.6-35B-A3B",
+    "served_revision_pinned": false,
+    "thinking": {
+      "enabled": true,
+      "mode": "think",
+      "provider_control": "chat_template_kwargs.enable_thinking=true",
+      "thinking_call_max_tokens": 4096,
+      "samples_with_reasoning": 77,
+      "max_thinking_call_completion_tokens": 4096,
+      "max_reported_reasoning_tokens": null,
+      "forced_final_fallback_count": 14,
+      "forced_final_fallback_disables_thinking": true
+    }
+  },
+  "endpoint": {
+    "platform": "huggingface-inference-providers",
+    "provider": "deepinfra",
+    "api": "chat_completions",
+    "routing": "explicit-client-provider",
+    "max_concurrency": 4
+  },
+  "generation": {
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "top_k": 20,
+    "presence_penalty": 1.5,
+    "thinking_call_max_tokens": 4096,
+    "forced_final_max_tokens": 512,
+    "forced_final_strategy": "new-turn-final-request",
+    "forced_final_output_field": "content",
+    "max_retries": 2
+  },
+  "results": {
+    "acceptance": {
+      "correct": 66,
+      "total": 87,
+      "rate": 0.7586206896551724,
+      "stderr": 0.04587781610038978
+    },
+    "compliance": {
+      "correct": 75,
+      "total": 87,
+      "rate": 0.8620689655172413,
+      "stderr": 0.03696939775302741
+    },
+    "groups": {
+      "ablaut": {
+        "correct": 2,
+        "total": 2,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "berufe": {
+        "correct": 5,
+        "total": 5,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "deutsch-alman": {
+        "correct": 9,
+        "total": 11,
+        "rate": 0.8181818181818182,
+        "stderr": 0.11629129983033296
+      },
+      "die-verwandlung": {
+        "correct": 3,
+        "total": 4,
+        "rate": 0.75,
+        "stderr": 0.21650635094610965
+      },
+      "regelabdeckung": {
+        "correct": 26,
+        "total": 26,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "relativsaetze": {
+        "correct": 10,
+        "total": 13,
+        "rate": 0.7692307692307693,
+        "stderr": 0.11685454235580768
+      },
+      "siddhartha": {
+        "correct": 3,
+        "total": 16,
+        "rate": 0.1875,
+        "stderr": 0.09757809372497497
+      },
+      "starke-flexion": {
+        "correct": 8,
+        "total": 8,
+        "rate": 1.0,
+        "stderr": 0.0
+      },
+      "steppenwolf": {
+        "correct": 0,
+        "total": 2,
+        "rate": 0.0,
+        "stderr": 0.0
+      }
+    },
+    "tokens": {
+      "input": 1340221,
+      "output": 175692,
+      "reasoning": null,
+      "total": 1515913
+    },
+    "estimated_cost_usd": 0.36794055
+  },
+  "pricing": {
+    "currency": "USD",
+    "input_per_million_tokens": 0.15,
+    "output_per_million_tokens": 0.95,
+    "observed_at": "2026-07-12T09:00:00Z"
+  },
+  "artifacts": {
+    "samples_jsonl": "/home/onur/scratch/alman-benchmark-runs/incremental-87/hf/20260715T130000Z-87-qwen-resume/qwen36-35b-hf-deepinfra-thinking.samples.jsonl"
+  }
+}
