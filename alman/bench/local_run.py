@@ -58,10 +58,19 @@ class ServeProfile(BaseModel):
     attention_backend: str
     moe_backend: str
     enable_prefix_caching: bool
+    model_file: Path | None = None
+    gpu_layers: int | None = Field(default=None, ge=0)
+    reasoning: str | None = None
+    reasoning_budget: int | None = Field(default=None, ge=-1)
+    cache_type_k: str | None = None
+    cache_type_v: str | None = None
+    cache_prompt: bool | None = None
+    jinja: bool | None = None
+    metrics: bool | None = None
 
 
 class RuntimeProfile(StrictModel):
-    engine: Literal["vllm"] = "vllm"
+    engine: Literal["vllm", "llama.cpp"] = "vllm"
     version: str
     executable: Path
     manifest: Path
@@ -87,6 +96,17 @@ class RuntimeProfile(StrictModel):
             raise ValueError(
                 "credential-bearing serve_args are forbidden; pass secrets in runtime.env"
             )
+        if self.engine == "llama.cpp":
+            if self.serve_args.model_file is None:
+                raise ValueError("llama.cpp requires serve_args.model_file")
+            if not self.serve_args.model_file.is_absolute():
+                raise ValueError("llama.cpp model_file must be absolute")
+            if self.serve_args.gpu_layers is None:
+                raise ValueError("llama.cpp requires serve_args.gpu_layers")
+            if not self.serve_args.reasoning:
+                raise ValueError("llama.cpp requires serve_args.reasoning")
+            if self.serve_args.reasoning_budget is None:
+                raise ValueError("llama.cpp requires serve_args.reasoning_budget")
         return self
 
 
@@ -184,6 +204,9 @@ def preflight(profile: LocalBenchmarkProfile, artifact_root: Path) -> None:
             raise ValueError(f"missing or non-executable {label}: {path}")
     if not profile.runtime.manifest.is_file():
         raise ValueError(f"missing runtime manifest: {profile.runtime.manifest}")
+    model_file = profile.runtime.serve_args.model_file
+    if model_file is not None and not model_file.is_file():
+        raise ValueError(f"missing llama.cpp model file: {model_file}")
     earlyoom = subprocess.run(
         ["pgrep", "-x", "earlyoom"], capture_output=True, check=False
     )
@@ -210,8 +233,16 @@ def preflight(profile: LocalBenchmarkProfile, artifact_root: Path) -> None:
     processes = subprocess.run(
         ["ps", "-eo", "args="], capture_output=True, text=True, check=True
     ).stdout.splitlines()
-    if any("vllm" in command and " serve " in command for command in processes):
-        raise RuntimeError("another vLLM server is already running")
+    if profile.runtime.engine == "vllm":
+        server_running = any(
+            "vllm" in command and " serve " in command for command in processes
+        )
+    else:
+        server_running = any("llama-server" in command for command in processes)
+    if server_running:
+        raise RuntimeError(
+            f"another {profile.runtime.engine} server is already running"
+        )
     status = subprocess.run(
         ["git", "status", "--porcelain=v1"],
         cwd=REPO_ROOT,
@@ -228,6 +259,44 @@ def _flag(name: str) -> str:
 
 
 def _serve_args(profile: LocalBenchmarkProfile) -> list[str]:
+    if profile.runtime.engine == "llama.cpp":
+        serve = profile.runtime.serve_args
+        assert serve.model_file is not None
+        assert serve.gpu_layers is not None
+        assert serve.reasoning is not None
+        args = [
+            str(profile.runtime.executable),
+            "-m",
+            str(serve.model_file),
+            "--host",
+            profile.endpoint.host,
+            "--port",
+            str(profile.endpoint.port),
+            "--alias",
+            profile.model.served_name,
+            "--ctx-size",
+            str(serve.max_model_len),
+            "--parallel",
+            str(serve.max_num_seqs),
+            "--gpu-layers",
+            str(serve.gpu_layers),
+            "--reasoning",
+            serve.reasoning,
+            "--reasoning-budget",
+            str(serve.reasoning_budget),
+        ]
+        if serve.cache_type_k:
+            args.extend(["--cache-type-k", serve.cache_type_k])
+        if serve.cache_type_v:
+            args.extend(["--cache-type-v", serve.cache_type_v])
+        if serve.cache_prompt is not None:
+            args.append("--cache-prompt" if serve.cache_prompt else "--no-cache-prompt")
+        if serve.jinja:
+            args.append("--jinja")
+        if serve.metrics:
+            args.append("--metrics")
+        return args
+
     args = [
         str(profile.runtime.executable),
         "serve",
@@ -244,6 +313,18 @@ def _serve_args(profile: LocalBenchmarkProfile) -> list[str]:
         profile.endpoint.api_key,
     ]
     for name, value in profile.runtime.serve_args.model_dump().items():
+        if name in {
+            "model_file",
+            "gpu_layers",
+            "reasoning",
+            "reasoning_budget",
+            "cache_type_k",
+            "cache_type_v",
+            "cache_prompt",
+            "jinja",
+            "metrics",
+        }:
+            continue
         if isinstance(value, bool):
             args.append(_flag(name) if value else _flag(f"no_{name}"))
         elif isinstance(value, (dict, list)):
@@ -266,6 +347,8 @@ def _redact_server_args(args: list[str]) -> list[str]:
 
 
 def _request_extra_body(profile: LocalBenchmarkProfile) -> dict[str, Any]:
+    if profile.runtime.engine == "llama.cpp":
+        return {"top_k": profile.generation.top_k}
     return {
         "chat_template_kwargs": {"enable_thinking": True},
         "thinking_token_budget": profile.generation.reasoning_token_budget,

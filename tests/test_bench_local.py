@@ -481,10 +481,52 @@ def test_profile_requires_nonsecret_local_api_key(profile):
         LocalBenchmarkProfile.model_validate(payload)
 
 
-def test_profile_requires_vllm_runtime(profile):
+def test_profile_rejects_unknown_runtime(profile):
     payload = profile.model_dump()
     payload["runtime"]["engine"] = "other"
     with pytest.raises(ValueError):
+        LocalBenchmarkProfile.model_validate(payload)
+
+
+def test_llama_cpp_profile_builds_guarded_server_command(profile, tmp_path):
+    model_file = tmp_path / "model.gguf"
+    model_file.touch()
+    payload = profile.model_dump()
+    payload["runtime"]["engine"] = "llama.cpp"
+    payload["runtime"]["serve_args"].update(
+        {
+            "model_file": model_file,
+            "gpu_layers": 999,
+            "reasoning": "auto",
+            "reasoning_budget": 4096,
+            "cache_type_k": "f16",
+            "cache_type_v": "f16",
+            "cache_prompt": True,
+            "jinja": True,
+            "metrics": True,
+        }
+    )
+    llama_profile = LocalBenchmarkProfile.model_validate(payload)
+
+    args = _serve_args(llama_profile)
+    assert args[:3] == [str(profile.runtime.executable), "-m", str(model_file)]
+    assert args[args.index("--ctx-size") + 1] == "32768"
+    assert args[args.index("--parallel") + 1] == "4"
+    assert args[args.index("--reasoning") + 1] == "auto"
+    assert args[args.index("--reasoning-budget") + 1] == "4096"
+    assert args[args.index("--cache-type-k") + 1] == "f16"
+    assert args[args.index("--cache-type-v") + 1] == "f16"
+    assert "--cache-prompt" in args
+    assert "--jinja" in args
+    assert "--metrics" in args
+    assert "serve" not in args
+    assert _generate_config(llama_profile)["extra_body"] == {"top_k": 20}
+
+
+def test_llama_cpp_profile_requires_model_file(profile):
+    payload = profile.model_dump()
+    payload["runtime"]["engine"] = "llama.cpp"
+    with pytest.raises(ValueError, match="model_file"):
         LocalBenchmarkProfile.model_validate(payload)
 
 

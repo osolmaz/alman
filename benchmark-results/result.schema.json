@@ -93,7 +93,7 @@
       "additionalProperties": false,
       "required": ["engine", "version", "executable", "manifest", "recipe", "server"],
       "properties": {
-        "engine": {"const": "vllm"},
+        "engine": {"enum": ["vllm", "llama.cpp"]},
         "version": {"type": "string"},
         "executable": {"type": "string"},
         "manifest": {"type": "string"},
