@@ -181,6 +181,14 @@ and correctness of composition means exactly this list:
    authored targeted tier pushes it up (see the tier structure note).
 10. Every public data file contains the canary GUID; no private item text
     appears in any public file.
+11. Every acceptance set passes the source-aware reference checks
+    (`alman-research/scripts/reference_checks.py`), run over the curated
+    tier and both almanbench sets. These checks read the Standard German
+    source for unambiguous evidence about what the references must contain,
+    so they catch references that are legal Alman strings but the wrong
+    answer for their source. The first two check classes are plural
+    nominalized adjectives that must keep `-en`, and zero-plural nouns whose
+    proven plural licenses the optional `-s` variant.
 
 The tiers answer different questions and are reported separately. The
 naturalistic tier gives the headline number. The targeted tier and the
@@ -279,6 +287,49 @@ that silently encodes one legal choice as the only answer punishes models for
 making the other legal choice, and the draft translations were themselves
 model-generated, so single-answer scoring would also drift toward that
 model's stylistic habits.
+
+## Acceptance-set maintenance
+
+The scorer is strict on purpose: after quote, whitespace, and punctuation
+normalization it requires exact, case-sensitive equality with an enumerated
+rendering. That design only works if the acceptance sets enumerate everything
+the spec licenses, so the sets are maintained under the following rules.
+
+Variants are generated mechanically wherever a choice point can be detected
+without false positives. The packager
+(`alman-research/scripts/package_almanbench.py`) generates the relativizer
+swap, the retained-`der` and `von die` genitive swaps, the `da`- and
+`wo`-compound swaps, and the optional plural `-s` renderings. The `-s`
+generation is source-aware: it reads the Standard German source for proof
+that a zero-plural noun is plural (a dative `-n` form, or a determiner that
+cannot precede a masculine or neuter singular) and only then emits the `-s`
+variant. Never add these variant families by hand to almanbench items, and
+never edit the packaged `almanbench/*.jsonl` files directly; extend the
+generator and repackage, so every item benefits and the audit can verify the
+result. Curated items are the exception: they use the pattern-expansion
+format and their variants are written by hand, with each alternation
+annotated with the spec rule that licenses it.
+
+Every rendering variant, generated or hand-written, must be traceable to a
+spec rule. If no rule licenses an alternative, it does not go into the
+acceptance set, however plausible it looks.
+
+When a model run surfaces a rejected output that looks correct, the
+adjudication runs in this order. First check whether the output is licensed
+by a spec rule the reference missed; if so, the reference is the bug, and
+the fix is to extend the mechanical generator when the pattern is
+detectable, or the hand-written pattern when it is not, citing the rule.
+If no rule licenses the output, the model is wrong and nothing changes,
+regardless of how many strong models produced the same output. Agreement
+among models justifies a closer look at the reference, but the deciding
+test is always the spec rule. Orthographic modernization of historical
+sources, lexical
+substitutions, and case changes stay rejected: German capitalization is
+grammatical, so scoring remains case-sensitive.
+
+Any reference change must leave invariant 11 of the composition audit
+passing, and stored model runs are rescored after the change to confirm
+that nothing moved except the rows the fix was meant to move.
 
 ## Guard items
 
