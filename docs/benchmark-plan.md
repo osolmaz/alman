@@ -322,10 +322,24 @@ detectable, or the hand-written pattern when it is not, citing the rule.
 If no rule licenses the output, the model is wrong and nothing changes,
 regardless of how many strong models produced the same output. Agreement
 among models justifies a closer look at the reference, but the deciding
-test is always the spec rule. Orthographic modernization of historical
-sources, lexical
-substitutions, and case changes stay rejected: German capitalization is
-grammatical, so scoring remains case-sensitive.
+test is always the spec rule.
+
+Surface fidelity is part of the task. Alman is defined as a set of
+grammatical transformations applied to a Standard German source; everything
+the spec does not transform must be reproduced exactly. Orthographic
+modernization of historical sources stays rejected: archaic spellings like
+`grade`, `Thür`, or `daß` remain as written, and the dative `-e` in forms
+like `zu Hause` or `nach dem Tode` is preserved (the spec's case-ending
+elimination applies to the article system and to weak-noun oblique `-n`,
+not to fossilized dative `-e` on the noun). Lexical substitutions and
+expansions or contractions of abbreviations (`beziehungsweise` rewritten as
+`bzw.`, or the reverse) stay rejected, as do case changes: German
+capitalization is grammatical, so scoring remains case-sensitive. Model
+outputs that modernize, paraphrase, or abbreviate are counted as errors
+even when the grammar of the output is impeccable Alman, because the
+benchmark measures rule application, not free translation, and a looser
+standard would make scores incomparable across models with different
+paraphrasing habits.
 
 Any reference change must leave invariant 11 of the composition audit
 passing, and stored model runs are rescored after the change to confirm
