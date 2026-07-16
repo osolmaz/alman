@@ -112,7 +112,7 @@ membership conditions. Every condition is checkable by script from the item
 metadata, so the finished benchmark can be audited against this table rather
 than against intent.
 
-Public set, 1,007 items:
+Public set, 1,025 items:
 
 | Bin | Quota | Inclusion conditions |
 |---|---|---|
@@ -122,7 +122,7 @@ Public set, 1,007 items:
 | naturalistic-modern, Wikipedia | 120 | German Wikipedia sentence (CC BY-SA) with the article recorded, contemporary orthography |
 | naturalistic-modern, Tatoeba | 120 | Tatoeba sentence (CC-BY) with sentence id and contributor recorded |
 | naturalistic-modern, authored | 60 | Hand-written, register label from {instructions, casual, correspondence, news} |
-| targeted | 200 | Lifts a named rule that was under the 25-floor at selection time, with the tagger confirming the source genuinely exercises that rule. Hand-authored, since the held-out corpus could not supply the rare rules (see the tier structure note) |
+| targeted | 216 | Lifts a named rule that was under the 25-floor at selection time, with the tagger confirming the source genuinely exercises that rule. Hand-authored, since the held-out corpus could not supply the rare rules (see the tier structure note). 200 items from the original composition round plus a 16-item top-up for the adverbial-genitive rule (§3c), added to the spec after the freeze |
 | guards | 120 | Guard family label from the eight families below, 15 items each |
 | curated | 89 | The existing `alman/bench/curated/` collections, unchanged membership |
 
@@ -143,13 +143,13 @@ There are eight guard families with 15 public items each:
    equals the source
 8. comparison and word-formation `-er`/`-st` forms that keep their endings
 
-Private set, 200 items, mirroring the public proportions:
+Private set, 204 items, mirroring the public proportions:
 
 | Bin | Quota | Inclusion conditions |
 |---|---|---|
 | naturalistic-canonical | 60 | Corpus rows from works on the frozen private held-out list (disjoint from the public list), periods 12 / 24 / 24 across the three period bins |
 | naturalistic-modern | 60 | 24 Wikipedia, 24 Tatoeba, 12 authored, with articles and contributors disjoint from the public set |
-| targeted | 40 | Same conditions as public targeted |
+| targeted | 44 | Same conditions as public targeted, including a 4-item adverbial-genitive top-up |
 | guards | 40 | 5 per guard family |
 
 ## Composition audit
@@ -367,7 +367,8 @@ needs it.
 ## Item metadata
 
 Every item records its tier, the rules it genuinely exercises (the `covers`
-vocabulary of the existing benchmark, 38 tags), the source work identity
+vocabulary of the existing benchmark, 39 tags since the adverbial-genitive
+rule was added), the source work identity
 (`work_sha256`, author, title, publication year where known), an orthography
 flag for archaic spelling, a guard flag, and the acceptance set with the
 canonical rendering first. Work identity makes the contamination policy
@@ -379,7 +380,7 @@ archaic-spelling confusion.
 Two gaps stand between the current state and the build.
 
 The sampler's `rule_triggers` vocabulary has 13 tags, while the benchmark
-rule vocabulary has 38. Floor accounting needs a tagger that detects the
+rule vocabulary has 39. Floor accounting needs a tagger that detects the
 remaining rules from the source text. Most are detectable with the lexicons
 and patterns already in `mechanical_checks.py` (weak nouns, two-way
 prepositions, superlatives, feminine `-in` forms), so this is an extension
@@ -398,8 +399,8 @@ any commit.
 1. Freeze the held-out work list, stratified by period and genre and split
    into public and private works. This is the irreversible step and happens
    before any training run.
-2. Extend the rule tagger to the full 38-tag vocabulary and measure per-rule
-   coverage of the held-out rows.
+2. Extend the rule tagger to the full rule-tag vocabulary and measure
+   per-rule coverage of the held-out rows.
 3. Review the held-out corpus rows to the reference standard (about 450 to
    500 rows beyond those already reviewed). The ongoing 66k review is already
    moving through the corpus and will reach these rows eventually, so this
