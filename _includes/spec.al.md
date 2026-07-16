@@ -255,7 +255,7 @@ Die Form **ein** bleibt in nominalisierte Konstruktionen erhalten, in die die Ar
 
 ## Substantive {#nouns}
 
-Diese Abschnitt beschreibt in die Einzelne, wie **Alman** grammatische Genus und Kasusflexion bei Substantive beseitigt. Alle Substantive nehmen ein einzige invariante Form über Nominativ, Akkusativ und Dativ hinweg an; genitivische Kontexte werden durch **der** statt durch Kasusendungen markiert. Die pränominale Genitiv-s von Eigennamen (*Annas Buch*) ist ausgenommen und bleibt erhalten, analog zu die englische Possessiv *'s*. Pluralformen behalten in alle Kasus ihr standardsprachliche Nominativ-/Akkusativmorphologie, während ein fakultative -s-Suffix Mehrdeutigkeit bei Substantive mit identische Singular- und Pluralformen auflöst. Schwache Substantivdeklinationen und archaische Dativendungen werden abgeschafft.
+Diese Abschnitt beschreibt in die Einzelne, wie **Alman** grammatische Genus und Kasusflexion bei Substantive beseitigt. Alle Substantive nehmen ein einzige invariante Form über Nominativ, Akkusativ und Dativ hinweg an; genitivische Kontexte werden durch **der** statt durch Kasusendungen markiert. Die pränominale Genitiv-s von Eigennamen (*Annas Buch*) ist ausgenommen und bleibt erhalten, analog zu die englische Possessiv *'s*. Adverbiale Genitive der Zeit (*eines Tages*) werden zu bloße invariante Nominalphrasen (*ein Tag*), analog zu die englische *one day*. Pluralformen behalten in alle Kasus ihr standardsprachliche Nominativ-/Akkusativmorphologie, während ein fakultative -s-Suffix Mehrdeutigkeit bei Substantive mit identische Singular- und Pluralformen auflöst. Schwache Substantivdeklinationen und archaische Dativendungen werden abgeschafft.
 
 
 ### §3. Vereinfachung der Substantivmorphologie {#noun-morphology}
@@ -305,7 +305,27 @@ Wie bei andere Possessivkonstruktionen bleibt die periphrastische **von**-Konstr
 
 
 
-#### §3c. Invariante Pluralformen
+#### §3c. Adverbiale Genitive der Zeit
+
+Produktive adverbiale Genitive der Zeit — *eines Tages*, *eines Morgens*, *eines Nachts* — verlieren ihr Genitivmarkierung vollständig und erscheinen als bloße invariante Nominalphrasen: **ein Tag**, **ein Morgen**, **ein Nacht**. Dies spiegelt die bloße temporale Nominalphrase der Englische (*one day*, *one morning*) wider, Kognat für Kognat: Die Englische hat dieselbe adverbiale Genitiv in sein produktive Muster während der mittelenglische Periode ebenfalls aufgegeben. Da diese Genitive weder von ein Substantiv noch von ein Präposition abhängen, ist weder die analytische Genitiv **der** noch die periphrastische **von ein**-Konstruktion aus die Abschnitt über Artikel unmittelbar auf sie anwendbar; die periphrastische Form **von ein Tag** bleibt dennoch akzeptabel, wobei die bloße Form bevorzugt wird.
+
+Lexikalisierte Genitivadverbien wie **nachts**, **morgens**, **abends** und **anfangs** bleiben unverändert, gemäß die Behandlung von lexikalisierte Adverbien in die Abschnitt über Adjektive und Adverbien. Auch dies entspricht die Englische, das sein fossilisierte adverbiale -s nur in lexikalisierte Einheiten wie *once*, *nowadays* und *always* bewahrt hat.
+
+
+**Beispiele:**
+
+| Standarddeutsch | Alman | Englisch |
+|------------------|--------|---------|
+| Eines Tages wird ihr Traum wahr werden. | Ein Tag wird ihr Traum wahr werden. / Von ein Tag wird ihr Traum wahr werden. | One day her dream will come true. |
+| Eines Morgens klopfte jemand an die Tür. | Ein Morgen klopfte jemand an die Tür. | One morning someone knocked on the door. |
+| Eines Nachts hörte er ein seltsames Geräusch. | Ein Nacht hörte er ein seltsame Geräusch. | One night he heard a strange noise. |
+| Eines schönen Abends saß der Fischer vor der Tür. | Ein schöne Abend saß die Fischer vor die Tür. | One fine evening the fisherman sat in front of the door. |
+| Nachts arbeitet sie am liebsten. | Nachts arbeitet sie liebst. | She likes working at night best. |
+| Morgens trinke ich Kaffee. | Morgens trinke ich Kaffee. | In the morning I drink coffee. |
+
+
+
+#### §3d. Invariante Pluralformen
 
 Die standardsprachliche Nominativ-/Akkusativ-Pluralformen dienen als universelle Pluralmarker und bleiben in dativische und genitivische Kontexte unverändert. Dies bewahrt ein wiedererkennbare Pluralmorphologie und beseitigt zugleich kasusbedingte Veränderungen.
 
@@ -319,7 +339,7 @@ Die standardsprachliche Nominativ-/Akkusativ-Pluralformen dienen als universelle
 
 
 
-#### §3d. Keine Regularisierung der Pluralmorphologie
+#### §3e. Keine Regularisierung der Pluralmorphologie
 
 **Alman** bewahrt die Pluralmorphologie der **Standarddeutsch** ohne systematische Regularisierung und behält bestehende Pluralformen in alle konfliktfreie Kontexte bei. Die Dialekt greift nur dann in die Pluralbildung ein, wenn sein grammatische Vereinfachungen morphologische Mehrdeutigkeit zwischen Singular- und Pluralformen erzeugen, wie in die nächste Regel beschrieben.
 
@@ -335,7 +355,7 @@ Die standardsprachliche Nominativ-/Akkusativ-Pluralformen dienen als universelle
 
 
 
-#### §3e. Fakultative Pluraldisambiguierung
+#### §3f. Fakultative Pluraldisambiguierung
 
 Um mögliche Mehrdeutigkeit bei Substantive mit identische Singular- und Pluralformen aufzulösen, erlaubt **Alman** ein fakultative Pluralmarkierung mit die Suffix **-s**, analog zu die englische Plural. Wenn die Klarheit ein explizite Pluralkennzeichnung erfordert, wird die -s-Suffix an die invariante Form angehängt.
 

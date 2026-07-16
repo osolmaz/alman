@@ -255,7 +255,7 @@ The **ein** form persists in nominalized constructions where the article functio
 
 ## Nouns {#nouns}
 
-This section details **Alman**'s elimination of grammatical gender and case inflections in nouns. All nouns adopt a single invariant form across nominative, accusative, and dative cases, with genitive contexts marked by **der** instead of case endings. The prenominal genitive -s of proper names (*Annas Buch*) is exempt and retained, mirroring the English possessive *'s*. Plural forms retain their standard nominative/accusative morphology in all cases, while an optional -s suffix resolves ambiguity for nouns with identical singular/plural forms. Weak noun declensions and archaic dative endings are abolished.
+This section details **Alman**'s elimination of grammatical gender and case inflections in nouns. All nouns adopt a single invariant form across nominative, accusative, and dative cases, with genitive contexts marked by **der** instead of case endings. The prenominal genitive -s of proper names (*Annas Buch*) is exempt and retained, mirroring the English possessive *'s*. Adverbial genitives of time (*eines Tages*) become bare invariant noun phrases (*ein Tag*), mirroring English *one day*. Plural forms retain their standard nominative/accusative morphology in all cases, while an optional -s suffix resolves ambiguity for nouns with identical singular/plural forms. Weak noun declensions and archaic dative endings are abolished.
 
 
 ### §3. Noun Morphology Simplification {#noun-morphology}
@@ -305,7 +305,27 @@ As with other possessive constructions, the periphrastic **von** construction re
 
 
 
-#### §3c. Invariant Plural Forms
+#### §3c. Adverbial Genitives of Time
+
+Productive adverbial genitives of time — *eines Tages*, *eines Morgens*, *eines Nachts* — lose their genitive marking entirely and appear as bare invariant noun phrases: **ein Tag**, **ein Morgen**, **ein Nacht**. This mirrors the English bare temporal noun phrase (*one day*, *one morning*), cognate for cognate: English dropped the same adverbial genitive from its productive pattern during the Middle English period. Since these genitives depend on neither a noun nor a preposition, neither the analytical genitive **der** nor the periphrastic **von ein** treatment described in the section on articles applies naturally to them; the periphrastic **von ein Tag** nevertheless remains acceptable, with the bare form preferred.
+
+Lexicalized genitive adverbs such as **nachts**, **morgens**, **abends**, and **anfangs** remain unchanged, per the treatment of lexicalized adverbs in the section on adjectives and adverbs. This too parallels English, which kept its fossilized adverbial -s only in lexicalized items such as *once*, *nowadays*, and *always*.
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Eines Tages wird ihr Traum wahr werden. | Ein Tag wird ihr Traum wahr werden. / Von ein Tag wird ihr Traum wahr werden. | One day her dream will come true. |
+| Eines Morgens klopfte jemand an die Tür. | Ein Morgen klopfte jemand an die Tür. | One morning someone knocked on the door. |
+| Eines Nachts hörte er ein seltsames Geräusch. | Ein Nacht hörte er ein seltsame Geräusch. | One night he heard a strange noise. |
+| Eines schönen Abends saß der Fischer vor der Tür. | Ein schöne Abend saß die Fischer vor die Tür. | One fine evening the fisherman sat in front of the door. |
+| Nachts arbeitet sie am liebsten. | Nachts arbeitet sie liebst. | She likes working at night best. |
+| Morgens trinke ich Kaffee. | Morgens trinke ich Kaffee. | In the morning I drink coffee. |
+
+
+
+#### §3d. Invariant Plural Forms
 
 Standard nominative/accusative plural forms serve as universal plural markers, remaining unchanged in dative and genitive contexts. This preserves recognizable plural morphology while eliminating case-based modifications.
 
@@ -319,7 +339,7 @@ Standard nominative/accusative plural forms serve as universal plural markers, r
 
 
 
-#### §3d. No Regularization of Plural Morphology
+#### §3e. No Regularization of Plural Morphology
 
 **Alman** preserves **Standard German** plural morphology without systematic regularization, maintaining existing plural forms in all non-conflicting contexts. The dialect only intervenes in plural formation when its grammatical simplifications create morphological ambiguity between singular and plural forms, as described in the next rule.
 
@@ -335,7 +355,7 @@ Standard nominative/accusative plural forms serve as universal plural markers, r
 
 
 
-#### §3e. Optional Plural Disambiguation
+#### §3f. Optional Plural Disambiguation
 
 To resolve potential ambiguity in nouns with identical singular/plural forms, **Alman** permits optional plural marking with the suffix **-s**, mirroring the English plural. When clarity requires explicit plurality indication, the -s suffix is appended to the invariant form.
 

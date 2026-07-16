@@ -183,6 +183,20 @@
       "rule": "subject-object-order",
       "covers": ["subject-object-order", "case-inflection-retention"],
       "note": "Guard (identity): object fronting stays available when the object is a personal pronoun, since pronouns retain case marking."
+    },
+    {
+      "source": "Eines Abends stand plötzlich mein Bruder vor der Tür.",
+      "pattern": "{Ein Abend|Von ein Abend}@3c stand plötzlich mein Bruder vor die Tür.",
+      "rule": "adverbial-genitive",
+      "covers": ["adverbial-genitive"],
+      "note": "Productive adverbial genitive of time loses its genitive marking and appears as a bare invariant noun phrase (canonical), mirroring English 'one evening'; the periphrastic 'von ein' variant is accepted."
+    },
+    {
+      "source": "Abends liest sie meistens ein Buch.",
+      "accepted": ["Abends liest sie meistens ein Buch."],
+      "rule": "adverbial-genitive",
+      "covers": ["adverbial-genitive"],
+      "note": "Guard (identity): lexicalized genitive adverbs like 'abends' are fossilized single words and remain unchanged; only the productive 'eines + noun' pattern is rewritten."
     }
   ]
 }

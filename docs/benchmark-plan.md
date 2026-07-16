@@ -2,14 +2,14 @@
 
 Almanbench is the Standard German → Alman translation benchmark
 (`alman/bench/`, built on [Inspect AI](https://inspect.aisi.org.uk/)). Today it
-contains 87 curated, hand-translated items. Version 1 grows it to roughly
+contains 89 curated, hand-translated items. Version 1 grows it to roughly
 1,000 items, large enough to rank models, while keeping the review standard
 that makes the references trustworthy. This document covers what the benchmark
 measures, how runs are executed, and the plan for building v1.
 
 ## Current state
 
-The 87 items under `alman/bench/curated/` are hand-translated. Literary
+The 89 items under `alman/bench/curated/` are hand-translated. Literary
 sentences from Kafka and Hesse (re-derived from the `alman-research` seed data
 under the current spec) exercise several rules at once, and targeted
 collections (`relativsaetze`, `regelabdeckung`) demonstrate individual rules,
@@ -82,7 +82,7 @@ speech, correspondence). These have no draft translations yet; the
 model-draft-then-review pipeline that produced the corpus translations
 applies to them unchanged.
 
-The third is the existing curated tier of 87 items, which stays as the
+The third is the existing curated tier of 89 items, which stays as the
 modern-register demonstrative core. Its acceptance sets and `covers` tags
 carry over unchanged.
 
@@ -93,7 +93,7 @@ carry over unchanged.
 | Naturalistic | ~600 | ~300 corpus rows from held-out works, ~300 modern-source sentences | Headline score on real prose with interacting rules |
 | Targeted | ~200 | Hand-authored (see note below) | Lift rare rules to the coverage floor |
 | Guards | ~120 | Mostly hand-authored, modern register | Overcorrection traps |
-| Curated | 87 | Existing `alman/bench/curated/` | Modern-register diagnostic core |
+| Curated | 89 | Existing `alman/bench/curated/` | Modern-register diagnostic core |
 
 The naturalistic tier holds an even balance between canonical and
 contemporary German, and reports slice scores by the register flag so the
@@ -124,7 +124,7 @@ Public set, 1,007 items:
 | naturalistic-modern, authored | 60 | Hand-written, register label from {instructions, casual, correspondence, news} |
 | targeted | 200 | Lifts a named rule that was under the 25-floor at selection time, with the tagger confirming the source genuinely exercises that rule. Hand-authored, since the held-out corpus could not supply the rare rules (see the tier structure note) |
 | guards | 120 | Guard family label from the eight families below, 15 items each |
-| curated | 87 | The existing `alman/bench/curated/` collections, unchanged membership |
+| curated | 89 | The existing `alman/bench/curated/` collections, unchanged membership |
 
 Within the canonical bins, at least 30 items are drama and at least 15 are
 verse, mirroring the corpus genre mix. Works without a resolvable publication
@@ -241,7 +241,7 @@ out lose nothing, since they become verified training data.
 ## Public and private sets
 
 The benchmark ships in two parts. The public set is the roughly 1,000 items
-described above, including the curated 87. It is what gives the project
+described above, including the curated 89. It is what gives the project
 reproducible numbers and lets others evaluate their own models. The private
 set is about 200 further items drawn from the same tiers and reviewed to the
 same standard, stored outside any public repository (the private

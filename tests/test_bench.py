@@ -193,11 +193,11 @@ class TestCurated:
     def test_task_uses_curated_items_by_default(self):
         task = alman_bench()
         assert task.dataset.name == "alman-bench-curated"
-        assert len(task.dataset) == 87
+        assert len(task.dataset) == 89
 
     def test_task_accepts_inspect_paragraph_list(self):
         task = alman_bench(paragraphs=["regelabdeckung", "relativsaetze"])
-        assert len(task.dataset) == 39
+        assert len(task.dataset) == 41
         assert {sample.metadata["paragraph"] for sample in task.dataset} == {
             "regelabdeckung",
             "relativsaetze",
@@ -213,7 +213,7 @@ class TestCurated:
         assert len(task.dataset) == len(items)
 
     def test_item_count(self, curated_items):
-        assert len(curated_items) == 87
+        assert len(curated_items) == 89
 
     def test_curated_items_do_not_duplicate_spec_examples(self, curated_items):
         assert find_spec_example_overlaps(curated_items) == []

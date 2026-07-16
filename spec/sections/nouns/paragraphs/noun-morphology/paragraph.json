@@ -96,6 +96,53 @@
       ]
     },
     {
+      "id": "adverbial-genitive",
+      "title": "Adverbial Genitives of Time",
+      "description": "Productive adverbial genitives of time — *eines Tages*, *eines Morgens*, *eines Nachts* — lose their genitive marking entirely and appear as bare invariant noun phrases: **ein Tag**, **ein Morgen**, **ein Nacht**. This mirrors the English bare temporal noun phrase (*one day*, *one morning*), cognate for cognate: English dropped the same adverbial genitive from its productive pattern during the Middle English period. Since these genitives depend on neither a noun nor a preposition, neither the analytical genitive **der** nor the periphrastic **von ein** treatment described in the section on articles applies naturally to them; the periphrastic **von ein Tag** nevertheless remains acceptable, with the bare form preferred.\n\nLexicalized genitive adverbs such as **nachts**, **morgens**, **abends**, and **anfangs** remain unchanged, per the treatment of lexicalized adverbs in the section on adjectives and adverbs. This too parallels English, which kept its fossilized adverbial -s only in lexicalized items such as *once*, *nowadays*, and *always*.",
+      "i18n": {
+        "de": {
+          "title": "Adverbiale Genitive der Zeit",
+          "description": "Produktive adverbiale Genitive der Zeit — *eines Tages*, *eines Morgens*, *eines Nachts* — verlieren ihre Genitivmarkierung vollständig und erscheinen als bloße invariante Nominalphrasen: **ein Tag**, **ein Morgen**, **ein Nacht**. Dies spiegelt die bloße temporale Nominalphrase des Englischen (*one day*, *one morning*) wider, Kognat für Kognat: Das Englische hat denselben adverbialen Genitiv in seinem produktiven Muster während der mittelenglischen Periode ebenfalls aufgegeben. Da diese Genitive weder von einem Substantiv noch von einer Präposition abhängen, ist weder der analytische Genitiv **der** noch die periphrastische **von ein**-Konstruktion aus dem Abschnitt über Artikel unmittelbar auf sie anwendbar; die periphrastische Form **von ein Tag** bleibt dennoch akzeptabel, wobei die bloße Form bevorzugt wird.\n\nLexikalisierte Genitivadverbien wie **nachts**, **morgens**, **abends** und **anfangs** bleiben unverändert, gemäß der Behandlung lexikalisierter Adverbien im Abschnitt über Adjektive und Adverbien. Auch dies entspricht dem Englischen, das sein fossilisiertes adverbiales -s nur in lexikalisierten Einheiten wie *once*, *nowadays* und *always* bewahrt hat."
+        },
+        "al": {
+          "title": "Adverbiale Genitive der Zeit",
+          "description": "Produktive adverbiale Genitive der Zeit — *eines Tages*, *eines Morgens*, *eines Nachts* — verlieren ihr Genitivmarkierung vollständig und erscheinen als bloße invariante Nominalphrasen: **ein Tag**, **ein Morgen**, **ein Nacht**. Dies spiegelt die bloße temporale Nominalphrase der Englische (*one day*, *one morning*) wider, Kognat für Kognat: Die Englische hat dieselbe adverbiale Genitiv in sein produktive Muster während der mittelenglische Periode ebenfalls aufgegeben. Da diese Genitive weder von ein Substantiv noch von ein Präposition abhängen, ist weder die analytische Genitiv **der** noch die periphrastische **von ein**-Konstruktion aus die Abschnitt über Artikel unmittelbar auf sie anwendbar; die periphrastische Form **von ein Tag** bleibt dennoch akzeptabel, wobei die bloße Form bevorzugt wird.\n\nLexikalisierte Genitivadverbien wie **nachts**, **morgens**, **abends** und **anfangs** bleiben unverändert, gemäß die Behandlung von lexikalisierte Adverbien in die Abschnitt über Adjektive und Adverbien. Auch dies entspricht die Englische, das sein fossilisierte adverbiale -s nur in lexikalisierte Einheiten wie *once*, *nowadays* und *always* bewahrt hat."
+        }
+      },
+      "examples": [
+        {
+          "standard": "Eines Tages wird ihr Traum wahr werden.",
+          "alman": "Ein Tag wird ihr Traum wahr werden. / Von ein Tag wird ihr Traum wahr werden.",
+          "english": "One day her dream will come true."
+        },
+        {
+          "standard": "Eines Morgens klopfte jemand an die Tür.",
+          "alman": "Ein Morgen klopfte jemand an die Tür.",
+          "english": "One morning someone knocked on the door."
+        },
+        {
+          "standard": "Eines Nachts hörte er ein seltsames Geräusch.",
+          "alman": "Ein Nacht hörte er ein seltsame Geräusch.",
+          "english": "One night he heard a strange noise."
+        },
+        {
+          "standard": "Eines schönen Abends saß der Fischer vor der Tür.",
+          "alman": "Ein schöne Abend saß die Fischer vor die Tür.",
+          "english": "One fine evening the fisherman sat in front of the door."
+        },
+        {
+          "standard": "Nachts arbeitet sie am liebsten.",
+          "alman": "Nachts arbeitet sie liebst.",
+          "english": "She likes working at night best."
+        },
+        {
+          "standard": "Morgens trinke ich Kaffee.",
+          "alman": "Morgens trinke ich Kaffee.",
+          "english": "In the morning I drink coffee."
+        }
+      ]
+    },
+    {
       "id": "plural-uniformity",
       "title": "Invariant Plural Forms",
       "description": "Standard nominative/accusative plural forms serve as universal plural markers, remaining unchanged in dative and genitive contexts. This preserves recognizable plural morphology while eliminating case-based modifications.",
