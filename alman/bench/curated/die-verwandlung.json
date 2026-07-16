@@ -4,9 +4,9 @@
   "items": [
     {
       "source": "Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt.",
-      "pattern": "Als Gregor Samsa ein Morgen aus unruhige Träume erwachte, fand er sich in sein Bett zu ein {ungeheure|ungeheuere}@4a Ungeziefer verwandelt.",
+      "pattern": "Als Gregor Samsa {ein|von ein}@2b Morgen aus unruhige Träume erwachte, fand er sich in sein Bett zu ein {ungeheure|ungeheuere}@4a Ungeziefer verwandelt.",
       "rule": "mixed",
-      "note": "The adverbial genitive 'eines Morgens' is not covered explicitly by the spec; rendered with the invariant 'ein'. Both elided (ungeheure) and unelided (ungeheuere) adjective stems are accepted since the spec does not regulate stem elision."
+      "note": "The adverbial genitive 'eines Morgens' is not covered explicitly by the spec; the bare invariant 'ein' is canonical, and the periphrastic 'von ein' is also accepted per the indefinite-genitive rule and matches the parallel-corpus convention ('eines Tages' -> 'von ein Tag'). Both elided (ungeheure) and unelided (ungeheuere) adjective stems are accepted since the spec does not regulate stem elision."
     },
     {
       "source": "Erst in der Abenddämmerung erwachte Gregor aus seinem schweren ohnmachtähnlichen Schlaf.",

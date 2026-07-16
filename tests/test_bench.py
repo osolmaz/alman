@@ -322,10 +322,14 @@ class TestCurated:
     def test_regelabdeckung_collection(self, curated_items):
         by_id = {item.id: item for item in curated_items}
 
-        # Stressed attributive DAS becomes 'diese'; standalone 'den' becomes
-        # the neutral demonstrative 'das' (article-aligned 'die' accepted).
+        # Stressed attributive DAS becomes 'diese' (all-caps emphasis variant
+        # accepted); standalone 'den' becomes the neutral demonstrative 'das'
+        # (article-aligned 'die' accepted).
         stressed = by_id["curated/regelabdeckung/1"]
-        assert stressed.accepted == ["Diese Auto will sie haben, kein andere."]
+        assert stressed.accepted == [
+            "Diese Auto will sie haben, kein andere.",
+            "DIESE Auto will sie haben, kein andere.",
+        ]
         standalone = by_id["curated/regelabdeckung/2"]
         assert standalone.accepted[0].startswith("Das habe ich")
         assert any(v.startswith("Die habe ich") for v in standalone.accepted)

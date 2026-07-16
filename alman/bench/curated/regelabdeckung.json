@@ -11,10 +11,10 @@
     },
     {
       "source": "DAS Auto will sie haben, kein anderes.",
-      "accepted": ["Diese Auto will sie haben, kein andere."],
+      "accepted": ["Diese Auto will sie haben, kein andere.", "DIESE Auto will sie haben, kein andere."],
       "rule": "demonstrative-exception",
       "covers": ["demonstrative-exception", "possessive-determiners-kein"],
-      "note": "Tricky: stressed attributive 'DAS' stands directly before a noun, so the exception does not apply; demonstrative force is expressed with 'diese'. Standalone 'kein' takes the invariant base form and the nominalized adjective takes -e."
+      "note": "Tricky: stressed attributive 'DAS' stands directly before a noun, so the exception does not apply; demonstrative force is expressed with 'diese'. Standalone 'kein' takes the invariant base form and the nominalized adjective takes -e. All-caps 'DIESE' is also accepted: the emphasis capitals are typographic, and the task instruction asks for the input's capitalization style to be preserved."
     },
     {
       "source": "Den habe ich gestern in der Stadt getroffen.",
@@ -137,10 +137,10 @@
     },
     {
       "source": "In allen Städten gab es viele Proteste mit wenigen Verletzten.",
-      "accepted": ["In alle Städte gab es viele Proteste mit wenige Verletzte."],
+      "accepted": ["In alle Städte gab es viele Proteste mit wenige Verletzten."],
       "rule": "indefinite-negative-quantifiers",
       "covers": ["indefinite-negative-quantifiers"],
-      "note": "Tricky: case-inflected quantifiers drop their endings onto the retained pair member (allen -> alle, wenigen -> wenige) while 'viele' already fits; the nominalized adjective takes the invariant -e."
+      "note": "Tricky: case-inflected quantifiers drop their endings onto the retained pair member (allen -> alle, wenigen -> wenige) while 'viele' already fits. The plural nominalized adjective keeps -en as a plural marker per the nominalized-adjectives rule (die Schoenen pattern); the invariant -e would collapse it with the singular 'die Verletzte'. Corrected 2026-07: the earlier reference 'wenige Verletzte' contradicted that rule."
     },
     {
       "source": "Er redet viel, aber er sagt nichts.",

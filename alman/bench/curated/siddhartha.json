@@ -9,22 +9,23 @@
     },
     {
       "source": "Sonne bräunte seine lichten Schultern am Flußufer, beim Bade, bei den heiligen Waschungen, bei den heiligen Opfern.",
-      "accepted": [
-        "Sonne bräunte sein lichte Schultern an die Flußufer, bei die Bad, bei die heilige Waschungen, bei die heilige Opfer."
-      ],
-      "rule": "mixed"
+      "pattern": "Sonne bräunte sein lichte Schultern an die Flußufer, bei die Bad, bei die heilige Waschungen, bei die heilige Opfer[s].",
+      "rule": "mixed",
+      "note": "Optional plural -s accepted on 'Opfer' (identical singular/plural forms) per the optional plural disambiguation rule; the canonical form omits it."
     },
     {
       "source": "Schatten floß in seine schwarzen Augen im Mangohain, bei den Knabenspielen, beim Gesang der Mutter, bei den heiligen Opfern, bei den Lehren seines Vaters, des Gelehrten, beim Gespräch der Weisen.",
-      "pattern": "Schatten floß in sein schwarze Augen in die Mangohain, bei die Knabenspiele, bei die Gesang {der|von die}@1d Mutter, bei die heilige Opfer, bei die Lehren von sein Vater, die Gelehrte, bei die Gespräch {der|von die} Weisen.",
+      "pattern": "Schatten floß in sein schwarze Augen in die Mangohain, bei die Knabenspiele, bei die Gesang {der|von die}@1d Mutter, bei die heilige Opfer[s], bei die Lehren von sein Vater, die Gelehrte, bei die Gespräch {der|von die} Weisen.",
       "rule": "mixed",
-      "note": "The apposition 'des Gelehrten' follows its head into the von-construction ('von sein Vater, die Gelehrte'), since the possessive genitive has no der-form and must be periphrastic."
+      "note": "The apposition 'des Gelehrten' follows its head into the von-construction ('von sein Vater, die Gelehrte'), since the possessive genitive has no der-form and must be periphrastic. Optional plural -s accepted on 'Opfer' per the optional plural disambiguation rule."
     },
     {
       "source": "Lange schon nahm Siddhartha am Gespräch der Weisen teil, übte sich mit Govinda im Redekampf, übte sich mit Govinda in der Kunst der Betrachtung, im Dienst der Versenkung.",
       "pattern": "Lange schon nahm Siddhartha an die Gespräch {der|von die}@1d Weisen teil, übte sich mit Govinda in die Redekampf, übte sich mit Govinda in die Kunst {der|von die} Betrachtung, in die Dienst {der|von die} Versenkung.",
       "rule": "mixed",
-      "covers": ["reflexive-pronouns"]
+      "covers": [
+        "reflexive-pronouns"
+      ]
     },
     {
       "source": "Schon verstand er, lautlos das Om zu sprechen, das Wort der Worte, es lautlos in sich hinein zu sprechen mit dem Einhauch, es lautlos aus sich heraus zu sprechen mit dem Aushauch, mit gesammelter Seele, die Stirn umgeben vom Glanz des klardenkenden Geistes.",
@@ -44,7 +45,9 @@
         "Freude sprang in die Herz von sein Vater über die Sohn, die Gelehrige, die Wissensdurstige, ein große Weise und Priester sah er in ihm heranwachsen, ein Fürst unter die Brahmanen."
       ],
       "rule": "mixed",
-      "covers": ["nominalized-adjectives"]
+      "covers": [
+        "nominalized-adjectives"
+      ]
     },
     {
       "source": "Wonne sprang in seiner Mutter Brust, wenn sie ihn sah, wenn sie ihn schreiten, wenn sie ihn niedersitzen und aufstehen sah, Siddhartha, den Starken, den Schönen, den auf schlanken Beinen Schreitenden, den mit vollkommenem Anstand sie Begrüßenden.",
@@ -77,7 +80,9 @@
         "An die Abend von diese Tag holten sie die Asketen ein, die dürre Samanas, und boten ihnen Begleitschaft und Gehorsam an. Sie wurden angenommen."
       ],
       "rule": "mixed",
-      "covers": ["genitive-handling"]
+      "covers": [
+        "genitive-handling"
+      ]
     },
     {
       "source": "Siddhartha schenkte sein Gewand einem armen Brahmanen auf der Straße.",
@@ -87,10 +92,9 @@
     },
     {
       "source": "Heiße Träume flackerten aus seinen vergrößerten Augen, an seinen dorrenden Fingern wuchsen lang die Nägel und am Kinn der trockne, struppige Bart.",
-      "accepted": [
-        "Heiße Träume flackerten aus sein vergrößerte Augen, an sein dorrende Finger wuchsen lang die Nägel und an die Kinn die trockne, struppige Bart."
-      ],
-      "rule": "mixed"
+      "pattern": "Heiße Träume flackerten aus sein vergrößerte Augen, an sein dorrende Finger[s] wuchsen lang die Nägel und an die Kinn die trockne, struppige Bart.",
+      "rule": "mixed",
+      "note": "Optional plural -s accepted on 'Finger' (identical singular/plural forms) per the optional plural disambiguation rule; the canonical form omits it. The dative-plural 'Fingern' is not accepted, since case endings are eliminated."
     },
     {
       "source": "War es also gut, war es richtig, war es ein sinnvolles und höchstes Tun, den Göttern zu opfern?",
@@ -103,7 +107,10 @@
       "source": "Diese Sage, dies Gerücht, dies Märchen klang auf, duftete empor, hier und dort, in den Städten sprachen die Brahmanen davon, im Wald die Samanas, immer wieder drang der Name Gotamas, des Buddha, zu den Ohren der Jünglinge, im Guten und im Bösen, in Lobpreisung und in Schmähung.",
       "pattern": "Diese Sage, diese Gerücht, diese Märchen klang auf, duftete empor, hier und dort, in die Städte sprachen die Brahmanen {davon|von das}@6i, in die Wald die Samanas, immer wieder drang die Name {g:Gotamas|von Gotama}@3b, {g:der|die} Buddha, zu die Ohren {der|von die}@1d Jünglinge, in die Gute und in die Böse, in Lobpreisung und in Schmähung.",
       "rule": "mixed",
-      "covers": ["proper-name-genitive", "pronominal-adverbs"],
+      "covers": [
+        "proper-name-genitive",
+        "pronominal-adverbs"
+      ],
       "note": "The apposition 'des Buddha' covaries with the rendering of the name genitive (linked group): genitive 'der Buddha' after retained 'Gotamas', non-genitive 'die Buddha' after the von-construction. The da- compound 'davon' may be retained or uncontracted to 'von das'."
     }
   ]
