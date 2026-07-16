@@ -49,15 +49,15 @@
     {
       "id": "genitive-constructions",
       "title": "Genitive Case",
-      "description": "Indefinite genitive constructions employ either:\n1. Prepositional phrase **von ein** + Noun\n2. Only **ein**, depending on the context, e.g. when used with a genitive prepositions such as **wegen**, **trotz**, **statt**, **innerhalb** and so on.\n\nThe periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.\n\nThis systematizes existing colloquial patterns that use prepositional phrases with dative forms, while replacing them with the invariant **ein**.",
+      "description": "Indefinite genitive constructions employ either:\n1. Prepositional phrase **von ein** + Noun\n2. Only **ein**, depending on the context, e.g. when used with a genitive prepositions such as **wegen**, **trotz**, **statt**, **innerhalb** and so on.\n\nThe periphrastic **von ein** construction is preferred when maintaining indefiniteness is crucial.\n\nThis systematizes existing colloquial patterns that use prepositional phrases with dative forms, while replacing them with the invariant **ein**.\n\nArticleless genitives, where the case is marked only on an adjective or determiner (*die Erzeugung energiereicher Biomoleküle*), likewise take the periphrastic **von**: *die Erzeugung von energiereiche Biomoleküle*. Removing the case ending alone, without **von**, is not sufficient, as it would leave the relation between the two nouns unmarked.",
       "i18n": {
         "de": {
           "title": "Genitiv",
-          "description": "Unbestimmte Genitivkonstruktionen verwenden entweder:\n1. die Präpositionalphrase **von ein** + Substantiv\n2. nur **ein**, je nach Kontext, z. B. nach genitivischen Präpositionen wie **wegen**, **trotz**, **statt**, **innerhalb** und so weiter.\n\nDie periphrastische **von ein**-Konstruktion wird bevorzugt, wenn die Wahrung der Unbestimmtheit entscheidend ist.\n\nDies systematisiert bestehende umgangssprachliche Muster, die Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch das invariante **ein**."
+          "description": "Unbestimmte Genitivkonstruktionen verwenden entweder:\n1. die Präpositionalphrase **von ein** + Substantiv\n2. nur **ein**, je nach Kontext, z. B. nach genitivischen Präpositionen wie **wegen**, **trotz**, **statt**, **innerhalb** und so weiter.\n\nDie periphrastische **von ein**-Konstruktion wird bevorzugt, wenn die Wahrung der Unbestimmtheit entscheidend ist.\n\nDies systematisiert bestehende umgangssprachliche Muster, die Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch das invariante **ein**.\n\nArtikellose Genitive, bei denen der Kasus nur an einem Adjektiv oder Begleiter markiert ist (*die Erzeugung energiereicher Biomoleküle*), verwenden ebenfalls das periphrastische **von**: *die Erzeugung von energiereiche Biomoleküle*. Das bloße Entfernen der Kasusendung ohne **von** genügt nicht, da die Beziehung zwischen den beiden Substantiven sonst unmarkiert bliebe."
         },
         "al": {
           "title": "Genitiv",
-          "description": "Unbestimmte Genitivkonstruktionen verwenden entweder:\n1. die Präpositionalphrase **von ein** + Substantiv\n2. nur **ein**, je nach Kontext, z. B. nach genitivische Präpositionen wie **wegen**, **trotz**, **statt**, **innerhalb** und so weiter.\n\nDie periphrastische **von ein**-Konstruktion wird bevorzugt, wenn die Wahrung der Unbestimmtheit entscheidend ist.\n\nDies systematisiert bestehende umgangssprachliche Muster, das Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch die invariante **ein**."
+          "description": "Unbestimmte Genitivkonstruktionen verwenden entweder:\n1. die Präpositionalphrase **von ein** + Substantiv\n2. nur **ein**, je nach Kontext, z. B. nach genitivische Präpositionen wie **wegen**, **trotz**, **statt**, **innerhalb** und so weiter.\n\nDie periphrastische **von ein**-Konstruktion wird bevorzugt, wenn die Wahrung der Unbestimmtheit entscheidend ist.\n\nDies systematisiert bestehende umgangssprachliche Muster, das Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch die invariante **ein**.\n\nArtikellose Genitive, bei die die Kasus nur an ein Adjektiv oder Begleiter markiert ist (*die Erzeugung energiereicher Biomoleküle*), verwenden ebenfalls die periphrastische **von**: *die Erzeugung von energiereiche Biomoleküle*. Die bloße Entfernen der Kasusendung ohne **von** genügt nicht, da die Beziehung zwischen die beide Substantive sonst unmarkiert bliebe."
         }
       },
       "examples": [
@@ -68,6 +68,10 @@
         {
           "standard": "wegen eines Problems",
           "alman": "wegen ein Problem"
+        },
+        {
+          "standard": "die Erzeugung energiereicher Biomoleküle",
+          "alman": "die Erzeugung von energiereiche Biomoleküle"
         }
       ]
     },

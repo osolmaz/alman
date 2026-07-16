@@ -49,9 +49,9 @@
     },
     {
       "source": "Nichts, was er sagte, war neu.",
-      "pattern": "Nichts, {das|die}@6f er sagte, war neu.",
+      "pattern": "Nichts, {das|die|was}@6f er sagte, war neu.",
       "rule": "relative-pronouns",
-      "note": "The was-relative after indefinite heads (alles/nichts/etwas) also falls under the single invariant relativizer; 'was' itself is not in the acceptance set. Mirrors the siddhartha item ('alles, was' -> 'alles, das')."
+      "note": "After indefinite heads (alles/nichts/etwas) the invariant relativizer is available, but the free-relative 'was' carries no gender or case inflection and is retained as an accepted variant. Mirrors the siddhartha item ('alles, was')."
     },
     {
       "source": "Die Stadt, in der ich geboren wurde, liegt in Bayern.",

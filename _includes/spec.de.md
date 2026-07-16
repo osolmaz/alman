@@ -230,6 +230,8 @@ Die periphrastische **von ein**-Konstruktion wird bevorzugt, wenn die Wahrung de
 
 Dies systematisiert bestehende umgangssprachliche Muster, die Präpositionalphrasen mit Dativformen verwenden, und ersetzt diese durch das invariante **ein**.
 
+Artikellose Genitive, bei denen der Kasus nur an einem Adjektiv oder Begleiter markiert ist (*die Erzeugung energiereicher Biomoleküle*), verwenden ebenfalls das periphrastische **von**: *die Erzeugung von energiereiche Biomoleküle*. Das bloße Entfernen der Kasusendung ohne **von** genügt nicht, da die Beziehung zwischen den beiden Substantiven sonst unmarkiert bliebe.
+
 
 **Beispiele:**
 
@@ -237,6 +239,7 @@ Dies systematisiert bestehende umgangssprachliche Muster, die Präpositionalphra
 |------------------|-------|
 | das Buch eines Freundes | die Buch von ein Freund |
 | wegen eines Problems | wegen ein Problem |
+| die Erzeugung energiereicher Biomoleküle | die Erzeugung von energiereiche Biomoleküle |
 
 
 
@@ -615,6 +618,8 @@ Relativpronomen werden zu einem einzigen invarianten Relativierer vereinfacht: d
 
 Die artikelgleiche Form **die** ist in allen nicht-genitivischen Positionen ebenfalls akzeptabel (*die Mann, die dort steht*). **das** wird bevorzugt, weil es den Relativierer optisch und klanglich vom invarianten Artikel **die** unterscheidet und gestapelte identische Formen dort vermeidet, wo beide aufeinandertreffen (*die Frau, das die Kinder sieht* statt *die Frau, die die Kinder sieht*).
 
+Das freie Relativpronomen **was** trägt keine Genus- oder Kasusflexion und bleibt erhalten. Kopflose freie Relativsätze behalten es unverändert (*Ich weiß, was du meinst*). Nach einem indefiniten oder quantifizierenden Kopf wie **alles**, **nichts**, **etwas** oder einem nominalisierten Superlativ steht der invariante Relativierer gleichermaßen zur Verfügung, sodass sowohl das erhaltene **was** als auch **das** (oder **die**) akzeptabel sind: *alles, was ich weiß* / *alles, das ich weiß*. Dies entspricht dem Englischen, wo *everything that I know* neben dem freien Relativsatz *what I know* steht.
+
 Die genitivischen Relativpronomen **dessen** und **deren** werden beide durch **deren** ersetzt, im Einklang mit der Behandlung der genitivischen Demonstrativa im Abschnitt über Artikel.
 
 Da der invariante Relativierer die Kasusrolle des relativierten Elements nicht mehr markiert, wird Mehrdeutigkeit zwischen Subjekt- und Objektrelativsätzen durch Verbkongruenz und Kontext aufgelöst; bei echter Mehrdeutigkeit können Sprecher mit einem Personalpronomen im Relativsatz oder einer periphrastischen Konstruktion umformulieren.
@@ -629,6 +634,8 @@ Da der invariante Relativierer die Kasusrolle des relativierten Elements nicht m
 | der Mann, dem ich helfe | die Mann, das ich helfe / die Mann, die ich helfe | the man that I help |
 | das Kind, das spielt | die Kind, das spielt / die Kind, die spielt | the child that is playing |
 | die Frau, die die Kinder sieht | die Frau, das die Kinder sieht / die Frau, die die Kinder sieht | the woman that sees the children |
+| alles, was ich weiß | alles, was ich weiß / alles, das ich weiß | everything (that) I know |
+| Ich weiß, was du meinst. | Ich weiß, was du meinst. | I know what you mean. |
 | die Frau, deren Auto kaputt ist | die Frau, deren Auto kaputt ist | the woman whose car is broken |
 | der Mann, dessen Haus groß ist | die Mann, deren Haus groß ist | the man whose house is large |
 

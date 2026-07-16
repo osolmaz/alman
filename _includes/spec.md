@@ -230,6 +230,8 @@ The periphrastic **von ein** construction is preferred when maintaining indefini
 
 This systematizes existing colloquial patterns that use prepositional phrases with dative forms, while replacing them with the invariant **ein**.
 
+Articleless genitives, where the case is marked only on an adjective or determiner (*die Erzeugung energiereicher Biomoleküle*), likewise take the periphrastic **von**: *die Erzeugung von energiereiche Biomoleküle*. Removing the case ending alone, without **von**, is not sufficient, as it would leave the relation between the two nouns unmarked.
+
 
 **Examples:**
 
@@ -237,6 +239,7 @@ This systematizes existing colloquial patterns that use prepositional phrases wi
 |------------------|-------|
 | das Buch eines Freundes | die Buch von ein Freund |
 | wegen eines Problems | wegen ein Problem |
+| die Erzeugung energiereicher Biomoleküle | die Erzeugung von energiereiche Biomoleküle |
 
 
 
@@ -615,6 +618,8 @@ Relative pronouns are simplified to a single invariant relativizer: the neutral 
 
 The article-aligned form **die** is also acceptable in all non-genitive positions (*die Mann, die dort steht*). **das** is preferred because it keeps the relativizer visually and audibly distinct from the invariant article **die**, avoiding stacked identical forms where the two meet (*die Frau, das die Kinder sieht* rather than *die Frau, die die Kinder sieht*).
 
+The free-relative pronoun **was** carries no gender or case inflection and is retained. Headless free relatives keep it unchanged (*Ich weiß, was du meinst*). After an indefinite or quantifying head such as **alles**, **nichts**, **etwas**, or a nominalized superlative, the invariant relativizer is equally available, so both the retained **was** and **das** (or **die**) are acceptable: *alles, was ich weiß* / *alles, das ich weiß*. This mirrors English, where *everything that I know* stands beside the free relative *what I know*.
+
 The genitive relative pronouns **dessen** and **deren** are both replaced by **deren**, consistent with the treatment of genitive demonstratives in the section on articles.
 
 Since the invariant relativizer no longer marks the case role of the relativized element, ambiguity between subject and object relative clauses is resolved by verb agreement and context; where genuine ambiguity arises, speakers may rephrase using a personal pronoun in the relative clause or a periphrastic construction.
@@ -629,6 +634,8 @@ Since the invariant relativizer no longer marks the case role of the relativized
 | der Mann, dem ich helfe | die Mann, das ich helfe / die Mann, die ich helfe | the man that I help |
 | das Kind, das spielt | die Kind, das spielt / die Kind, die spielt | the child that is playing |
 | die Frau, die die Kinder sieht | die Frau, das die Kinder sieht / die Frau, die die Kinder sieht | the woman that sees the children |
+| alles, was ich weiß | alles, was ich weiß / alles, das ich weiß | everything (that) I know |
+| Ich weiß, was du meinst. | Ich weiß, was du meinst. | I know what you mean. |
 | die Frau, deren Auto kaputt ist | die Frau, deren Auto kaputt ist | the woman whose car is broken |
 | der Mann, dessen Haus groß ist | die Mann, deren Haus groß ist | the man whose house is large |
 

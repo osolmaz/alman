@@ -264,7 +264,9 @@ class TestCurated:
         item = by_id["curated/siddhartha/10"]
         assert "alles, das Siddhartha" in item.accepted[0]
         assert any("alles, die Siddhartha" in value for value in item.accepted)
-        assert not any("alles, was Siddhartha" in value for value in item.accepted)
+        # The uninflected free-relative 'was' is retained after indefinite
+        # heads (spec rule on relative pronouns).
+        assert any("alles, was Siddhartha" in value for value in item.accepted)
 
     def test_relativsaetze_collection(self, curated_items):
         by_id = {item.id: item for item in curated_items}
@@ -288,10 +290,11 @@ class TestCurated:
         identity = by_id["curated/relativsaetze/6"]
         assert identity.accepted == [identity.source]
 
-        # 'was' after indefinite heads is replaced and not accepted.
+        # After indefinite heads the invariant relativizer is canonical and
+        # the uninflected free-relative 'was' stays accepted.
         was_rel = by_id["curated/relativsaetze/7"]
         assert was_rel.accepted[0] == "Nichts, das er sagte, war neu."
-        assert not any(", was " in v for v in was_rel.accepted)
+        assert "Nichts, was er sagte, war neu." in was_rel.accepted
 
         # Two clauses choose independently: 2 x 2 variants.
         independent = by_id["curated/relativsaetze/12"]
