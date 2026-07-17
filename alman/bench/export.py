@@ -37,7 +37,7 @@ from inspect_ai.model import ContentReasoning
 from alman.bench.almanbench import case_set_identity
 from alman.bench.registry import Profile
 from alman.bench.scoring import is_accepted, lint, split_thinking
-from alman.bench.task import _system_prompt, almanbench_samples
+from alman.bench.task import almanbench_samples
 
 SCHEMA_VERSION = 1
 BENCHMARK_ID = "almanbench-public"
@@ -84,19 +84,33 @@ def _completion_parts(sample: EvalSample) -> tuple[str | None, str]:
     return ("\n".join(reasoning_parts) or None), answer
 
 
-def _sample_tokens(sample: EvalSample) -> dict[str, int]:
+def _sample_tokens(sample: EvalSample, disjoint_input: bool) -> dict[str, int]:
+    """Normalize per-sample usage into disjoint token buckets.
+
+    Providers disagree on what ``input_tokens`` means: OpenAI-style APIs
+    include cache reads in it, while Anthropic reports uncached input only,
+    with cache reads and writes as separate buckets (``disjoint_input``).
+    The exported ``input`` is always the sum of the three buckets.
+    """
     usages = list((sample.model_usage or {}).values())
 
     def total(field: str) -> int:
         return sum(getattr(usage, field) or 0 for usage in usages)
 
     input_tokens = total("input_tokens")
-    cached = total("input_tokens_cache_read")
+    cache_read = total("input_tokens_cache_read")
+    cache_write = total("input_tokens_cache_write")
+    uncached = input_tokens if disjoint_input else input_tokens - cache_read
+    if uncached < 0:
+        raise ValueError(
+            f"sample {sample.id}: cache reads exceed input tokens; "
+            "the provider's usage convention does not match the exporter"
+        )
     return {
-        "input": input_tokens,
-        "uncached_input": input_tokens - cached,
-        "cached_input": cached,
-        "cache_creation_input": total("input_tokens_cache_write"),
+        "input": uncached + cache_read + cache_write,
+        "uncached_input": uncached,
+        "cached_input": cache_read,
+        "cache_creation_input": cache_write,
         "output": total("output_tokens"),
         "reasoning": total("reasoning_tokens"),
         "total": total("total_tokens"),
@@ -141,14 +155,24 @@ def estimated_cost_usd(
         "cache_creation_input_per_million_tokens",
         pricing["uncached_input_per_million_tokens"],
     )
-    uncached = tokens["uncached_input"] - tokens["cache_creation_input"]
     cost = (
-        uncached * pricing["uncached_input_per_million_tokens"]
+        tokens["uncached_input"] * pricing["uncached_input_per_million_tokens"]
         + tokens["cached_input"] * cached_rate
         + tokens["cache_creation_input"] * creation_rate
         + tokens["output"] * pricing["output_per_million_tokens"]
     ) / 1_000_000
     return round(cost, 5)
+
+
+def _logged_prompt_sha256(log: EvalLog) -> str:
+    """Hash of the system prompt the model actually received.
+
+    Taken from the logged messages, not the current checkout, so re-exports
+    of older logs record the prompt that was really used.
+    """
+    sample = (log.samples or [])[0]
+    system = next(m for m in sample.messages if m.role == "system")
+    return hashlib.sha256(system.text.encode()).hexdigest()
 
 
 def _validate_case_coverage(log: EvalLog, rows: list[dict[str, Any]]) -> None:
@@ -181,6 +205,11 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
         raise ValueError("export requires a dataset='almanbench' run")
     if log.eval.task_args.get("include_spec", True) is not True:
         raise ValueError("official artifacts require the spec in context")
+    if log.eval.model != profile.model:
+        raise ValueError(
+            f"log was run with model {log.eval.model!r}, but profile "
+            f"{profile.name!r} declares {profile.model!r}"
+        )
 
     scoring_revision, dirty = _scoring_revision()
     if dirty:
@@ -189,12 +218,18 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
     execution_id = log.eval.run_id
     started = log.stats.started_at
     completed = log.stats.completed_at
-    run_date = datetime.now(timezone.utc).strftime("%Y%m%d")
-    run_id = f"{profile.name}-{BENCHMARK_ID}-{run_date}"
+    started_compact = (
+        datetime.fromisoformat(started)
+        .astimezone(timezone.utc)
+        .strftime("%Y%m%dT%H%M%SZ")
+    )
+    run_id = f"{profile.name}-{BENCHMARK_ID}-{started_compact}"
+    disjoint_input = profile.model.startswith("anthropic/")
 
     rows = []
     for sample in log.samples or []:
         reasoning, answer = _completion_parts(sample)
+        sample_tokens = _sample_tokens(sample, disjoint_input)
         accepted = (
             list(sample.target)
             if not isinstance(sample.target, str)
@@ -217,11 +252,11 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
                 "reasoning": reasoning,
                 "reasoning_status": "exposed" if reasoning else "not_exposed",
                 "thinking_observed": bool(reasoning)
-                or bool(_sample_tokens(sample)["reasoning"]),
+                or bool(sample_tokens["reasoning"]),
                 "forced_final": False,
                 "correct": is_accepted(answer, accepted),
                 "compliant": not lint(answer),
-                "tokens": _sample_tokens(sample),
+                "tokens": sample_tokens,
                 "finish_reason": choice.stop_reason,
                 "returned_model": sample.output.model,
                 "run_id": run_id,
@@ -296,9 +331,7 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
         "logical_run_id": run_id,
         "execution_id": execution_id,
         "started_at": started,
-        "prompt_sha256": hashlib.sha256(
-            _system_prompt(include_spec=True).encode()
-        ).hexdigest(),
+        "prompt_sha256": _logged_prompt_sha256(log),
         "inspect_model": log.eval.model,
     }
     (out_dir / "manifest.json").write_text(

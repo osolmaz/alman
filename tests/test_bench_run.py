@@ -259,6 +259,24 @@ class TestExport:
         assert flat[0]["model_id"] == "mock"
         assert flat[0]["benchmark_id"] == "almanbench-public"
 
+    def test_run_id_derives_from_start_time(self, mock_run):
+        _, out_dir = mock_run
+        rows = (out_dir / "mock.samples.jsonl").read_text(encoding="utf-8")
+        run_id = json.loads(rows.splitlines()[0])["run_id"]
+        assert run_id.startswith("mock-almanbench-public-")
+        assert run_id.endswith("Z")
+
+    def test_export_rejects_profile_model_mismatch(self, mock_run, tmp_path):
+        log_path, _ = mock_run
+        wrong = Profile(
+            name="wrong",
+            label="Wrong",
+            platform="test",
+            model="openai/some-other-model",
+        )
+        with pytest.raises(ValueError, match="profile 'wrong' declares"):
+            export_log(log_path, wrong, tmp_path / "out")
+
     def test_export_rejects_unfinished_or_wrong_dataset(self, mock_run, tmp_path):
         from inspect_ai import eval as inspect_eval
 
