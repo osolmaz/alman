@@ -92,13 +92,14 @@ for _token in "keine keinen keinem keiner keins keines".split():
     _FORBIDDEN[_token] = "inflected negative article"
 
 # "meinen" and "meine" are deliberately absent: they collide with the verb
-# "meinen" ("ich meine"). "ihrer" is absent because it collides with the
-# genitive personal pronoun, which Alman retains ("ich will ihrer los sein",
-# spec rule on personal pronouns).
+# "meinen" ("ich meine"). "ihrer" and "seiner" are absent because they collide
+# with the genitive personal pronouns, which Alman retains ("ich will ihrer
+# los sein", "wo wir seiner bedürfen"; spec rules on personal pronouns and on
+# genitive objects).
 for _token in (
     "meinem meiner meines meins "
     "deine deinen deinem deiner deines deins "
-    "seine seinen seinem seiner seines seins "
+    "seine seinen seinem seines seins "
     "ihre ihren ihrem ihres "
     "unsere unseren unserem unserer unseres "
     "eure euren eurem eurer eures"

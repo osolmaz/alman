@@ -4,199 +4,337 @@
   "items": [
     {
       "source": "Genau das habe ich dem Lehrer gesagt.",
-      "accepted": ["Genau das habe ich die Lehrer gesagt."],
+      "accepted": [
+        "Genau das habe ich die Lehrer gesagt."
+      ],
       "rule": "demonstrative-exception",
-      "covers": ["demonstrative-exception"],
+      "covers": [
+        "demonstrative-exception"
+      ],
       "note": "Standalone accusative 'das' is retained (the demonstrative exception is positional: no following noun), while 'dem Lehrer' still becomes 'die Lehrer'. Fronting is allowed because the subject is a personal pronoun."
     },
     {
       "source": "DAS Auto will sie haben, kein anderes.",
-      "accepted": ["Diese Auto will sie haben, kein andere.", "DIESE Auto will sie haben, kein andere."],
+      "accepted": [
+        "Diese Auto will sie haben, kein andere.",
+        "DIESE Auto will sie haben, kein andere."
+      ],
       "rule": "demonstrative-exception",
-      "covers": ["demonstrative-exception", "possessive-determiners-kein"],
+      "covers": [
+        "demonstrative-exception",
+        "possessive-determiners-kein"
+      ],
       "note": "Tricky: stressed attributive 'DAS' stands directly before a noun, so the exception does not apply; demonstrative force is expressed with 'diese'. Standalone 'kein' takes the invariant base form and the nominalized adjective takes -e. All-caps 'DIESE' is also accepted: the emphasis capitals are typographic, and the task instruction asks for the input's capitalization style to be preserved."
     },
     {
       "source": "Den habe ich gestern in der Stadt getroffen.",
       "pattern": "{Das|Die}@1c habe ich gestern in die Stadt getroffen.",
       "rule": "demonstrative-exception",
-      "covers": ["demonstrative-exception"],
+      "covers": [
+        "demonstrative-exception"
+      ],
       "note": "Tricky: the Standard German standalone demonstrative 'den' is replaced by the neutral 'das' (article-aligned 'die' accepted), parallel to 'Der war's! -> Das war's!'."
     },
     {
       "source": "Sie geht in den Keller.",
-      "accepted": ["Sie geht in die Keller."],
+      "accepted": [
+        "Sie geht in die Keller."
+      ],
       "rule": "two-way-prepositions",
-      "covers": ["two-way-prepositions"],
+      "covers": [
+        "two-way-prepositions"
+      ],
       "note": "Two-way preposition with accusative (motion). Pairs with the next item: both directions collapse onto the same Alman surface form."
     },
     {
       "source": "Die Fahrräder stehen im Keller.",
-      "accepted": ["Die Fahrräder stehen in die Keller."],
+      "accepted": [
+        "Die Fahrräder stehen in die Keller."
+      ],
       "rule": "two-way-prepositions",
-      "covers": ["two-way-prepositions", "contraction-handling"],
+      "covers": [
+        "two-way-prepositions",
+        "contraction-handling"
+      ],
       "note": "Two-way preposition with dative (location), reached through contraction resolution (im = in + dem). Identical target as the motion item: the case distinction is abolished."
     },
     {
       "source": "Das ist das Fahrrad eines Nachbarn.",
-      "accepted": ["Das ist die Fahrrad von ein Nachbar."],
+      "accepted": [
+        "Das ist die Fahrrad von ein Nachbar."
+      ],
       "rule": "genitive-constructions",
-      "covers": ["genitive-constructions"],
+      "covers": [
+        "genitive-constructions"
+      ],
       "note": "Indefinite adnominal genitive becomes periphrastic 'von ein'. Tricky: 'Nachbarn' is a weak noun, so the -n of the oblique singular is also dropped. The first 'das' is a retained standalone demonstrative."
     },
     {
       "source": "Wegen eines Sturms fällt der Unterricht aus.",
-      "accepted": ["Wegen ein Sturm fällt die Unterricht aus."],
+      "accepted": [
+        "Wegen ein Sturm fällt die Unterricht aus."
+      ],
       "rule": "genitive-constructions",
-      "covers": ["genitive-constructions"],
+      "covers": [
+        "genitive-constructions"
+      ],
       "note": "After a genitive preposition the bare invariant 'ein' is used; no 'von' is inserted (contrast the adnominal case)."
     },
     {
       "source": "Berlin ist eine der größten Städte Europas.",
       "pattern": "Berlin ist ein {der|von die}@1d größte Städte {Europas|von Europa}@3b.",
       "rule": "nominalized-usage",
-      "covers": ["nominalized-usage"],
+      "covers": [
+        "nominalized-usage"
+      ],
       "note": "Nominalized 'eine' persists as bare 'ein' without a following noun; the partitive genitive keeps 'der' (or 'von die'), and the proper-name genitive 'Europas' may be retained or rendered periphrastically."
     },
     {
       "source": "Ich habe den Studenten nach dem Weg gefragt.",
-      "accepted": ["Ich habe die Student nach die Weg gefragt."],
+      "accepted": [
+        "Ich habe die Student nach die Weg gefragt."
+      ],
       "rule": "case-neutralization",
-      "covers": ["case-neutralization"],
+      "covers": [
+        "case-neutralization"
+      ],
       "note": "Tricky: weak-noun declension is abolished, so accusative singular 'den Studenten' becomes 'die Student'. Rendering 'die Studenten' would flip the meaning to plural, since -en survives only as the plural marker."
     },
     {
       "source": "Er spricht mit den Männern und den Kindern.",
-      "accepted": ["Er spricht mit die Männer und die Kinder."],
+      "accepted": [
+        "Er spricht mit die Männer und die Kinder."
+      ],
       "rule": "plural-uniformity",
-      "covers": ["plural-uniformity", "no-plural-morphology-regularization"],
+      "covers": [
+        "plural-uniformity",
+        "no-plural-morphology-regularization"
+      ],
       "note": "Dative plural -n is dropped and the nominative plural serves in all cases. Guard: the irregular umlaut plurals themselves are untouched; no regularization to something like 'Manns' is licensed."
     },
     {
       "source": "Die Computer waren alle ausverkauft.",
       "pattern": "Die Computer[s] waren alle ausverkauft.",
       "rule": "optional-plural-marking",
-      "covers": ["optional-plural-marking"],
+      "covers": [
+        "optional-plural-marking"
+      ],
       "note": "Nouns with identical singular and plural may optionally take -s for disambiguation; both renderings are accepted and the canonical form omits the marker."
     },
     {
       "source": "Vor kurzem hat sie unter anderem in Wien gearbeitet.",
-      "accepted": ["Vor kurze hat sie unter andere in Wien gearbeitet."],
+      "accepted": [
+        "Vor kurze hat sie unter andere in Wien gearbeitet."
+      ],
       "rule": "non-inflected-adverbs",
-      "covers": ["non-inflected-adverbs"],
+      "covers": [
+        "non-inflected-adverbs"
+      ],
       "note": "Tricky: fixed adverbial expressions are not exempt from the form-based principle; the declensional -em endings become the invariant -e (vor kurze, unter andere)."
     },
     {
       "source": "Er singt am besten, wenn er allein ist.",
       "pattern": "Er singt {best|an best}@5b, wenn er allein ist.",
       "rule": "adverbial-superlatives",
-      "covers": ["adverbial-superlatives"],
+      "covers": [
+        "adverbial-superlatives"
+      ],
       "note": "The adverbial superlative drops 'am' entirely in favor of the bare stem (canonical) or 'an' + stem; expanding 'am' to 'an die' is wrong here."
     },
     {
       "source": "Das Mädchen lacht, weil es den Witz versteht.",
-      "accepted": ["Die Mädchen lacht, weil sie die Witz versteht."],
+      "accepted": [
+        "Die Mädchen lacht, weil sie die Witz versteht."
+      ],
       "rule": "natural-gender-attribution",
-      "covers": ["natural-gender-attribution"],
+      "covers": [
+        "natural-gender-attribution"
+      ],
       "note": "Tricky: grammatically neuter 'das Mädchen' denotes a female person, so the pronoun switches from 'es' to 'sie' under natural gender attribution, with singular agreement since the referent's gender is known."
     },
     {
       "source": "Der Motor läuft nicht, weil er kaputt ist.",
-      "accepted": ["Die Motor läuft nicht, weil es kaputt ist."],
+      "accepted": [
+        "Die Motor läuft nicht, weil es kaputt ist."
+      ],
       "rule": "natural-gender-attribution",
-      "covers": ["natural-gender-attribution", "gender-neutral-referents"],
+      "covers": [
+        "natural-gender-attribution",
+        "gender-neutral-referents"
+      ],
       "note": "The mirror image: a grammatically masculine inanimate loses its 'er' pronoun; things without natural gender take 'es'."
     },
     {
       "source": "Der Lärm ärgert einen, wenn man schlafen will.",
-      "accepted": ["Die Lärm ärgert einen, wenn man schlafen will."],
+      "accepted": [
+        "Die Lärm ärgert einen, wenn man schlafen will."
+      ],
       "rule": "case-inflection-retention",
-      "covers": ["case-inflection-retention"],
+      "covers": [
+        "case-inflection-retention"
+      ],
       "note": "Guard: 'einen' here is the accusative of the pronoun 'man' and is retained, although it is homographic with the eliminated inflected indefinite article."
     },
     {
       "source": "Wessen Mantel hängt an der Garderobe?",
-      "accepted": ["Wessen Mantel hängt an die Garderobe?"],
+      "accepted": [
+        "Wessen Mantel hängt an die Garderobe?"
+      ],
       "rule": "interrogative-pronouns",
-      "covers": ["interrogative-pronouns"],
+      "covers": [
+        "interrogative-pronouns"
+      ],
       "note": "Guard: the interrogatives wer/was/wen/wem/wessen are retained unchanged; 'wessen' survives even though the relative 'dessen' is replaced by 'deren'."
     },
     {
       "source": "Womit habt ihr die Wand gestrichen?",
       "pattern": "{Mit was|Womit}@6h habt ihr die Wand gestrichen?",
       "rule": "prepositional-interrogatives",
-      "covers": ["prepositional-interrogatives"],
+      "covers": [
+        "prepositional-interrogatives"
+      ],
       "note": "Preposition + 'was' may replace the wo- compound, mirroring English 'with what'; the Standard German compound remains fully acceptable."
     },
     {
       "source": "Sie hat lange darüber nachgedacht.",
       "pattern": "Sie hat lange {über das|darüber}@6i nachgedacht.",
       "rule": "pronominal-adverbs",
-      "covers": ["pronominal-adverbs"],
+      "covers": [
+        "pronominal-adverbs"
+      ],
       "note": "The da- compound may be replaced by preposition + demonstrative 'das'; both variants are interchangeable."
     },
     {
       "source": "In allen Städten gab es viele Proteste mit wenigen Verletzten.",
-      "accepted": ["In alle Städte gab es viele Proteste mit wenige Verletzten."],
+      "accepted": [
+        "In alle Städte gab es viele Proteste mit wenige Verletzten."
+      ],
       "rule": "indefinite-negative-quantifiers",
-      "covers": ["indefinite-negative-quantifiers"],
+      "covers": [
+        "indefinite-negative-quantifiers"
+      ],
       "note": "Tricky: case-inflected quantifiers drop their endings onto the retained pair member (allen -> alle, wenigen -> wenige) while 'viele' already fits. The plural nominalized adjective keeps -en as a plural marker per the nominalized-adjectives rule (die Schoenen pattern); the invariant -e would collapse it with the singular 'die Verletzte'. Corrected 2026-07: the earlier reference 'wenige Verletzte' contradicted that rule."
     },
     {
       "source": "Er redet viel, aber er sagt nichts.",
-      "accepted": ["Er redet viel, aber er sagt nichts."],
+      "accepted": [
+        "Er redet viel, aber er sagt nichts."
+      ],
       "rule": "indefinite-negative-quantifiers",
-      "covers": ["indefinite-negative-quantifiers"],
+      "covers": [
+        "indefinite-negative-quantifiers"
+      ],
       "note": "Guard (identity): the paired quantifiers viel/viele and nicht/nichts are separate lexical items and must not be merged or given -e endings."
     },
     {
       "source": "Wenn ich mehr Zeit hätte, läse ich den Roman zu Ende.",
-      "accepted": ["Wenn ich mehr Zeit hätte, läse ich die Roman zu Ende."],
+      "accepted": [
+        "Wenn ich mehr Zeit hätte, läse ich die Roman zu Ende."
+      ],
       "rule": "verb-conjugations",
-      "covers": ["verb-conjugations"],
+      "covers": [
+        "verb-conjugations"
+      ],
       "note": "Guard: the full verbal system is retained, including irregular subjunctive II forms (hätte, läse); only the article changes."
     },
     {
       "source": "Beim Joggen hört er Podcasts.",
-      "accepted": ["Bei die Joggen hört er Podcasts."],
+      "accepted": [
+        "Bei die Joggen hört er Podcasts."
+      ],
       "rule": "nominalized-verbs",
-      "covers": ["nominalized-verbs", "contraction-handling"],
+      "covers": [
+        "nominalized-verbs",
+        "contraction-handling"
+      ],
       "note": "Nominalized verbs join the invariant 'die' system: the contraction resolves to 'bei die', not 'bei das'."
     },
     {
       "source": "Ich glaube, dass der Gärtner die Rosen geschnitten hat.",
-      "accepted": ["Ich glaube, dass die Gärtner die Rosen geschnitten hat."],
+      "accepted": [
+        "Ich glaube, dass die Gärtner die Rosen geschnitten hat."
+      ],
       "rule": "word-order-rules",
-      "covers": ["word-order-rules"],
+      "covers": [
+        "word-order-rules"
+      ],
       "note": "Guard: verb-final order in the dass-clause is retained, and the subject already precedes the object; singular 'hat' keeps the subject reading of 'die Gärtner' unambiguous."
     },
     {
       "source": "Den Vertrag hat die Firma nie unterschrieben.",
-      "accepted": ["Die Firma hat die Vertrag nie unterschrieben."],
+      "accepted": [
+        "Die Firma hat die Vertrag nie unterschrieben."
+      ],
       "rule": "subject-object-order",
-      "covers": ["subject-object-order"],
+      "covers": [
+        "subject-object-order"
+      ],
       "note": "Tricky: Standard German fronts the object via its accusative article. With two full noun phrases and no case marking, Alman requires the subject first, so the translation must reorder; a surface-faithful 'Die Vertrag hat die Firma...' is not accepted."
     },
     {
       "source": "Ihn hat die Polizei nie gefunden.",
-      "accepted": ["Ihn hat die Polizei nie gefunden."],
+      "accepted": [
+        "Ihn hat die Polizei nie gefunden."
+      ],
       "rule": "subject-object-order",
-      "covers": ["subject-object-order", "case-inflection-retention"],
+      "covers": [
+        "subject-object-order",
+        "case-inflection-retention"
+      ],
       "note": "Guard (identity): object fronting stays available when the object is a personal pronoun, since pronouns retain case marking."
     },
     {
       "source": "Eines Abends stand plötzlich mein Bruder vor der Tür.",
       "pattern": "{Ein Abend|Von ein Abend}@3c stand plötzlich mein Bruder vor die Tür.",
       "rule": "adverbial-genitive",
-      "covers": ["adverbial-genitive"],
+      "covers": [
+        "adverbial-genitive"
+      ],
       "note": "Productive adverbial genitive of time loses its genitive marking and appears as a bare invariant noun phrase (canonical), mirroring English 'one evening'; the periphrastic 'von ein' variant is accepted."
     },
     {
       "source": "Abends liest sie meistens ein Buch.",
-      "accepted": ["Abends liest sie meistens ein Buch."],
+      "accepted": [
+        "Abends liest sie meistens ein Buch."
+      ],
       "rule": "adverbial-genitive",
-      "covers": ["adverbial-genitive"],
+      "covers": [
+        "adverbial-genitive"
+      ],
       "note": "Guard (identity): lexicalized genitive adverbs like 'abends' are fossilized single words and remain unchanged; only the productive 'eines + noun' pattern is rewritten."
+    },
+    {
+      "source": "Er bediente sich eines alten Tricks.",
+      "accepted": [
+        "Er bediente sich ein alte Trick."
+      ],
+      "rule": "genitive-objects",
+      "covers": [
+        "genitive-objects"
+      ],
+      "note": "Genitive object rendered with the verb's modern plain-object government: the genitive marking drops and the object appears in the invariant form (genitive-objects rule, option 1)."
+    },
+    {
+      "source": "Sie erinnerte sich seiner mit Dankbarkeit.",
+      "pattern": "Sie erinnerte sich {an ihn|seiner}@6j mit Dankbarkeit.",
+      "rule": "genitive-objects",
+      "covers": [
+        "genitive-objects",
+        "case-inflection-retention"
+      ],
+      "note": "Archaic genitive object of 'sich erinnern': the established prepositional complement 'an + accusative' is canonical, and the retained Standard German genitive pronoun 'seiner' stays available under case retention (genitive-objects rule, option 2 and pronoun clause)."
+    },
+    {
+      "source": "Er war ihrer nach kurzer Zeit überdrüssig.",
+      "accepted": [
+        "Er war ihrer nach kurze Zeit überdrüssig."
+      ],
+      "rule": "genitive-objects",
+      "covers": [
+        "genitive-objects",
+        "case-inflection-retention"
+      ],
+      "note": "The genitive personal pronoun 'ihrer' (object of the genitive-governing adjective 'überdrüssig') is a retained pronoun case form, not a possessive determiner, and survives unchanged (genitive-objects rule, pronoun clause); only the adjective ending in 'kurzer' takes the invariant -e."
     }
   ]
 }

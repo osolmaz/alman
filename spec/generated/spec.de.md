@@ -104,6 +104,8 @@ Nach genitivischen Präpositionen wie **wegen**, **trotz**, **statt**, **währen
 
 Das genitivische **der** ist die einzige kasusmarkierte Artikelform, die **Alman** beibehält. Dies ist eine bewusste Ausnahme von der ansonsten vollständigen Beseitigung kasusspezifischer Flexion: Sie hält adnominale Genitivkonstruktionen (*die Haus der Mann*) erkennbar und mit **Standarddeutsch** gegenseitig verständlich. Unbestimmte Artikel, Possessivbegleiter und **kein** beseitigen die Genitivmarkierung stattdessen vollständig durch Periphrase, wie in den jeweiligen Regeln beschrieben.
 
+Das beibehaltene **der** steht an derselben nachgestellten Position wie der **Standarddeutsch**-Genitiv: Der Besitzer folgt seinem Bezugsnomen (*die Haus der Mann*). Archaische oder poetische vorangestellte Genitive mit Artikel (*des Sultans Stadt*, *des Pindus Wellen*) überleben nicht in vorangestellter Position; sie werden in die nachgestellte Konstruktion umgestellt (*die Stadt der Sultan*) oder mit **von die** wiedergegeben. Ohne Kasusendungen wäre ein vorangestelltes *der Sultan Stadt* nicht mehr als Genitiv lesbar. Nur das Genitiv-s von Eigennamen (*Annas Buch*; siehe den Abschnitt über Substantive) bleibt vorangestellt und spiegelt das englische Possessiv *'s*.
+
 
 **Beispiele:**
 
@@ -113,6 +115,7 @@ Das genitivische **der** ist die einzige kasusmarkierte Artikelform, die **Alman
 | der Frau (Genitive) | der Frau |
 | des Kindes (Genitive) | der Kind |
 | wegen des Wetters | wegen der Wetter / wegen die Wetter |
+| in des Sultans Stadt und Land | in die Stadt und Land der Sultan |
 
 
 
@@ -145,6 +148,8 @@ Obwohl austauschbar, sollte 'der' beibehalten werden, wenn ursprüngliche Geniti
 
 Eine Apposition stimmt in der Konstruktion mit ihrer Bezugsnominalphrase überein. Wird ein Genitiv periphrastisch mit **von** wiedergegeben, nimmt auch eine Apposition dazu die nicht-genitivische Form an; wird der Genitiv **der** verwendet, bleibt die Apposition im Genitiv. Dasselbe gilt für Appositionen nach einem beibehaltenen Eigennamen-Genitiv (siehe den Abschnitt über Substantive). Possessive Genitive (*seines Vaters*) haben keine **der**-Form und sind stets periphrastisch (siehe die Regel zu Possessivbegleitern im Abschnitt über Begleiter); ihre Appositionen nehmen daher immer die nicht-genitivische Form an.
 
+Eine Genitivbeziehung wird immer offen markiert, entweder durch **der** oder durch **von**. Artikellose Genitive — bloße Plural- oder Massenbesitzer wie *die Erzeugung energiereicher Biomoleküle* — haben keinen Artikel, der zu **der** werden könnte, und nehmen daher **von** mit der invarianten Form: *die Erzeugung von energiereiche Biomoleküle*. Bloße Nebeneinanderstellung (*die Erzeugung energiereiche Biomoleküle*) ist nicht verfügbar: Ohne die Endungen würde nichts die Beziehung anzeigen. Das spiegelt das Englische, wo solche Phrasen *of* verlangen. Bei koordinierten Genitiven kann **von** entweder wiederholt werden oder sich auf die gesamte Koordination beziehen, wie im Englischen: *Verfasser von einige Traktate und (von) viele Hymnen*.
+
 
 **Beispiele:**
 
@@ -154,6 +159,8 @@ Eine Apposition stimmt in der Konstruktion mit ihrer Bezugsnominalphrase überei
 | die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |  |
 | bei den Lehren seines Vaters, des Gelehrten | bei die Lehren von sein Vater, die Gelehrte | in the teachings of his father, the scholar |
 | die Werke Goethes, des Dichters | die Werke Goethes, der Dichter / die Werke von Goethe, die Dichter | the works of Goethe, the poet |
+| die Erzeugung energiereicher Biomoleküle | die Erzeugung von energiereiche Biomoleküle |  |
+| Verfasserin einiger Traktate und vieler Hymnen | Verfasser von einige Traktate und viele Hymnen / Verfasser von einige Traktate und von viele Hymnen |  |
 
 
 
@@ -272,6 +279,7 @@ Alle kasusspezifischen Substantivendungen werden entfernt, darunter:
 - Genitiv-Marker -s/-es an Gattungsnamen (des Mannes → der Mann); das pränominale Genitiv-s von Eigennamen ist ausgenommen und bleibt erhalten (siehe die Regel zum Eigennamen-Genitiv)
 - Dativ-Plural-Suffixe -n (den Bränden → die Brände)
 - Schwache Deklinationsmuster: Die -n/-en-Endungen, die schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativischen Singularkasus annehmen, entfallen; der Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Der -n/-en-Plural dieser Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invarianten Pluralformen), sodass der Singular *die Kollege* vom Plural *die Kollegen* unterschieden bleibt.
+- Archaische Dativendungen (dem Kinde → die Kind), auch innerhalb fester adverbialer Ausdrücke: *zu Hause* / *nach Hause* werden zu **zu Haus** / **nach Haus**, *zu Pferde* wird zu *zu Pferd*, *auf Erden* wird zu *auf Erde*. Im Einklang mit der Behandlung der Präposition-Artikel-Verschmelzungen gibt es keine Liste ausgenommener fester Ausdrücke.
 
 
 **Beispiele:**
@@ -285,6 +293,8 @@ Alle kasusspezifischen Substantivendungen werden entfernt, darunter:
 | dem Studenten (Dative, weak noun) | die Student |
 | im Menschen (Dative, weak noun) | in die Mensch |
 | die Kollegen (Plural) | die Kollegen (-en retained as plural marker) |
+| nach Hause | nach Haus |
+| zu Pferde (archaic dative) | zu Pferd |
 
 
 
@@ -690,6 +700,32 @@ Die *da-*Komposita des **Standarddeutsch** bleiben voll akzeptabel, da sie keine
 
 
 
+#### §6j. Genitivobjekte von Verben und Adjektiven
+
+Eine kleine Gruppe von **Standarddeutsch**-Verben und -Adjektiven regiert ein Genitivobjekt: **bedürfen**, **sich bedienen**, **gedenken**, **entbehren**, archaisches **sich erinnern** + Genitiv, **fähig**, **sich bewusst**. Diese Genitivobjekte werden in **Alman** nicht beibehalten. Das Genitivobjekt ist im Deutschen seit Jahrhunderten auf dem Rückzug, daher hat jedes dieser Verben und Adjektive ein etabliertes modernes Komplement, und **Alman** verwendet es:
+
+1. Wo der heutige Gebrauch ein einfaches Objekt erlaubt, erscheint das Objekt in der invarianten Form: *er entbehrt ein höhere Leben*, *sie bediente sich ein starke Zweig*.
+2. Wo der heutige Gebrauch ein Präpositionalkomplement bevorzugt, wird diese Präposition verwendet: *sich erinnern an*, *sich freuen über*, *fähig zu*, *denken an* (für *gedenken*).
+
+Ist das Objekt ein Pronomen, bleiben die beibehaltenen **Standarddeutsch**-Genitivpronomen nach der Regel zur Kasusbeibehaltung verfügbar (*ich will ihrer los sein*, *wo wir seiner bedürfen*), ebenso **da**-Komposita für unbelebte Referenten. Das Genitiv-Relativpronomen folgt der Regel zu den Relativpronomen und erscheint als **deren** (*die Steg, deren ich gedacht habe*).
+
+Dies spiegelt das Ergebnis im Englischen, wo kasusregierte Objekte zu einfachen Objekten oder Präpositionalphrasen wurden: *to make use of*, *to remember*, *to be capable of*.
+
+
+**Beispiele:**
+
+| Standarddeutsch | Alman | Englisch |
+|------------------|--------|---------|
+| Er bediente sich eines starken Zweiges. | Er bediente sich ein starke Zweig. | He made use of a strong branch. |
+| das eines höheren Lebens entbehrt | das ein höhere Leben entbehrt | which lacks a higher life |
+| Sie freuten sich des Anlasses. | Sie freuten sich über die Anlass. | They rejoiced at the occasion. |
+| Man muss der Toten gedenken. | Man muss an die Toten denken. | One must remember the dead. |
+| Sie ist dieser Aufgabe fähig. | Sie ist zu diese Aufgabe fähig. | She is capable of this task. |
+| Ich will ihrer los sein. | Ich will ihrer los sein. | I want to be rid of them. |
+| Sie wussten sich seiner nicht zu erinnern. | Sie wussten sich an ihn nicht zu erinnern. | They could not remember him. |
+
+
+
 ### §7. Begleiter und Demonstrativa {#determiners}
 
 Dieser Paragraph beschreibt die Vereinfachung der Begleiter- und Demonstrativformen in **Alman** durch Genusneutralisierung und Kasusreduktion, wobei die Klarheit durch Kontext und Wortstellung gewahrt bleibt.
@@ -772,8 +808,8 @@ Dieselbe invariante Grundform wird im pronominalen (alleinstehenden) Gebrauch ve
 Während **Alman** die meisten Begleiter zusammenführt und vereinfacht, werden einige **indefinite** oder **negative** Quantoren, die im **Standarddeutsch** als **Wortpaare** auftreten, **in ihren ursprünglichen Formen beibehalten**. In diesen Fällen werden **alle** vs. **alles**, **viel** vs. **viele**, **wenig** vs. **wenige** und **nicht** vs. **nichts** unter anderem **nicht** reanalysiert oder zu einer einzigen Form verschmolzen. Sie folgen stattdessen dem **Standarddeutsch**-Gebrauch:
 
 1. **alle/alles**
-   - **alle** → für plurale indefinite Referenzen („all [people/things]“).
-   - **alles** → für das singularische, abstrakte „everything“.
+   - **alle** → die attributive Form vor Substantiven jeden Numerus (*alle Menschen*, bei Massennomen *alle Kummer*, *alle Segen*) und für plurale indefinite Referenz („alle [Menschen/Dinge]“).
+   - **alles** → das alleinstehende Pronomen mit der Bedeutung „everything“.
 
 2. **viel/viele**
    - **viel** → mit **nicht zählbaren** Substantiven oder adverbial („much“, „a lot“).
@@ -791,6 +827,8 @@ Da das **Standarddeutsch** diese Paare als **eigenständige lexikalische Einheit
 
 Die kasusflektierten Formen, die diese Quantoren im **Standarddeutsch** annehmen (**vielen, vielem, vieler, allen, allem, aller, wenigen, wenigem**), werden durch Weglassen der Kasusendung behandelt: Das Ergebnis ist dasjenige Mitglied des beibehaltenen Paares, das in den Kontext passt (nicht zählbar oder adverbial → **viel**, zählbar plural → **viele** und so weiter). So wird *vielen Dank* zu *viel Dank* und *in allen Fällen* zu *in alle Fälle*, analog zu den invarianten englischen Quantoren *much*, *many*, *all*, *little* und *few*. Da die Unterscheidung innerhalb jedes Paares lexikalisch und nicht deklinational ist, nehmen diese Quantoren nie die invariante -e-Endung aus dem Abschnitt über Adjektive an.
 
+Vor einem Begleiter, Possessiv oder Demonstrativ bleibt das unflektierte **all** des **Standarddeutsch** erhalten: *all das Geld*, *all sein Mühe*, analog zum englischen *all the money*. Versteinerte kasusmarkierte Formen werden nach denselben Prinzipien normalisiert: *vor allem* wird zu *vor alles*, und *alledem* (wie in *trotz alledem*) wird zu *all das*, wobei das alleinstehende *alles* ebenso akzeptabel ist (*trotz all das* / *trotz alles*).
+
 
 **Beispiele:**
 
@@ -807,6 +845,10 @@ Die kasusflektierten Formen, die diese Quantoren im **Standarddeutsch** annehmen
 | **Vielen** Dank! | **Viel** Dank! |
 | in **allen** Fällen | in **alle** Fälle |
 | mit **wenigem** zufrieden | mit **wenig** zufrieden |
+| allen Kummer / aller Segen | alle Kummer / alle Segen |
+| all das Geld | all das Geld |
+| vor allem | vor alles |
+| trotz alledem | trotz all das / trotz alles |
 
 
 
@@ -933,6 +975,8 @@ Das natürliche Geschlecht wird, wo kommunikativ relevant, durch Pronomen (siehe
 
 Diese Regel gewährleistet eine einheitliche Behandlung personenbezeichnender Substantive und spiegelt das umfassendere Bestreben von **Alman** wider, die Geschlechterdifferenzierung in lexikalischen Einheiten zu reduzieren.
 
+Die Regel erfasst personenbezeichnende Ableitungen über etablierte Titel hinaus, einschließlich femininer Nachnamen-Ableitungen (*die Steegin* → *die Steeg*) und Rollen-Epitheta (*die Eiskönigin* → *die Eiskönig*). Sie greift jedoch nicht in Komposita hinein, deren Referent keine Person ist: *die Malerinnenschule* (eine Schule für Malerinnen) behält ihre Form, da das Tilgen des Suffixes die Bedeutung des Kompositums ändern würde.
+
 
 **Beispiele:**
 
@@ -944,4 +988,7 @@ Diese Regel gewährleistet eine einheitliche Behandlung personenbezeichnender Su
 | der Türke / die Türkin | die Türke | Turk |
 | der Kollege / die Kollegin | die Kollege | colleague |
 | meine Freundin | mein feste Freund | my girlfriend |
+| die Steegin (surname derivative) | die Steeg |  |
+| die Eiskönigin | die Eiskönig |  |
+| die Malerinnenschule (compound, non-person referent) | die Malerinnenschule |  |
 

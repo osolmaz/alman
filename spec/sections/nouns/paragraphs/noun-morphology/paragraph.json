@@ -16,15 +16,15 @@
     {
       "id": "case-neutralization",
       "title": "Case Ending Elimination",
-      "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers on common nouns (des Mannes → der Mann); the prenominal genitive -s of proper names is exempt and retained (see the rule on the proper-name genitive)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.",
+      "description": "All case-specific noun endings are removed, including:\n- Genitive -s/-es markers on common nouns (des Mannes → der Mann); the prenominal genitive -s of proper names is exempt and retained (see the rule on the proper-name genitive)\n- Dative plural -n suffixes (den Bränden → die Brände)\n- Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.\n- Archaic dative endings (dem Kinde → die Kind), including inside fixed adverbial expressions: *zu Hause* / *nach Hause* become **zu Haus** / **nach Haus**, *zu Pferde* becomes *zu Pferd*, *auf Erden* becomes *auf Erde*. Consistent with the treatment of preposition-article contractions, there is no list of exempt fixed expressions.",
       "i18n": {
         "de": {
           "title": "Beseitigung der Kasusendungen",
-          "description": "Alle kasusspezifischen Substantivendungen werden entfernt, darunter:\n- Genitiv-Marker -s/-es an Gattungsnamen (des Mannes → der Mann); das pränominale Genitiv-s von Eigennamen ist ausgenommen und bleibt erhalten (siehe die Regel zum Eigennamen-Genitiv)\n- Dativ-Plural-Suffixe -n (den Bränden → die Brände)\n- Schwache Deklinationsmuster: Die -n/-en-Endungen, die schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativischen Singularkasus annehmen, entfallen; der Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Der -n/-en-Plural dieser Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invarianten Pluralformen), sodass der Singular *die Kollege* vom Plural *die Kollegen* unterschieden bleibt."
+          "description": "Alle kasusspezifischen Substantivendungen werden entfernt, darunter:\n- Genitiv-Marker -s/-es an Gattungsnamen (des Mannes → der Mann); das pränominale Genitiv-s von Eigennamen ist ausgenommen und bleibt erhalten (siehe die Regel zum Eigennamen-Genitiv)\n- Dativ-Plural-Suffixe -n (den Bränden → die Brände)\n- Schwache Deklinationsmuster: Die -n/-en-Endungen, die schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativischen Singularkasus annehmen, entfallen; der Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Der -n/-en-Plural dieser Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invarianten Pluralformen), sodass der Singular *die Kollege* vom Plural *die Kollegen* unterschieden bleibt.\n- Archaische Dativendungen (dem Kinde → die Kind), auch innerhalb fester adverbialer Ausdrücke: *zu Hause* / *nach Hause* werden zu **zu Haus** / **nach Haus**, *zu Pferde* wird zu *zu Pferd*, *auf Erden* wird zu *auf Erde*. Im Einklang mit der Behandlung der Präposition-Artikel-Verschmelzungen gibt es keine Liste ausgenommener fester Ausdrücke."
         },
         "al": {
           "title": "Beseitigung der Kasusendungen",
-          "description": "Alle kasusspezifische Substantivendungen werden entfernt, darunter:\n- Genitiv-Marker -s/-es an Gattungsnamen (des Mannes → der Mann); die pränominale Genitiv-s von Eigennamen ist ausgenommen und bleibt erhalten (siehe die Regel zu die Eigennamen-Genitiv)\n- Dativ-Plural-Suffixe -n (den Bränden → die Brände)\n- Schwache Deklinationsmuster: Die -n/-en-Endungen, das schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativische Singularkasus annehmen, entfallen; die Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Die -n/-en-Plural von diese Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invariante Pluralformen), sodass die Singular *die Kollege* von die Plural *die Kollegen* unterschieden bleibt."
+          "description": "Alle kasusspezifische Substantivendungen werden entfernt, darunter:\n- Genitiv-Marker -s/-es an Gattungsnamen (des Mannes → der Mann); die pränominale Genitiv-s von Eigennamen ist ausgenommen und bleibt erhalten (siehe die Regel zu die Eigennamen-Genitiv)\n- Dativ-Plural-Suffixe -n (den Bränden → die Brände)\n- Schwache Deklinationsmuster: Die -n/-en-Endungen, das schwache Substantive wie **Kollege**, **Mensch**, **Student** und **Junge** in nicht-nominativische Singularkasus annehmen, entfallen; die Nominativ Singular dient als invariante Singularform (den Kollegen → die Kollege). Die -n/-en-Plural von diese Substantive ist davon unberührt und bleibt als Pluralmarker erhalten (siehe die Regel zu invariante Pluralformen), sodass die Singular *die Kollege* von die Plural *die Kollegen* unterschieden bleibt.\n- Archaische Dativendungen (dem Kinde → die Kind), auch innerhalb feste adverbiale Ausdrücke: *zu Hause* / *nach Hause* werden zu **zu Haus** / **nach Haus**, *zu Pferde* wird zu *zu Pferd*, *auf Erden* wird zu *auf Erde*. In die Einklang mit die Behandlung der Präposition-Artikel-Verschmelzungen gibt es kein Liste von ausgenommene feste Ausdrücke."
         }
       },
       "examples": [
@@ -55,6 +55,14 @@
         {
           "standard": "die Kollegen (Plural)",
           "alman": "die Kollegen (-en retained as plural marker)"
+        },
+        {
+          "standard": "nach Hause",
+          "alman": "nach Haus"
+        },
+        {
+          "standard": "zu Pferde (archaic dative)",
+          "alman": "zu Pferd"
         }
       ]
     },

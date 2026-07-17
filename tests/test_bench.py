@@ -193,11 +193,11 @@ class TestCurated:
     def test_task_uses_curated_items_by_default(self):
         task = alman_bench()
         assert task.dataset.name == "alman-bench-curated"
-        assert len(task.dataset) == 89
+        assert len(task.dataset) == 92
 
     def test_task_accepts_inspect_paragraph_list(self):
         task = alman_bench(paragraphs=["regelabdeckung", "relativsaetze"])
-        assert len(task.dataset) == 41
+        assert len(task.dataset) == 44
         assert {sample.metadata["paragraph"] for sample in task.dataset} == {
             "regelabdeckung",
             "relativsaetze",
@@ -213,7 +213,7 @@ class TestCurated:
         assert len(task.dataset) == len(items)
 
     def test_item_count(self, curated_items):
-        assert len(curated_items) == 89
+        assert len(curated_items) == 92
 
     def test_curated_items_do_not_duplicate_spec_examples(self, curated_items):
         assert find_spec_example_overlaps(curated_items) == []
@@ -286,9 +286,12 @@ class TestCurated:
             "Die Autor, deren Roman ich gerade lese, lebt in Berlin."
         ]
 
-        # Plural 'deren' survives unchanged (identity translation).
+        # Plural 'deren' survives unchanged; only the archaic dative -e of
+        # 'zu Hause' drops (case-neutralization, no fixed-expression exemption).
         identity = by_id["curated/relativsaetze/6"]
-        assert identity.accepted == [identity.source]
+        assert identity.accepted == [
+            "Die Nachbarn, deren Garten verwildert ist, sind selten zu Haus."
+        ]
 
         # After indefinite heads the invariant relativizer is canonical and
         # the uninflected free-relative 'was' stays accepted.
