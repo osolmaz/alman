@@ -243,7 +243,7 @@ profiles:
     label: Ternary Bonsai 27B
     platform: huggingface-inference-providers
     model: openai-api/hf/prism-ml/Ternary-Bonsai-27B-gguf:together
-    max_connections: 32
+    max_connections: 64
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
       HF_API_KEY: ${HF_TOKEN}
