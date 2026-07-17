@@ -54,6 +54,8 @@ def main() -> None:
         help="stop after the Inspect run (no artifacts)",
     )
     args = parser.parse_args()
+    if args.limit is not None and args.limit < 1:
+        parser.error("--limit must be a positive sample count")
 
     profile = load_profile(args.profile)
     os.environ.update(profile.resolved_env())

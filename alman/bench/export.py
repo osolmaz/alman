@@ -66,24 +66,41 @@ def _scoring_revision() -> tuple[str, bool]:
     return commit, dirty
 
 
-def _completion_parts(sample: EvalSample) -> tuple[str | None, str]:
-    """Split a sample's completion into (reasoning, final answer)."""
+def _completion_parts(
+    sample: EvalSample,
+) -> tuple[str | None, str | None, str, bool]:
+    """Split a completion into (reasoning, summary, final answer, redacted).
+
+    Redacted reasoning blocks carry an opaque signature or encrypted blob in
+    ``reasoning``; only their ``summary`` is publishable text.
+    """
     content = sample.output.choices[0].message.content
     if isinstance(content, str):
         reasoning, answer = split_thinking(content)
-        return reasoning or None, answer
+        return reasoning or None, None, answer, False
     reasoning_parts: list[str] = []
+    summary_parts: list[str] = []
     text_parts: list[str] = []
+    redacted = False
     for item in content:
         if isinstance(item, ContentReasoning):
-            if item.reasoning.strip():
+            if item.redacted:
+                redacted = True
+            elif item.reasoning.strip():
                 reasoning_parts.append(item.reasoning.strip())
+            if item.summary and item.summary.strip():
+                summary_parts.append(item.summary.strip())
         elif hasattr(item, "text"):
             text_parts.append(item.text)
     inline, answer = split_thinking("\n".join(text_parts))
     if inline:
         reasoning_parts.append(inline)
-    return ("\n".join(reasoning_parts) or None), answer
+    return (
+        "\n".join(reasoning_parts) or None,
+        "\n".join(summary_parts) or None,
+        answer,
+        redacted,
+    )
 
 
 def _sample_tokens(sample: EvalSample) -> dict[str, int]:
@@ -198,8 +215,20 @@ def _validate_case_coverage(log: EvalLog, rows: list[dict[str, Any]]) -> None:
         )
 
 
-def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any]:
-    """Write the artifact set for a finished run; returns the aggregate."""
+def export_log(
+    log_path: Path,
+    profile: Profile,
+    out_dir: Path,
+    allow_dirty: bool = False,
+) -> dict[str, Any]:
+    """Write the artifact set for a finished run; returns the aggregate.
+
+    Official exports require a clean working tree so ``scoring_revision``
+    names a commit that reproduces the scores; ``allow_dirty`` exists for
+    tests. ``execution_id`` is the id of the Inspect execution that completed
+    the run; samples carried over from an earlier attempt by ``--retry``
+    inherit it.
+    """
     log = read_eval_log(str(log_path))
     if log.status != "success":
         raise ValueError(
@@ -225,8 +254,12 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
             )
 
     scoring_revision, dirty = _scoring_revision()
-    if dirty:
-        print("WARNING: alman working tree is dirty; scoring_revision is stale")
+    if dirty and not allow_dirty:
+        raise ValueError(
+            "the alman working tree is dirty; official artifacts record "
+            "scoring_revision as a commit that must reproduce the scores, "
+            "so commit or stash before exporting"
+        )
 
     execution_id = log.eval.run_id
     started = log.stats.started_at
@@ -240,11 +273,15 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
 
     rows = []
     for sample in log.samples or []:
-        reasoning, answer = _completion_parts(sample)
+        reasoning, summary, answer, redacted = _completion_parts(sample)
         sample_tokens = _sample_tokens(sample)
-        thinking_observed = bool(reasoning) or bool(sample_tokens["reasoning"])
+        thinking_observed = (
+            bool(reasoning) or redacted or bool(sample_tokens["reasoning"])
+        )
         if reasoning:
             reasoning_status = "returned"
+        elif redacted:
+            reasoning_status = "redacted"
         elif thinking_observed:
             reasoning_status = "not_exposed"
         else:
@@ -269,6 +306,7 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
                 },
                 "output": answer,
                 "reasoning": reasoning,
+                "reasoning_summary": summary,
                 "reasoning_status": reasoning_status,
                 "thinking_observed": thinking_observed,
                 "forced_final": False,
@@ -294,7 +332,6 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
         "case_set_id": case_set_id,
         "case_set_size": len(rows),
         "scoring_revision": scoring_revision,
-        "scoring_tree_dirty": dirty,
         "run": {
             "id": run_id,
             "started_at": started,
@@ -309,6 +346,7 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
             "platform": profile.platform,
             "inspect_model": log.eval.model,
             "generate": profile.generate,
+            "logged_generate_config": logged_config.model_dump(exclude_none=True),
         },
         "results": {
             **_group_scores(rows),
@@ -345,7 +383,6 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
         "case_set_id": case_set_id,
         "case_set_size": len(rows),
         "scoring_revision": scoring_revision,
-        "scoring_tree_dirty": dirty,
         "model": profile.requested_model,
         "model_id": profile.name,
         "logical_run_id": run_id,
@@ -388,7 +425,7 @@ def _write_publication_rows(
                 "model_revision": None,
                 "output": row["output"],
                 "reasoning": row["reasoning"],
-                "reasoning_summary": None,
+                "reasoning_summary": row["reasoning_summary"],
                 "reasoning_status": row["reasoning_status"],
                 "correct": row["correct"],
                 "compliant": row["compliant"],

@@ -184,7 +184,7 @@ def mock_run(tmp_path_factory) -> tuple[Path, Path]:
     )
     assert logs[0].status == "success"
     out_dir = root / "artifacts"
-    export_log(Path(logs[0].location), MOCK_PROFILE, out_dir)
+    export_log(Path(logs[0].location), MOCK_PROFILE, out_dir, allow_dirty=True)
     return Path(logs[0].location), out_dir
 
 
@@ -265,6 +265,16 @@ class TestExport:
         run_id = json.loads(rows.splitlines()[0])["run_id"]
         assert run_id.startswith("mock-almanbench-public-")
         assert run_id.endswith("Z")
+
+    def test_export_rejects_dirty_tree(self, mock_run, tmp_path, monkeypatch):
+        import alman.bench.export as export_module
+
+        log_path, _ = mock_run
+        monkeypatch.setattr(
+            export_module, "_scoring_revision", lambda: ("deadbeef", True)
+        )
+        with pytest.raises(ValueError, match="dirty"):
+            export_log(log_path, MOCK_PROFILE, tmp_path / "out")
 
     def test_export_rejects_profile_model_mismatch(self, mock_run, tmp_path):
         log_path, _ = mock_run
