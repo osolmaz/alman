@@ -74,6 +74,21 @@ profiles:
       output_per_million_tokens: 10.0
       observed: 2026-07-16
 
+  claude-fable-5-high:
+    label: Claude Fable 5
+    platform: anthropic-api
+    model: anthropic/claude-fable-5
+    max_connections: 4
+    generate:
+      reasoning_effort: high
+      max_tokens: 32768
+    pricing:
+      uncached_input_per_million_tokens: 10.0
+      cached_input_per_million_tokens: 1.0
+      cache_creation_input_per_million_tokens: 12.5
+      output_per_million_tokens: 50.0
+      observed: 2026-07-17
+
   # Hugging Face Inference Providers (router). Provider suffixes are pinned
   # for reproducibility; pricing is the pinned provider's router price.
 
@@ -157,4 +172,84 @@ profiles:
     pricing:
       uncached_input_per_million_tokens: 1.4
       output_per_million_tokens: 4.4
+      observed: 2026-07-17
+
+  deepseek-v4-pro:
+    label: DeepSeek V4 Pro
+    platform: huggingface-inference-providers
+    model: openai-api/hf/deepseek-ai/DeepSeek-V4-Pro:novita
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 1.6
+      output_per_million_tokens: 3.2
+      observed: 2026-07-17
+
+  mimo-v2.5-pro:
+    label: MiMo V2.5 Pro
+    platform: huggingface-inference-providers
+    model: openai-api/hf/XiaomiMiMo/MiMo-V2.5-Pro:deepinfra
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 0.43
+      output_per_million_tokens: 0.87
+      observed: 2026-07-17
+
+  gemma-4-31b-it:
+    label: Gemma 4 31B IT
+    platform: huggingface-inference-providers
+    model: openai-api/hf/google/gemma-4-31B-it:novita
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 0.14
+      output_per_million_tokens: 0.4
+      observed: 2026-07-17
+
+  nemotron-3-ultra:
+    label: Nemotron 3 Ultra
+    platform: huggingface-inference-providers
+    model: openai-api/hf/nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-NVFP4:together
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 0.95
+    pricing:
+      uncached_input_per_million_tokens: 0.6
+      output_per_million_tokens: 3.6
+      observed: 2026-07-17
+
+  ternary-bonsai-27b:
+    label: Ternary Bonsai 27B
+    platform: huggingface-inference-providers
+    model: openai-api/hf/prism-ml/Ternary-Bonsai-27B-gguf:together
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 8192
+      temperature: 0.7
+      top_p: 0.95
+    pricing:
+      uncached_input_per_million_tokens: 0.0
+      output_per_million_tokens: 0.0
       observed: 2026-07-17
