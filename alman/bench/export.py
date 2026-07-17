@@ -84,28 +84,23 @@ def _completion_parts(sample: EvalSample) -> tuple[str | None, str]:
     return ("\n".join(reasoning_parts) or None), answer
 
 
-def _sample_tokens(sample: EvalSample, disjoint_input: bool) -> dict[str, int]:
+def _sample_tokens(sample: EvalSample) -> dict[str, int]:
     """Normalize per-sample usage into disjoint token buckets.
 
-    Providers disagree on what ``input_tokens`` means: OpenAI-style APIs
-    include cache reads in it, while Anthropic reports uncached input only,
-    with cache reads and writes as separate buckets (``disjoint_input``).
-    The exported ``input`` is always the sum of the three buckets.
+    Inspect's ``ModelUsage`` keeps the buckets disjoint for every provider:
+    ``input_tokens`` excludes cache reads and writes (the OpenAI mapping
+    subtracts ``cached_tokens`` from ``prompt_tokens``; Anthropic reports
+    them separately natively). The exported ``input`` is the sum of the
+    three buckets.
     """
     usages = list((sample.model_usage or {}).values())
 
     def total(field: str) -> int:
         return sum(getattr(usage, field) or 0 for usage in usages)
 
-    input_tokens = total("input_tokens")
+    uncached = total("input_tokens")
     cache_read = total("input_tokens_cache_read")
     cache_write = total("input_tokens_cache_write")
-    uncached = input_tokens if disjoint_input else input_tokens - cache_read
-    if uncached < 0:
-        raise ValueError(
-            f"sample {sample.id}: cache reads exceed input tokens; "
-            "the provider's usage convention does not match the exporter"
-        )
     return {
         "input": uncached + cache_read + cache_write,
         "uncached_input": uncached,
@@ -168,11 +163,19 @@ def _logged_prompt_sha256(log: EvalLog) -> str:
     """Hash of the system prompt the model actually received.
 
     Taken from the logged messages, not the current checkout, so re-exports
-    of older logs record the prompt that was really used.
+    of older logs record the prompt that was really used. A retried run that
+    mixed prompt revisions is rejected: it is not one benchmark run.
     """
-    sample = (log.samples or [])[0]
-    system = next(m for m in sample.messages if m.role == "system")
-    return hashlib.sha256(system.text.encode()).hexdigest()
+    hashes = set()
+    for sample in log.samples or []:
+        system = next(m for m in sample.messages if m.role == "system")
+        hashes.add(hashlib.sha256(system.text.encode()).hexdigest())
+    if len(hashes) != 1:
+        raise ValueError(
+            "samples were generated with different system prompts; "
+            "the log mixes prompt revisions and cannot be one run"
+        )
+    return hashes.pop()
 
 
 def _validate_case_coverage(log: EvalLog, rows: list[dict[str, Any]]) -> None:
@@ -210,6 +213,14 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
             f"log was run with model {log.eval.model!r}, but profile "
             f"{profile.name!r} declares {profile.model!r}"
         )
+    logged_config = log.eval.model_generate_config
+    for key, value in profile.generate.items():
+        logged = getattr(logged_config, key, None)
+        if logged != value:
+            raise ValueError(
+                f"log was generated with {key}={logged!r}, but profile "
+                f"{profile.name!r} declares {key}={value!r}"
+            )
 
     scoring_revision, dirty = _scoring_revision()
     if dirty:
@@ -224,12 +235,11 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
         .strftime("%Y%m%dT%H%M%SZ")
     )
     run_id = f"{profile.name}-{BENCHMARK_ID}-{started_compact}"
-    disjoint_input = profile.model.startswith("anthropic/")
 
     rows = []
     for sample in log.samples or []:
         reasoning, answer = _completion_parts(sample)
-        sample_tokens = _sample_tokens(sample, disjoint_input)
+        sample_tokens = _sample_tokens(sample)
         accepted = (
             list(sample.target)
             if not isinstance(sample.target, str)
@@ -276,6 +286,7 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
         "case_set_id": case_set_id,
         "case_set_size": len(rows),
         "scoring_revision": scoring_revision,
+        "scoring_tree_dirty": dirty,
         "run": {
             "id": run_id,
             "started_at": started,
@@ -326,6 +337,7 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
         "case_set_id": case_set_id,
         "case_set_size": len(rows),
         "scoring_revision": scoring_revision,
+        "scoring_tree_dirty": dirty,
         "model": profile.requested_model,
         "model_id": profile.name,
         "logical_run_id": run_id,
