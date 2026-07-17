@@ -421,7 +421,9 @@ tbody tr:first-child .lb-bar-fill {
 .site-nav {
   margin-left: auto;
   display: flex;
-  gap: 1.1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.1rem;
 }
 
 .site-nav a {
@@ -431,6 +433,7 @@ tbody tr:first-child .lb-bar-fill {
   letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--ink);
+  white-space: nowrap;
 }
 
 .site-nav a:hover,
@@ -621,7 +624,7 @@ tbody tr:first-child .lb-bar-fill {
   .site-nav {
     margin-left: 0;
     width: 100%;
-    gap: 1.1rem;
+    justify-content: space-between;
   }
 
   .site-brand img {
