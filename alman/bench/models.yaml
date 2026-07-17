@@ -7,9 +7,10 @@
 #
 #     uv run bench-run <profile>
 #
-# Routing follows Inspect model strings. `openai/...` and `anthropic/...` use
-# the native providers. Any OpenAI-compatible endpoint (Hugging Face router,
-# dedicated Inference Endpoints, local servers) uses
+# Routing follows Inspect model strings. `openai/...` uses Inspect's native
+# provider; `anthropic-http/...` uses the harness's dependency-free Messages
+# API adapter. Any OpenAI-compatible endpoint (Hugging Face router, dedicated
+# Inference Endpoints, local servers) uses
 # `openai-api/<service>/<model>` with `<SERVICE>_BASE_URL` and
 # `<SERVICE>_API_KEY` from the profile env; `${VAR}` values are read from the
 # ambient environment at run time.
