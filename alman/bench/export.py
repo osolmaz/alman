@@ -237,6 +237,11 @@ def export_log(
         )
     if log.eval.task_args.get("dataset") != "almanbench":
         raise ValueError("export requires a dataset='almanbench' run")
+    if log.eval.task_args.get("bench_dir") is not None:
+        raise ValueError(
+            "this exporter publishes the public set only; private-set logs "
+            "(bench_dir=...) must not produce publication artifacts"
+        )
     if log.eval.task_args.get("include_spec", True) is not True:
         raise ValueError("official artifacts require the spec in context")
     if log.eval.model != profile.model:
@@ -318,11 +323,12 @@ def export_log(
                 "run_id": run_id,
                 "execution_id": execution_id,
                 "scoring_revision": scoring_revision,
-                "completed_at": completed,
+                "completed_at": sample.completed_at or completed,
             }
         )
     rows.sort(key=lambda row: row["id"])
     _validate_case_coverage(log, rows)
+    prompt_sha256 = _logged_prompt_sha256(log)
 
     case_set_id = case_set_identity(rows)
     tokens = {key: sum(row["tokens"][key] for row in rows) for key in rows[0]["tokens"]}
@@ -388,7 +394,7 @@ def export_log(
         "logical_run_id": run_id,
         "execution_id": execution_id,
         "started_at": started,
-        "prompt_sha256": _logged_prompt_sha256(log),
+        "prompt_sha256": prompt_sha256,
         "inspect_model": log.eval.model,
     }
     (out_dir / "manifest.json").write_text(

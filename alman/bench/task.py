@@ -42,11 +42,7 @@ from inspect_ai.scorer import (
 )
 from inspect_ai.solver import Generate, TaskState, generate, solver
 
-from alman.bench.almanbench import (
-    ALMANBENCH_DIR,
-    AlmanbenchItem,
-    load_almanbench_items,
-)
+from alman.bench.almanbench import AlmanbenchItem, load_almanbench_items
 from alman.bench.dataset import REPO_ROOT, BenchItem, load_curated_items, load_items
 from alman.bench.scoring import is_accepted, lint, split_thinking
 
@@ -152,17 +148,21 @@ def _packaged_almanbench_sample(item: AlmanbenchItem) -> Sample:
 
 
 def almanbench_samples(bench_dir: str | None = None) -> list[Sample]:
-    """The full almanbench case set: curated tier plus packaged tiers.
+    """The almanbench case set.
 
-    ``bench_dir`` overrides the packaged-tier directory (the private set uses
-    the same layout outside this repository).
+    The public set is the curated tier plus the packaged public tiers.
+    ``bench_dir`` selects a different packaged directory (the private set
+    uses the same layout outside this repository); the public curated items
+    are not mixed in then, since the private set must stay disjoint from the
+    public one for the contamination comparison to mean anything.
     """
-    packaged_dir = Path(bench_dir) if bench_dir else ALMANBENCH_DIR
+    if bench_dir is not None:
+        return [
+            _packaged_almanbench_sample(item)
+            for item in load_almanbench_items(Path(bench_dir))
+        ]
     samples = [_curated_almanbench_sample(item) for item in load_curated_items()]
-    samples += [
-        _packaged_almanbench_sample(item)
-        for item in load_almanbench_items(packaged_dir)
-    ]
+    samples += [_packaged_almanbench_sample(item) for item in load_almanbench_items()]
     return samples
 
 
