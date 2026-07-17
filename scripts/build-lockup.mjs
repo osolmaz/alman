@@ -1,4 +1,4 @@
-// Generates public/assets/brand/alman_institut_lockup.svg:
+// Generates site/public/assets/brand/alman_institut_lockup.svg:
 // the emblem plus the two wordmark lines converted to vector paths,
 // with both lines sized to exactly the same ink width.
 //
@@ -10,7 +10,7 @@ import path from "node:path";
 import opentype from "opentype.js";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const BRAND = path.join(ROOT, "public/assets/brand");
+const BRAND = path.join(ROOT, "site/public/assets/brand");
 const INK = "#1a1a1a";
 
 // Layout (viewBox units). Emblem spans the full height; text sits right of it.
@@ -107,5 +107,5 @@ const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${F} ${F}"
 </svg>
 `;
 
-writeFileSync(path.join(ROOT, "public/favicon.svg"), favicon);
-console.log(`wrote public/favicon.svg (${F}x${F})`);
+writeFileSync(path.join(ROOT, "site/public/favicon.svg"), favicon);
+console.log(`wrote site/public/favicon.svg (${F}x${F})`);

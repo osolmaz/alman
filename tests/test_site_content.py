@@ -23,8 +23,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # Locale-named files (about/al.md) and suffixed translations (<slug>.al.md).
 ALMAN_PAGES = sorted(
-    set((REPO_ROOT / "src" / "content").glob("**/al.md"))
-    | set((REPO_ROOT / "src" / "content").glob("**/*.al.md"))
+    set((REPO_ROOT / "site" / "src" / "content").glob("**/al.md"))
+    | set((REPO_ROOT / "site" / "src" / "content").glob("**/*.al.md"))
 )
 
 _CODE_SPAN = re.compile(r"`[^`\n]*`")

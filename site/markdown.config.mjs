@@ -8,7 +8,7 @@ import { remarkHeadingId } from "remark-custom-heading-id";
 
 export const markdownConfig = {
   // remarkHeadingId handles the kramdown-style `{#id}` heading anchors
-  // used by the generated spec document (_includes/spec.md).
+  // used by the generated spec document (spec/generated/spec.md).
   // "oldschool" dashes match kramdown: -- becomes en dash, --- em dash.
   remarkPlugins: [
     remarkMath,

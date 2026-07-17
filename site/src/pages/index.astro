@@ -2,7 +2,7 @@
 import { getEntry, render } from "astro:content";
 import Base from "../layouts/Base.astro";
 import Scrolly from "../components/Scrolly.astro";
-import specMeta from "../../spec/main.json";
+import specMeta from "../../../spec/main.json";
 
 const entry = await getEntry("spec", "spec");
 if (!entry) {
