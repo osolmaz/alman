@@ -3,8 +3,8 @@
   "benchmark": "almanbench",
   "version": "v0.1",
   "caseSetSize": 1025,
-  "caseSetId": "sha256:a8d75377a75bc43df04bfdc4eb8469ca73856c3d4c8efc3ec823d7060e590668",
-  "scoringRevision": "9511daf5b41abd8be25e08845d8e7716285e9e3a",
+  "caseSetId": "sha256:4d5a3c1fe630b81dfec3fba46c40a58c6be64dcc4b0ef75af1dd7df4c794d7cb",
+  "scoringRevision": "7f7ecf0ae6fdadf2e34698f6833c293d50c2a742",
   "evaluated": "2026-07-17",
   "dataset": "https://huggingface.co/datasets/osolmaz/almanbench",
   "results": "https://huggingface.co/datasets/osolmaz/almanbench-results",
@@ -15,11 +15,11 @@
       "route": "OpenAI API",
       "reasoning": "xhigh",
       "acceptance": [
-        890,
+        901,
         1025
       ],
       "compliance": [
-        1017,
+        1021,
         1025
       ],
       "tiers": {
@@ -32,7 +32,7 @@
           120
         ],
         "naturalistic": [
-          493,
+          504,
           600
         ],
         "targeted": [
@@ -47,11 +47,11 @@
       "route": "Anthropic API",
       "reasoning": "high",
       "acceptance": [
-        882,
+        889,
         1025
       ],
       "compliance": [
-        1016,
+        1021,
         1025
       ],
       "tiers": {
@@ -64,7 +64,7 @@
           120
         ],
         "naturalistic": [
-          482,
+          489,
           600
         ],
         "targeted": [
@@ -79,11 +79,11 @@
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
       "acceptance": [
-        854,
+        863,
         1025
       ],
       "compliance": [
-        1017,
+        1023,
         1025
       ],
       "tiers": {
@@ -96,7 +96,7 @@
           120
         ],
         "naturalistic": [
-          462,
+          471,
           600
         ],
         "targeted": [
@@ -111,11 +111,11 @@
       "route": "OpenAI API",
       "reasoning": "xhigh",
       "acceptance": [
-        847,
+        858,
         1025
       ],
       "compliance": [
-        1016,
+        1022,
         1025
       ],
       "tiers": {
@@ -128,7 +128,7 @@
           120
         ],
         "naturalistic": [
-          449,
+          460,
           600
         ],
         "targeted": [
@@ -143,11 +143,11 @@
       "route": "OpenAI API",
       "reasoning": "xhigh",
       "acceptance": [
-        834,
+        844,
         1025
       ],
       "compliance": [
-        995,
+        1001,
         1025
       ],
       "tiers": {
@@ -160,7 +160,7 @@
           120
         ],
         "naturalistic": [
-          438,
+          448,
           600
         ],
         "targeted": [
@@ -175,11 +175,11 @@
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
       "acceptance": [
-        829,
+        836,
         1025
       ],
       "compliance": [
-        1010,
+        1014,
         1025
       ],
       "tiers": {
@@ -192,7 +192,7 @@
           120
         ],
         "naturalistic": [
-          440,
+          447,
           600
         ],
         "targeted": [
@@ -207,11 +207,11 @@
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
       "acceptance": [
-        823,
+        830,
         1025
       ],
       "compliance": [
-        1015,
+        1020,
         1025
       ],
       "tiers": {
@@ -224,7 +224,7 @@
           120
         ],
         "naturalistic": [
-          428,
+          435,
           600
         ],
         "targeted": [
@@ -239,11 +239,11 @@
       "route": "Anthropic API",
       "reasoning": "xhigh",
       "acceptance": [
-        777,
+        780,
         1025
       ],
       "compliance": [
-        936,
+        946,
         1025
       ],
       "tiers": {
@@ -256,7 +256,7 @@
           120
         ],
         "naturalistic": [
-          386,
+          389,
           600
         ],
         "targeted": [
@@ -271,11 +271,11 @@
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
       "acceptance": [
-        763,
+        771,
         1025
       ],
       "compliance": [
-        994,
+        998,
         1025
       ],
       "tiers": {
@@ -288,7 +288,7 @@
           120
         ],
         "naturalistic": [
-          379,
+          387,
           600
         ],
         "targeted": [
@@ -303,11 +303,11 @@
       "route": "HF Inference Providers, Scaleway",
       "reasoning": "default",
       "acceptance": [
-        719,
+        724,
         1025
       ],
       "compliance": [
-        983,
+        992,
         1025
       ],
       "tiers": {
@@ -320,7 +320,7 @@
           120
         ],
         "naturalistic": [
-          345,
+          350,
           600
         ],
         "targeted": [
@@ -335,11 +335,11 @@
       "route": "HF Inference Providers, Together",
       "reasoning": "default",
       "acceptance": [
-        713,
+        716,
         1025
       ],
       "compliance": [
-        1001,
+        1006,
         1025
       ],
       "tiers": {
@@ -352,7 +352,7 @@
           120
         ],
         "naturalistic": [
-          353,
+          356,
           600
         ],
         "targeted": [
@@ -371,7 +371,7 @@
         1025
       ],
       "compliance": [
-        967,
+        970,
         1025
       ],
       "tiers": {
@@ -399,11 +399,11 @@
       "route": "HF Inference Providers, DeepInfra",
       "reasoning": "default",
       "acceptance": [
-        617,
+        622,
         1025
       ],
       "compliance": [
-        897,
+        901,
         1025
       ],
       "tiers": {
@@ -416,7 +416,7 @@
           120
         ],
         "naturalistic": [
-          268,
+          273,
           600
         ],
         "targeted": [
@@ -431,11 +431,11 @@
       "route": "HF Inference Providers, Together",
       "reasoning": "default",
       "acceptance": [
-        481,
+        482,
         1025
       ],
       "compliance": [
-        912,
+        920,
         1025
       ],
       "tiers": {
@@ -448,7 +448,7 @@
           120
         ],
         "naturalistic": [
-          197,
+          198,
           600
         ],
         "targeted": [
