@@ -2,11 +2,12 @@
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 from alman.bench.almanbench import ALMANBENCH_DIR, case_set_identity
-from alman.bench.export import estimated_cost_usd, export_log
+from alman.bench.export import _completion_parts, estimated_cost_usd, export_log
 from alman.bench.registry import Profile, load_profile, load_registry
 from alman.bench.scoring import split_thinking
 from alman.bench.task import alman_bench, almanbench_samples
@@ -232,6 +233,15 @@ class TestForcedFinal:
 
 
 class TestExport:
+    def test_completion_falls_back_from_condensed_choice_attachment(self):
+        from inspect_ai.model import ModelOutput
+
+        output = ModelOutput.from_content("mockllm/model", "attachment://abc")
+        output.completion = "die Mann"
+        sample = SimpleNamespace(messages=[], output=output)
+
+        assert _completion_parts(sample)[2] == "die Mann"
+
     def test_export_resolves_condensed_log_attachments(
         self, mock_run, tmp_path, monkeypatch
     ):

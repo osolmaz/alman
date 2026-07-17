@@ -110,6 +110,13 @@ def _completion_parts(
     for message in assistants[:-1]:
         collect(message.content)
     answer = collect(sample.output.choices[0].message.content)
+    if "attachment://" in answer:
+        # Inspect resolves the canonical completion field but can leave a
+        # condensed attachment reference in choices[0].message after retry.
+        # The scorer also reads completion, so use the same resolved value.
+        inline, answer = split_thinking(sample.output.completion)
+        if inline:
+            reasoning_parts.append(inline)
     return (
         "\n".join(reasoning_parts) or None,
         "\n".join(summary_parts) or None,
