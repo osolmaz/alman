@@ -1,5 +1,5 @@
 {
-  "$comment": "Leaderboard data for the /almanbench/ site page. Counts are [correct, total]. All entries are 2026-07-17 full-set runs on the same case set; run artifacts live in the private osolmaz/alman bucket under benchmark-runs/2026-07-17/.",
+  "$comment": "Leaderboard data for the /almanbench/ site page. Counts are [correct, total]. All entries are 2026-07-17 full-set runs on the same case set. Per-sample results are published in the osolmaz/almanbench-results dataset; raw run artifacts live in the private osolmaz/alman bucket under benchmark-runs/2026-07-17/.",
   "benchmark": "almanbench",
   "version": "v0.1",
   "caseSetSize": 1025,
@@ -7,6 +7,7 @@
   "scoringRevision": "bc5ef955ff21af1de017c1e1baad1bbc97019845",
   "evaluated": "2026-07-17",
   "dataset": "https://huggingface.co/datasets/osolmaz/almanbench",
+  "results": "https://huggingface.co/datasets/osolmaz/almanbench-results",
   "entries": [
     {
       "label": "GPT-5.6 Sol",

@@ -4,6 +4,9 @@ The current Almanbench v0.1 leaderboard (1,025-item public set, evaluated
 2026-07-17) is published at [alman.ai/almanbench](https://alman.ai/almanbench/)
 and stored in
 [`benchmark-results/almanbench-leaderboard.json`](../benchmark-results/almanbench-leaderboard.json).
+Per-sample results for every leaderboard run are published in the
+[osolmaz/almanbench-results](https://huggingface.co/datasets/osolmaz/almanbench-results)
+dataset.
 
 The earlier combined 87-row leaderboard is in the
 [expanded curated thinking comparison](../benchmark-results/2026-07-15-expanded-curated-thinking-comparison.md).
