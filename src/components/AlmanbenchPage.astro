@@ -34,6 +34,10 @@ const barPct = (rate: number): number =>
 const fmtTick = (tick: number): string =>
   locale === "en" ? `${tick}%` : `${tick} %`;
 
+// Per-model run details, shown as the hover popover on the model name.
+const runTip = (entry: (typeof lb.entries)[number]): string =>
+  `${entry.route} · Reasoning: ${entry.reasoning} · ${lb.evaluated}`;
+
 const copy = {
   en: {
     description:
@@ -47,13 +51,6 @@ const copy = {
     linkGithub: "GitHub",
     linkSpec: "Specification",
     resultsH: "Results",
-    resultsNote:
-      "Evaluated 2026-07-17 on the full 1,025-item public set, with the " +
-      "specification in the system prompt. API models run at maximum " +
-      "reasoning effort; open-weight models run through Hugging Face " +
-      "Inference Providers with their default reasoning. Single sampled " +
-      "runs; scoring is case-sensitive, and archaic spellings in " +
-      "historical sources must be preserved.",
     tiersH: "Score by tier",
     compH: "Composition",
     compP:
@@ -114,14 +111,6 @@ const copy = {
     linkGithub: "GitHub",
     linkSpec: "Spezifikation",
     resultsH: "Ergebnisse",
-    resultsNote:
-      "Geprüft am 17.07.2026 auf dem vollständigen öffentlichen Satz von " +
-      "1.025 Testfällen, mit der Spezifikation im Systemprompt. " +
-      "API-Modelle laufen mit maximaler Reasoning-Stufe; " +
-      "Open-Weight-Modelle laufen über Hugging Face Inference Providers " +
-      "mit ihrem Standard-Reasoning. Einzelne Läufe; die Bewertung " +
-      "unterscheidet Groß- und Kleinschreibung, und historische " +
-      "Schreibweisen müssen erhalten bleiben.",
     tiersH: "Score nach Ebene",
     compH: "Zusammensetzung",
     compP:
@@ -184,14 +173,6 @@ const copy = {
     linkGithub: "GitHub",
     linkSpec: "Spezifikation",
     resultsH: "Ergebnisse",
-    resultsNote:
-      "Geprüft an die 17.07.2026 auf die vollständige öffentliche Satz von " +
-      "1.025 Testfälle, mit die Spezifikation in die Systemprompt. " +
-      "API-Modelle laufen mit maximale Reasoning-Stufe; " +
-      "Open-Weight-Modelle laufen über Hugging Face Inference Providers " +
-      "mit ihr Standard-Reasoning. Einzelne Läufe; die Bewertung " +
-      "unterscheidet Groß- und Kleinschreibung, und historische " +
-      "Schreibweisen müssen erhalten bleiben.",
     tiersH: "Score nach Ebene",
     compH: "Zusammensetzung",
     compP:
@@ -301,7 +282,7 @@ const bibtex = `@misc{almanbench2026,
           <tr>
             <td class="num mono">{index + 1}</td>
             <td class={index === 0 ? "lb-best" : undefined}>
-              <span class="lb-model" tabindex="0" data-tip={entry.route}>
+              <span class="lb-model" tabindex="0" data-tip={runTip(entry)}>
                 <img
                   class="lb-logo"
                   src={`/assets/icons/models/${entry.vendor}.svg`}
@@ -356,7 +337,6 @@ const bibtex = `@misc{almanbench2026,
       </tr>
     </tfoot>
   </table>
-  <p class="table-note">{copy.resultsNote}</p>
 
   <h3>{copy.tiersH}</h3>
   <table>

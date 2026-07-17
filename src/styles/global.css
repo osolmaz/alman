@@ -244,6 +244,7 @@ td.mono {
   bottom: calc(100% + 0.4rem);
   z-index: 2;
   background: var(--ink);
+  box-shadow: 0 0 0 2px var(--paper);
   color: #fff;
   font-family: var(--font-mono);
   font-size: 0.72rem;

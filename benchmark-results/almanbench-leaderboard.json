@@ -11,7 +11,8 @@
     {
       "label": "GPT-5.6 Sol",
       "vendor": "openai",
-      "route": "OpenAI API, xhigh",
+      "route": "OpenAI API",
+      "reasoning": "xhigh",
       "acceptance": [
         890,
         1025
@@ -43,6 +44,7 @@
       "label": "DeepSeek V4 Flash",
       "vendor": "deepseek",
       "route": "HF Inference Providers, Novita",
+      "reasoning": "default",
       "acceptance": [
         854,
         1025
@@ -73,7 +75,8 @@
     {
       "label": "GPT-5.6 Terra",
       "vendor": "openai",
-      "route": "OpenAI API, xhigh",
+      "route": "OpenAI API",
+      "reasoning": "xhigh",
       "acceptance": [
         847,
         1025
@@ -104,7 +107,8 @@
     {
       "label": "GPT-5.6 Luna",
       "vendor": "openai",
-      "route": "OpenAI API, xhigh",
+      "route": "OpenAI API",
+      "reasoning": "xhigh",
       "acceptance": [
         834,
         1025
@@ -136,6 +140,7 @@
       "label": "Kimi K2.7 Code",
       "vendor": "moonshot",
       "route": "HF Inference Providers, Novita",
+      "reasoning": "default",
       "acceptance": [
         829,
         1025
@@ -166,7 +171,8 @@
     {
       "label": "Claude Sonnet 5",
       "vendor": "anthropic",
-      "route": "Anthropic API, xhigh",
+      "route": "Anthropic API",
+      "reasoning": "xhigh",
       "acceptance": [
         777,
         1025
@@ -198,6 +204,7 @@
       "label": "MiniMax M3",
       "vendor": "minimax",
       "route": "HF Inference Providers, Novita",
+      "reasoning": "default",
       "acceptance": [
         763,
         1025
@@ -229,6 +236,7 @@
       "label": "Qwen3.6 35B A3B",
       "vendor": "qwen",
       "route": "HF Inference Providers, Scaleway",
+      "reasoning": "default",
       "acceptance": [
         719,
         1025
