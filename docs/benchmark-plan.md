@@ -112,7 +112,7 @@ membership conditions. Every condition is checkable by script from the item
 metadata, so the finished benchmark can be audited against this table rather
 than against intent.
 
-Public set, 1,025 items:
+Public set, 1,028 items (1,025 at the v0.1 freeze; three curated items were added with the genitive-objects rule on 2026-07-18):
 
 | Bin | Quota | Inclusion conditions |
 |---|---|---|
@@ -124,7 +124,7 @@ Public set, 1,025 items:
 | naturalistic-modern, authored | 60 | Hand-written, register label from {instructions, casual, correspondence, news} |
 | targeted | 216 | Lifts a named rule that was under the 25-floor at selection time, with the tagger confirming the source genuinely exercises that rule. Hand-authored, since the held-out corpus could not supply the rare rules (see the tier structure note). 200 items from the original composition round plus a 16-item top-up for the adverbial-genitive rule (§3c), added to the spec after the freeze |
 | guards | 120 | Guard family label from the eight families below, 15 items each |
-| curated | 89 | The existing `alman/bench/curated/` collections, unchanged membership |
+| curated | 92 | The `alman/bench/curated/` collections (89 at the freeze, plus three items added with the genitive-objects rule) |
 
 Within the canonical bins, at least 30 items are drama and at least 15 are
 verse, mirroring the corpus genre mix. Works without a resolvable publication
@@ -312,7 +312,8 @@ Variants are generated mechanically wherever a choice point can be detected
 without false positives. The packager
 (`alman-research/scripts/package_almanbench.py`) generates the relativizer
 swap, the retained-`der` and `von die` genitive swaps, the `da`- and
-`wo`-compound swaps, and the optional plural `-s` renderings. The `-s`
+`wo`-compound swaps, the `von`-coordination and `-in`-coordination
+alternations, and the optional plural `-s` renderings. The `-s`
 generation is source-aware: it reads the Standard German source for proof
 that a zero-plural noun is plural (a dative `-n` form, or a determiner that
 cannot precede a masculine or neuter singular) and only then emits the `-s`
@@ -471,7 +472,7 @@ entry (Inspect model string, provider env, generation config, pricing).
    uv run bench-run <profile> --limit 3
    ```
 
-2. **Full run** (the 1,025-item public set):
+2. **Full run** (the 1,028-item public set):
 
    ```bash
    uv run bench-run <profile>
