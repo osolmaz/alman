@@ -10,14 +10,22 @@ the task):
 
 Task options (pass with -T):
 
+    -T dataset=almanbench     the full public case set (curated + packaged)
+    -T dataset=almanbench -T tiers=guards,curated
+                              a tier subset, e.g. for smoke runs
     -T include_spec=false     evaluate without the spec in context
     -T dataset=spec -T include_spec=false
                               diagnostic run on spec examples
     -T dataset=spec -T include_spec=false -T section=articles
                               diagnostic for one spec section
+
+Registry-driven runs (model config, artifacts, cost) go through
+``uv run bench-run <profile>``; see ``alman/bench/run.py``.
 """
 
 from __future__ import annotations
+
+from pathlib import Path
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import MemoryDataset, Sample
@@ -34,8 +42,13 @@ from inspect_ai.scorer import (
 )
 from inspect_ai.solver import Generate, TaskState, generate, solver
 
+from alman.bench.almanbench import (
+    ALMANBENCH_DIR,
+    AlmanbenchItem,
+    load_almanbench_items,
+)
 from alman.bench.dataset import REPO_ROOT, BenchItem, load_curated_items, load_items
-from alman.bench.scoring import is_accepted, lint
+from alman.bench.scoring import is_accepted, lint, split_thinking
 
 SPEC_MARKDOWN = REPO_ROOT / "_includes" / "spec.md"
 
@@ -100,16 +113,69 @@ def _sample(item: BenchItem) -> Sample:
     )
 
 
+def _curated_almanbench_sample(item: BenchItem) -> Sample:
+    """A curated item as a row of the full almanbench case set."""
+    return Sample(
+        id=item.id,
+        input=item.source,
+        target=item.accepted,
+        metadata={
+            "tier": "curated",
+            "collection": item.paragraph,
+            "paragraph": "curated",
+            "bin": "curated",
+            "set": "public",
+            "guard": False,
+        },
+    )
+
+
+def _packaged_almanbench_sample(item: AlmanbenchItem) -> Sample:
+    return Sample(
+        id=item.id,
+        input=item.source,
+        target=item.accepted,
+        metadata={
+            "tier": item.tier,
+            "collection": item.tier,
+            "paragraph": item.tier,
+            "bin": item.bin,
+            "set": item.set,
+            "guard": item.guard,
+            "guard_family": item.guard_family,
+            "covers": item.covers,
+            "register": item.register_label,
+            "orthography_archaic": item.orthography_archaic,
+            "work": item.work,
+        },
+    )
+
+
+def almanbench_samples(bench_dir: str | None = None) -> list[Sample]:
+    """The full almanbench case set: curated tier plus packaged tiers.
+
+    ``bench_dir`` overrides the packaged-tier directory (the private set uses
+    the same layout outside this repository).
+    """
+    packaged_dir = Path(bench_dir) if bench_dir else ALMANBENCH_DIR
+    samples = [_curated_almanbench_sample(item) for item in load_curated_items()]
+    samples += [
+        _packaged_almanbench_sample(item)
+        for item in load_almanbench_items(packaged_dir)
+    ]
+    return samples
+
+
 @scorer(metrics=[grouped(accuracy(), "paragraph"), stderr()])
 def acceptance():
     """Exact match (after normalization) against the item's acceptance set."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        completion = state.output.completion
-        correct = is_accepted(completion, list(target))
+        _, answer = split_thinking(state.output.completion)
+        correct = is_accepted(answer, list(target))
         return Score(
             value=CORRECT if correct else INCORRECT,
-            answer=completion,
+            answer=answer,
             explanation="accepted: " + " | ".join(target),
         )
 
@@ -121,11 +187,11 @@ def compliance():
     """Spec-compliance linter: no eliminated Standard German surface forms."""
 
     async def score(state: TaskState, target: Target) -> Score:
-        completion = state.output.completion
-        violations = lint(completion)
+        _, answer = split_thinking(state.output.completion)
+        violations = lint(answer)
         return Score(
             value=INCORRECT if violations else CORRECT,
-            answer=completion,
+            answer=answer,
             explanation="; ".join(violations) if violations else "no violations",
         )
 
@@ -139,8 +205,31 @@ def alman_bench(
     section: str | None = None,
     paragraph: str | None = None,
     paragraphs: str | list[str] | None = None,
+    tiers: str | list[str] | None = None,
+    bench_dir: str | None = None,
 ) -> Task:
     """Translate unseen Standard German sentences to Alman."""
+    if dataset == "almanbench":
+        if section is not None or paragraph is not None or paragraphs is not None:
+            raise ValueError(
+                "dataset='almanbench' filters by tier; use tiers=..., not "
+                "section/paragraph/paragraphs"
+            )
+        samples = almanbench_samples(bench_dir)
+        if tiers is not None:
+            values = tiers.split(",") if isinstance(tiers, str) else tiers
+            selected = {value.strip() for value in values if value.strip()}
+            known = {sample.metadata["tier"] for sample in samples}
+            if not selected or not selected <= known:
+                raise ValueError(f"tiers must be a subset of {sorted(known)}")
+            samples = [s for s in samples if s.metadata["tier"] in selected]
+        return Task(
+            dataset=MemoryDataset(samples=samples, name="alman-bench-almanbench"),
+            solver=[translator_system_message(include_spec), generate()],
+            scorer=[acceptance(), compliance()],
+        )
+    if tiers is not None or bench_dir is not None:
+        raise ValueError("tiers and bench_dir apply only to dataset='almanbench'")
     if dataset == "spec":
         if include_spec:
             raise ValueError(
@@ -151,7 +240,9 @@ def alman_bench(
     elif dataset == "curated":
         items = load_curated_items()
     else:
-        raise ValueError(f"unknown dataset {dataset!r}; use 'spec' or 'curated'")
+        raise ValueError(
+            f"unknown dataset {dataset!r}; use 'almanbench', 'curated', or 'spec'"
+        )
     if section is not None:
         items = [item for item in items if item.section == section]
     if paragraph is not None:
