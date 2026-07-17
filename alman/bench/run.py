@@ -53,6 +53,11 @@ def main() -> None:
         action="store_true",
         help="stop after the Inspect run (no artifacts)",
     )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="overwrite artifacts already present in the output directory",
+    )
     args = parser.parse_args()
     if args.limit is not None and args.limit < 1:
         parser.error("--limit must be a positive sample count")
@@ -64,6 +69,12 @@ def main() -> None:
     out_root = args.out or Path.home() / "scratch" / "almanbench-runs" / date
     out_dir = out_root / profile.name
     log_dir = out_dir / "logs"
+    samples_path = out_dir / f"{profile.name}.samples.jsonl"
+    if samples_path.exists() and not args.force and not args.no_export:
+        raise SystemExit(
+            f"{samples_path} already exists; pass --force to overwrite or "
+            "choose a different --out"
+        )
 
     # Import inspect after the profile env is in place. Importing the task
     # module also registers the task so retries can resolve it.
@@ -73,6 +84,14 @@ def main() -> None:
     from alman.bench.task import alman_bench
 
     if args.retry:
+        from inspect_ai.log import read_eval_log
+
+        header = read_eval_log(str(args.retry), header_only=True)
+        if header.eval.model != profile.model:
+            raise SystemExit(
+                f"log was run with model {header.eval.model!r}, but profile "
+                f"{profile.name!r} declares {profile.model!r}"
+            )
         logs = eval_retry(
             str(args.retry),
             log_dir=str(log_dir),

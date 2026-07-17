@@ -350,6 +350,10 @@ def export_log(
                 "returned_model": sample.output.model,
                 "run_id": run_id,
                 "execution_id": execution_id,
+                # Physical per-sample identity; carried over unchanged when
+                # --retry reuses a completed sample, unlike execution_id,
+                # which names the execution that completed the run.
+                "sample_uuid": sample.uuid,
                 "scoring_revision": scoring_revision,
                 "completed_at": sample.completed_at or completed,
             }
