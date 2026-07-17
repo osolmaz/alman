@@ -447,33 +447,41 @@ published items, so the two mechanisms cover the two threats independently.
 
 ## Run protocol
 
-1. **Smoke test** (2 curated items, verifying auth, model id, and effort):
+Official runs go through the standardized runner, which resolves a profile
+from the model registry (`alman/bench/models.yaml`), delegates execution to
+Inspect, and exports the stable artifact set. Adding a model is one registry
+entry (Inspect model string, provider env, generation config, pricing).
+
+1. **Smoke test** (a few items, verifying auth, model id, and effort):
 
    ```bash
-   uv run inspect eval alman/bench/task.py --model openai/gpt-5.5 \
-     --reasoning-effort xhigh --max-connections 1 --limit 2
+   uv run bench-run <profile> --limit 3
    ```
 
-2. **Full run** (all curated items, strictly sequential):
+2. **Full run** (the 1,025-item public set):
 
    ```bash
-   uv run inspect eval alman/bench/task.py --model openai/gpt-5.5 \
-     --reasoning-effort xhigh --max-connections 1
+   uv run bench-run <profile>
    ```
 
-   Runs are sequential (`--max-connections 1`) by policy, which keeps
-   rate-limit behavior predictable, exposes per-item latency, and still allows
-   prompt caching for the roughly 12k-token shared spec prefix.
+   Concurrency comes from the profile's `max_connections`. If a run fails
+   partway, resume it with `uv run bench-run <profile> --retry <log>.eval`,
+   which reloads the profile environment, re-registers the task, retries only
+   the unfinished samples, and exports.
 
-3. **Standard variants:**
+3. **Standard variants** (ad-hoc, through the task directly):
 
    ```bash
-   -T include_spec=false                       # curated no-spec ablation
+   -T include_spec=false                       # no-spec ablation
    -T dataset=spec -T include_spec=false       # diagnostic only; never headline
    ```
 
-4. **Inspect results:** logs land in `logs/` (gitignored); browse them with
-   `uv run inspect view`.
+4. **Artifacts:** per-case `samples.jsonl`, publication rows, and an
+   aggregate `result.json` with per-tier scores, token usage, and estimated
+   cost land in `~/scratch/almanbench-runs/<date>/<profile>/`; the raw
+   Inspect `.eval` log sits next to them in `logs/`. Acceptance and
+   compliance are recomputed from the stored outputs at export time, so the
+   recorded `scoring_revision` is the alman commit that scored them.
 
 ## Run records
 

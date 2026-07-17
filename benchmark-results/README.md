@@ -125,19 +125,24 @@ complete field set.
 
 ## Validation
 
-Use the validator matching the record's declared `$schema`:
+Local vLLM records validate with:
 
 ```bash
 uv run bench-result benchmark-results/<local-run>.json
-uv run bench-hf --validate benchmark-results/<hosted-run>.json
-uv run bench-openai --validate benchmark-results/<openai-run>.json
-uv run bench-anthropic --validate benchmark-results/<anthropic-run>.json
 ```
 
 Validation checks JSON Schema constraints plus cross-field rules: raw counts
 equal evaluated plus excluded rows, rates match counts, group totals match the
 evaluated sample count, thinking was observed, and no memory-pressure kill
 occurred.
+
+The hosted, OpenAI, and Anthropic record schemas
+(`hosted-result.schema.json`, `openai-result.schema.json`,
+`anthropic-result.schema.json`) describe historical records produced by the
+retired bespoke runners; the records and schemas are kept, and generic JSON
+Schema tooling validates them. New runs go through the standardized Inspect
+pipeline (`uv run bench-run <profile>`, see `alman/bench/run.py`), which
+writes the almanbench artifact set instead of these record formats.
 
 ## Loading
 

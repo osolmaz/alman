@@ -1,0 +1,160 @@
+# Model registry for standardized almanbench runs.
+#
+# One profile per reproducible configuration: the Inspect model string,
+# provider environment, generation config, concurrency, and observed pricing
+# (USD per million tokens, with the date it was read from the provider).
+# Run a profile with:
+#
+#     uv run bench-run <profile>
+#
+# Routing follows Inspect model strings. `openai/...` and `anthropic/...` use
+# the native providers. Any OpenAI-compatible endpoint (Hugging Face router,
+# dedicated Inference Endpoints, local servers) uses
+# `openai-api/<service>/<model>` with `<SERVICE>_BASE_URL` and
+# `<SERVICE>_API_KEY` from the profile env; `${VAR}` values are read from the
+# ambient environment at run time.
+
+defaults:
+  max_connections: 8
+
+profiles:
+  gpt-5.6-sol-xhigh:
+    label: GPT-5.6 Sol
+    platform: openai-api
+    model: openai/gpt-5.6-sol
+    generate:
+      reasoning_effort: xhigh
+      max_tokens: 16384
+    pricing:
+      uncached_input_per_million_tokens: 5.0
+      cached_input_per_million_tokens: 0.5
+      cache_creation_input_per_million_tokens: 6.25
+      output_per_million_tokens: 30.0
+      observed: 2026-07-16
+
+  gpt-5.6-terra-xhigh:
+    label: GPT-5.6 Terra
+    platform: openai-api
+    model: openai/gpt-5.6-terra
+    generate:
+      reasoning_effort: xhigh
+      max_tokens: 16384
+    pricing:
+      uncached_input_per_million_tokens: 2.5
+      cached_input_per_million_tokens: 0.25
+      cache_creation_input_per_million_tokens: 3.125
+      output_per_million_tokens: 15.0
+      observed: 2026-07-16
+
+  gpt-5.6-luna-xhigh:
+    label: GPT-5.6 Luna
+    platform: openai-api
+    model: openai/gpt-5.6-luna
+    generate:
+      reasoning_effort: xhigh
+      max_tokens: 16384
+    pricing:
+      uncached_input_per_million_tokens: 1.0
+      cached_input_per_million_tokens: 0.1
+      cache_creation_input_per_million_tokens: 1.25
+      output_per_million_tokens: 6.0
+      observed: 2026-07-16
+
+  claude-sonnet-5-xhigh:
+    label: Claude Sonnet 5
+    platform: anthropic-api
+    model: anthropic/claude-sonnet-5
+    generate:
+      reasoning_effort: xhigh
+      max_tokens: 16384
+    pricing:
+      uncached_input_per_million_tokens: 2.0
+      cached_input_per_million_tokens: 0.2
+      cache_creation_input_per_million_tokens: 2.5
+      output_per_million_tokens: 10.0
+      observed: 2026-07-16
+
+  # Hugging Face Inference Providers (router). Provider suffixes are pinned
+  # for reproducibility; pricing is the pinned provider's router price.
+
+  kimi-k2.7-code:
+    label: Kimi K2.7 Code
+    platform: huggingface-inference-providers
+    model: openai-api/hf/moonshotai/Kimi-K2.7-Code:novita
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 0.95
+      output_per_million_tokens: 4.0
+      observed: 2026-07-17
+
+  minimax-m3:
+    label: MiniMax M3
+    platform: huggingface-inference-providers
+    model: openai-api/hf/MiniMaxAI/MiniMax-M3:novita
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 0.3
+      output_per_million_tokens: 1.2
+      observed: 2026-07-17
+
+  deepseek-v4-flash:
+    label: DeepSeek V4 Flash
+    platform: huggingface-inference-providers
+    model: openai-api/hf/deepseek-ai/DeepSeek-V4-Flash:novita
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 0.14
+      output_per_million_tokens: 0.28
+      observed: 2026-07-17
+
+  qwen3.6-35b-a3b:
+    label: Qwen3.6 35B A3B
+    platform: huggingface-inference-providers
+    # deepinfra was persistently engine_overloaded on 2026-07-17; scaleway
+    # is the pinned provider instead.
+    model: openai-api/hf/Qwen/Qwen3.6-35B-A3B:scaleway
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 0.285
+      output_per_million_tokens: 1.71
+      observed: 2026-07-17
+
+  glm-5.2:
+    label: GLM 5.2
+    platform: huggingface-inference-providers
+    model: openai-api/hf/zai-org/GLM-5.2:novita
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 1.4
+      output_per_million_tokens: 4.4
+      observed: 2026-07-17

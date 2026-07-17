@@ -51,15 +51,30 @@ is in the model context because the spec contains their answers verbatim. The
 curated data contains no spec examples, and the loader rejects any overlap.
 Spec examples may be used as a diagnostic only when `include_spec=false`.
 
-Run it against any model supported by Inspect — the model is a drop-in
-parameter:
+Official runs go through the model registry (`alman/bench/models.yaml`),
+which pins the Inspect model string, provider environment, generation config,
+and observed pricing for each named profile:
 
 ```bash
-uv run inspect eval alman/bench/task.py --model openai/gpt-5-codex
-uv run inspect eval alman/bench/task.py --model anthropic/claude-sonnet-4-5
-uv run inspect eval alman/bench/task.py --model google/gemini-2.5-pro
-uv run inspect eval alman/bench/task.py --model vllm/local -M model_path=./my-finetune
-uv run inspect eval alman/bench/task.py --model mockllm/model   # dry run, no API key
+uv run bench-run deepseek-v4-flash              # full 1,025-item public set
+uv run bench-run kimi-k2.7-code --limit 3       # smoke test
+uv run bench-run glm-5.2 --tiers guards,curated # tier subset
+```
+
+The runner delegates execution to Inspect and exports the stable almanbench
+artifact set (per-case samples, publication rows, aggregate with per-tier
+scores and estimated cost). Adding a model is one registry entry; any
+OpenAI-compatible endpoint works, including Hugging Face Inference Providers
+(`openai-api/hf/<org>/<model>:<provider>` with `HF_TOKEN`) and dedicated
+Inference Endpoints or local servers via `<SERVICE>_BASE_URL`.
+
+For ad-hoc runs, the task itself takes any model supported by Inspect as a
+drop-in parameter:
+
+```bash
+uv run inspect eval alman/bench/task.py -T dataset=almanbench --model openai/gpt-5-codex
+uv run inspect eval alman/bench/task.py -T dataset=almanbench --model anthropic/claude-sonnet-4-5
+uv run inspect eval alman/bench/task.py -T dataset=almanbench --model mockllm/model  # dry run
 ```
 
 Set the provider's API key first (e.g. `OPENAI_API_KEY`). Results are written
@@ -68,6 +83,8 @@ to `logs/`; browse them with `uv run inspect view`.
 Task options (passed with `-T`):
 
 ```bash
+-T dataset=almanbench      # the full 1,025-item public set (default: curated)
+-T dataset=almanbench -T tiers=guards,curated
 -T include_spec=false      # translate without the spec in the system prompt
 -T dataset=spec            # diagnostic spec-example run; pair with include_spec=false
 -T dataset=spec -T include_spec=false -T section=articles

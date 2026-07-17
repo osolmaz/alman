@@ -117,14 +117,8 @@ def _evaluated_samples(log: EvalLog) -> tuple[list[Any], list[str]]:
     if paragraph is not None:
         items = [item for item in items if item.paragraph == paragraph]
     if paragraphs is not None:
-        values = (
-            paragraphs.split(",")
-            if isinstance(paragraphs, str)
-            else paragraphs
-        )
-        selected = {
-            value.strip() for value in values if value.strip()
-        }
+        values = paragraphs.split(",") if isinstance(paragraphs, str) else paragraphs
+        selected = {value.strip() for value in values if value.strip()}
         items = [item for item in items if item.paragraph in selected]
     evaluated_ids = {item.id for item in items}
     logged_ids = set(logged)
@@ -134,9 +128,7 @@ def _evaluated_samples(log: EvalLog) -> tuple[list[Any], list[str]]:
         excluded_ids = sorted(LEGACY_SPEC_EXAMPLE_IDS)
     else:
         missing = sorted(evaluated_ids - logged_ids)
-        unexpected = sorted(
-            logged_ids - evaluated_ids - LEGACY_SPEC_EXAMPLE_IDS
-        )
+        unexpected = sorted(logged_ids - evaluated_ids - LEGACY_SPEC_EXAMPLE_IDS)
         raise ValueError(
             f"curated sample ids do not match the dataset; "
             f"missing={missing}, unexpected={unexpected}"

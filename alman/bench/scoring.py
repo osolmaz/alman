@@ -47,6 +47,27 @@ def is_accepted(output: str, accepted: list[str]) -> bool:
     return any(normalized == normalize(a) for a in accepted)
 
 
+_THINK_RE = re.compile(r"<think>(.*?)</think>", flags=re.DOTALL)
+
+
+def split_thinking(text: str) -> tuple[str, str]:
+    """Split inline ``<think>`` blocks from the final answer.
+
+    Open-weight models often emit their reasoning as ``<think>...</think>``
+    inside the message content. Returns ``(reasoning, final_answer)``; both
+    scoring instruments must be applied to the final answer only. An
+    unclosed ``<think>`` (the model was cut off mid-reasoning) counts as
+    reasoning with no final answer, not as an answer.
+    """
+    parts = [match.strip() for match in _THINK_RE.findall(text) if match.strip()]
+    final_answer = _THINK_RE.sub("", text)
+    if "<think>" in final_answer:
+        final_answer, _, truncated = final_answer.partition("<think>")
+        if truncated.strip():
+            parts.append(truncated.strip())
+    return "\n".join(parts), final_answer.strip()
+
+
 _FORBIDDEN: dict[str, str] = {}
 
 for _token in (

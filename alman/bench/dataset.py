@@ -280,7 +280,6 @@ def load_curated_items(
     if overlaps:
         overlap_ids = [item.id for item in overlaps]
         raise ValueError(
-            "curated items duplicate specification examples: "
-            f"{overlap_ids}"
+            f"curated items duplicate specification examples: {overlap_ids}"
         )
     return items
