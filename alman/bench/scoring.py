@@ -11,6 +11,12 @@ Two instruments, kept separate on purpose:
   Notably ``einen``/``einem`` are *not* flagged (retained as oblique forms of
   the pronoun *man*, spec section on pronouns) and neither is ``derjenige``
   (retained as a genitive form, spec rule on genitive handling).
+
+  Text inside German quotation marks („...“ and »...«) is treated as a
+  mention of Standard German rather than a use of it and is exempt, the
+  same convention the site-content compliance test applies to code spans
+  and italics. The guards tier depends on this: its items quote Standard
+  German that must be preserved verbatim.
 """
 
 from __future__ import annotations
@@ -85,12 +91,15 @@ for _token in "eine einer eines".split():
 for _token in "keine keinen keinem keiner keins keines".split():
     _FORBIDDEN[_token] = "inflected negative article"
 
-# "meinen" is deliberately absent: it collides with the verb "meinen".
+# "meinen" and "meine" are deliberately absent: they collide with the verb
+# "meinen" ("ich meine"). "ihrer" is absent because it collides with the
+# genitive personal pronoun, which Alman retains ("ich will ihrer los sein",
+# spec rule on personal pronouns).
 for _token in (
-    "meine meinem meiner meines meins "
+    "meinem meiner meines meins "
     "deine deinen deinem deiner deines deins "
     "seine seinen seinem seiner seines seins "
-    "ihre ihren ihrem ihrer ihres "
+    "ihre ihren ihrem ihres "
     "unsere unseren unserem unserer unseres "
     "eure euren eurem eurer eures"
 ).split():
@@ -110,13 +119,29 @@ for _token in (
 
 _TOKEN_RE = re.compile(r"[A-Za-zÄÖÜäöüß]+")
 
+# Quoted spans are mentions of Standard German, not uses of it.
+_QUOTED_SPAN_RE = re.compile(r"„[^“]*“|»[^«]*«")
+
+# "die/der/das eine" is the numeral-like 'the one' ("die eine Teil der
+# Gesellschaft"), not an inflected indefinite article.
+_ARTICLES_BEFORE_EINE = {"die", "der", "das"}
+
 
 def lint(text: str) -> list[str]:
     """Return violations of Alman surface-form invariants found in ``text``."""
+    text = _QUOTED_SPAN_RE.sub(" ", text)
     violations = []
-    for match in _TOKEN_RE.finditer(text):
+    tokens = list(_TOKEN_RE.finditer(text))
+    for i, match in enumerate(tokens):
         token = match.group(0)
         reason = _FORBIDDEN.get(token.lower())
-        if reason:
-            violations.append(f"'{token}': {reason}")
+        if not reason:
+            continue
+        if (
+            token.lower() == "eine"
+            and i > 0
+            and tokens[i - 1].group(0).lower() in _ARTICLES_BEFORE_EINE
+        ):
+            continue
+        violations.append(f"'{token}': {reason}")
     return violations
