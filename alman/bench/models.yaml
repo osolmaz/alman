@@ -128,7 +128,9 @@ profiles:
   qwen3.6-35b-a3b:
     label: Qwen3.6 35B A3B
     platform: huggingface-inference-providers
-    model: openai-api/hf/Qwen/Qwen3.6-35B-A3B:deepinfra
+    # deepinfra was persistently engine_overloaded on 2026-07-17; scaleway
+    # is the pinned provider instead.
+    model: openai-api/hf/Qwen/Qwen3.6-35B-A3B:scaleway
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
       HF_API_KEY: ${HF_TOKEN}
@@ -137,8 +139,8 @@ profiles:
       temperature: 1.0
       top_p: 1.0
     pricing:
-      uncached_input_per_million_tokens: 0.15
-      output_per_million_tokens: 0.95
+      uncached_input_per_million_tokens: 0.285
+      output_per_million_tokens: 1.71
       observed: 2026-07-17
 
   glm-5.2:
