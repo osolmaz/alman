@@ -65,6 +65,18 @@ def main() -> None:
     profile = load_profile(args.profile)
     os.environ.update(profile.resolved_env())
 
+    if not args.no_export:
+        # Fail before any model call, not after a paid 1,025-sample run:
+        # the exporter refuses dirty trees.
+        from alman.bench.export import _scoring_revision
+
+        _, dirty = _scoring_revision()
+        if dirty:
+            raise SystemExit(
+                "the alman working tree is dirty; commit or stash before an "
+                "official run (or pass --no-export)"
+            )
+
     date = datetime.now(timezone.utc).strftime("%Y%m%d")
     out_root = args.out or Path.home() / "scratch" / "almanbench-runs" / date
     out_dir = out_root / profile.name
@@ -93,6 +105,23 @@ def main() -> None:
                 f"log was run with model {prior.eval.model!r}, but profile "
                 f"{profile.name!r} declares {profile.model!r}"
             )
+        if not args.no_export:
+            # The exporter will reject these conditions anyway; check them
+            # before paying for the remaining samples.
+            task_args = prior.eval.task_args
+            if task_args.get("dataset") != "almanbench":
+                raise SystemExit("retry log is not a dataset='almanbench' run")
+            if task_args.get("bench_dir") is not None:
+                raise SystemExit("retry log is a private-set run; no export")
+            if task_args.get("include_spec", True) is not True:
+                raise SystemExit("retry log was run without the spec")
+            prior_config = prior.eval.model_generate_config
+            for key, value in profile.generate.items():
+                if getattr(prior_config, key, None) != value:
+                    raise SystemExit(
+                        f"retry log was generated with different {key}; "
+                        f"profile {profile.name!r} declares {value!r}"
+                    )
         # Samples completed in the prior attempt are carried over by
         # eval_retry; record which execution actually produced them.
         execution_ids = {
