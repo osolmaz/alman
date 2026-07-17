@@ -361,6 +361,58 @@
           "alman": "Er freut sich über das. / Er freut sich darüber."
         }
       ]
+    },
+    {
+      "id": "genitive-objects",
+      "title": "Genitive Objects of Verbs and Adjectives",
+      "description": "A small set of <sd /> verbs and adjectives govern a genitive object: **bedürfen**, **sich bedienen**, **gedenken**, **entbehren**, archaic **sich erinnern** + genitive, **fähig**, **sich bewusst**. These genitive objects are not retained in <alman />. The genitive object has been receding in German for centuries, so every such verb and adjective has an established modern complement, and <alman /> uses it:\n\n1. Where contemporary usage allows a plain object, the object appears in the invariant form: *er entbehrt ein höhere Leben*, *sie bediente sich ein starke Zweig*.\n2. Where contemporary usage prefers a prepositional complement, that preposition is used: *sich erinnern an*, *sich freuen über*, *fähig zu*, *denken an* (for *gedenken*).\n\nWhen the object is a pronoun, the retained <sd /> genitive pronoun forms remain available under the case-retention rule (*ich will ihrer los sein*, *wo wir seiner bedürfen*), as do **da**-compounds for inanimate referents. The genitive relative pronoun follows the relative-pronoun rule and surfaces as **deren** (*die Steg, deren ich gedacht habe*).\n\nThis mirrors the English outcome, where case-governed objects became plain objects or prepositional phrases: *to make use of*, *to remember*, *to be capable of*.",
+      "i18n": {
+        "de": {
+          "title": "Genitivobjekte von Verben und Adjektiven",
+          "description": "Eine kleine Gruppe von <sd />-Verben und -Adjektiven regiert ein Genitivobjekt: **bedürfen**, **sich bedienen**, **gedenken**, **entbehren**, archaisches **sich erinnern** + Genitiv, **fähig**, **sich bewusst**. Diese Genitivobjekte werden in <alman /> nicht beibehalten. Das Genitivobjekt ist im Deutschen seit Jahrhunderten auf dem Rückzug, daher hat jedes dieser Verben und Adjektive ein etabliertes modernes Komplement, und <alman /> verwendet es:\n\n1. Wo der heutige Gebrauch ein einfaches Objekt erlaubt, erscheint das Objekt in der invarianten Form: *er entbehrt ein höhere Leben*, *sie bediente sich ein starke Zweig*.\n2. Wo der heutige Gebrauch ein Präpositionalkomplement bevorzugt, wird diese Präposition verwendet: *sich erinnern an*, *sich freuen über*, *fähig zu*, *denken an* (für *gedenken*).\n\nIst das Objekt ein Pronomen, bleiben die beibehaltenen <sd />-Genitivpronomen nach der Regel zur Kasusbeibehaltung verfügbar (*ich will ihrer los sein*, *wo wir seiner bedürfen*), ebenso **da**-Komposita für unbelebte Referenten. Das Genitiv-Relativpronomen folgt der Regel zu den Relativpronomen und erscheint als **deren** (*die Steg, deren ich gedacht habe*).\n\nDies spiegelt das Ergebnis im Englischen, wo kasusregierte Objekte zu einfachen Objekten oder Präpositionalphrasen wurden: *to make use of*, *to remember*, *to be capable of*."
+        },
+        "al": {
+          "title": "Genitivobjekte von Verben und Adjektiven",
+          "description": "Ein kleine Gruppe von <sd />-Verben und -Adjektiven regiert ein Genitivobjekt: **bedürfen**, **sich bedienen**, **gedenken**, **entbehren**, archaische **sich erinnern** + Genitiv, **fähig**, **sich bewusst**. Diese Genitivobjekte werden in <alman /> nicht beibehalten. Die Genitivobjekt ist in die Deutsche seit Jahrhunderte auf die Rückzug, daher hat jede von diese Verben und Adjektive ein etablierte moderne Komplement, und <alman /> verwendet es:\n\n1. Wo die heutige Gebrauch ein einfache Objekt erlaubt, erscheint die Objekt in die invariante Form: *er entbehrt ein höhere Leben*, *sie bediente sich ein starke Zweig*.\n2. Wo die heutige Gebrauch ein Präpositionalkomplement bevorzugt, wird diese Präposition verwendet: *sich erinnern an*, *sich freuen über*, *fähig zu*, *denken an* (für *gedenken*).\n\nIst die Objekt ein Pronomen, bleiben die beibehaltene <sd />-Genitivpronomen nach die Regel zu die Kasusbeibehaltung verfügbar (*ich will ihrer los sein*, *wo wir seiner bedürfen*), ebenso **da**-Komposita für unbelebte Referenten. Die Genitiv-Relativpronomen folgt die Regel zu die Relativpronomen und erscheint als **deren** (*die Steg, deren ich gedacht habe*).\n\nDies spiegelt die Ergebnis in die Englische, wo kasusregierte Objekte zu einfache Objekte oder Präpositionalphrasen wurden: *to make use of*, *to remember*, *to be capable of*."
+        }
+      },
+      "examples": [
+        {
+          "standard": "Er bediente sich eines starken Zweiges.",
+          "alman": "Er bediente sich ein starke Zweig.",
+          "english": "He made use of a strong branch."
+        },
+        {
+          "standard": "das eines höheren Lebens entbehrt",
+          "alman": "das ein höhere Leben entbehrt",
+          "english": "which lacks a higher life"
+        },
+        {
+          "standard": "Sie freuten sich des Anlasses.",
+          "alman": "Sie freuten sich über die Anlass.",
+          "english": "They rejoiced at the occasion."
+        },
+        {
+          "standard": "Man muss der Toten gedenken.",
+          "alman": "Man muss an die Toten denken.",
+          "english": "One must remember the dead."
+        },
+        {
+          "standard": "Sie ist dieser Aufgabe fähig.",
+          "alman": "Sie ist zu diese Aufgabe fähig.",
+          "english": "She is capable of this task."
+        },
+        {
+          "standard": "Ich will ihrer los sein.",
+          "alman": "Ich will ihrer los sein.",
+          "english": "I want to be rid of them."
+        },
+        {
+          "standard": "Sie wussten sich seiner nicht zu erinnern.",
+          "alman": "Sie wussten sich an ihn nicht zu erinnern.",
+          "english": "They could not remember him."
+        }
+      ]
     }
   ]
 }

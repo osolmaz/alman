@@ -104,6 +104,8 @@ After genitive prepositions such as **wegen**, **trotz**, **statt**, **während*
 
 The genitive **der** is the single case-marked article form that **Alman** retains. This is a deliberate exception to the otherwise complete elimination of case-specific inflection: it keeps adnominal genitive constructions (*die Haus der Mann*) recognizable and mutually intelligible with **Standard German**. Indefinite articles, possessive determiners, and **kein** instead eliminate genitive marking entirely through periphrasis, as described in their respective rules.
 
+The retained **der** occupies the same postnominal position as the **Standard German** genitive: the possessor follows its head noun (*die Haus der Mann*). Archaic or poetic prenominal genitives with an article (*des Sultans Stadt*, *des Pindus Wellen*) do not survive in prenominal position; they are reordered into the postnominal construction (*die Stadt der Sultan*) or rendered with **von die**. Without case endings, a prenominal *der Sultan Stadt* would no longer be readable as a genitive. Only the proper-name genitive -s (*Annas Buch*; see the section on nouns) remains prenominal, mirroring the English possessive *'s*.
+
 
 **Examples:**
 
@@ -113,6 +115,7 @@ The genitive **der** is the single case-marked article form that **Alman** retai
 | der Frau (Genitive) | der Frau |
 | des Kindes (Genitive) | der Kind |
 | wegen des Wetters | wegen der Wetter / wegen die Wetter |
+| in des Sultans Stadt und Land | in die Stadt und Land der Sultan |
 
 
 
@@ -145,6 +148,8 @@ While interchangeable, 'der' should be retained when translating original geniti
 
 An apposition agrees in construction with its head noun phrase. When a genitive is rendered periphrastically with **von**, an apposition to it likewise takes the non-genitive form; when the genitive **der** is used, the apposition remains in the genitive. The same holds for appositions following a retained proper-name genitive (see the section on nouns). Note that possessive genitives (*seines Vaters*) have no **der** form and are always periphrastic (see the rule on possessive determiners in the section on determiners), so their appositions always take the non-genitive form.
 
+A genitive relationship is always overtly marked, either by **der** or by **von**. Article-less genitives — bare plural or mass possessors such as *die Erzeugung energiereicher Biomoleküle* — have no article to convert to **der**, so they take **von** with the invariant form: *die Erzeugung von energiereiche Biomoleküle*. Bare juxtaposition (*die Erzeugung energiereiche Biomoleküle*) is not available: with the endings gone, nothing would signal the relationship. This mirrors English, where such phrases require *of*. In coordinated genitives, **von** may either be repeated or take scope over the whole coordination, as in English: *Verfasser von einige Traktate und (von) viele Hymnen*.
+
 
 **Examples:**
 
@@ -154,6 +159,8 @@ An apposition agrees in construction with its head noun phrase. When a genitive 
 | die Farbe des Autos | die Farbe der Auto / die Farbe von die Auto |  |
 | bei den Lehren seines Vaters, des Gelehrten | bei die Lehren von sein Vater, die Gelehrte | in the teachings of his father, the scholar |
 | die Werke Goethes, des Dichters | die Werke Goethes, der Dichter / die Werke von Goethe, die Dichter | the works of Goethe, the poet |
+| die Erzeugung energiereicher Biomoleküle | die Erzeugung von energiereiche Biomoleküle |  |
+| Verfasserin einiger Traktate und vieler Hymnen | Verfasser von einige Traktate und viele Hymnen / Verfasser von einige Traktate und von viele Hymnen |  |
 
 
 
@@ -272,6 +279,7 @@ All case-specific noun endings are removed, including:
 - Genitive -s/-es markers on common nouns (des Mannes → der Mann); the prenominal genitive -s of proper names is exempt and retained (see the rule on the proper-name genitive)
 - Dative plural -n suffixes (den Bränden → die Brände)
 - Weak noun declensional patterns: the -n/-en endings that weak nouns such as **Kollege**, **Mensch**, **Student**, and **Junge** take in non-nominative singular cases are dropped, and the nominative singular serves as the invariant singular form (den Kollegen → die Kollege). The -n/-en plural of these nouns is unaffected and is retained as a plural marker (see the rule on invariant plural forms), so singular *die Kollege* remains distinct from plural *die Kollegen*.
+- Archaic dative endings (dem Kinde → die Kind), including inside fixed adverbial expressions: *zu Hause* / *nach Hause* become **zu Haus** / **nach Haus**, *zu Pferde* becomes *zu Pferd*, *auf Erden* becomes *auf Erde*. Consistent with the treatment of preposition-article contractions, there is no list of exempt fixed expressions.
 
 
 **Examples:**
@@ -285,6 +293,8 @@ All case-specific noun endings are removed, including:
 | dem Studenten (Dative, weak noun) | die Student |
 | im Menschen (Dative, weak noun) | in die Mensch |
 | die Kollegen (Plural) | die Kollegen (-en retained as plural marker) |
+| nach Hause | nach Haus |
+| zu Pferde (archaic dative) | zu Pferd |
 
 
 
@@ -690,6 +700,32 @@ The **Standard German** *da-* compounds remain fully acceptable, as they carry n
 
 
 
+#### §6j. Genitive Objects of Verbs and Adjectives
+
+A small set of **Standard German** verbs and adjectives govern a genitive object: **bedürfen**, **sich bedienen**, **gedenken**, **entbehren**, archaic **sich erinnern** + genitive, **fähig**, **sich bewusst**. These genitive objects are not retained in **Alman**. The genitive object has been receding in German for centuries, so every such verb and adjective has an established modern complement, and **Alman** uses it:
+
+1. Where contemporary usage allows a plain object, the object appears in the invariant form: *er entbehrt ein höhere Leben*, *sie bediente sich ein starke Zweig*.
+2. Where contemporary usage prefers a prepositional complement, that preposition is used: *sich erinnern an*, *sich freuen über*, *fähig zu*, *denken an* (for *gedenken*).
+
+When the object is a pronoun, the retained **Standard German** genitive pronoun forms remain available under the case-retention rule (*ich will ihrer los sein*, *wo wir seiner bedürfen*), as do **da**-compounds for inanimate referents. The genitive relative pronoun follows the relative-pronoun rule and surfaces as **deren** (*die Steg, deren ich gedacht habe*).
+
+This mirrors the English outcome, where case-governed objects became plain objects or prepositional phrases: *to make use of*, *to remember*, *to be capable of*.
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| Er bediente sich eines starken Zweiges. | Er bediente sich ein starke Zweig. | He made use of a strong branch. |
+| das eines höheren Lebens entbehrt | das ein höhere Leben entbehrt | which lacks a higher life |
+| Sie freuten sich des Anlasses. | Sie freuten sich über die Anlass. | They rejoiced at the occasion. |
+| Man muss der Toten gedenken. | Man muss an die Toten denken. | One must remember the dead. |
+| Sie ist dieser Aufgabe fähig. | Sie ist zu diese Aufgabe fähig. | She is capable of this task. |
+| Ich will ihrer los sein. | Ich will ihrer los sein. | I want to be rid of them. |
+| Sie wussten sich seiner nicht zu erinnern. | Sie wussten sich an ihn nicht zu erinnern. | They could not remember him. |
+
+
+
 ### §7. Determiners and Demonstratives {#determiners}
 
 This paragraph describes the simplification of determiner and demonstrative forms in **Alman** through gender neutralization and case reduction, while maintaining clarity through context and word order.
@@ -772,8 +808,8 @@ The same invariant base form is used in pronominal (standalone) use, where **Sta
 While **Alman** consolidates and simplifies most determiners, some **indefinite** or **negative** quantifiers that appear as **paired words** in **Standard German** are **retained in their original forms**. In these cases, **alle** vs. **alles**, **viel** vs. **viele**, **wenig** vs. **wenige**, and **nicht** vs. **nichts**, among others, are **not** reanalyzed or merged into a single form. Instead, they follow **Standard German** usage:
 
 1. **alle/alles**
-   - **alle** → used for plural indefinite references ("all [people/things]").
-   - **alles** → used for singular, abstract "everything."
+   - **alle** → the attributive form, used before nouns of any number (*alle Menschen*, and with mass nouns *alle Kummer*, *alle Segen*) and for plural indefinite reference ("all [people/things]").
+   - **alles** → the standalone pronoun meaning "everything."
 
 2. **viel/viele**
    - **viel** → used with **uncountable** nouns or adverbially ("much," "a lot [of something uncountable]").
@@ -791,6 +827,8 @@ Since **Standard German** treats these pairs as **separate lexical items** rathe
 
 The case-inflected forms that these quantifiers take in **Standard German** (**vielen, vielem, vieler, allen, allem, aller, wenigen, wenigem**) are handled by dropping the case ending: the result is whichever member of the retained pair fits the context (uncountable or adverbial → **viel**, countable plural → **viele**, and so on). Thus *vielen Dank* becomes *viel Dank* and *in allen Fällen* becomes *in alle Fälle*, mirroring the invariant English quantifiers *much*, *many*, *all*, *little*, and *few*. Because the distinction within each pair is lexical rather than declensional, these quantifiers never take the invariant -e ending described in the section on adjectives.
 
+Before a determiner, possessive, or demonstrative, the uninflected **all** of **Standard German** is retained: *all das Geld*, *all sein Mühe*, mirroring English *all the money*. Fossilized case-marked forms are normalized by the same principles: *vor allem* becomes *vor alles*, and *alledem* (as in *trotz alledem*) becomes *all das*, with the standalone *alles* equally acceptable (*trotz all das* / *trotz alles*).
+
 
 **Examples:**
 
@@ -807,6 +845,10 @@ The case-inflected forms that these quantifiers take in **Standard German** (**v
 | **Vielen** Dank! | **Viel** Dank! |
 | in **allen** Fällen | in **alle** Fälle |
 | mit **wenigem** zufrieden | mit **wenig** zufrieden |
+| allen Kummer / aller Segen | alle Kummer / alle Segen |
+| all das Geld | all das Geld |
+| vor allem | vor alles |
+| trotz alledem | trotz all das / trotz alles |
 
 
 
@@ -933,6 +975,8 @@ Natural gender, where communicatively relevant, is conveyed by pronouns (see the
 
 This rule ensures a uniform treatment of person-denoting nouns, reflecting the broader commitment within **Alman** to reduce gender differentiation in lexical items.
 
+The rule covers person-denoting derivatives beyond established titles, including feminine surname derivatives (*die Steegin* → *die Steeg*, "the Steeg woman") and role epithets (*die Eiskönigin* → *die Eiskönig*). It does not, however, reach inside compounds whose referent is not a person: *die Malerinnenschule* (a school for women painters) keeps its form, since stripping the suffix would change the meaning of the compound.
+
 
 **Examples:**
 
@@ -944,4 +988,7 @@ This rule ensures a uniform treatment of person-denoting nouns, reflecting the b
 | der Türke / die Türkin | die Türke | Turk |
 | der Kollege / die Kollegin | die Kollege | colleague |
 | meine Freundin | mein feste Freund | my girlfriend |
+| die Steegin (surname derivative) | die Steeg |  |
+| die Eiskönigin | die Eiskönig |  |
+| die Malerinnenschule (compound, non-person referent) | die Malerinnenschule |  |
 

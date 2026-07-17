@@ -6,7 +6,9 @@
       "source": "Der Mann, der neben mir wohnt, ist Lehrer.",
       "pattern": "Die Mann, {das|die}@6f neben mir wohnt, ist Lehrer.",
       "rule": "relative-pronouns",
-      "covers": ["relative-pronouns"],
+      "covers": [
+        "relative-pronouns"
+      ],
       "note": "Subject relative on a masculine antecedent: SD 'der' becomes the invariant relativizer, canonical 'das'."
     },
     {
@@ -35,17 +37,19 @@
     },
     {
       "source": "Der Autor, dessen Roman ich gerade lese, lebt in Berlin.",
-      "accepted": ["Die Autor, deren Roman ich gerade lese, lebt in Berlin."],
+      "accepted": [
+        "Die Autor, deren Roman ich gerade lese, lebt in Berlin."
+      ],
       "rule": "relative-pronouns",
       "note": "Genitive relative: 'dessen' is replaced by 'deren'; no das/die alternation exists in the genitive."
     },
     {
       "source": "Die Nachbarn, deren Garten verwildert ist, sind selten zu Hause.",
       "accepted": [
-        "Die Nachbarn, deren Garten verwildert ist, sind selten zu Hause."
+        "Die Nachbarn, deren Garten verwildert ist, sind selten zu Haus."
       ],
       "rule": "relative-pronouns",
-      "note": "Identity translation: plural 'deren' is already the retained genitive relativizer, so nothing changes. Guards against models overcorrecting 'deren' to 'das'."
+      "note": "Plural 'deren' is already the retained genitive relativizer, so it stays. The archaic dative -e in 'zu Hause' drops per the case-ending-elimination rule (no fixed-expression exemptions), so 'zu Haus' is the only accepted form. Guards against models overcorrecting 'deren' to 'das'."
     },
     {
       "source": "Nichts, was er sagte, war neu.",
@@ -75,7 +79,9 @@
       "source": "Diejenigen, die den Kurs bestanden haben, bekommen ein Zertifikat.",
       "pattern": "Diejenige, {das|die}@6f die Kurs bestanden haben, bekommen ein Zertifikat.",
       "rule": "mixed",
-      "covers": ["unified-non-genitive-forms"],
+      "covers": [
+        "unified-non-genitive-forms"
+      ],
       "note": "Demonstrative head plus relative clause: 'diejenigen' takes the unified determiner form 'diejenige' while the relativizer is chosen independently."
     },
     {
