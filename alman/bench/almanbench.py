@@ -42,6 +42,8 @@ class AlmanbenchItem(BaseModel):
     register_label: str = Field(alias="register")
     """Text register, "canonical" or "modern" (JSON key: ``register``)."""
     guard: bool
+    note: str | None = None
+    """Optional hand-written translator's note for a non-obvious item."""
 
     model_config = {"populate_by_name": True}
     guard_family: str | None = None
@@ -69,9 +71,7 @@ def load_almanbench_items(
     seen: dict[str, str] = {}
     for item in items:
         if item.source in seen:
-            raise ValueError(
-                f"duplicate source in {item.id} and {seen[item.source]}"
-            )
+            raise ValueError(f"duplicate source in {item.id} and {seen[item.source]}")
         seen[item.source] = item.id
 
     as_bench = [
