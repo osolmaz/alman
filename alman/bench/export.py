@@ -257,6 +257,19 @@ def export_log(
                 f"log was generated with {key}={logged!r}, but profile "
                 f"{profile.name!r} declares {key}={value!r}"
             )
+    # Settings the runner itself controls; anything else set in the log is an
+    # undeclared override and the run is not the profile it claims to be.
+    runner_keys = {"max_connections", "retry_on_error"}
+    undeclared = (
+        set(logged_config.model_dump(exclude_none=True))
+        - set(profile.generate)
+        - runner_keys
+    )
+    if undeclared:
+        raise ValueError(
+            f"log carries generation settings not declared by profile "
+            f"{profile.name!r}: {sorted(undeclared)}"
+        )
 
     scoring_revision, dirty = _scoring_revision()
     if dirty and not allow_dirty:
@@ -307,14 +320,14 @@ def export_log(
                 "metadata": {
                     k: v
                     for k, v in sample.metadata.items()
-                    if k not in ("collection", "paragraph")
+                    if k not in ("collection", "paragraph", "forced_final")
                 },
                 "output": answer,
                 "reasoning": reasoning,
                 "reasoning_summary": summary,
                 "reasoning_status": reasoning_status,
                 "thinking_observed": thinking_observed,
-                "forced_final": False,
+                "forced_final": bool(sample.metadata.get("forced_final", False)),
                 "correct": is_accepted(answer, accepted),
                 "compliant": not lint(answer),
                 "tokens": sample_tokens,

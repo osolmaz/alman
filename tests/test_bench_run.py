@@ -188,6 +188,33 @@ def mock_run(tmp_path_factory) -> tuple[Path, Path]:
     return Path(logs[0].location), out_dir
 
 
+class TestForcedFinal:
+    def test_empty_answer_triggers_follow_up(self, tmp_path):
+        """A response that is all reasoning and no final text gets one
+        follow-up call, and the sample is marked forced_final."""
+        from inspect_ai import eval as inspect_eval
+        from inspect_ai.model import ModelOutput
+
+        outputs = [
+            ModelOutput.from_content(
+                "mockllm/model", "<think>nur Nachdenken, keine Antwort</think>"
+            ),
+            ModelOutput.from_content("mockllm/model", "die Mann"),
+        ]
+        logs = inspect_eval(
+            alman_bench(dataset="almanbench", tiers="curated"),
+            model="mockllm/model",
+            model_args={"custom_outputs": outputs},
+            limit=1,
+            log_dir=str(tmp_path / "logs"),
+            display="none",
+        )
+        assert logs[0].status == "success"
+        sample = logs[0].samples[0]
+        assert sample.metadata.get("forced_final") is True
+        assert sample.scores["acceptance"].answer == "die Mann"
+
+
 class TestExport:
     def test_artifact_files_written(self, mock_run):
         _, out_dir = mock_run

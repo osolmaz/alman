@@ -29,7 +29,7 @@ from pathlib import Path
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import MemoryDataset, Sample
-from inspect_ai.model import ChatMessageSystem
+from inspect_ai.model import ChatMessageSystem, ChatMessageUser
 from inspect_ai.scorer import (
     CORRECT,
     INCORRECT,
@@ -88,6 +88,38 @@ def translator_system_message(include_spec: bool = True):
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         state.messages.insert(0, ChatMessageSystem(content=content))
+        return state
+
+    return solve
+
+
+FORCED_FINAL_PROMPT = (
+    "Your previous response contained no final translation. "
+    "Output only the final Alman translation now, with no reasoning, "
+    "no explanations, and no quotation marks."
+)
+
+FORCED_FINAL_MAX_TOKENS = 2048
+
+
+@solver
+def forced_final():
+    """Recover a final answer when reasoning exhausted the output budget.
+
+    Reasoning models sometimes spend the entire ``max_tokens`` budget on
+    thinking and return no final text. Scoring the empty answer would
+    understate the model, so one follow-up call asks for the final
+    translation only; the sample is marked ``forced_final`` for the
+    exporter.
+    """
+
+    async def solve(state: TaskState, generate: Generate) -> TaskState:
+        _, answer = split_thinking(state.output.completion)
+        if answer.strip():
+            return state
+        state.messages.append(ChatMessageUser(content=FORCED_FINAL_PROMPT))
+        state = await generate(state, max_tokens=FORCED_FINAL_MAX_TOKENS)
+        state.metadata["forced_final"] = True
         return state
 
     return solve
@@ -225,7 +257,11 @@ def alman_bench(
             samples = [s for s in samples if s.metadata["tier"] in selected]
         return Task(
             dataset=MemoryDataset(samples=samples, name="alman-bench-almanbench"),
-            solver=[translator_system_message(include_spec), generate()],
+            solver=[
+                translator_system_message(include_spec),
+                generate(),
+                forced_final(),
+            ],
             scorer=[acceptance(), compliance()],
         )
     if tiers is not None or bench_dir is not None:
@@ -261,6 +297,6 @@ def alman_bench(
             samples=[_sample(item) for item in items],
             name=f"alman-bench-{dataset}",
         ),
-        solver=[translator_system_message(include_spec), generate()],
+        solver=[translator_system_message(include_spec), generate(), forced_final()],
         scorer=[acceptance(), compliance()],
     )
