@@ -181,6 +181,9 @@ tr:last-child td {
 }
 
 .resource-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   font-family: var(--font-din);
   font-weight: 500;
   font-size: 0.82rem;
@@ -189,6 +192,12 @@ tr:last-child td {
   color: var(--ink);
   border: 1px solid var(--ink);
   padding: 0.4rem 0.9rem;
+}
+
+.resource-links img {
+  width: 1.05rem;
+  height: 1.05rem;
+  object-fit: contain;
 }
 
 .resource-links a:hover {
@@ -210,6 +219,121 @@ td.mono {
 
 .lb-best {
   font-weight: 600;
+}
+
+.lb-chart .lb-bar-col {
+  width: 62%;
+}
+
+.lb-model {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+[data-tip] {
+  position: relative;
+  cursor: default;
+}
+
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 0.4rem);
+  z-index: 2;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.6rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.1s ease-in;
+}
+
+[data-tip]:hover::after,
+[data-tip]:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lb-bar-label[data-tip]::after,
+td.num [data-tip]::after {
+  left: auto;
+  right: 0;
+}
+
+.lb-chart .lb-axis-row td {
+  border-bottom: none;
+  padding-top: 0.15rem;
+  padding-bottom: 0.4rem;
+}
+
+.lb-axis {
+  position: relative;
+  flex: 1;
+  height: 1.35rem;
+}
+
+.lb-axis-tick {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--grey-1);
+  white-space: nowrap;
+}
+
+.lb-axis-tick::before {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 0.3rem;
+  background: var(--grey-1);
+  margin: 0 auto 0.1rem;
+}
+
+.lb-axis-pad {
+  visibility: hidden;
+}
+
+.lb-logo {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: none;
+}
+
+.lb-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 12rem;
+}
+
+.lb-bar-track {
+  flex: 1;
+}
+
+.lb-bar-fill {
+  height: 0.85rem;
+  background: var(--form-blue);
+}
+
+tbody tr:first-child .lb-bar-fill {
+  background: var(--ink);
+}
+
+.lb-bar-label {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  min-width: 4.5rem;
+  text-align: right;
 }
 
 .table-note {

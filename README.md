@@ -26,7 +26,7 @@ live in `src/content/blog/`, and the visual identity is documented in
 ## Translation benchmark
 
 Almanbench is a Standard German → Alman translation benchmark, built on
-[Inspect AI](https://inspect.aisi.org.uk/). The v1 public set contains 1,025
+[Inspect AI](https://inspect.aisi.org.uk/). The v0.1 public set contains 1,025
 items across four tiers (naturalistic, targeted, guards, curated). Its
 canonical public distribution is the Hugging Face dataset
 [osolmaz/almanbench](https://huggingface.co/datasets/osolmaz/almanbench), and
@@ -35,7 +35,7 @@ the current leaderboard is published at
 `benchmark-results/almanbench-leaderboard.json`). The earlier
 [87-row curated comparison](benchmark-results/2026-07-15-expanded-curated-thinking-comparison.md)
 of 18 model configurations, including the ternary and 1-bit Bonsai 27B
-variants, predates the v1 freeze and remains as a diagnostic reference.
+variants, predates the v0.1 freeze and remains as a diagnostic reference.
 
 The packaged tiers live in `alman/bench/almanbench/`; the curated tier is:
 

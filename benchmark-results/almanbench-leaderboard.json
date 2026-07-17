@@ -1,84 +1,260 @@
 {
-  "$comment": "Leaderboard data for the /almanbench/ site page. Counts are [correct, total]. The v1 entries come from the 2026-07-17 full-set runs (almanbench-results.json aggregates in the private benchmark-runs bucket); the preliminary entries are the 2026-07-15 curated 87-row comparison (2026-07-15-expanded-curated-thinking-comparison.md).",
+  "$comment": "Leaderboard data for the /almanbench/ site page. Counts are [correct, total]. All entries are 2026-07-17 full-set runs on the same case set; run artifacts live in the private osolmaz/alman bucket under benchmark-runs/2026-07-17/.",
   "benchmark": "almanbench",
-  "version": "v1",
+  "version": "v0.1",
   "caseSetSize": 1025,
   "caseSetId": "sha256:a8d75377a75bc43df04bfdc4eb8469ca73856c3d4c8efc3ec823d7060e590668",
-  "scoringRevision": "eb0b463153ea9f16b58c9ef78d99d1e121511217",
+  "scoringRevision": "bc5ef955ff21af1de017c1e1baad1bbc97019845",
   "evaluated": "2026-07-17",
   "dataset": "https://huggingface.co/datasets/osolmaz/almanbench",
   "entries": [
     {
       "label": "GPT-5.6 Sol",
+      "vendor": "openai",
       "route": "OpenAI API, xhigh",
-      "acceptance": [890, 1025],
-      "compliance": [1017, 1025],
+      "acceptance": [
+        890,
+        1025
+      ],
+      "compliance": [
+        1017,
+        1025
+      ],
       "tiers": {
-        "naturalistic": [493, 600],
-        "targeted": [209, 216],
-        "guards": [105, 120],
-        "curated": [83, 89]
+        "naturalistic": [
+          493,
+          600
+        ],
+        "targeted": [
+          209,
+          216
+        ],
+        "guards": [
+          105,
+          120
+        ],
+        "curated": [
+          83,
+          89
+        ]
+      }
+    },
+    {
+      "label": "DeepSeek V4 Flash",
+      "vendor": "deepseek",
+      "route": "HF Inference Providers, Novita",
+      "acceptance": [
+        854,
+        1025
+      ],
+      "compliance": [
+        1017,
+        1025
+      ],
+      "tiers": {
+        "naturalistic": [
+          462,
+          600
+        ],
+        "targeted": [
+          205,
+          216
+        ],
+        "guards": [
+          106,
+          120
+        ],
+        "curated": [
+          81,
+          89
+        ]
       }
     },
     {
       "label": "GPT-5.6 Terra",
+      "vendor": "openai",
       "route": "OpenAI API, xhigh",
-      "acceptance": [847, 1025],
-      "compliance": [1016, 1025],
+      "acceptance": [
+        847,
+        1025
+      ],
+      "compliance": [
+        1016,
+        1025
+      ],
       "tiers": {
-        "naturalistic": [449, 600],
-        "targeted": [208, 216],
-        "guards": [106, 120],
-        "curated": [84, 89]
+        "naturalistic": [
+          449,
+          600
+        ],
+        "targeted": [
+          208,
+          216
+        ],
+        "guards": [
+          106,
+          120
+        ],
+        "curated": [
+          84,
+          89
+        ]
       }
     },
     {
       "label": "GPT-5.6 Luna",
+      "vendor": "openai",
       "route": "OpenAI API, xhigh",
-      "acceptance": [834, 1025],
-      "compliance": [995, 1025],
+      "acceptance": [
+        834,
+        1025
+      ],
+      "compliance": [
+        995,
+        1025
+      ],
       "tiers": {
-        "naturalistic": [438, 600],
-        "targeted": [210, 216],
-        "guards": [103, 120],
-        "curated": [83, 89]
+        "naturalistic": [
+          438,
+          600
+        ],
+        "targeted": [
+          210,
+          216
+        ],
+        "guards": [
+          103,
+          120
+        ],
+        "curated": [
+          83,
+          89
+        ]
+      }
+    },
+    {
+      "label": "Kimi K2.7 Code",
+      "vendor": "moonshot",
+      "route": "HF Inference Providers, Novita",
+      "acceptance": [
+        829,
+        1025
+      ],
+      "compliance": [
+        1010,
+        1025
+      ],
+      "tiers": {
+        "naturalistic": [
+          440,
+          600
+        ],
+        "targeted": [
+          201,
+          216
+        ],
+        "guards": [
+          105,
+          120
+        ],
+        "curated": [
+          83,
+          89
+        ]
       }
     },
     {
       "label": "Claude Sonnet 5",
+      "vendor": "anthropic",
       "route": "Anthropic API, xhigh",
-      "acceptance": [777, 1025],
-      "compliance": [936, 1025],
+      "acceptance": [
+        777,
+        1025
+      ],
+      "compliance": [
+        936,
+        1025
+      ],
       "tiers": {
-        "naturalistic": [386, 600],
-        "targeted": [205, 216],
-        "guards": [107, 120],
-        "curated": [79, 89]
+        "naturalistic": [
+          386,
+          600
+        ],
+        "targeted": [
+          205,
+          216
+        ],
+        "guards": [
+          107,
+          120
+        ],
+        "curated": [
+          79,
+          89
+        ]
+      }
+    },
+    {
+      "label": "MiniMax M3",
+      "vendor": "minimax",
+      "route": "HF Inference Providers, Novita",
+      "acceptance": [
+        763,
+        1025
+      ],
+      "compliance": [
+        994,
+        1025
+      ],
+      "tiers": {
+        "naturalistic": [
+          379,
+          600
+        ],
+        "targeted": [
+          206,
+          216
+        ],
+        "guards": [
+          102,
+          120
+        ],
+        "curated": [
+          76,
+          89
+        ]
+      }
+    },
+    {
+      "label": "Qwen3.6 35B A3B",
+      "vendor": "qwen",
+      "route": "HF Inference Providers, Scaleway",
+      "acceptance": [
+        719,
+        1025
+      ],
+      "compliance": [
+        983,
+        1025
+      ],
+      "tiers": {
+        "naturalistic": [
+          345,
+          600
+        ],
+        "targeted": [
+          199,
+          216
+        ],
+        "guards": [
+          101,
+          120
+        ],
+        "curated": [
+          74,
+          89
+        ]
       }
     }
-  ],
-  "preliminary": {
-    "caseSetSize": 87,
-    "evaluated": "2026-07-15",
-    "entries": [
-      { "label": "GPT-5.6 Sol", "route": "OpenAI API, xhigh", "acceptance": [83, 87], "compliance": [87, 87] },
-      { "label": "GPT-5.5", "route": "OpenAI API, xhigh", "acceptance": [80, 87], "compliance": [87, 87] },
-      { "label": "DeepSeek V4 Pro", "route": "Novita", "acceptance": [79, 87], "compliance": [86, 87] },
-      { "label": "Kimi K2.7 Code", "route": "Novita", "acceptance": [78, 87], "compliance": [87, 87] },
-      { "label": "GPT-5.6 Luna", "route": "OpenAI API, xhigh", "acceptance": [78, 87], "compliance": [86, 87] },
-      { "label": "GPT-5.6 Terra", "route": "OpenAI API, xhigh", "acceptance": [78, 87], "compliance": [86, 87] },
-      { "label": "DeepSeek V4 Flash", "route": "Novita", "acceptance": [76, 87], "compliance": [87, 87] },
-      { "label": "Claude Sonnet 5", "route": "Anthropic API, xhigh", "acceptance": [75, 87], "compliance": [83, 87] },
-      { "label": "GLM 5.2", "route": "Novita", "acceptance": [73, 87], "compliance": [86, 87] },
-      { "label": "Nemotron 3 Ultra", "route": "Together", "acceptance": [73, 87], "compliance": [86, 87] },
-      { "label": "Step 3.7 Flash", "route": "DeepInfra", "acceptance": [69, 87], "compliance": [84, 87] },
-      { "label": "MiniMax M3", "route": "Novita", "acceptance": [68, 87], "compliance": [85, 87] },
-      { "label": "Qwen 3.6 35B", "route": "DeepInfra", "acceptance": [66, 87], "compliance": [75, 87] },
-      { "label": "GPT-5.4 mini", "route": "OpenAI API, xhigh", "acceptance": [63, 87], "compliance": [81, 87] },
-      { "label": "Gemma 4 26B NVFP4", "route": "Local vLLM", "acceptance": [59, 87], "compliance": [84, 87] },
-      { "label": "Ternary Bonsai 27B", "route": "Local llama.cpp, ternary Q2_0", "acceptance": [41, 87], "compliance": [82, 87] },
-      { "label": "Bonsai 27B 1-bit", "route": "Local llama.cpp, binary Q1_0", "acceptance": [28, 87], "compliance": [71, 87] },
-      { "label": "Qwen 3.6 35B NVFP4", "route": "Local vLLM, presence penalty 1.5", "acceptance": [9, 87], "compliance": [66, 87] }
-    ]
-  }
+  ]
 }
