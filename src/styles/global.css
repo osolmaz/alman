@@ -421,14 +421,14 @@ tbody tr:first-child .lb-bar-fill {
 .site-nav {
   margin-left: auto;
   display: flex;
-  gap: 1.4rem;
+  gap: 1.1rem;
 }
 
 .site-nav a {
   font-family: var(--font-din);
   font-weight: 500;
-  font-size: 0.85rem;
-  letter-spacing: 0.14em;
+  font-size: 0.8rem;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--ink);
 }
