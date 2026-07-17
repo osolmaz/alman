@@ -232,6 +232,23 @@ class TestForcedFinal:
 
 
 class TestExport:
+    def test_export_resolves_condensed_log_attachments(
+        self, mock_run, tmp_path, monkeypatch
+    ):
+        import alman.bench.export as export_module
+
+        log_path, _ = mock_run
+        original = export_module.read_eval_log
+        calls = []
+
+        def read_with_recording(path, **kwargs):
+            calls.append(kwargs)
+            return original(path, **kwargs)
+
+        monkeypatch.setattr(export_module, "read_eval_log", read_with_recording)
+        export_log(log_path, MOCK_PROFILE, tmp_path / "out", allow_dirty=True)
+        assert calls == [{"resolve_attachments": "core"}]
+
     def test_artifact_files_written(self, mock_run):
         _, out_dir = mock_run
         for name in (

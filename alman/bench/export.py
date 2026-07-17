@@ -261,7 +261,11 @@ def export_log(
     each row; for retried runs the runner passes ``execution_ids`` mapping
     carried-over sample ids to the execution that actually produced them.
     """
-    log = read_eval_log(str(log_path))
+    # Inspect condenses repeated long content into per-sample attachments,
+    # especially after eval-retry. Resolve core fields before hashing the
+    # system prompt or extracting outputs; otherwise attachment references
+    # look like different prompts and can leak into exported answers.
+    log = read_eval_log(str(log_path), resolve_attachments="core")
     if log.status != "success":
         raise ValueError(
             f"log status is {log.status!r}; finish the run first "
