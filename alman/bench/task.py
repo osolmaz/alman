@@ -109,16 +109,22 @@ def forced_final():
     Reasoning models sometimes spend the entire ``max_tokens`` budget on
     thinking and return no final text. Scoring the empty answer would
     understate the model, so one follow-up call asks for the final
-    translation only; the sample is marked ``forced_final`` for the
-    exporter.
+    translation only, with reasoning disabled when the run configured a
+    reasoning effort; the sample is marked ``forced_final`` for the
+    exporter. If the fallback also returns no text, the empty answer is
+    scored as is (incorrect).
     """
+    from inspect_ai.model._generate_config import active_generate_config
 
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         _, answer = split_thinking(state.output.completion)
         if answer.strip():
             return state
         state.messages.append(ChatMessageUser(content=FORCED_FINAL_PROMPT))
-        state = await generate(state, max_tokens=FORCED_FINAL_MAX_TOKENS)
+        overrides: dict = {"max_tokens": FORCED_FINAL_MAX_TOKENS}
+        if active_generate_config().reasoning_effort is not None:
+            overrides["reasoning_effort"] = "none"
+        state = await generate(state, **overrides)
         state.metadata["forced_final"] = True
         return state
 

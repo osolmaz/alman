@@ -71,30 +71,45 @@ def _completion_parts(
 ) -> tuple[str | None, str | None, str, bool]:
     """Split a completion into (reasoning, summary, final answer, redacted).
 
-    Redacted reasoning blocks carry an opaque signature or encrypted blob in
-    ``reasoning``; only their ``summary`` is publishable text.
+    Reasoning may live on any assistant message: a forced-final retry adds a
+    second assistant turn, and the primary turn holds the thinking. The
+    final answer always comes from the sample's output. Redacted reasoning
+    blocks carry an opaque signature or encrypted blob in ``reasoning``;
+    only their ``summary`` is publishable text.
     """
-    content = sample.output.choices[0].message.content
-    if isinstance(content, str):
-        reasoning, answer = split_thinking(content)
-        return reasoning or None, None, answer, False
     reasoning_parts: list[str] = []
     summary_parts: list[str] = []
-    text_parts: list[str] = []
     redacted = False
-    for item in content:
-        if isinstance(item, ContentReasoning):
-            if item.redacted:
-                redacted = True
-            elif item.reasoning.strip():
-                reasoning_parts.append(item.reasoning.strip())
-            if item.summary and item.summary.strip():
-                summary_parts.append(item.summary.strip())
-        elif hasattr(item, "text"):
-            text_parts.append(item.text)
-    inline, answer = split_thinking("\n".join(text_parts))
-    if inline:
-        reasoning_parts.append(inline)
+
+    def collect(content: Any) -> str:
+        nonlocal redacted
+        if isinstance(content, str):
+            inline, text = split_thinking(content)
+            if inline:
+                reasoning_parts.append(inline)
+            return text
+        text_parts: list[str] = []
+        for item in content:
+            if isinstance(item, ContentReasoning):
+                if item.redacted:
+                    redacted = True
+                elif item.reasoning.strip():
+                    reasoning_parts.append(item.reasoning.strip())
+                if item.summary and item.summary.strip():
+                    summary_parts.append(item.summary.strip())
+            elif hasattr(item, "text"):
+                text_parts.append(item.text)
+        inline, text = split_thinking("\n".join(text_parts))
+        if inline:
+            reasoning_parts.append(inline)
+        return text
+
+    assistants = [m for m in sample.messages if m.role == "assistant"]
+    # The final assistant message is the sample output; earlier ones are
+    # primary turns whose reasoning must be preserved.
+    for message in assistants[:-1]:
+        collect(message.content)
+    answer = collect(sample.output.choices[0].message.content)
     return (
         "\n".join(reasoning_parts) or None,
         "\n".join(summary_parts) or None,

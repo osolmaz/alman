@@ -103,6 +103,11 @@ class TestSplitThinking:
         assert reasoning == "a\nb"
         assert answer == "x y"
 
+    def test_unclosed_block_is_reasoning_not_answer(self):
+        reasoning, answer = split_thinking("<think>abgeschnittene Ged")
+        assert reasoning == "abgeschnittene Ged"
+        assert answer == ""
+
 
 class TestRegistry:
     def test_all_profiles_complete(self):
@@ -213,6 +218,17 @@ class TestForcedFinal:
         sample = logs[0].samples[0]
         assert sample.metadata.get("forced_final") is True
         assert sample.scores["acceptance"].answer == "die Mann"
+
+        out_dir = tmp_path / "artifacts"
+        export_log(Path(logs[0].location), MOCK_PROFILE, out_dir, allow_dirty=True)
+        row = json.loads(
+            (out_dir / "mock.samples.jsonl").read_text(encoding="utf-8").splitlines()[0]
+        )
+        assert row["forced_final"] is True
+        assert row["output"] == "die Mann"
+        # The primary turn's reasoning is preserved in the artifact.
+        assert "nur Nachdenken" in row["reasoning"]
+        assert row["thinking_observed"] is True
 
 
 class TestExport:
