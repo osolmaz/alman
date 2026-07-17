@@ -78,7 +78,7 @@ profiles:
     label: Claude Fable 5
     platform: anthropic-api
     model: anthropic-http/claude-fable-5
-    max_connections: 4
+    max_connections: 8
     generate:
       reasoning_effort: high
       max_tokens: 32768
@@ -242,6 +242,7 @@ profiles:
     label: Ternary Bonsai 27B
     platform: huggingface-inference-providers
     model: openai-api/hf/prism-ml/Ternary-Bonsai-27B-gguf:together
+    max_connections: 32
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
       HF_API_KEY: ${HF_TOKEN}
