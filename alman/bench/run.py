@@ -89,10 +89,12 @@ def main() -> None:
         )
 
     # Import inspect after the profile env is in place. Importing the task
-    # module also registers the task so retries can resolve it.
+    # and provider modules also registers them so fresh runs and retries can
+    # resolve the benchmark's dependency-free HTTP adapters.
     from inspect_ai import eval_retry
     from inspect_ai import eval as inspect_eval
 
+    import alman.bench.providers  # noqa: F401
     from alman.bench.task import alman_bench
 
     execution_ids: dict[str, str] = {}

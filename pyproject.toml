@@ -5,7 +5,6 @@ description = "The Alman language: spec tooling, linter, and the Almanbench benc
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "anthropic>=0.69.0",
     "huggingface-hub>=0.34.0",
     "httpx>=0.28.1",
     "inspect-ai>=0.3.245",
