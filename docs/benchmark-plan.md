@@ -465,8 +465,9 @@ entry (Inspect model string, provider env, generation config, pricing).
    ```
 
    Concurrency comes from the profile's `max_connections`. If a run fails
-   partway, resume the Inspect log with `inspect eval-retry` and re-export
-   with `python -m alman.bench.export`.
+   partway, resume it with `uv run bench-run <profile> --retry <log>.eval`,
+   which reloads the profile environment, re-registers the task, retries only
+   the unfinished samples, and exports.
 
 3. **Standard variants** (ad-hoc, through the task directly):
 

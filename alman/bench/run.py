@@ -10,8 +10,12 @@ and the exporter owns the stable artifact schema. Typical usage:
 
 Artifacts land in ``<out>/<profile>/`` (default
 ``~/scratch/almanbench-runs/<date>/<profile>/``), Inspect logs in a ``logs``
-subdirectory. If a run fails partway, resume it with ``inspect eval-retry``
-on the ``.eval`` log and re-export with ``python -m alman.bench.export``.
+subdirectory. If a run fails partway, resume it with::
+
+    uv run bench-run <profile> --retry <log>.eval
+
+which reloads the profile environment, re-registers the task, and retries
+only the unfinished samples before exporting.
 """
 
 from __future__ import annotations
@@ -37,6 +41,11 @@ def main() -> None:
     parser.add_argument("--limit", type=int, help="run only the first N samples")
     parser.add_argument("--tiers", help="comma-separated tier subset")
     parser.add_argument(
+        "--retry",
+        type=Path,
+        help="resume a failed run from its .eval log (ignores --limit/--tiers)",
+    )
+    parser.add_argument(
         "--max-connections", type=int, help="override the profile's concurrency"
     )
     parser.add_argument(
@@ -54,28 +63,35 @@ def main() -> None:
     out_dir = out_root / profile.name
     log_dir = out_dir / "logs"
 
-    # Import inspect after the profile env is in place.
+    # Import inspect after the profile env is in place. Importing the task
+    # module also registers the task so retries can resolve it.
+    from inspect_ai import eval_retry
     from inspect_ai import eval as inspect_eval
 
     from alman.bench.task import alman_bench
 
-    task = alman_bench(dataset="almanbench", include_spec=True, tiers=args.tiers)
-    logs = inspect_eval(
-        task,
-        model=profile.model,
-        log_dir=str(log_dir),
-        limit=args.limit,
-        max_connections=args.max_connections or profile.max_connections,
-        retry_on_error=3,
-        **profile.generate,
-    )
+    if args.retry:
+        logs = eval_retry(
+            str(args.retry),
+            log_dir=str(log_dir),
+            max_connections=args.max_connections or profile.max_connections,
+        )
+    else:
+        task = alman_bench(dataset="almanbench", include_spec=True, tiers=args.tiers)
+        logs = inspect_eval(
+            task,
+            model=profile.model,
+            log_dir=str(log_dir),
+            limit=args.limit,
+            max_connections=args.max_connections or profile.max_connections,
+            retry_on_error=3,
+            **profile.generate,
+        )
     log = logs[0]
     if log.status != "success":
         raise SystemExit(
             f"run ended with status {log.status!r}; resume with: "
-            f"inspect eval-retry {log.location} && "
-            f"python -m alman.bench.export --log <log> "
-            f"--profile {profile.name} --out {out_dir}"
+            f"uv run bench-run {profile.name} --retry {log.location}"
         )
     if args.no_export:
         print(f"log: {log.location}")

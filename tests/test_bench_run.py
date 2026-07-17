@@ -160,7 +160,7 @@ class TestCost:
 MOCK_PROFILE = Profile(
     name="mock",
     label="Mock Model",
-    platform="test",
+    platform="local",
     model="mockllm/model",
     pricing={
         "uncached_input_per_million_tokens": 1.0,
@@ -271,7 +271,7 @@ class TestExport:
         wrong = Profile(
             name="wrong",
             label="Wrong",
-            platform="test",
+            platform="local",
             model="openai/some-other-model",
         )
         with pytest.raises(ValueError, match="profile 'wrong' declares"):

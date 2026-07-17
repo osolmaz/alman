@@ -33,6 +33,7 @@ from typing import Any
 
 from inspect_ai.log import EvalLog, EvalSample, read_eval_log
 from inspect_ai.model import ContentReasoning
+from jsonschema import Draft202012Validator
 
 from alman.bench.almanbench import case_set_identity
 from alman.bench.registry import Profile
@@ -42,6 +43,7 @@ from alman.bench.task import almanbench_samples
 SCHEMA_VERSION = 1
 BENCHMARK_ID = "almanbench-public"
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PUBLICATION_SCHEMA = REPO_ROOT / "benchmark-results" / "almanbench-result.schema.json"
 
 
 def _scoring_revision() -> tuple[str, bool]:
@@ -240,6 +242,13 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
     for sample in log.samples or []:
         reasoning, answer = _completion_parts(sample)
         sample_tokens = _sample_tokens(sample)
+        thinking_observed = bool(reasoning) or bool(sample_tokens["reasoning"])
+        if reasoning:
+            reasoning_status = "returned"
+        elif thinking_observed:
+            reasoning_status = "not_exposed"
+        else:
+            reasoning_status = "not_observed"
         accepted = (
             list(sample.target)
             if not isinstance(sample.target, str)
@@ -260,9 +269,8 @@ def export_log(log_path: Path, profile: Profile, out_dir: Path) -> dict[str, Any
                 },
                 "output": answer,
                 "reasoning": reasoning,
-                "reasoning_status": "exposed" if reasoning else "not_exposed",
-                "thinking_observed": bool(reasoning)
-                or bool(sample_tokens["reasoning"]),
+                "reasoning_status": reasoning_status,
+                "thinking_observed": thinking_observed,
                 "forced_final": False,
                 "correct": is_accepted(answer, accepted),
                 "compliant": not lint(answer),
@@ -386,6 +394,7 @@ def _write_publication_rows(
                 "compliant": row["compliant"],
                 "thinking_observed": row["thinking_observed"],
                 "forced_final": row["forced_final"],
+                "response_id": None,
                 "returned_model": row["returned_model"],
                 "finish_reason": row["finish_reason"],
                 "completed_at": row["completed_at"],
@@ -397,8 +406,14 @@ def _write_publication_rows(
                 "total_tokens": row["tokens"]["total"],
                 "run_id": row["run_id"],
                 "execution_id": row["execution_id"],
+                "artifact": aggregate["artifacts"]["samples_jsonl"],
             }
         )
+    validator = Draft202012Validator(
+        json.loads(PUBLICATION_SCHEMA.read_text(encoding="utf-8"))
+    )
+    for row in flat:
+        validator.validate(row)
     results_path = out_dir / f"{profile.name}.almanbench-results.jsonl"
     results_path.write_text(
         "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in flat),
