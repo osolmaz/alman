@@ -171,6 +171,95 @@ tr:last-child td {
   border-bottom: 1px solid var(--ink);
 }
 
+/* ---------- Benchmark page ---------- */
+
+.resource-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.resource-links a {
+  font-family: var(--font-din);
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 0.4rem 0.9rem;
+}
+
+.resource-links a:hover {
+  color: var(--form-blue);
+  border-color: var(--form-blue);
+  text-decoration: none;
+}
+
+td.num,
+th.num {
+  text-align: right;
+}
+
+td.mono {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.lb-best {
+  font-weight: 600;
+}
+
+.table-note {
+  font-size: 0.85rem;
+  color: var(--grey-1);
+  margin-top: -0.5rem;
+}
+
+.bench-example {
+  margin: 1.5rem 0;
+  border: 1px solid var(--grey-2);
+  text-align: left;
+  font-size: inherit;
+  color: inherit;
+}
+
+.bench-example-id {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--grey-1);
+  border-bottom: 1px solid var(--grey-2);
+  padding: 0.5rem 1rem;
+}
+
+.bench-example dl {
+  margin: 0;
+  padding: 0.75rem 1rem 1rem;
+}
+
+.bench-example dt {
+  font-family: var(--font-din);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.75rem;
+  color: var(--grey-1);
+  margin-top: 0.75rem;
+}
+
+.bench-example dd {
+  margin: 0.25rem 0 0;
+}
+
+.bench-canonical {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--grey-1);
+}
+
 /* ---------- Header ---------- */
 
 .site-header {

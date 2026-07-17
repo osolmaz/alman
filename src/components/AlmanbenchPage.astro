@@ -1,0 +1,454 @@
+---
+// The standalone Almanbench page, rendered once per locale. Leaderboard
+// numbers come from benchmark-results/almanbench-leaderboard.json; prose is
+// translated inline per locale (Alman copy must stay spec-compliant).
+import Base from "../layouts/Base.astro";
+import { localeHome, translationsFor, type Locale } from "../i18n/ui";
+import lb from "../../benchmark-results/almanbench-leaderboard.json";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const translations = translationsFor("almanbench");
+
+const fmtPct = (correct: number, total: number): string => {
+  const pct = ((100 * correct) / total).toFixed(1);
+  return locale === "en" ? `${pct}%` : `${pct.replace(".", ",")} %`;
+};
+const fmtInt = (n: number): string =>
+  n.toLocaleString(locale === "en" ? "en-US" : "de-DE");
+const fmtScore = ([correct, total]: number[]): string =>
+  `${fmtPct(correct, total)} (${correct}/${total})`;
+
+const tierKeys = ["naturalistic", "targeted", "guards", "curated"] as const;
+
+const copy = {
+  en: {
+    description: "Almanbench: the Standard German to Alman translation benchmark.",
+    lead:
+      "Almanbench is the Standard German to Alman translation benchmark. " +
+      "Its 1,025 public items measure whether a language model can apply " +
+      "the complete Alman specification to real German prose, from " +
+      "canonical literature to contemporary text.",
+    linkDataset: "Dataset",
+    linkGithub: "GitHub",
+    linkSpec: "Specification",
+    resultsH: "Results",
+    resultsNote:
+      "Evaluated 2026-07-17 on the full 1,025-item public set, with the " +
+      "specification in the system prompt and maximum reasoning effort. " +
+      "Single sampled runs; scoring is case-sensitive, and archaic " +
+      "spellings in historical sources must be preserved.",
+    tiersH: "Acceptance by tier",
+    metricsH: "Metrics",
+    metricsP:
+      "Each run reports two numbers. Acceptance is normalized exact match " +
+      "against the item's full set of licensed renderings, enumerated in " +
+      "the data. Compliance is a conservative linter that flags Standard " +
+      "German surface forms Alman eliminates, such as unresolved " +
+      "preposition-article contractions or case-inflected articles. An " +
+      "unrelated but well-formed answer can still be compliant, so " +
+      "acceptance ranks the models and compliance is only a floor.",
+    compH: "Composition",
+    compP:
+      "The public set contains 1,025 items in four tiers. A private " +
+      "held-out set of about 200 further items, reviewed to the same " +
+      "standard, is never published and prices training contamination " +
+      "over time. Every published row carries a canary GUID so the data " +
+      "can be filtered from training corpora.",
+    compTh: ["Tier", "Items", "Purpose"],
+    compRows: [
+      [
+        "naturalistic",
+        600,
+        "Real prose with interacting rules. Half canonical literature (1500 to 1955), half contemporary German from Wikipedia, Tatoeba, and hand-authored sentences.",
+      ],
+      [
+        "targeted",
+        216,
+        "Hand-authored items that lift rare rules to at least 25 observations each.",
+      ],
+      [
+        "guards",
+        120,
+        "Overcorrection traps in eight families. Forms that Alman keeps, which a surface-form stripper would wrongly change.",
+      ],
+      [
+        "curated",
+        89,
+        "Hand-translated demonstrative core. Every specification rule is the designated target of at least one item.",
+      ],
+    ],
+    exampleH: "Example item",
+    exampleIntro:
+      "A naturalistic item from German Wikipedia. The genitive after " +
+      "*Familie* may keep *der* or take the *von* periphrasis, so the " +
+      "acceptance set lists both renderings.",
+    exampleSrc: "Standard German",
+    exampleAccepted: "Accepted renderings",
+    canonicalMark: "canonical",
+    prelimH: "Earlier diagnostic results",
+    prelimP:
+      "Before the v1 freeze, 18 model configurations were compared on the " +
+      "87-item curated tier alone, including open-weight models served " +
+      "through Hugging Face Inference Providers and local quantized runs. " +
+      "These numbers are diagnostic and not comparable to the v1 " +
+      "leaderboard above.",
+    runH: "Running the benchmark",
+    runP:
+      "The dataset is published on Hugging Face. The harness ships with " +
+      "the alman repository and runs against any model supported by " +
+      "Inspect AI.",
+    citeH: "Citation",
+    thModel: "Model",
+    thRoute: "Route",
+  },
+  de: {
+    description:
+      "Almanbench: die Übersetzungs-Benchmark von Standarddeutsch nach Alman.",
+    lead:
+      "Almanbench ist die Übersetzungs-Benchmark von Standarddeutsch nach " +
+      "Alman. Ihre 1.025 öffentlichen Testfälle messen, ob ein " +
+      "Sprachmodell die vollständige Alman-Spezifikation auf echte " +
+      "deutsche Prosa anwenden kann, von kanonischer Literatur bis zu " +
+      "zeitgenössischen Texten.",
+    linkDataset: "Datensatz",
+    linkGithub: "GitHub",
+    linkSpec: "Spezifikation",
+    resultsH: "Ergebnisse",
+    resultsNote:
+      "Geprüft am 17.07.2026 auf dem vollständigen öffentlichen Satz von " +
+      "1.025 Testfällen, mit der Spezifikation im Systemprompt und " +
+      "maximaler Reasoning-Stufe. Einzelne Läufe; die Bewertung " +
+      "unterscheidet Groß- und Kleinschreibung, und historische " +
+      "Schreibweisen müssen erhalten bleiben.",
+    tiersH: "Acceptance nach Ebene",
+    metricsH: "Metriken",
+    metricsP:
+      "Jeder Lauf liefert zwei Zahlen. Acceptance ist der normalisierte " +
+      "exakte Abgleich mit der vollständigen Menge der zulässigen " +
+      "Wiedergaben eines Testfalls, die in den Daten aufgeführt sind. " +
+      "Compliance ist ein konservativer Linter, der standarddeutsche " +
+      "Oberflächenformen markiert, die Alman abschafft, etwa unaufgelöste " +
+      "Verschmelzungen von Präposition und Artikel oder kasusflektierte " +
+      "Artikel. Eine themenfremde, aber wohlgeformte Antwort kann " +
+      "trotzdem compliant sein; Acceptance ordnet die Modelle, Compliance " +
+      "ist nur eine Untergrenze.",
+    compH: "Zusammensetzung",
+    compP:
+      "Der öffentliche Satz enthält 1.025 Testfälle in vier Ebenen. Ein " +
+      "privater zurückgehaltener Satz von rund 200 weiteren Testfällen, " +
+      "nach demselben Standard geprüft, wird nie veröffentlicht und misst " +
+      "Trainingskontamination über die Zeit. Jede veröffentlichte Zeile " +
+      "trägt eine Canary-GUID, damit die Daten aus Trainingskorpora " +
+      "gefiltert werden können.",
+    compTh: ["Ebene", "Testfälle", "Aufgabe"],
+    compRows: [
+      [
+        "naturalistic",
+        600,
+        "Echte Prosa mit zusammenwirkenden Regeln. Zur Hälfte kanonische Literatur (1500 bis 1955), zur Hälfte zeitgenössisches Deutsch aus Wikipedia, Tatoeba und handgeschriebenen Sätzen.",
+      ],
+      [
+        "targeted",
+        216,
+        "Handgeschriebene Testfälle, die seltene Regeln auf mindestens 25 Beobachtungen heben.",
+      ],
+      [
+        "guards",
+        120,
+        "Überkorrektur-Fallen in acht Familien. Formen, die Alman behält und die ein Oberflächenformen-Entferner fälschlich ändern würde.",
+      ],
+      [
+        "curated",
+        89,
+        "Handübersetzter demonstrativer Kern. Jede Regel der Spezifikation ist das ausgewiesene Ziel von mindestens einem Testfall.",
+      ],
+    ],
+    exampleH: "Beispiel-Testfall",
+    exampleIntro:
+      "Ein naturalistischer Testfall aus der deutschen Wikipedia. Der " +
+      "Genitiv nach *Familie* darf *der* behalten oder die " +
+      "*von*-Umschreibung nehmen, daher führt die Akzeptanzmenge beide " +
+      "Wiedergaben auf.",
+    exampleSrc: "Standarddeutsch",
+    exampleAccepted: "Zulässige Wiedergaben",
+    canonicalMark: "kanonisch",
+    prelimH: "Frühere diagnostische Ergebnisse",
+    prelimP:
+      "Vor dem v1-Freeze wurden 18 Modellkonfigurationen allein auf der " +
+      "kuratierten Ebene mit 87 Testfällen verglichen, darunter " +
+      "Open-Weight-Modelle über Hugging Face Inference Providers und " +
+      "lokale quantisierte Läufe. Diese Zahlen sind diagnostisch und " +
+      "nicht mit der v1-Rangliste oben vergleichbar.",
+    runH: "Die Benchmark ausführen",
+    runP:
+      "Der Datensatz ist auf Hugging Face veröffentlicht. Der " +
+      "Benchmark-Code liegt im alman-Repository und läuft gegen jedes von " +
+      "Inspect AI unterstützte Modell.",
+    citeH: "Zitieren",
+    thModel: "Modell",
+    thRoute: "Route",
+  },
+  al: {
+    description:
+      "Almanbench: die Übersetzungs-Benchmark von Standarddeutsch nach Alman.",
+    lead:
+      "Almanbench ist die Übersetzungs-Benchmark von Standarddeutsch nach " +
+      "Alman. Ihr 1.025 öffentliche Testfälle messen, ob ein " +
+      "Sprachmodell die vollständige Alman-Spezifikation auf echte " +
+      "deutsche Prosa anwenden kann, von kanonische Literatur bis zu " +
+      "zeitgenössische Texte.",
+    linkDataset: "Datensatz",
+    linkGithub: "GitHub",
+    linkSpec: "Spezifikation",
+    resultsH: "Ergebnisse",
+    resultsNote:
+      "Geprüft an die 17.07.2026 auf die vollständige öffentliche Satz von " +
+      "1.025 Testfälle, mit die Spezifikation in die Systemprompt und " +
+      "maximale Reasoning-Stufe. Einzelne Läufe; die Bewertung " +
+      "unterscheidet Groß- und Kleinschreibung, und historische " +
+      "Schreibweisen müssen erhalten bleiben.",
+    tiersH: "Acceptance nach Ebene",
+    metricsH: "Metriken",
+    metricsP:
+      "Jede Lauf liefert zwei Zahlen. Acceptance ist die normalisierte " +
+      "exakte Abgleich mit die vollständige Menge der zulässige " +
+      "Wiedergaben von ein Testfall, das in die Daten aufgeführt sind. " +
+      "Compliance ist ein konservative Linter, das standarddeutsche " +
+      "Oberflächenformen markiert, das Alman abschafft, etwa unaufgelöste " +
+      "Verschmelzungen von Präposition und Artikel oder kasusflektierte " +
+      "Artikel. Ein themenfremde, aber wohlgeformte Antwort kann " +
+      "trotzdem compliant sein; Acceptance ordnet die Modelle, Compliance " +
+      "ist nur ein Untergrenze.",
+    compH: "Zusammensetzung",
+    compP:
+      "Die öffentliche Satz enthält 1.025 Testfälle in vier Ebenen. Ein " +
+      "private zurückgehaltene Satz von rund 200 weitere Testfälle, nach " +
+      "dieselbe Standard geprüft, wird nie veröffentlicht und misst " +
+      "Trainingskontamination über die Zeit. Jede veröffentlichte Zeile " +
+      "trägt ein Canary-GUID, damit die Daten aus Trainingskorpora " +
+      "gefiltert werden können.",
+    compTh: ["Ebene", "Testfälle", "Aufgabe"],
+    compRows: [
+      [
+        "naturalistic",
+        600,
+        "Echte Prosa mit zusammenwirkende Regeln. Zu die Hälfte kanonische Literatur (1500 bis 1955), zu die Hälfte zeitgenössische Deutsch aus Wikipedia, Tatoeba und handgeschriebene Sätze.",
+      ],
+      [
+        "targeted",
+        216,
+        "Handgeschriebene Testfälle, das seltene Regeln auf mindestens 25 Beobachtungen heben.",
+      ],
+      [
+        "guards",
+        120,
+        "Überkorrektur-Fallen in acht Familien. Formen, das Alman behält und das ein Oberflächenformen-Entferner fälschlich ändern würde.",
+      ],
+      [
+        "curated",
+        89,
+        "Handübersetzte demonstrative Kern. Jede Regel der Spezifikation ist die ausgewiesene Ziel von mindestens ein Testfall.",
+      ],
+    ],
+    exampleH: "Beispiel-Testfall",
+    exampleIntro:
+      "Ein naturalistische Testfall aus die deutsche Wikipedia. Die " +
+      "Genitiv nach *Familie* darf *der* behalten oder die " +
+      "*von*-Umschreibung nehmen, daher führt die Akzeptanzmenge beide " +
+      "Wiedergaben auf.",
+    exampleSrc: "Standarddeutsch",
+    exampleAccepted: "Zulässige Wiedergaben",
+    canonicalMark: "kanonisch",
+    prelimH: "Frühere diagnostische Ergebnisse",
+    prelimP:
+      "Vor die v1-Freeze wurden 18 Modellkonfigurationen allein auf die " +
+      "kuratierte Ebene mit 87 Testfälle verglichen, darunter " +
+      "Open-Weight-Modelle über Hugging Face Inference Providers und " +
+      "lokale quantisierte Läufe. Diese Zahlen sind diagnostisch und " +
+      "nicht mit die v1-Rangliste oben vergleichbar.",
+    runH: "Die Benchmark ausführen",
+    runP:
+      "Die Datensatz ist auf Hugging Face veröffentlicht. Die " +
+      "Benchmark-Code liegt in die alman-Repository und läuft gegen jede " +
+      "von Inspect AI unterstützte Modell.",
+    citeH: "Zitieren",
+    thModel: "Modell",
+    thRoute: "Route",
+  },
+}[locale];
+
+const example = {
+  id: "almanbench/modern-wikipedia/pub-023",
+  source: "Der Braunbär gehört zu den Säugetieren aus der Familie der Bären.",
+  accepted: [
+    "Die Braunbär gehört zu die Säugetiere aus die Familie der Bären.",
+    "Die Braunbär gehört zu die Säugetiere aus die Familie von die Bären.",
+  ],
+};
+
+const bibtex = `@misc{almanbench2026,
+  title        = {Almanbench: A Standard German to Alman Translation Benchmark},
+  author       = {Solmaz, Onur},
+  year         = {2026},
+  howpublished = {\\url{https://alman.ai/almanbench/}}
+}`;
+---
+
+<Base
+  title="Almanbench"
+  description={copy.description}
+  locale={locale}
+  translations={translations}
+>
+  <div class="doc-band">
+    <span>Prüfungsergebnisse · Formblatt AL-2</span>
+    <span>Almanbench v1 · Stand {lb.evaluated}</span>
+  </div>
+
+  <h1>Almanbench</h1>
+  <p>{copy.lead}</p>
+
+  <nav class="resource-links">
+    <a href={lb.dataset}>{copy.linkDataset}</a>
+    <a href="https://github.com/osolmaz/alman">{copy.linkGithub}</a>
+    <a href={`${localeHome(locale)}#spec`}>{copy.linkSpec}</a>
+  </nav>
+
+  <h2>{copy.resultsH}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th class="num">Nr.</th>
+        <th>{copy.thModel}</th>
+        <th>{copy.thRoute}</th>
+        <th class="num">Acceptance ↑</th>
+        <th class="num">Compliance ↑</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        lb.entries.map((entry, index) => (
+          <tr>
+            <td class="num mono">{index + 1}</td>
+            <td class={index === 0 ? "lb-best" : undefined}>{entry.label}</td>
+            <td>{entry.route}</td>
+            <td class="num mono">
+              <strong>{fmtPct(entry.acceptance[0], entry.acceptance[1])}</strong>
+              {` (${entry.acceptance[0]}/${entry.acceptance[1]})`}
+            </td>
+            <td class="num mono">{fmtScore(entry.compliance)}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  <p class="table-note">{copy.resultsNote}</p>
+
+  <h3>{copy.tiersH}</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>{copy.thModel}</th>
+        {tierKeys.map((tier) => <th class="num">{tier}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {
+        lb.entries.map((entry) => (
+          <tr>
+            <td>{entry.label}</td>
+            {tierKeys.map((tier) => (
+              <td class="num mono">
+                {fmtPct(entry.tiers[tier][0], entry.tiers[tier][1])}
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  <h2>{copy.metricsH}</h2>
+  <p>{copy.metricsP}</p>
+
+  <h2>{copy.compH}</h2>
+  <p>{copy.compP}</p>
+  <table>
+    <thead>
+      <tr>
+        <th>{copy.compTh[0]}</th>
+        <th class="num">{copy.compTh[1]}</th>
+        <th>{copy.compTh[2]}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        copy.compRows.map(([tier, count, purpose]) => (
+          <tr>
+            <td class="mono">{tier}</td>
+            <td class="num mono">{fmtInt(count as number)}</td>
+            <td>{purpose}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  <h2>{copy.exampleH}</h2>
+  <p set:html={copy.exampleIntro.replace(/\*([^*]+)\*/g, "<i>$1</i>")} />
+  <figure class="bench-example">
+    <div class="bench-example-id">{example.id}</div>
+    <dl>
+      <dt>{copy.exampleSrc}</dt>
+      <dd>{example.source}</dd>
+      <dt>{copy.exampleAccepted}</dt>
+      {
+        example.accepted.map((rendering, index) => (
+          <dd>
+            {rendering}
+            {index === 0 && <span class="bench-canonical"> ({copy.canonicalMark})</span>}
+          </dd>
+        ))
+      }
+    </dl>
+  </figure>
+
+  <h2>{copy.prelimH}</h2>
+  <p>{copy.prelimP}</p>
+  <table>
+    <thead>
+      <tr>
+        <th>{copy.thModel}</th>
+        <th>{copy.thRoute}</th>
+        <th class="num">Acceptance ↑</th>
+        <th class="num">Compliance ↑</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        lb.preliminary.entries.map((entry) => (
+          <tr>
+            <td>{entry.label}</td>
+            <td>{entry.route}</td>
+            <td class="num mono">{fmtScore(entry.acceptance)}</td>
+            <td class="num mono">{fmtScore(entry.compliance)}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  <h2>{copy.runH}</h2>
+  <p>{copy.runP}</p>
+  <pre><code>from datasets import load_dataset
+
+ds = load_dataset("osolmaz/almanbench", split="test")</code></pre>
+  <pre><code>uv run inspect eval alman/bench/task.py --model openai/gpt-5-codex</code></pre>
+
+  <h2>{copy.citeH}</h2>
+  <pre><code>{bibtex}</code></pre>
+</Base>

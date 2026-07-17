@@ -266,6 +266,19 @@ Every published data file carries a canary GUID (the BIG-bench convention),
 so training-data filters can exclude almanbench and so a model can be probed
 for having seen it.
 
+### Distribution
+
+The canonical public distribution is the Hugging Face dataset
+[osolmaz/almanbench](https://huggingface.co/datasets/osolmaz/almanbench). It
+is assembled from the packaged tiers plus the curated tier by
+`alman-research/scripts/export_almanbench_hf.py`, which commits its export
+copy to `alman-research/almanbench/hf/` and asserts that no private source
+text leaks. After any repackage, re-run the export and re-upload so the
+dataset, the committed copy, and the packaged files stay in sync. The
+benchmark is not mirrored anywhere else on Hugging Face. Results are
+published on the site at `/almanbench/`, fed by
+`benchmark-results/almanbench-leaderboard.json`.
+
 ## Reference standard
 
 A reference is accepted when the row is clean under the compliance lint and

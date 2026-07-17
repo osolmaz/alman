@@ -45,6 +45,7 @@ export const translationsFor = (slug: string): Record<Locale, string> => ({
 export const ui: Record<Locale, Record<string, string>> = {
   en: {
     "nav.spec": "Specification",
+    "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "About",
     "spec.title": "Specification",
@@ -56,6 +57,7 @@ export const ui: Record<Locale, Record<string, string>> = {
   },
   de: {
     "nav.spec": "Spezifikation",
+    "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "Über uns",
     "spec.title": "Spezifikation",
@@ -68,6 +70,7 @@ export const ui: Record<Locale, Record<string, string>> = {
   },
   al: {
     "nav.spec": "Spezifikation",
+    "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "Über uns",
     "spec.title": "Spezifikation",

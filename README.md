@@ -25,14 +25,21 @@ live in `src/content/blog/`, and the visual identity is documented in
 
 ## Translation benchmark
 
-A Standard German → Alman translation benchmark, built on
-[Inspect AI](https://inspect.aisi.org.uk/). Its evaluation set is:
+Almanbench is a Standard German → Alman translation benchmark, built on
+[Inspect AI](https://inspect.aisi.org.uk/). The v1 public set contains 1,025
+items across four tiers (naturalistic, targeted, guards, curated). Its
+canonical public distribution is the Hugging Face dataset
+[osolmaz/almanbench](https://huggingface.co/datasets/osolmaz/almanbench), and
+the current leaderboard is published at
+[alman.ai/almanbench](https://alman.ai/almanbench/) (data in
+`benchmark-results/almanbench-leaderboard.json`). The earlier
+[87-row curated comparison](benchmark-results/2026-07-15-expanded-curated-thinking-comparison.md)
+of 18 model configurations, including the ternary and 1-bit Bonsai 27B
+variants, predates the v1 freeze and remains as a diagnostic reference.
 
-The latest [87-row benchmark leaderboard](benchmark-results/2026-07-15-expanded-curated-thinking-comparison.md)
-compares 18 model configurations, including the ternary and 1-bit Bonsai 27B
-variants.
+The packaged tiers live in `alman/bench/almanbench/`; the curated tier is:
 
-- **Curated sentences** (`alman/bench/curated/`) — hand-translated full
+- **Curated sentences** (`alman/bench/curated/`): hand-translated full
   sentences, mostly literary German (Kafka's *Die Verwandlung*, Hesse's
   *Siddhartha* and *Der Steppenwolf*), that exercise many rules at once:
   genitives, contractions, weak nouns, dative plurals, adjective chains.
