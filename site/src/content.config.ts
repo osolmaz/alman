@@ -19,12 +19,12 @@ const blog = defineCollection({
 });
 
 // The specification documents are generated from the JSON files under spec/
-// by `uv run python -m alman.build` and committed at _includes/spec.md
+// by `uv run python -m alman.build` and committed at spec/generated/spec.md
 // (English), spec.de.md (German), and spec.al.md (Alman). They are loaded
 // from there as-is; do not edit them by hand.
 const spec = defineCollection({
   loader: glob({
-    base: "./_includes",
+    base: "../spec/generated",
     pattern: "spec*.md",
     // Keep the file name (minus extension) as the id, so the localized
     // documents are addressable as "spec", "spec.de", and "spec.al".

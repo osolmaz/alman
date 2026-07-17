@@ -1,33 +1,35 @@
 ---
 import { getEntry, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
-import specMeta from "../../../spec/main.json";
+import AlmanDiff from "../../components/AlmanDiff.astro";
+import specMeta from "../../../../spec/main.json";
 import { ui } from "../../i18n/ui";
 
-const entry = await getEntry("spec", "spec.de");
-if (!entry) {
+const entry = await getEntry("spec", "spec.al");
+const deEntry = await getEntry("spec", "spec.de");
+if (!entry || !deEntry) {
   throw new Error(
-    "German spec document not found. Generate it with `uv run python -m alman.build`.",
+    "Spec documents not found. Generate them with `uv run python -m alman.build`.",
   );
 }
 const { Content } = await render(entry);
 const translations = { en: "/", de: "/de/", al: "/al/" };
-const t = ui.de;
+const t = ui.al;
 ---
 
 <Base
   title={t["spec.title"]}
   description={t["spec.description"]}
-  locale="de"
+  locale="al"
   translations={translations}
 >
   <div class="doc-band" id="spec">
-    <span>Amtliche Fassung · Deutsche Sprachfassung</span>
+    <span>Amtliche Fassung · Alman-Sprachfassung</span>
     <span>Dokument AL-1 · Stand {specMeta.lastUpdated}</span>
   </div>
-  <article class="spec-doc">
+  <AlmanDiff german={deEntry.body ?? ""} alman={entry.body ?? ""} class="spec-doc">
     <Content />
-  </article>
+  </AlmanDiff>
   <hr />
   <p>{t["spec.edit"]} <a href="https://github.com/osolmaz/alman">GitHub</a>.</p>
 </Base>

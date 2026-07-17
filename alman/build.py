@@ -9,9 +9,9 @@ SPEC_DIR = Path("spec")
 # "al" are read from the optional "i18n" blocks in the spec JSON files and
 # fall back to English where a translation is missing.
 OUTPUT_FILES = {
-    "en": Path("_includes/spec.md"),
-    "de": Path("_includes/spec.de.md"),
-    "al": Path("_includes/spec.al.md"),
+    "en": Path("spec/generated/spec.md"),
+    "de": Path("spec/generated/spec.de.md"),
+    "al": Path("spec/generated/spec.al.md"),
 }
 
 STRINGS = {

@@ -46,7 +46,7 @@ from alman.bench.almanbench import AlmanbenchItem, load_almanbench_items
 from alman.bench.dataset import REPO_ROOT, BenchItem, load_curated_items, load_items
 from alman.bench.scoring import is_accepted, lint, split_thinking
 
-SPEC_MARKDOWN = REPO_ROOT / "_includes" / "spec.md"
+SPEC_MARKDOWN = REPO_ROOT / "spec" / "generated" / "spec.md"
 
 INSTRUCTIONS = """\
 You are a translator from Standard German to Alman, a simplified dialect of \
