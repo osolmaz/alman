@@ -83,15 +83,23 @@ def main() -> None:
 
     from alman.bench.task import alman_bench
 
+    execution_ids: dict[str, str] = {}
     if args.retry:
         from inspect_ai.log import read_eval_log
 
-        header = read_eval_log(str(args.retry), header_only=True)
-        if header.eval.model != profile.model:
+        prior = read_eval_log(str(args.retry))
+        if prior.eval.model != profile.model:
             raise SystemExit(
-                f"log was run with model {header.eval.model!r}, but profile "
+                f"log was run with model {prior.eval.model!r}, but profile "
                 f"{profile.name!r} declares {profile.model!r}"
             )
+        # Samples completed in the prior attempt are carried over by
+        # eval_retry; record which execution actually produced them.
+        execution_ids = {
+            str(sample.id): prior.eval.run_id
+            for sample in prior.samples or []
+            if sample.error is None and sample.output is not None
+        }
         logs = eval_retry(
             str(args.retry),
             log_dir=str(log_dir),
@@ -120,7 +128,9 @@ def main() -> None:
 
     from alman.bench.export import export_log
 
-    aggregate = export_log(Path(log.location), profile, out_dir)
+    aggregate = export_log(
+        Path(log.location), profile, out_dir, execution_ids=execution_ids
+    )
     print(
         json.dumps(
             {

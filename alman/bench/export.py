@@ -213,21 +213,37 @@ def _logged_prompt_sha256(log: EvalLog) -> str:
 
 
 def _validate_case_coverage(log: EvalLog, rows: list[dict[str, Any]]) -> None:
+    """Check the logged cases against the canonical case set at HEAD.
+
+    Every row must match the current references exactly (source, acceptance
+    set, collection), so a retry that silently mixed reference revisions is
+    rejected; scoring an old log against new references is the rescore
+    tooling's job, not the exporter's. Full runs must also cover the
+    complete set.
+    """
     ids = [row["id"] for row in rows]
     if len(set(ids)) != len(ids):
         raise ValueError("duplicate sample ids in the log")
+    canonical = {sample.id: sample for sample in almanbench_samples()}
+    for row in rows:
+        sample = canonical.get(row["id"])
+        if sample is None:
+            raise ValueError(f"{row['id']} is not in the current case set")
+        if (
+            row["source"] != sample.input
+            or row["accepted"] != list(sample.target)
+            or row["collection"] != sample.metadata["collection"]
+        ):
+            raise ValueError(
+                f"{row['id']}: logged case differs from the current case "
+                "set; the references changed since the run (use the rescore "
+                "tooling, or rerun against the current set)"
+            )
     if log.eval.config.limit is not None or log.eval.task_args.get("tiers"):
         return
-    expected = {
-        sample.id for sample in almanbench_samples(log.eval.task_args.get("bench_dir"))
-    }
-    if set(ids) != expected:
-        missing = sorted(expected - set(ids))[:5]
-        unexpected = sorted(set(ids) - expected)[:5]
-        raise ValueError(
-            f"log does not cover the case set; missing={missing}, "
-            f"unexpected={unexpected}"
-        )
+    if set(ids) != set(canonical):
+        missing = sorted(set(canonical) - set(ids))[:5]
+        raise ValueError(f"log does not cover the case set; missing={missing}")
 
 
 def export_log(
@@ -235,14 +251,15 @@ def export_log(
     profile: Profile,
     out_dir: Path,
     allow_dirty: bool = False,
+    execution_ids: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     """Write the artifact set for a finished run; returns the aggregate.
 
     Official exports require a clean working tree so ``scoring_revision``
     names a commit that reproduces the scores; ``allow_dirty`` exists for
-    tests. ``execution_id`` is the id of the Inspect execution that completed
-    the run; samples carried over from an earlier attempt by ``--retry``
-    inherit it.
+    tests. ``execution_id`` is the id of the Inspect execution that produced
+    each row; for retried runs the runner passes ``execution_ids`` mapping
+    carried-over sample ids to the execution that actually produced them.
     """
     log = read_eval_log(str(log_path))
     if log.status != "success":
@@ -349,10 +366,9 @@ def export_log(
                 "finish_reason": choice.stop_reason,
                 "returned_model": sample.output.model,
                 "run_id": run_id,
-                "execution_id": execution_id,
+                "execution_id": (execution_ids or {}).get(str(sample.id), execution_id),
                 # Physical per-sample identity; carried over unchanged when
-                # --retry reuses a completed sample, unlike execution_id,
-                # which names the execution that completed the run.
+                # --retry reuses a completed sample.
                 "sample_uuid": sample.uuid,
                 "scoring_revision": scoring_revision,
                 "completed_at": sample.completed_at or completed,
