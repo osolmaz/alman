@@ -49,10 +49,10 @@ import worldMap from "../assets/world-map.svg?raw";
               Gemeldete Verluste: drei Lehrkräfte
             </p>
             <blockquote class="file-quote">
-              <span class="q-more">Every noun has a gender, and there is no
-              sense or system in the distribution; so the gender of each must
-              be learned separately and by heart. There is no other way.</span>
-              &hellip; In German, a young lady has no sex, while a turnip has.
+              Every noun has a gender, and there is no sense or system in the
+              distribution; so the gender of each must be learned separately and
+              by heart. There is no other way. &hellip; In German, a young lady
+              has no sex, while a turnip has.
             </blockquote>
             <p class="file-attrib">
               — M. Twain,
@@ -111,10 +111,10 @@ import worldMap from "../assets/world-map.svg?raw";
                 <tr><td>der Baum <span class="gloss">(tree)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
                 <tr><td>die Knospe <span class="gloss">(its bud)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
                 <tr><td>das Blatt <span class="gloss">(its leaf)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
-                <tr class="row-extra"><td>der Hund <span class="gloss">(dog)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
-                <tr class="row-extra"><td>die Katze <span class="gloss">(cat, incl. tomcats)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
-                <tr class="row-extra"><td>das Pferd <span class="gloss">(horse)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
-                <tr class="row-extra"><td>das Weib <span class="gloss">(wife)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
+                <tr><td>der Hund <span class="gloss">(dog)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
+                <tr><td>die Katze <span class="gloss">(cat, incl. tomcats)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
+                <tr><td>das Pferd <span class="gloss">(horse)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
+                <tr><td>das Weib <span class="gloss">(wife)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
                 <tr><td>die Steckrübe <span class="gloss">(turnip)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
                 <tr><td>das Mädchen <span class="gloss">(young lady)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
               </tbody>
@@ -1273,45 +1273,48 @@ import worldMap from "../assets/world-map.svg?raw";
     }
   }
 
-  /* ---------- Mobile: alternating flow, card pinned per group ---------- */
+  /* ---------- Mobile: strictly linear, text then card ---------- */
 
   @media (max-width: 860px) {
+    /*
+     * Nothing pins and nothing overlaps: each group renders all of its
+     * step text first, then its card in normal flow. By the time the card
+     * scrolls into view its steps have already passed above, so it arrives
+     * showing the state they produced (annex revealed, table collapsed,
+     * corrections struck through, stamp applied).
+     */
     .group {
-      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 4rem;
     }
 
-    /*
-     * Reading order per group: the group's first step text arrives in
-     * normal flow, then the card scrolls in after it and pins to the top
-     * of the viewport while the remaining steps scroll by underneath.
-     * When the group ends the card unpins and slides up and away before
-     * the next group's text arrives. Card height is capped so the step
-     * text below always has room to breathe.
-     */
     .group > .step {
-      justify-content: center;
+      order: 1;
+    }
+
+    .group-steps {
+      order: 2;
     }
 
     .stage-col {
-      position: sticky;
-      top: 0;
-      z-index: 3;
-      background: var(--paper);
-      padding: 0.6rem 0;
+      order: 3;
+      padding-top: 1rem;
+    }
+
+    .step {
+      min-height: 0;
+      margin: 0 0 2.75rem;
+      justify-content: flex-start;
+    }
+
+    .group-steps .step:last-child {
+      margin-bottom: 0;
     }
 
     .stage-card {
       margin: 0 auto;
-      max-height: 52vh;
-      max-height: 52svh;
-      overflow-y: auto;
       padding: 0.85rem 1rem 1rem;
-    }
-
-    /* Compact the card content rather than shrinking type further */
-    .q-more,
-    .row-extra {
-      display: none;
     }
 
     .card-head {
@@ -1399,7 +1402,10 @@ import worldMap from "../assets/world-map.svg?raw";
       margin-top: 0.8rem;
       padding-top: 0.7rem;
       padding-right: 0;
-      min-height: 4.6rem;
+      min-height: 0;
+      /* Room for the stamp below the Reinschrift, so it only clips the
+         last line the way a real rubber stamp would */
+      padding-bottom: 4.25rem;
     }
 
     .clean-sentence {
@@ -1411,26 +1417,10 @@ import worldMap from "../assets/world-map.svg?raw";
       font-size: 0.7rem;
     }
 
-    .group-steps {
-      position: relative;
-      z-index: 1;
-    }
-
-    .step {
-      min-height: 58vh;
-      justify-content: flex-end;
-      padding-bottom: 1.5rem;
-      z-index: 1;
-    }
-
     .step p:not(.step-kicker) {
       border: 1px solid var(--grey-2);
       border-radius: 2px;
       padding: 0.8rem 1rem;
-    }
-
-    .group:last-child .step:last-child {
-      min-height: 80vh;
     }
 
     /* Stamped across the document, like a real rubber stamp */
