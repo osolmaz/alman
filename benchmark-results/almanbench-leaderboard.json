@@ -3,8 +3,8 @@
   "benchmark": "almanbench",
   "version": "v0.1",
   "caseSetSize": 1029,
-  "caseSetId": "sha256:00f09af4eccde5df99edf5e4700a2103ae2bf6e2d621a6d752b34170f39178c8",
-  "scoringRevision": "de0483af46783a12566463e3f212b2f50514c063",
+  "caseSetId": "sha256:9f5d67b364b4fd1ca97f129e5d3dfbf1783577e892cd321c9a4e42d5925bd576",
+  "scoringRevision": "6b0ac8b38c19b37c26308f77dc9834c73871bd1f",
   "evaluated": "2026-07-18",
   "dataset": "https://huggingface.co/datasets/osolmaz/almanbench",
   "results": "https://huggingface.co/datasets/osolmaz/almanbench-results",
@@ -56,7 +56,7 @@
       ],
       "tiers": {
         "curated": [
-          88,
+          89,
           93
         ],
         "guards": [
@@ -64,7 +64,7 @@
           120
         ],
         "naturalistic": [
-          554,
+          553,
           600
         ],
         "targeted": [
@@ -79,7 +79,7 @@
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
       "acceptance": [
-        920,
+        923,
         1029
       ],
       "compliance": [
@@ -88,7 +88,7 @@
       ],
       "tiers": {
         "curated": [
-          87,
+          88,
           93
         ],
         "guards": [
@@ -96,7 +96,7 @@
           120
         ],
         "naturalistic": [
-          517,
+          519,
           600
         ],
         "targeted": [
@@ -111,7 +111,7 @@
       "route": "OpenAI API",
       "reasoning": "xhigh",
       "acceptance": [
-        901,
+        902,
         1029
       ],
       "compliance": [
@@ -128,7 +128,7 @@
           120
         ],
         "naturalistic": [
-          499,
+          500,
           600
         ],
         "targeted": [
@@ -175,7 +175,7 @@
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
       "acceptance": [
-        894,
+        895,
         1029
       ],
       "compliance": [
@@ -192,7 +192,7 @@
           120
         ],
         "naturalistic": [
-          497,
+          498,
           600
         ],
         "targeted": [
@@ -239,11 +239,11 @@
       "route": "Anthropic API",
       "reasoning": "xhigh",
       "acceptance": [
-        853,
+        857,
         1029
       ],
       "compliance": [
-        983,
+        982,
         1029
       ],
       "tiers": {
@@ -256,7 +256,7 @@
           120
         ],
         "naturalistic": [
-          458,
+          462,
           600
         ],
         "targeted": [
@@ -271,7 +271,7 @@
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
       "acceptance": [
-        815,
+        819,
         1029
       ],
       "compliance": [
@@ -280,7 +280,7 @@
       ],
       "tiers": {
         "curated": [
-          80,
+          81,
           93
         ],
         "guards": [
@@ -288,7 +288,7 @@
           120
         ],
         "naturalistic": [
-          427,
+          430,
           600
         ],
         "targeted": [
@@ -303,7 +303,7 @@
       "route": "HF Inference Providers, Together",
       "reasoning": "default",
       "acceptance": [
-        767,
+        768,
         1029
       ],
       "compliance": [
@@ -320,7 +320,7 @@
           120
         ],
         "naturalistic": [
-          395,
+          396,
           600
         ],
         "targeted": [
@@ -335,16 +335,16 @@
       "route": "HF Inference Providers, Scaleway",
       "reasoning": "default",
       "acceptance": [
-        761,
+        765,
         1029
       ],
       "compliance": [
-        997,
+        998,
         1029
       ],
       "tiers": {
         "curated": [
-          78,
+          79,
           93
         ],
         "guards": [
@@ -352,7 +352,7 @@
           120
         ],
         "naturalistic": [
-          382,
+          385,
           600
         ],
         "targeted": [
@@ -367,7 +367,7 @@
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
       "acceptance": [
-        665,
+        667,
         1029
       ],
       "compliance": [
@@ -376,7 +376,7 @@
       ],
       "tiers": {
         "curated": [
-          66,
+          67,
           93
         ],
         "guards": [
@@ -384,7 +384,7 @@
           120
         ],
         "naturalistic": [
-          301,
+          302,
           600
         ],
         "targeted": [
@@ -399,7 +399,7 @@
       "route": "HF Inference Providers, DeepInfra",
       "reasoning": "default",
       "acceptance": [
-        658,
+        661,
         1029
       ],
       "compliance": [
@@ -408,7 +408,7 @@
       ],
       "tiers": {
         "curated": [
-          70,
+          71,
           93
         ],
         "guards": [
@@ -416,7 +416,7 @@
           120
         ],
         "naturalistic": [
-          301,
+          303,
           600
         ],
         "targeted": [
@@ -431,16 +431,16 @@
       "route": "HF Inference Providers, Together",
       "reasoning": "default",
       "acceptance": [
-        492,
+        496,
         1029
       ],
       "compliance": [
-        931,
+        930,
         1029
       ],
       "tiers": {
         "curated": [
-          44,
+          45,
           93
         ],
         "guards": [
@@ -448,7 +448,7 @@
           120
         ],
         "naturalistic": [
-          206,
+          209,
           600
         ],
         "targeted": [

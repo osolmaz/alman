@@ -21,7 +21,7 @@
     },
     {
       "source": "Lange schon nahm Siddhartha am Gespräch der Weisen teil, übte sich mit Govinda im Redekampf, übte sich mit Govinda in der Kunst der Betrachtung, im Dienst der Versenkung.",
-      "pattern": "Lange schon nahm Siddhartha an die Gespräch {der|von die}@1d Weisen teil, übte sich mit Govinda in die Redekampf, übte sich mit Govinda in die Kunst {der|von die} Betrachtung, in die Dienst {der|von die} Versenkung.",
+      "pattern": "Lange schon nahm Siddhartha an die Gespräch {der|von die}@1d {Weisen|Weise}@4c teil, übte sich mit Govinda in die Redekampf, übte sich mit Govinda in die Kunst {der|von die} Betrachtung, in die Dienst {der|von die} Versenkung.",
       "rule": "mixed",
       "covers": [
         "reflexive-pronouns"
