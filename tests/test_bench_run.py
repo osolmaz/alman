@@ -142,7 +142,12 @@ class TestRegistry:
             == "deepseek-ai/DeepSeek-V4-Flash:novita"
         )
         assert load_profile("gpt-5.6-sol-xhigh").requested_model == "gpt-5.6-sol"
-        assert load_profile("gpt-5.6-sol-max").requested_model == "gpt-5.6-sol"
+        sol_max = load_profile("gpt-5.6-sol-max")
+        assert sol_max.requested_model == "gpt-5.6-sol"
+        assert sol_max.max_connections == 32
+        assert sol_max.generate["extra_body"]["prompt_cache_key"] == (
+            "almanbench-public"
+        )
         assert load_profile("gpt-5.5-xhigh").requested_model == "gpt-5.5"
         assert load_profile("claude-opus-4.8-max").requested_model == "claude-opus-4-8"
 

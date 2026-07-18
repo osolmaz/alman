@@ -30,6 +30,7 @@ profiles:
       # Keeping the full specification in the stable system prefix lets all
       # benchmark rows reuse the same cached tokens.
       extra_body:
+        prompt_cache_key: almanbench-public
         prompt_cache_retention: 24h
     pricing:
       uncached_input_per_million_tokens: 5.0
@@ -44,6 +45,8 @@ profiles:
     generate:
       reasoning_effort: xhigh
       max_tokens: 16384
+      extra_body:
+        prompt_cache_key: almanbench-public
     pricing:
       uncached_input_per_million_tokens: 5.0
       cached_input_per_million_tokens: 0.5
@@ -55,9 +58,12 @@ profiles:
     label: GPT-5.6 Sol max
     platform: openai-api
     model: openai/gpt-5.6-sol
+    max_connections: 32
     generate:
       reasoning_effort: max
       max_tokens: 16384
+      extra_body:
+        prompt_cache_key: almanbench-public
     pricing:
       uncached_input_per_million_tokens: 5.0
       cached_input_per_million_tokens: 0.5
@@ -72,6 +78,8 @@ profiles:
     generate:
       reasoning_effort: xhigh
       max_tokens: 16384
+      extra_body:
+        prompt_cache_key: almanbench-public
     pricing:
       uncached_input_per_million_tokens: 2.5
       cached_input_per_million_tokens: 0.25
@@ -86,6 +94,8 @@ profiles:
     generate:
       reasoning_effort: xhigh
       max_tokens: 16384
+      extra_body:
+        prompt_cache_key: almanbench-public
     pricing:
       uncached_input_per_million_tokens: 1.0
       cached_input_per_million_tokens: 0.1
