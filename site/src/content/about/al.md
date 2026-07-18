@@ -30,7 +30,7 @@ Wir entwickeln unter die folgende Vorgaben:
 
 ## Sprache von diese Website
 
-Die Spezifikation und die zugehörige Dokumentation sind überwiegend auf Englisch verfasst, weil die Zielgruppe aus Nicht-Muttersprachler der Deutsche besteht. Deutsche und Alman-Fassungen der Spezifikation befinden sich derzeit in Entwicklung.
+Die Spezifikation und die zugehörige Dokumentation sind überwiegend auf Englisch verfasst, weil die Zielgruppe aus Nicht-Muttersprachler der Deutsche besteht. Die Spezifikation ist über die Sprachauswahl auch auf Deutsch und auf Alman selbst verfügbar.
 
 ---
 
