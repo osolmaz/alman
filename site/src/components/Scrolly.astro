@@ -6,6 +6,12 @@
 // the remedy — a Kafka sentence corrected rule by rule and stamped —
 // and a world map as the statement of purpose. Progress is driven by an
 // IntersectionObserver setting data-step / data-stage on the section.
+//
+// Markup is grouped: each stage card sits next to the steps that narrate
+// it. On wide screens every card is overlaid into one sticky stage on the
+// right (cross-fading as before); on small screens each group flows in
+// order — card, then its steps — with the card pinned to the top only
+// while its own steps scroll by.
 import worldMap from "../assets/world-map.svg?raw";
 ---
 
@@ -17,444 +23,557 @@ import worldMap from "../assets/world-map.svg?raw";
   </header>
 
   <div class="scrolly-body">
-    <div class="scrolly-stage">
-      <!-- Stage: the Twain case file, sheet 1 -->
-      <div class="stage-card stage-f1">
-        <div class="card-head">
-          <span>Az. 1880-TW-001</span>
-          <span>Antrag auf Sprachreform</span>
-        </div>
-        <p class="file-meta">
-          Antragsteller: Twain, M. (Heidelberg)<br />
-          Eingegangen: 1880 &nbsp;·&nbsp; Status: <strong>offen</strong><br />
-          Gemeldete Verluste: drei Lehrkräfte
-        </p>
-        <blockquote class="file-quote">
-          Every noun has a gender, and there is no sense or system in the
-          distribution; so the gender of each must be learned separately and
-          by heart. There is no other way. &hellip; In German, a young lady
-          has no sex, while a turnip has.
-        </blockquote>
-        <p class="file-attrib">
-          — M. Twain,
-          <a href="/blog/the-awful-german-language/"><em>A Tramp Abroad</em> (1880)</a>
-        </p>
-        <div class="file-annex" data-at="1">
-          <p class="annex-label">Anlage 1: Beweisstück</p>
-          <div class="annex-dialogue">
-            <p><span class="speaker">Gretchen.</span> Wilhelm, where is the turnip?</p>
-            <p><span class="speaker">Wilhelm.</span> She has gone to the kitchen.</p>
-            <p><span class="speaker">Gretchen.</span> Where is the accomplished and beautiful English maiden?</p>
-            <p><span class="speaker">Wilhelm.</span> It has gone to the opera.</p>
+    <!-- Group: the Twain case file, sheet 1 -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-f1">
+            <div class="card-head">
+              <span>Az. 1880-TW-001</span>
+              <span>Antrag auf Sprachreform</span>
+            </div>
+            <p class="file-meta">
+              Antragsteller: Twain, M. (Heidelberg)<br />
+              Eingegangen: 1880 &nbsp;·&nbsp; Status: <strong>offen</strong><br />
+              Gemeldete Verluste: drei Lehrkräfte
+            </p>
+            <blockquote class="file-quote">
+              <span class="q-more">Every noun has a gender, and there is no
+              sense or system in the distribution; so the gender of each must
+              be learned separately and by heart. There is no other way.</span>
+              &hellip; In German, a young lady has no sex, while a turnip has.
+            </blockquote>
+            <p class="file-attrib">
+              — M. Twain,
+              <a href="/blog/the-awful-german-language/"><em>A Tramp Abroad</em> (1880)</a>
+            </p>
+            <div class="file-annex" data-at="1">
+              <p class="annex-label">Anlage 1: Beweisstück</p>
+              <div class="annex-dialogue">
+                <p><span class="speaker">Gretchen.</span> Wilhelm, where is the turnip?</p>
+                <p><span class="speaker">Wilhelm.</span> She has gone to the kitchen.</p>
+                <p><span class="speaker">Gretchen.</span> Where is the accomplished and beautiful English maiden?</p>
+                <p><span class="speaker">Wilhelm.</span> It has gone to the opera.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- Stage: exhibit — the gender inventory -->
-      <div class="stage-card stage-f2">
-        <div class="card-head">
-          <span>Az. 1880-TW-001</span>
-          <span>Anlage 2: Bestandsaufnahme</span>
-        </div>
-        <table class="inv-table">
-          <thead>
-            <tr><th>Gegenstand</th><th>Geschlecht lt. Wörterbuch</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>der Baum <span class="gloss">(tree)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
-            <tr><td>die Knospe <span class="gloss">(its bud)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
-            <tr><td>das Blatt <span class="gloss">(its leaf)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
-            <tr><td>der Hund <span class="gloss">(dog)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
-            <tr><td>die Katze <span class="gloss">(cat, incl. tomcats)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
-            <tr><td>das Pferd <span class="gloss">(horse)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
-            <tr><td>das Weib <span class="gloss">(wife)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
-            <tr><td>die Steckrübe <span class="gloss">(turnip)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
-            <tr><td>das Mädchen <span class="gloss">(young lady)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
-          </tbody>
-        </table>
-        <p class="table-verdict inv-verdict">Systematik: keine.</p>
-      </div>
-
-      <!-- Stage: exhibit — the applicant's reform proposals -->
-      <div class="stage-card stage-f3">
-        <div class="card-head">
-          <span>Az. 1880-TW-001</span>
-          <span>Anlage 3: Reformvorschläge (Auszug)</span>
-        </div>
-        <ol class="prop-list">
-          <li value="1">
-            In the first place, I would leave out the Dative case. &hellip;
-            The Dative case is but an ornamental folly — it is better to
-            discard it.
-          </li>
-          <li value="4">
-            Fourthly, I would reorganize the sexes, and distribute them
-            according to the will of the creator. This as a tribute of
-            respect, if nothing else.
-          </li>
-          <li value="7">
-            Seventhly, I would discard the Parenthesis. &hellip; Infractions
-            of this law should be punishable with death.
-          </li>
-        </ol>
-        <p class="file-meta prop-note">
-          Vermerk: Vorschläge 1 und 4 fallen in die Zuständigkeit des
-          Instituts.
-        </p>
-      </div>
-
-      <!-- Stage: the German declension table -->
-      <div class="stage-card stage-de">
-        <div class="card-head">
-          <span>Anlage 4</span>
-          <span>Bestimmter Artikel, Standarddeutsch</span>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th></th><th>Mask.</th><th>Fem.</th><th>Neut.</th><th>Plural</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Nominativ</th>
-              <td><del>der</del><ins>die</ins></td>
-              <td class="stays">die</td>
-              <td><del>das</del><ins>die</ins></td>
-              <td class="stays">die</td>
-            </tr>
-            <tr>
-              <th>Akkusativ</th>
-              <td><del>den</del><ins>die</ins></td>
-              <td class="stays">die</td>
-              <td><del>das</del><ins>die</ins></td>
-              <td class="stays">die</td>
-            </tr>
-            <tr>
-              <th>Dativ</th>
-              <td><del>dem</del><ins>die</ins></td>
-              <td><del>der</del><ins>die</ins></td>
-              <td><del>dem</del><ins>die</ins></td>
-              <td><del>den</del><ins>die</ins></td>
-            </tr>
-            <tr class="gen">
-              <th>Genitiv</th>
-              <td><del>des</del><ins>der</ins></td>
-              <td class="stays">der</td>
-              <td><del>des</del><ins>der</ins></td>
-              <td class="stays">der</td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="table-verdict de-verdict">Sechzehn Felder. Zwei Formen.</p>
-      </div>
-
-      <!-- Stage: the Old English declension table -->
-      <div class="stage-card stage-oe">
-        <div class="card-head">
-          <span>Präzedenzfall</span>
-          <span>Bestimmter Artikel, Altenglisch (ca. 900)</span>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th></th><th>Mask.</th><th>Fem.</th><th>Neut.</th><th>Plural</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Nominativ</th>
-              <td><del>se</del><ins>the</ins></td>
-              <td><del>sēo</del><ins>the</ins></td>
-              <td><del>þæt</del><ins>the</ins></td>
-              <td><del>þā</del><ins>the</ins></td>
-            </tr>
-            <tr>
-              <th>Akkusativ</th>
-              <td><del>þone</del><ins>the</ins></td>
-              <td><del>þā</del><ins>the</ins></td>
-              <td><del>þæt</del><ins>the</ins></td>
-              <td><del>þā</del><ins>the</ins></td>
-            </tr>
-            <tr>
-              <th>Dativ</th>
-              <td><del>þǣm</del><ins>the</ins></td>
-              <td><del>þǣre</del><ins>the</ins></td>
-              <td><del>þǣm</del><ins>the</ins></td>
-              <td><del>þǣm</del><ins>the</ins></td>
-            </tr>
-            <tr>
-              <th>Genitiv</th>
-              <td><del>þæs</del><ins>the</ins></td>
-              <td><del>þǣre</del><ins>the</ins></td>
-              <td><del>þæs</del><ins>the</ins></td>
-              <td><del>þāra</del><ins>the</ins></td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="table-verdict oe-verdict">Sechzehn Felder. Eine Form.</p>
-      </div>
-
-      <!-- Stage: the precedent, word by word -->
-      <div class="stage-card stage-prec">
-        <div class="card-head">
-          <span>Präzedenzfall</span>
-          <span>Erledigt ca. 1300</span>
-        </div>
-        <table class="prec-table">
-          <thead>
-            <tr>
-              <th>Altenglisch</th>
-              <th>Mittelenglisch</th>
-              <th>Heute</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>se mōna <span class="gloss">(m.)</span></td>
-              <td>þe mone</td>
-              <td><ins>the</ins> moon</td>
-            </tr>
-            <tr>
-              <td>sēo sunne <span class="gloss">(f.)</span></td>
-              <td>þe sonne</td>
-              <td><ins>the</ins> sun</td>
-            </tr>
-            <tr>
-              <td>þæt wīf <span class="gloss">(n.)</span></td>
-              <td>þe wif</td>
-              <td><ins>the</ins> wife</td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="table-verdict prec-verdict">
-          Erledigt. Keine Beschwerden seit 700 Jahren.
-        </p>
-      </div>
-
-      <!-- Stage: the sentence under processing -->
-      <div class="stage-card stage-doc">
-        <div class="card-head">
-          <span>Formblatt AL-2</span>
-          <span>Antrag auf Vereinfachung</span>
-        </div>
-        <p class="doc-source">
-          Eingang: F. Kafka, <em>Die Verwandlung</em> (1915), Satz 1
-        </p>
-        <p class="doc-sentence">
-          Als Gregor Samsa
-          <span class="tok" data-at="10"><del>eines Morgens</del><ins>ein Morgen</ins></span>
-          aus
-          <span class="tok" data-at="12"><del>unruhigen</del><ins>unruhige</ins></span>
-          <span class="tok" data-at="11"><del>Träumen</del><ins>Träume</ins></span>
-          erwachte, fand er sich in
-          <span class="tok" data-at="13"><del>seinem</del><ins>sein</ins></span>
-          Bett zu
-          <span class="tok" data-at="10"><del>einem</del><ins>ein</ins></span>
-          <span class="tok" data-at="12"><del>ungeheueren</del><ins>ungeheure</ins></span>
-          Ungeziefer verwandelt.
-        </p>
-        <div class="doc-chips" aria-hidden="true">
-          <span class="chip" data-at="10">§2a</span>
-          <span class="chip" data-at="11">§3a</span>
-          <span class="chip" data-at="12">§4a</span>
-          <span class="chip" data-at="13">§7c</span>
-        </div>
-        <div class="doc-clean" data-at="14">
-          <p class="clean-label">Reinschrift</p>
-          <p class="clean-sentence">
-            Als Gregor Samsa ein Morgen aus unruhige Träume erwachte, fand er
-            sich in sein Bett zu ein ungeheure Ungeziefer verwandelt.
+      <div class="group-steps">
+        <div class="step" data-step="0">
+          <p class="step-kicker">Vorgang 1880-TW-001</p>
+          <p>
+            In 1880, an American author filed
+            <a href="/blog/the-awful-german-language/">a detailed complaint</a>
+            about the German language, together with a proposal for its
+            reform. He had studied it for nine weeks, under great difficulty
+            and annoyance; three of his teachers died in the meantime. The
+            file has remained open since.
           </p>
         </div>
-        <div class="stamp" data-at="14" aria-hidden="true">
-          <span class="stamp-emblem"></span>
-          <span class="stamp-line1">Amtlich vereinfacht</span>
-          <span class="stamp-line2">Geprüft · §1–§10</span>
-        </div>
-      </div>
-
-      <!-- Stage: the world register -->
-      <div class="stage-card stage-world">
-        <div class="card-head">
-          <span>Anlage W</span>
-          <span>Weltsprachen-Register</span>
-        </div>
-        <div class="world-map" set:html={worldMap} />
-        <div class="world-legend">
-          <p class="legend-row legend-en">
-            <span class="swatch swatch-en"></span>
-            Englisch — 1,5 Mrd. Sprecher <span class="gloss">(entgendert ca. 1300)</span>
-          </p>
-          <p class="legend-row legend-de-now">
-            <span class="swatch swatch-de"></span>
-            Deutsch — 0,13 Mrd. Sprecher <span class="gloss">(Stand: vor Vereinfachung)</span>
-          </p>
-          <p class="legend-row legend-de-plan" data-at="16">
-            <span class="swatch swatch-plan"></span>
-            Deutsch — Prognose <span class="gloss">(nach Vereinfachung)</span>
+        <div class="step" data-step="1">
+          <p class="step-kicker">Beweisaufnahme</p>
+          <p>
+            Supporting evidence was attached: a dialogue from one of the best
+            of the German Sunday-school books, in which a turnip is
+            <em>she</em> and a young lady is <em>it</em>. The Institut has
+            reviewed the material. No error on the applicant's part could be
+            established.
           </p>
         </div>
       </div>
     </div>
 
-    <div class="scrolly-steps">
-      <div class="step" data-step="0">
-        <p class="step-kicker">Vorgang 1880-TW-001</p>
-        <p>
-          In 1880, an American author filed
-          <a href="/blog/the-awful-german-language/">a detailed complaint</a>
-          about the German language, together with a proposal for its
-          reform. He had studied it for nine weeks, under great difficulty
-          and annoyance; three of his teachers died in the meantime. The
-          file has remained open since.
-        </p>
+    <!-- Group: exhibit — the gender inventory -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-f2">
+            <div class="card-head">
+              <span>Az. 1880-TW-001</span>
+              <span>Anlage 2: Bestandsaufnahme</span>
+            </div>
+            <table class="inv-table">
+              <thead>
+                <tr><th>Gegenstand</th><th>Geschlecht lt. Wörterbuch</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>der Baum <span class="gloss">(tree)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
+                <tr><td>die Knospe <span class="gloss">(its bud)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
+                <tr><td>das Blatt <span class="gloss">(its leaf)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
+                <tr class="row-extra"><td>der Hund <span class="gloss">(dog)</span></td><td>männlich <span class="g-sym">♂</span></td></tr>
+                <tr class="row-extra"><td>die Katze <span class="gloss">(cat, incl. tomcats)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
+                <tr class="row-extra"><td>das Pferd <span class="gloss">(horse)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
+                <tr class="row-extra"><td>das Weib <span class="gloss">(wife)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
+                <tr><td>die Steckrübe <span class="gloss">(turnip)</span></td><td>weiblich <span class="g-sym">♀</span></td></tr>
+                <tr><td>das Mädchen <span class="gloss">(young lady)</span></td><td>sächlich <span class="g-sym">⚲</span></td></tr>
+              </tbody>
+            </table>
+            <p class="table-verdict inv-verdict">Systematik: keine.</p>
+          </div>
+        </div>
       </div>
-      <div class="step" data-step="1">
-        <p class="step-kicker">Beweisaufnahme</p>
-        <p>
-          Supporting evidence was attached: a dialogue from one of the best
-          of the German Sunday-school books, in which a turnip is
-          <em>she</em> and a young lady is <em>it</em>. The Institut has
-          reviewed the material. No error on the applicant's part could be
-          established.
-        </p>
+      <div class="group-steps">
+        <div class="step" data-step="2">
+          <p class="step-kicker">Bestandsaufnahme</p>
+          <p>
+            The applicant further submitted an inventory: a tree is male, its
+            buds are female, its leaves are neuter; horses are sexless, dogs
+            are male, cats are female — tomcats included, of course. A wife,
+            he noted, has no sex at all. The inventory has been verified
+            against the dictionary. It is accurate.
+          </p>
+        </div>
       </div>
-      <div class="step" data-step="2">
-        <p class="step-kicker">Bestandsaufnahme</p>
-        <p>
-          The applicant further submitted an inventory: a tree is male, its
-          buds are female, its leaves are neuter; horses are sexless, dogs
-          are male, cats are female — tomcats included, of course. A wife,
-          he noted, has no sex at all. The inventory has been verified
-          against the dictionary. It is accurate.
-        </p>
+    </div>
+
+    <!-- Group: exhibit — the applicant's reform proposals -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-f3">
+            <div class="card-head">
+              <span>Az. 1880-TW-001</span>
+              <span>Anlage 3: Reformvorschläge (Auszug)</span>
+            </div>
+            <ol class="prop-list">
+              <li value="1">
+                In the first place, I would leave out the Dative case. &hellip;
+                The Dative case is but an ornamental folly — it is better to
+                discard it.
+              </li>
+              <li value="4">
+                Fourthly, I would reorganize the sexes, and distribute them
+                according to the will of the creator. This as a tribute of
+                respect, if nothing else.
+              </li>
+              <li value="7">
+                Seventhly, I would discard the Parenthesis. &hellip; Infractions
+                of this law should be punishable with death.
+              </li>
+            </ol>
+            <p class="file-meta prop-note">
+              Vermerk: Vorschläge 1 und 4 fallen in die Zuständigkeit des
+              Instituts.
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="step" data-step="3">
-        <p class="step-kicker">Reformvorschläge</p>
-        <p>
-          The applicant supplied remedies, estimating that a gifted person
-          ought to learn English in thirty hours, French in thirty days,
-          and German in thirty years. Proposals 1 and 4 fall within the
-          Institut's remit. Processing begins — 146 years after receipt,
-          well within the usual administrative timeframe.
-        </p>
+      <div class="group-steps">
+        <div class="step" data-step="3">
+          <p class="step-kicker">Reformvorschläge</p>
+          <p>
+            The applicant supplied remedies, estimating that a gifted person
+            ought to learn English in thirty hours, French in thirty days,
+            and German in thirty years. Proposals 1 and 4 fall within the
+            Institut's remit. Processing begins — 146 years after receipt,
+            well within the usual administrative timeframe.
+          </p>
+        </div>
       </div>
-      <div class="step" data-step="4">
-        <p class="step-kicker">Befund</p>
-        <p>
-          The complaint has merit. Standard German declines its definite
-          article across three genders, four cases and two numbers: sixteen
-          slots, six forms, and no system by which to learn them.
-        </p>
+    </div>
+
+    <!-- Group: the German declension table, as found -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-de stage-de1">
+            <div class="card-head">
+              <span>Anlage 4</span>
+              <span>Bestimmter Artikel, Standarddeutsch</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th><th>Mask.</th><th>Fem.</th><th>Neut.</th><th>Plural</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Nominativ</th>
+                  <td><del>der</del><ins>die</ins></td>
+                  <td class="stays">die</td>
+                  <td><del>das</del><ins>die</ins></td>
+                  <td class="stays">die</td>
+                </tr>
+                <tr>
+                  <th>Akkusativ</th>
+                  <td><del>den</del><ins>die</ins></td>
+                  <td class="stays">die</td>
+                  <td><del>das</del><ins>die</ins></td>
+                  <td class="stays">die</td>
+                </tr>
+                <tr>
+                  <th>Dativ</th>
+                  <td><del>dem</del><ins>die</ins></td>
+                  <td><del>der</del><ins>die</ins></td>
+                  <td><del>dem</del><ins>die</ins></td>
+                  <td><del>den</del><ins>die</ins></td>
+                </tr>
+                <tr class="gen">
+                  <th>Genitiv</th>
+                  <td><del>des</del><ins>der</ins></td>
+                  <td class="stays">der</td>
+                  <td><del>des</del><ins>der</ins></td>
+                  <td class="stays">der</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="table-verdict de-verdict">Sechzehn Felder. Zwei Formen.</p>
+          </div>
+        </div>
       </div>
-      <div class="step" data-step="5">
-        <p class="step-kicker">Präzedenzfall</p>
-        <p>
-          A precedent exists. English — also a Germanic language — once
-          declined its article through the same three genders and four
-          cases: <em>se mōna</em>, the he-moon; <em>sēo sunne</em>, the
-          she-sun; <em>þæt wīf</em>, the it-wife. Sixteen slots, nine forms.
-          Any Anglo-Saxon would have understood the applicant's suffering.
-        </p>
+      <div class="group-steps">
+        <div class="step" data-step="4">
+          <p class="step-kicker">Befund</p>
+          <p>
+            The complaint has merit. Standard German declines its definite
+            article across three genders, four cases and two numbers: sixteen
+            slots, six forms, and no system by which to learn them.
+          </p>
+        </div>
       </div>
-      <div class="step" data-step="6">
-        <p class="step-kicker">Präzedenzfall, Fortsetzung</p>
-        <p>
-          Then it stopped. Between roughly 1150 and 1300 the endings wore
-          away, the sixteen slots merged into a single <strong>the</strong>,
-          and the grammatical genders went with them. No committee was
-          involved. No intelligibility was lost.
-        </p>
+    </div>
+
+    <!-- Group: the Old English declension table -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-oe">
+            <div class="card-head">
+              <span>Präzedenzfall</span>
+              <span>Bestimmter Artikel, Altenglisch (ca. 900)</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th><th>Mask.</th><th>Fem.</th><th>Neut.</th><th>Plural</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Nominativ</th>
+                  <td><del>se</del><ins>the</ins></td>
+                  <td><del>sēo</del><ins>the</ins></td>
+                  <td><del>þæt</del><ins>the</ins></td>
+                  <td><del>þā</del><ins>the</ins></td>
+                </tr>
+                <tr>
+                  <th>Akkusativ</th>
+                  <td><del>þone</del><ins>the</ins></td>
+                  <td><del>þā</del><ins>the</ins></td>
+                  <td><del>þæt</del><ins>the</ins></td>
+                  <td><del>þā</del><ins>the</ins></td>
+                </tr>
+                <tr>
+                  <th>Dativ</th>
+                  <td><del>þǣm</del><ins>the</ins></td>
+                  <td><del>þǣre</del><ins>the</ins></td>
+                  <td><del>þǣm</del><ins>the</ins></td>
+                  <td><del>þǣm</del><ins>the</ins></td>
+                </tr>
+                <tr>
+                  <th>Genitiv</th>
+                  <td><del>þæs</del><ins>the</ins></td>
+                  <td><del>þǣre</del><ins>the</ins></td>
+                  <td><del>þæs</del><ins>the</ins></td>
+                  <td><del>þāra</del><ins>the</ins></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="table-verdict oe-verdict">Sechzehn Felder. Eine Form.</p>
+          </div>
+        </div>
       </div>
-      <div class="step" data-step="7">
-        <p class="step-kicker">Präzedenzfall, Ergebnis</p>
-        <p>
-          Since then, English assigns gender by nature rather than by
-          dictionary: the moon is <em>it</em>, the sun is <em>it</em>, a
-          wife is <em>she</em>. The applicant's turnip problem does not
-          arise. Nobody has requested the old forms back.
-        </p>
+      <div class="group-steps">
+        <div class="step" data-step="5">
+          <p class="step-kicker">Präzedenzfall</p>
+          <p>
+            A precedent exists. English — also a Germanic language — once
+            declined its article through the same three genders and four
+            cases: <em>se mōna</em>, the he-moon; <em>sēo sunne</em>, the
+            she-sun; <em>þæt wīf</em>, the it-wife. Sixteen slots, nine forms.
+            Any Anglo-Saxon would have understood the applicant's suffering.
+          </p>
+        </div>
+        <div class="step" data-step="6">
+          <p class="step-kicker">Präzedenzfall, Fortsetzung</p>
+          <p>
+            Then it stopped. Between roughly 1150 and 1300 the endings wore
+            away, the sixteen slots merged into a single <strong>the</strong>,
+            and the grammatical genders went with them. No committee was
+            involved. No intelligibility was lost.
+          </p>
+        </div>
       </div>
-      <div class="step" data-step="8">
-        <p class="step-kicker">Abhilfe · §1a, §1b</p>
-        <p>
-          The same procedure is hereby applied to German — by regulation
-          rather than by seven centuries of erosion. Every non-genitive
-          context receives <strong>die</strong>; the genitive receives
-          <strong>der</strong>. The applicant's first proposal, to leave
-          out the dative case, is exceeded: the accusative goes with it.
-        </p>
+    </div>
+
+    <!-- Group: the precedent, word by word -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-prec">
+            <div class="card-head">
+              <span>Präzedenzfall</span>
+              <span>Erledigt ca. 1300</span>
+            </div>
+            <table class="prec-table">
+              <thead>
+                <tr>
+                  <th>Altenglisch</th>
+                  <th>Mittelenglisch</th>
+                  <th>Heute</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>se mōna <span class="gloss">(m.)</span></td>
+                  <td>þe mone</td>
+                  <td><ins>the</ins> moon</td>
+                </tr>
+                <tr>
+                  <td>sēo sunne <span class="gloss">(f.)</span></td>
+                  <td>þe sonne</td>
+                  <td><ins>the</ins> sun</td>
+                </tr>
+                <tr>
+                  <td>þæt wīf <span class="gloss">(n.)</span></td>
+                  <td>þe wif</td>
+                  <td><ins>the</ins> wife</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="table-verdict prec-verdict">
+              Erledigt. Keine Beschwerden seit 700 Jahren.
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="step" data-step="9">
-        <p class="step-kicker">Eingang</p>
-        <p>
-          The procedure extends to whole sentences. For demonstration, one
-          is submitted for processing: the opening of Kafka's
-          <em>Die Verwandlung</em>.
-        </p>
+      <div class="group-steps">
+        <div class="step" data-step="7">
+          <p class="step-kicker">Präzedenzfall, Ergebnis</p>
+          <p>
+            Since then, English assigns gender by nature rather than by
+            dictionary: the moon is <em>it</em>, the sun is <em>it</em>, a
+            wife is <em>she</em>. The applicant's turnip problem does not
+            arise. Nobody has requested the old forms back.
+          </p>
+        </div>
       </div>
-      <div class="step" data-step="10">
-        <p class="step-kicker">§2a</p>
-        <p>
-          The indefinite article adopts its invariant base form
-          <strong>ein</strong>. Case endings are discarded:
-          <em>eines Morgens</em> and <em>einem</em> are corrected.
-        </p>
+    </div>
+
+    <!-- Group: the German table again, this time collapsing -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-de stage-de2">
+            <div class="card-head">
+              <span>Anlage 4</span>
+              <span>Bestimmter Artikel, Standarddeutsch</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th></th><th>Mask.</th><th>Fem.</th><th>Neut.</th><th>Plural</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>Nominativ</th>
+                  <td><del>der</del><ins>die</ins></td>
+                  <td class="stays">die</td>
+                  <td><del>das</del><ins>die</ins></td>
+                  <td class="stays">die</td>
+                </tr>
+                <tr>
+                  <th>Akkusativ</th>
+                  <td><del>den</del><ins>die</ins></td>
+                  <td class="stays">die</td>
+                  <td><del>das</del><ins>die</ins></td>
+                  <td class="stays">die</td>
+                </tr>
+                <tr>
+                  <th>Dativ</th>
+                  <td><del>dem</del><ins>die</ins></td>
+                  <td><del>der</del><ins>die</ins></td>
+                  <td><del>dem</del><ins>die</ins></td>
+                  <td><del>den</del><ins>die</ins></td>
+                </tr>
+                <tr class="gen">
+                  <th>Genitiv</th>
+                  <td><del>des</del><ins>der</ins></td>
+                  <td class="stays">der</td>
+                  <td><del>des</del><ins>der</ins></td>
+                  <td class="stays">der</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="table-verdict de-verdict">Sechzehn Felder. Zwei Formen.</p>
+          </div>
+        </div>
       </div>
-      <div class="step" data-step="11">
-        <p class="step-kicker">§3a</p>
-        <p>
-          Case endings on nouns are eliminated. The dative plural
-          <em>Träumen</em> loses its <em>-n</em> and reverts to the plain
-          plural <em>Träume</em>.
-        </p>
+      <div class="group-steps">
+        <div class="step" data-step="8">
+          <p class="step-kicker">Abhilfe · §1a, §1b</p>
+          <p>
+            The same procedure is hereby applied to German — by regulation
+            rather than by seven centuries of erosion. Every non-genitive
+            context receives <strong>die</strong>; the genitive receives
+            <strong>der</strong>. The applicant's first proposal, to leave
+            out the dative case, is exceeded: the accusative goes with it.
+          </p>
+        </div>
       </div>
-      <div class="step" data-step="12">
-        <p class="step-kicker">§4a</p>
-        <p>
-          The applicant reported he would "rather decline two drinks than
-          one German adjective." The matter is resolved: all adjective
-          endings regularize to an invariant <strong>-e</strong>.
-        </p>
+    </div>
+
+    <!-- Group: the sentence under processing -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-doc">
+            <div class="card-head">
+              <span>Formblatt AL-2</span>
+              <span>Antrag auf Vereinfachung</span>
+            </div>
+            <p class="doc-source">
+              Eingang: F. Kafka, <em>Die Verwandlung</em> (1915), Satz 1
+            </p>
+            <p class="doc-sentence">
+              Als Gregor Samsa
+              <span class="tok" data-at="10"><del>eines Morgens</del><ins>ein Morgen</ins></span>
+              aus
+              <span class="tok" data-at="12"><del>unruhigen</del><ins>unruhige</ins></span>
+              <span class="tok" data-at="11"><del>Träumen</del><ins>Träume</ins></span>
+              erwachte, fand er sich in
+              <span class="tok" data-at="13"><del>seinem</del><ins>sein</ins></span>
+              Bett zu
+              <span class="tok" data-at="10"><del>einem</del><ins>ein</ins></span>
+              <span class="tok" data-at="12"><del>ungeheueren</del><ins>ungeheure</ins></span>
+              Ungeziefer verwandelt.
+            </p>
+            <div class="doc-chips" aria-hidden="true">
+              <span class="chip" data-at="10">§2a</span>
+              <span class="chip" data-at="11">§3a</span>
+              <span class="chip" data-at="12">§4a</span>
+              <span class="chip" data-at="13">§7c</span>
+            </div>
+            <div class="doc-clean" data-at="14">
+              <p class="clean-label">Reinschrift</p>
+              <p class="clean-sentence">
+                Als Gregor Samsa ein Morgen aus unruhige Träume erwachte, fand er
+                sich in sein Bett zu ein ungeheure Ungeziefer verwandelt.
+              </p>
+            </div>
+            <div class="stamp" data-at="14" aria-hidden="true">
+              <span class="stamp-emblem"></span>
+              <span class="stamp-line1">Amtlich vereinfacht</span>
+              <span class="stamp-line2">Geprüft · §1–§10</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="step" data-step="13">
-        <p class="step-kicker">§7c</p>
-        <p>
-          Possessive determiners keep their bare base form in all
-          non-genitive contexts: <em>seinem Bett</em> is corrected to
-          <em>sein Bett</em>.
-        </p>
+      <div class="group-steps">
+        <div class="step" data-step="9">
+          <p class="step-kicker">Eingang</p>
+          <p>
+            The procedure extends to whole sentences. For demonstration, one
+            is submitted for processing: the opening of Kafka's
+            <em>Die Verwandlung</em>.
+          </p>
+        </div>
+        <div class="step" data-step="10">
+          <p class="step-kicker">§2a</p>
+          <p>
+            The indefinite article adopts its invariant base form
+            <strong>ein</strong>. Case endings are discarded:
+            <em>eines Morgens</em> and <em>einem</em> are corrected.
+          </p>
+        </div>
+        <div class="step" data-step="11">
+          <p class="step-kicker">§3a</p>
+          <p>
+            Case endings on nouns are eliminated. The dative plural
+            <em>Träumen</em> loses its <em>-n</em> and reverts to the plain
+            plural <em>Träume</em>.
+          </p>
+        </div>
+        <div class="step" data-step="12">
+          <p class="step-kicker">§4a</p>
+          <p>
+            The applicant reported he would "rather decline two drinks than
+            one German adjective." The matter is resolved: all adjective
+            endings regularize to an invariant <strong>-e</strong>.
+          </p>
+        </div>
+        <div class="step" data-step="13">
+          <p class="step-kicker">§7c</p>
+          <p>
+            Possessive determiners keep their bare base form in all
+            non-genitive contexts: <em>seinem Bett</em> is corrected to
+            <em>sein Bett</em>.
+          </p>
+        </div>
+        <div class="step" data-step="14">
+          <p class="step-kicker">Bescheid</p>
+          <p>
+            Processing complete. The sentence remains German; every speaker
+            understands it. File 1880-TW-001 is closed after 146 years. The
+            applicant is deemed notified.
+          </p>
+        </div>
       </div>
-      <div class="step" data-step="14">
-        <p class="step-kicker">Bescheid</p>
-        <p>
-          Processing complete. The sentence remains German; every speaker
-          understands it. File 1880-TW-001 is closed after 146 years. The
-          applicant is deemed notified.
-        </p>
+    </div>
+
+    <!-- Group: the world register -->
+    <div class="group">
+      <div class="stage-col">
+        <div class="stage-sticky">
+          <div class="stage-card stage-world">
+            <div class="card-head">
+              <span>Anlage W</span>
+              <span>Weltsprachen-Register</span>
+            </div>
+            <div class="world-map" set:html={worldMap} />
+            <div class="world-legend">
+              <p class="legend-row legend-en">
+                <span class="swatch swatch-en"></span>
+                Englisch — 1,5 Mrd. Sprecher <span class="gloss">(entgendert ca. 1300)</span>
+              </p>
+              <p class="legend-row legend-de-now">
+                <span class="swatch swatch-de"></span>
+                Deutsch — 0,13 Mrd. Sprecher <span class="gloss">(Stand: vor Vereinfachung)</span>
+              </p>
+              <p class="legend-row legend-de-plan" data-at="16">
+                <span class="swatch swatch-plan"></span>
+                Deutsch — Prognose <span class="gloss">(nach Vereinfachung)</span>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="step" data-step="15">
-        <p class="step-kicker">Weltsprachen-Register</p>
-        <p>
-          For the record: since shedding its genders, English has
-          accumulated one and a half billion speakers. German maintains a
-          hundred and thirty million, a three-gender system, and a
-          reputation. The Institut notes the correlation.
-        </p>
-      </div>
-      <div class="step" data-step="16">
-        <p class="step-kicker">Zweck des Verfahrens</p>
-        <p>
-          The objective is on record. Alman diverges from Standard German
-          as little as possible, can be learned in an afternoon, and is no
-          slang and no ethnolect — ethnicity-less, class-less, open to all,
-          native speakers included. What English accomplished by accident,
-          German shall have by regulation: a gender-equitable world
-          language, and an alternative path to fluency for the millions
-          learning it. The full procedure is codified below in
-          <a href="#definite-articles">§1–§10</a>.
-        </p>
+      <div class="group-steps">
+        <div class="step" data-step="15">
+          <p class="step-kicker">Weltsprachen-Register</p>
+          <p>
+            For the record: since shedding its genders, English has
+            accumulated one and a half billion speakers. German maintains a
+            hundred and thirty million, a three-gender system, and a
+            reputation. The Institut notes the correlation.
+          </p>
+        </div>
+        <div class="step" data-step="16">
+          <p class="step-kicker">Zweck des Verfahrens</p>
+          <p>
+            The objective is on record. Alman diverges from Standard German
+            as little as possible, can be learned in an afternoon, and is no
+            slang and no ethnolect — ethnicity-less, class-less, open to all,
+            native speakers included. What English accomplished by accident,
+            German shall have by regulation: a gender-equitable world
+            language, and an alternative path to fluency for the millions
+            learning it. The full procedure is codified below in
+            <a href="#definite-articles">§1–§10</a>.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -466,8 +585,8 @@ import worldMap from "../assets/world-map.svg?raw";
 
   const STAGES = [
     "f1", "f1", "f2", "f3",       // Twain file and exhibits
-    "de", "oe", "oe", "prec",     // tables and precedent
-    "de",                         // remedy: German table collapses
+    "de1", "oe", "oe", "prec",    // tables and precedent
+    "de2",                        // remedy: German table collapses
     "doc", "doc", "doc", "doc", "doc", "doc", // Kafka processing
     "world", "world",             // statement of purpose
   ];
@@ -537,23 +656,10 @@ import worldMap from "../assets/world-map.svg?raw";
   .scrolly-body {
     max-width: 66rem;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: minmax(15rem, 20rem) 1fr;
-    gap: 3rem;
+    position: relative;
   }
 
-  /* ---------- Stage ---------- */
-
-  .scrolly-stage {
-    order: 2;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    height: 100dvh;
-    display: grid;
-    align-items: center;
-    justify-items: center;
-  }
+  /* ---------- Stage cards (shared) ---------- */
 
   .stage-card {
     background: #ffffff;
@@ -562,23 +668,7 @@ import worldMap from "../assets/world-map.svg?raw";
     padding: 1.5rem 1.75rem 1.75rem;
     width: 100%;
     max-width: 34rem;
-    grid-area: 1 / 1;
     position: relative;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.45s ease, visibility 0.45s;
-  }
-
-  [data-stage="f1"] .stage-f1,
-  [data-stage="f2"] .stage-f2,
-  [data-stage="f3"] .stage-f3,
-  [data-stage="de"] .stage-de,
-  [data-stage="oe"] .stage-oe,
-  [data-stage="prec"] .stage-prec,
-  [data-stage="doc"] .stage-doc,
-  [data-stage="world"] .stage-world {
-    opacity: 1;
-    visibility: visible;
   }
 
   .card-head {
@@ -1116,11 +1206,7 @@ import worldMap from "../assets/world-map.svg?raw";
     opacity: 1;
   }
 
-  /* ---------- Steps ---------- */
-
-  .scrolly-steps {
-    order: 1;
-  }
+  /* ---------- Steps (shared) ---------- */
 
   .step {
     min-height: 75vh;
@@ -1136,61 +1222,104 @@ import worldMap from "../assets/world-map.svg?raw";
     margin: 0.5rem 0 0;
   }
 
-  .step:first-child {
-    min-height: 60vh;
-  }
+  /* ---------- Wide layout: one overlaid sticky stage on the right ---------- */
 
-  .step:last-child {
-    min-height: 100vh;
-  }
-
-  /* ---------- Mobile ---------- */
-
-  @media (max-width: 860px) {
-    .scrolly-body {
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-
-    .scrolly-stage {
-      order: 1;
-      position: sticky;
-      top: 0;
-      height: auto;
-      padding: 0.6rem 0;
-      background: var(--paper);
-      z-index: 3;
-      align-items: start;
+  @media (min-width: 861px) {
+    .group-steps {
+      max-width: 20rem;
     }
 
     /*
-     * Inactive cards leave the layout flow so the sticky container hugs
-     * the active card instead of sizing to the tallest card in the stack
-     * (which left an opaque band covering the step text below).
+     * Every group's stage column is overlaid onto the same region of
+     * .scrolly-body, so all cards share one sticky stage on the right and
+     * cross-fade exactly as in the single-stage layout. The grouped markup
+     * only changes behavior on small screens.
      */
-    .stage-card {
-      padding: 0.85rem 1rem 1rem;
+    .stage-col {
       position: absolute;
-      top: 0.6rem;
-      left: 0;
+      top: 0;
+      bottom: 0;
+      left: 23rem;
       right: 0;
-      margin: 0 auto;
+      pointer-events: none;
+    }
+
+    .stage-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      height: 100dvh;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .stage-card {
+      pointer-events: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s ease, visibility 0.45s;
     }
 
     [data-stage="f1"] .stage-f1,
     [data-stage="f2"] .stage-f2,
     [data-stage="f3"] .stage-f3,
-    [data-stage="de"] .stage-de,
+    [data-stage="de1"] .stage-de1,
     [data-stage="oe"] .stage-oe,
     [data-stage="prec"] .stage-prec,
+    [data-stage="de2"] .stage-de2,
     [data-stage="doc"] .stage-doc,
     [data-stage="world"] .stage-world {
-      position: relative;
-      top: auto;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .group:first-child .step:first-child {
+      min-height: 60vh;
+    }
+
+    .group:last-child .step:last-child {
+      min-height: 100vh;
+    }
+  }
+
+  /* ---------- Mobile: alternating flow, card pinned per group ---------- */
+
+  @media (max-width: 860px) {
+    .group {
+      margin-bottom: 1rem;
+    }
+
+    /*
+     * The card sits in flow at the top of its group, pins to the top of
+     * the viewport while its own steps scroll by underneath, then scrolls
+     * away with the group. Height is capped so the step text below always
+     * has room to breathe.
+     */
+    .stage-col {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: var(--paper);
+      padding: 0.6rem 0;
+    }
+
+    .stage-card {
+      margin: 0 auto;
+      max-height: 52vh;
+      max-height: 52svh;
+      overflow-y: auto;
+      padding: 0.85rem 1rem 1rem;
+    }
+
+    /* Compact the card content rather than shrinking type further */
+    .q-more,
+    .row-extra {
+      display: none;
     }
 
     .card-head {
-      font-size: 0.58rem;
+      font-size: 0.64rem;
       letter-spacing: 0.06em;
       padding-bottom: 0.45rem;
       margin-bottom: 0.8rem;
@@ -1206,17 +1335,18 @@ import worldMap from "../assets/world-map.svg?raw";
     }
 
     .file-meta {
-      font-size: 0.66rem;
+      font-size: 0.72rem;
+      line-height: 1.7;
       margin-bottom: 0.8rem;
     }
 
     .file-quote {
-      font-size: 0.92rem;
-      line-height: 1.65;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     .file-attrib {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       margin-top: 0.5rem;
     }
 
@@ -1226,40 +1356,41 @@ import worldMap from "../assets/world-map.svg?raw";
     }
 
     .annex-dialogue p {
-      font-size: 0.86rem;
+      font-size: 0.9rem;
     }
 
     .inv-table td {
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       padding: 0.3rem 0.45rem;
     }
 
     .inv-table td:last-child {
-      font-size: 0.7rem;
+      font-size: 0.74rem;
     }
 
     .prop-list li {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       margin-bottom: 0.7rem;
     }
 
     .stage-de td,
     .stage-oe td {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
+      padding: 0.4rem 0.5rem;
     }
 
     .prec-table td {
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       padding: 0.45rem 0.45rem;
     }
 
     .doc-source {
-      font-size: 0.64rem;
+      font-size: 0.68rem;
       margin-bottom: 0.7rem;
     }
 
     .doc-sentence {
-      font-size: 0.94rem;
+      font-size: 0.98rem;
       line-height: 1.75;
     }
 
@@ -1272,26 +1403,25 @@ import worldMap from "../assets/world-map.svg?raw";
       margin-top: 0.8rem;
       padding-top: 0.7rem;
       padding-right: 0;
-      min-height: 0;
+      min-height: 4.6rem;
     }
 
     .clean-sentence {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       line-height: 1.6;
     }
 
     .legend-row {
-      font-size: 0.62rem;
+      font-size: 0.7rem;
     }
 
-    .scrolly-steps {
-      order: 2;
+    .group-steps {
       position: relative;
       z-index: 1;
     }
 
     .step {
-      min-height: 60vh;
+      min-height: 58vh;
       justify-content: flex-end;
       padding-bottom: 1.5rem;
       z-index: 1;
@@ -1303,11 +1433,15 @@ import worldMap from "../assets/world-map.svg?raw";
       padding: 0.8rem 1rem;
     }
 
+    .group:last-child .step:last-child {
+      min-height: 80vh;
+    }
+
     /* Stamped across the document, like a real rubber stamp */
     .stamp {
       right: auto;
       left: 50%;
-      bottom: 2.6rem;
+      bottom: 1.6rem;
       transform: translateX(-50%) rotate(-8deg) scale(1.6);
     }
 
