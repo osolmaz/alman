@@ -30,7 +30,7 @@ CANARY = (
 )
 
 
-class AlmanbenchItem(BaseModel):
+class AlmanBenchItem(BaseModel):
     """One almanbench item with the metadata schema from the benchmark plan."""
 
     id: str
@@ -81,9 +81,9 @@ def load_almanbench_items(
     *,
     tiers: tuple[str, ...] = TIERS,
     spec_dir: Path = SPEC_DIR,
-) -> list[AlmanbenchItem]:
+) -> list[AlmanBenchItem]:
     """Load the packaged tiers, verifying the canary and spec-overlap rules."""
-    items: list[AlmanbenchItem] = []
+    items: list[AlmanBenchItem] = []
     for tier in tiers:
         path = bench_dir / f"{tier}.jsonl"
         with open(path, encoding="utf-8") as f:
@@ -91,7 +91,7 @@ def load_almanbench_items(
             if header.get("canary") != CANARY:
                 raise ValueError(f"{path}: missing or wrong canary GUID")
             for line in f:
-                items.append(AlmanbenchItem.model_validate_json(line))
+                items.append(AlmanBenchItem.model_validate_json(line))
 
     seen: dict[str, str] = {}
     for item in items:

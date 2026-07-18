@@ -13,7 +13,7 @@ from alman.bench.scoring import split_thinking
 from alman.bench.task import alman_bench, almanbench_samples
 
 
-class TestAlmanbenchDataset:
+class TestAlmanBenchDataset:
     def test_case_set_matches_canonical_loaders(self):
         """The task assembles exactly the case set the rescore tooling builds
         from the canonical loaders: same rows, same identity hash. This is

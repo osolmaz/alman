@@ -42,7 +42,7 @@ from inspect_ai.scorer import (
 )
 from inspect_ai.solver import Generate, TaskState, generate, solver
 
-from alman.bench.almanbench import AlmanbenchItem, load_almanbench_items
+from alman.bench.almanbench import AlmanBenchItem, load_almanbench_items
 from alman.bench.dataset import REPO_ROOT, BenchItem, load_curated_items, load_items
 from alman.bench.scoring import is_accepted, lint, split_thinking
 
@@ -164,7 +164,7 @@ def _curated_almanbench_sample(item: BenchItem) -> Sample:
     )
 
 
-def _packaged_almanbench_sample(item: AlmanbenchItem) -> Sample:
+def _packaged_almanbench_sample(item: AlmanBenchItem) -> Sample:
     return Sample(
         id=item.id,
         input=item.source,

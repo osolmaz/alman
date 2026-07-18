@@ -1,7 +1,7 @@
 # Adjudication casebook
 
 This casebook records the contentious cases that came up while building and
-maintaining the spec and Almanbench, together with how each one was decided
+maintaining the spec and AlmanBench, together with how each one was decided
 and why. It is internal maintainer material, like everything under `docs/`.
 When a model output gets rejected but looks right, or two gold renderings
 seem to contradict each other, check here first, because most disputes are

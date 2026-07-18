@@ -1,6 +1,6 @@
 # Benchmark results
 
-The current Almanbench v0.1 leaderboard (1,029-item public set, evaluated
+The current AlmanBench v0.1 leaderboard (1,029-item public set, evaluated
 2026-07-17, references maintained in place since) is published at [alman.ai/almanbench](https://alman.ai/almanbench/)
 and stored in
 [`benchmark-results/almanbench-leaderboard.json`](../benchmark-results/almanbench-leaderboard.json).

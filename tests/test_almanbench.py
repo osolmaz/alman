@@ -1,4 +1,4 @@
-from alman.bench.almanbench import AlmanbenchItem
+from alman.bench.almanbench import AlmanBenchItem
 
 
 def _payload() -> dict:
@@ -18,12 +18,12 @@ def _payload() -> dict:
 
 
 def test_translator_note_is_optional() -> None:
-    item = AlmanbenchItem.model_validate(_payload())
+    item = AlmanBenchItem.model_validate(_payload())
     assert item.note is None
 
 
 def test_translator_note_is_preserved() -> None:
     payload = _payload()
     payload["note"] = "The definite article becomes invariant `die`."
-    item = AlmanbenchItem.model_validate(payload)
+    item = AlmanBenchItem.model_validate(payload)
     assert item.note == payload["note"]

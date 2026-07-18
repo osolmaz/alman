@@ -1,6 +1,6 @@
-# Almanbench plan
+# AlmanBench plan
 
-Almanbench is the Standard German → Alman translation benchmark
+AlmanBench is the Standard German → Alman translation benchmark
 (`alman/bench/`, built on [Inspect AI](https://inspect.aisi.org.uk/)). Today it
 contains 89 curated, hand-translated items. Version 1 grows it to roughly
 1,000 items, large enough to rank models, while keeping the review standard

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://huggingface.co/datasets/osolmaz/alman/blob/main/benchmark-results/almanbench-results/almanbench-result.schema.json",
-  "title": "Almanbench sample result",
+  "title": "AlmanBench sample result",
   "description": "One normalized model result for one curated Alman benchmark case.",
   "type": "object",
   "additionalProperties": false,

@@ -4,7 +4,7 @@ Alman is a constructed dialect of German that removes grammatical gender and
 most case inflection. The project maintains a formal specification of the
 dialect, publishes it in three languages at [alman.ai](https://alman.ai), and
 measures how well language models translate Standard German into it with the
-Almanbench benchmark.
+AlmanBench benchmark.
 
 ## Repository layout
 
@@ -39,7 +39,7 @@ suite enforces them.
 
 The site under [`site/`](site/) is built with [Astro](https://astro.build/)
 and deployed to GitHub Pages by `.github/workflows/deploy.yml`. It renders
-the generated spec documents, the About page, the blog, and the Almanbench
+the generated spec documents, the About page, the blog, and the AlmanBench
 leaderboard, each in three language versions (`/`, `/de/`, `/al/`).
 
 ```bash
@@ -53,9 +53,9 @@ Localized content lives in `site/src/content/`. See
 [`docs/i18n.md`](docs/i18n.md) for the language codes and the URL scheme, and
 [`docs/design-guide.md`](docs/design-guide.md) for the visual identity.
 
-## Almanbench
+## AlmanBench
 
-Almanbench is a Standard German → Alman translation benchmark built on
+AlmanBench is a Standard German → Alman translation benchmark built on
 [Inspect AI](https://inspect.aisi.org.uk/). The v0.1 public set contains
 1,029 items across four tiers (naturalistic, targeted, guards, curated) and
 is distributed as the Hugging Face dataset
