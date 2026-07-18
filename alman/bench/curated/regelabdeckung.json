@@ -207,13 +207,14 @@
     {
       "source": "In allen Städten gab es viele Proteste mit wenigen Verletzten.",
       "accepted": [
-        "In alle Städte gab es viele Proteste mit wenige Verletzten."
+        "In alle Städte gab es viele Proteste mit wenige Verletzten.",
+        "In alle Städte gab es viele Proteste mit wenige Verletzte."
       ],
       "rule": "indefinite-negative-quantifiers",
       "covers": [
         "indefinite-negative-quantifiers"
       ],
-      "note": "Tricky: case-inflected quantifiers drop their endings onto the retained pair member (allen -> alle, wenigen -> wenige) while 'viele' already fits. The plural nominalized adjective keeps -en as a plural marker per the nominalized-adjectives rule (die Schoenen pattern); the invariant -e would collapse it with the singular 'die Verletzte'. Corrected 2026-07: the earlier reference 'wenige Verletzte' contradicted that rule."
+      "note": "Tricky: case-inflected quantifiers drop their endings onto the retained pair member (allen -> alle, wenigen -> wenige) while 'viele' already fits. The plural nominalized adjective keeps -en as a plural marker per the nominalized-adjectives rule (die Schoenen pattern), with the leveled -e form accepted as a variant per the same rule's form-based tolerance (see the plural-nominalized-adjectives casebook entry). Corrected 2026-07: the earlier reference had only the leveled form; the retained form is canonical."
     },
     {
       "source": "Er redet viel, aber er sagt nichts.",

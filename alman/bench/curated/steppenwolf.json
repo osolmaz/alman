@@ -4,10 +4,10 @@
   "items": [
     {
       "source": "Der Mensch ist ja keine feste und dauernde Gestaltung (dies war, trotz entgegengesetzter Ahnungen ihrer Weisen, das Ideal der Antike), er ist vielmehr ein Versuch und Übergang, er ist nichts anderes als die schmale, gefährliche Brücke zwischen Natur und Geist.",
-      "pattern": "Die Mensch ist ja kein feste und dauernde Gestaltung (diese war, trotz entgegengesetzte Ahnungen von {sein|ihr}@6e Weisen, die Ideal {der|von die}@1d Antike), sie sind vielmehr ein Versuch und Übergang, sie sind nichts andere als die schmale, gefährliche Brücke zwischen Natur und Geist.",
+      "pattern": "Die Mensch ist ja kein feste und dauernde Gestaltung (diese war, trotz entgegengesetzte Ahnungen von {sein|ihr}@6e Weisen, die Ideal {der|von die}@1d Antike), sie sind vielmehr ein Versuch und Übergang, sie sind nichts {andere|anderes}@4a als die schmale, gefährliche Brücke zwischen Natur und Geist.",
       "rule": "mixed",
       "covers": ["gender-neutral-referents", "possessive-determiners-kein"],
-      "note": "Generic 'der Mensch' is resumed with singular-they 'sie' + plural verb per the gender-neutral referents rule. Possessor of 'ihrer Weisen' is the (inanimate) Antike: strict natural-gender attribution gives 'sein'; 'ihr' accepted since a collective reading is defensible."
+      "note": "Generic 'der Mensch' is resumed with singular-they 'sie' + plural verb per the gender-neutral referents rule. Possessor of 'ihrer Weisen' is the (inanimate) Antike: strict natural-gender attribution gives 'sein'; 'ihr' accepted since a collective reading is defensible. 'nichts anderes' is a standalone pronominal -es form: leveled 'andere' canonical, retained 'anderes' accepted (invariant -e rule tolerance)."
     },
     {
       "source": "Nach dem Geiste hin, zu Gott hin treibt ihn die innerste Bestimmung—nach der Natur, zur Mutter zurück zieht ihn die innigste Sehnsucht: zwischen beiden Mächten schwankt angstvoll bebend sein Leben.",
