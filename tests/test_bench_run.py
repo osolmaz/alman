@@ -150,6 +150,9 @@ class TestRegistry:
         )
         assert load_profile("gpt-5.5-xhigh").requested_model == "gpt-5.5"
         assert load_profile("claude-opus-4.8-max").requested_model == "claude-opus-4-8"
+        inkling = load_profile("inkling-max")
+        assert inkling.requested_model == "thinkingmachines/Inkling:together"
+        assert inkling.generate["reasoning_effort"] == "max"
 
 
 class TestCost:

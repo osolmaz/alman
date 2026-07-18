@@ -298,6 +298,23 @@ profiles:
       output_per_million_tokens: 3.6
       observed: 2026-07-17
 
+  inkling-max:
+    label: Inkling max
+    platform: huggingface-inference-providers
+    model: openai-api/hf/thinkingmachines/Inkling:together
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      reasoning_effort: max
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 1.0
+      output_per_million_tokens: 4.05
+      observed: 2026-07-19
+
   ternary-bonsai-27b:
     label: Ternary Bonsai 27B
     platform: huggingface-inference-providers
