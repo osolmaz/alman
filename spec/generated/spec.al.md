@@ -164,7 +164,23 @@ Ein Genitivbeziehung wird immer offen markiert, entweder durch **der** oder durc
 
 
 
-#### §1e. Auflösung von Verschmelzungen
+#### §1e. Apposition
+
+Ein Apposition — ein Nominalphrase, die sein Bezugsausdruck neu benennt und durch Kommas oder Gedankenstriche abgesetzt ist — steht in die einfache invariante Form. Die Kasus- oder Genitivmarkierung der Bezugsausdruck wird nicht auf die Apposition übertragen: *durch Vermittlung von ein Mann – die Marquis von Steyne –*, *Nachfolger von Ninus, ihr Gatte*. Das spiegelt die Englische, das Appositionen nie kasusmarkiert (*through the mediation of a man – the Marquis of Steyne –*).
+
+Die Übernahme der Genitivmarkierung der Bezugsausdruck bleibt akzeptabel: Die Apposition kann die beibehaltene **der** oder die **von**-Periphrase der Bezugsausdruck wiederholen (*– der Marquis von Steyne –*, *– von die Marquis von Steyne –*, *Nachfolger von Ninus, von ihr Gatte*). Die einfache Form ist kanonisch.
+
+
+**Beispiele:**
+
+| Standarddeutsch | Alman | Englisch |
+|------------------|--------|---------|
+| durch Vermittlung eines Mannes – des Marquis von Steyne – | durch Vermittlung von ein Mann – die Marquis von Steyne – | through the mediation of a man – the Marquis of Steyne – |
+| Nachfolgerin des Ninus, ihres Gatten | Nachfolger von Ninus, ihr Gatte | successor of Ninus, her husband |
+
+
+
+#### §1f. Auflösung von Verschmelzungen
 
 Präposition-Artikel-Verschmelzungen (z. B. vom, im, zur) müssen zu ihr volle Form aufgelöst werden, bevor die Artikelersetzungsregeln angewendet werden. Die entschmolzene Präposition und die Artikel werden dann nach die übliche **Alman**-Artikelregeln verarbeitet.
 
@@ -184,7 +200,7 @@ Diese Regel gilt einheitlich, auch für Verschmelzungen in feste Wendungen wie *
 
 
 
-#### §1f. Wechselpräpositionen
+#### §1g. Wechselpräpositionen
 
 In die **Standarddeutsch** regieren die Wechselpräpositionen (**in, an, auf, über, unter, vor, hinter, neben, zwischen**) die Akkusativ, um Bewegung auf ein Ziel hin auszudrücken, und die Dativ, um statische Lage auszudrücken. Da **Alman** Akkusativ- und Dativartikel in die invariante **die** zusammenfallen lässt, ist diese kasusbasierte Unterscheidung für Nominalphrasen abgeschafft: *in die Kino* deckt sowohl „ins Kino (hinein)“ als auch „im Kino“ ab.
 
@@ -523,6 +539,8 @@ Personen, deren Geschlecht unbekannt, unbestimmt oder generisch ist, werden mit 
 
 Man beachte: Wird die Referent durch ein Berufsbezeichnung beschrieben, folgt die Bezeichnung selbst die Einheitlichkeitsregeln in die Abschnitt über lexikalische Genus-Vereinfachungen, während die Pronomen die natürliche Geschlecht folgt.
 
+Ein abstrakte oder unbelebte Referent, das die Text personifiziert — das als Figur handelt, will oder spricht —, kann die Pronomen von sein Personifikation behalten (**er** oder **sie**), und die neutrale **es** ist gleichermaßen akzeptabel: *der Geist der Modernität* kann mit *er* oder mit *es* wiederaufgenommen werden. Das spiegelt die Englische, wo personifizierte Abstraktionen *he* oder *she* erhalten können (*Death and his brother Sleep*).
+
 
 **Beispiele:**
 
@@ -532,6 +550,7 @@ Man beachte: Wird die Referent durch ein Berufsbezeichnung beschrieben, folgt di
 | Er ist nett. (der Mann, m.) | Er ist nett. | He is nice. |
 | Es ist klug. (das Mädchen, n.) | Sie ist klug. | She is clever. |
 | Es ist neu. (das Buch, n.) | Es ist neu. | It is new. |
+| Der Geist weht, wo er will. (personified) | Die Geist weht, wo er will. / Die Geist weht, wo es will. | The spirit blows where it wills. |
 
 
 
@@ -626,7 +645,11 @@ Die Wahl unter die Possessivpronomen (**mein, dein, sein, ihr, unser, euer, Ihr*
 
 Relativpronomen werden zu ein einzige invariante Relativierer vereinfacht: die neutrale Form **das**, das unabhängig von Genus, Numerus oder Kasusrolle der Referent in die Relativsatz verwendet wird. Dies entspricht die englische Relativierer *that*, das Relativsätze ebenfalls unflektiert einleitet (*the man that stands there* → *die Mann, das dort steht*). Da **das** bereits als neutrale Demonstrativum erhalten bleibt (siehe die Abschnitt über Artikel), deckt ein einzige Form sowohl die Zeigen als auch die Satzverknüpfung ab.
 
-Die artikelgleiche Form **die** ist in alle nicht-genitivische Positionen ebenfalls akzeptabel (*die Mann, die dort steht*). **das** wird bevorzugt, weil es die Relativierer optisch und klanglich von die invariante Artikel **die** unterscheidet und gestapelte identische Formen dort vermeidet, wo beide aufeinandertreffen (*die Frau, das die Kinder sieht* statt *die Frau, die die Kinder sieht*).
+Die artikelgleiche Form **die** ist in alle nicht-genitivische Positionen ebenfalls akzeptabel (*die Mann, die dort steht*). **das** wird bevorzugt, weil es die Relativierer optisch und klanglich von die invariante Artikel **die** unterscheidet und gestapelte identische Formen dort vermeidet, wo beide aufeinandertreffen (*die Frau, das die Kinder sieht* statt *die Frau, die die Kinder sieht*). Die Präferenz ist genau dort besonders stark, wo die Relativierer unmittelbar vor die Artikel **die** stünde; exemplarische Prosa und Referenzwiedergaben verwenden dort stets **das** (oder ein erhaltene **welche** bzw. *wo*-Kompositum), **die** bleibt jedoch grammatisch.
+
+Wo die **Standarddeutsch** mit ein flektierte Form von **welch-** relativiert (*welcher*, *welchem*, *in welchem*), bleibt die unflektierte **welche** ebenfalls als Relativierer erhalten: *die Winkel, in welche die Blick haftete*. Die Englische hat bei die gleiche Kollaps beide von sein Relativierer behalten — *that* und *which* — und **welche** ist die Kognat von *which*. **das** bleibt die kanonische Form.
+
+Relative *wo*-Komposita (**womit**, **worauf**, **wovon** und ähnliche) bleiben überall dort erhalten, wo die **Standarddeutsch** sie verwendet, bei beliebige Bezugswort: *die Gegenstände, womit wir uns zusammenhalten*. Sie tragen kein Genus- oder Kasusflexion, und die Paraphrase mit Präposition + **das** (oder **die**) ist gleichermaßen akzeptabel (*die Gegenstände, mit das wir uns zusammenhalten*), parallel zu die Behandlung der interrogative *wo*-Formen und der pronominale *da*-Komposita in diese Abschnitt.
 
 Die freie Relativpronomen **was** trägt kein Genus- oder Kasusflexion und bleibt erhalten. Kopflose freie Relativsätze behalten es unverändert (*Ich weiß, was du meinst*). Nach ein indefinite oder quantifizierende Kopf wie **alles**, **nichts**, **etwas** oder ein nominalisierte Superlativ steht die invariante Relativierer gleichermaßen zu die Verfügung, sodass sowohl die erhaltene **was** als auch **das** (oder **die**) akzeptabel sind: *alles, was ich weiß* / *alles, das ich weiß*. Dies entspricht die Englische, wo *everything that I know* neben die freie Relativsatz *what I know* steht.
 
@@ -648,6 +671,8 @@ Da die invariante Relativierer die Kasusrolle der relativierte Element nicht meh
 | Ich weiß, was du meinst. | Ich weiß, was du meinst. | I know what you mean. |
 | die Frau, deren Auto kaputt ist | die Frau, deren Auto kaputt ist | the woman whose car is broken |
 | der Mann, dessen Haus groß ist | die Mann, deren Haus groß ist | the man whose house is large |
+| der Winkel, in welchem der Blick haftete | die Winkel, in das die Blick haftete / die Winkel, in welche die Blick haftete | the corner in which the gaze rested |
+| die Gegenstände, womit wir uns zusammenhalten | die Gegenstände, womit wir uns zusammenhalten / die Gegenstände, mit das wir uns zusammenhalten | the objects against which we measure ourselves |
 
 
 

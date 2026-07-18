@@ -164,7 +164,23 @@ A genitive relationship is always overtly marked, either by **der** or by **von*
 
 
 
-#### §1e. Contraction Resolution
+#### §1e. Apposition
+
+An appositive — a noun phrase that renames its anchor, set off by commas or dashes — stands in the plain invariant form. The case or genitive marking of the anchor is not copied onto the appositive: *durch Vermittlung von ein Mann – die Marquis von Steyne –*, *Nachfolger von Ninus, ihr Gatte*. This mirrors English, which never case-marks appositives (*through the mediation of a man – the Marquis of Steyne –*).
+
+Matching the genitive marking of the anchor remains acceptable: the appositive may repeat the retained **der** or the **von** periphrasis of the anchor (*– der Marquis von Steyne –*, *– von die Marquis von Steyne –*, *Nachfolger von Ninus, von ihr Gatte*). The plain form is canonical.
+
+
+**Examples:**
+
+| Standard German | Alman | English |
+|------------------|--------|---------|
+| durch Vermittlung eines Mannes – des Marquis von Steyne – | durch Vermittlung von ein Mann – die Marquis von Steyne – | through the mediation of a man – the Marquis of Steyne – |
+| Nachfolgerin des Ninus, ihres Gatten | Nachfolger von Ninus, ihr Gatte | successor of Ninus, her husband |
+
+
+
+#### §1f. Contraction Resolution
 
 Preposition-article contractions (e.g., vom, im, zur) must be resolved to their full form prior to applying article replacement rules. The uncontracted preposition and article are then processed according to standard **Alman** article rules.
 
@@ -184,7 +200,7 @@ This rule applies uniformly, including to contractions in fixed expressions such
 
 
 
-#### §1f. Two-Way Prepositions
+#### §1g. Two-Way Prepositions
 
 In **Standard German**, the two-way prepositions (**in, an, auf, über, unter, vor, hinter, neben, zwischen**) govern the accusative to express motion toward a goal and the dative to express static location. Since **Alman** collapses accusative and dative articles into the invariant **die**, this case-based distinction is abolished for noun phrases: *in die Kino* covers both "into the cinema" and "in the cinema."
 
@@ -523,6 +539,8 @@ Persons whose gender is unknown, unspecified, or generic are referred to with th
 
 Note that when the referent is described by an occupational title, the title itself follows the uniformity rules described in the section on lexical gender simplifications, while the pronoun follows natural gender.
 
+An abstract or inanimate referent that the text personifies — one that acts, wills, or speaks as a character — may keep the pronoun of its personification (**er** or **sie**), and the neutral **es** is equally acceptable: *der Geist der Modernität* may be resumed as *er* or as *es*. This mirrors English, where personified abstractions may take *he* or *she* (*Death and his brother Sleep*).
+
 
 **Examples:**
 
@@ -532,6 +550,7 @@ Note that when the referent is described by an occupational title, the title its
 | Er ist nett. (der Mann, m.) | Er ist nett. | He is nice. |
 | Es ist klug. (das Mädchen, n.) | Sie ist klug. | She is clever. |
 | Es ist neu. (das Buch, n.) | Es ist neu. | It is new. |
+| Der Geist weht, wo er will. (personified) | Die Geist weht, wo er will. / Die Geist weht, wo es will. | The spirit blows where it wills. |
 
 
 
@@ -626,7 +645,11 @@ The choice among the possessive pronouns (**mein, dein, sein, ihr, unser, euer, 
 
 Relative pronouns are simplified to a single invariant relativizer: the neutral form **das**, used regardless of the gender, number, or case role of the referent within the relative clause. This mirrors the English relativizer *that*, which likewise introduces relative clauses without inflecting (*the man that stands there* → *die Mann, das dort steht*). Since **das** is already retained as the neutral demonstrative (see the section on articles), a single form covers both pointing and clause-linking.
 
-The article-aligned form **die** is also acceptable in all non-genitive positions (*die Mann, die dort steht*). **das** is preferred because it keeps the relativizer visually and audibly distinct from the invariant article **die**, avoiding stacked identical forms where the two meet (*die Frau, das die Kinder sieht* rather than *die Frau, die die Kinder sieht*).
+The article-aligned form **die** is also acceptable in all non-genitive positions (*die Mann, die dort steht*). **das** is preferred because it keeps the relativizer visually and audibly distinct from the invariant article **die**, avoiding stacked identical forms where the two meet (*die Frau, das die Kinder sieht* rather than *die Frau, die die Kinder sieht*). The preference is strongest exactly where the relativizer would stand directly before the article **die**; exemplary prose and reference renderings always use **das** (or a retained **welche** or *wo*-compound) there, though **die** remains grammatical.
+
+Where **Standard German** relativizes with an inflected form of **welch-** (*welcher*, *welchem*, *in welchem*), the uninflected **welche** is likewise retained as a relativizer: *die Winkel, in welche die Blick haftete*. English kept both of its relativizers through the same collapse — *that* and *which* — and **welche** is the cognate of *which*. **das** remains the canonical form.
+
+Relative *wo*-compounds (**womit**, **worauf**, **wovon**, and similar) are retained wherever **Standard German** uses them, for any antecedent: *die Gegenstände, womit wir uns zusammenhalten*. They carry no gender or case inflection, and the paraphrase with preposition + **das** (or **die**) is equally acceptable (*die Gegenstände, mit das wir uns zusammenhalten*), parallel to the treatment of interrogative *wo*-forms and pronominal *da*-compounds described in this section.
 
 The free-relative pronoun **was** carries no gender or case inflection and is retained. Headless free relatives keep it unchanged (*Ich weiß, was du meinst*). After an indefinite or quantifying head such as **alles**, **nichts**, **etwas**, or a nominalized superlative, the invariant relativizer is equally available, so both the retained **was** and **das** (or **die**) are acceptable: *alles, was ich weiß* / *alles, das ich weiß*. This mirrors English, where *everything that I know* stands beside the free relative *what I know*.
 
@@ -648,6 +671,8 @@ Since the invariant relativizer no longer marks the case role of the relativized
 | Ich weiß, was du meinst. | Ich weiß, was du meinst. | I know what you mean. |
 | die Frau, deren Auto kaputt ist | die Frau, deren Auto kaputt ist | the woman whose car is broken |
 | der Mann, dessen Haus groß ist | die Mann, deren Haus groß ist | the man whose house is large |
+| der Winkel, in welchem der Blick haftete | die Winkel, in das die Blick haftete / die Winkel, in welche die Blick haftete | the corner in which the gaze rested |
+| die Gegenstände, womit wir uns zusammenhalten | die Gegenstände, womit wir uns zusammenhalten / die Gegenstände, mit das wir uns zusammenhalten | the objects against which we measure ourselves |
 
 
 

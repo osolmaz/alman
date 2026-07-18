@@ -52,7 +52,7 @@ class TestAlmanbenchDataset:
         manifest = json.loads(
             (ALMANBENCH_DIR / "manifest.json").read_text(encoding="utf-8")
         )
-        assert len(samples) == sum(manifest["tiers"].values()) + 92
+        assert len(samples) == sum(manifest["tiers"].values()) + 93
         assert case_set_identity(sample_rows) == case_set_identity(loader_rows)
 
     def test_ids_unique(self):
@@ -66,7 +66,7 @@ class TestAlmanbenchDataset:
             tier = sample.metadata["tier"]
             by_tier[tier] = by_tier.get(tier, 0) + 1
         assert by_tier == {
-            "curated": 92,
+            "curated": 93,
             "naturalistic": 600,
             "targeted": 216,
             "guards": 120,
@@ -74,7 +74,7 @@ class TestAlmanbenchDataset:
 
     def test_task_tier_filter(self):
         task = alman_bench(dataset="almanbench", tiers="guards,curated")
-        assert len(task.dataset) == 212
+        assert len(task.dataset) == 213
         assert {s.metadata["tier"] for s in task.dataset} == {"guards", "curated"}
 
     def test_task_rejects_unknown_tier(self):
@@ -275,12 +275,12 @@ class TestExport:
             (out_dir / "mock.result.json").read_text(encoding="utf-8")
         )
         acceptance = aggregate["results"]["acceptance"]
-        assert acceptance["total"] == 92
+        assert acceptance["total"] == 93
         assert acceptance["correct"] == 0  # mockllm's canned output
         compliance = aggregate["results"]["compliance"]
-        assert compliance["correct"] == 92  # ...which is lint-clean
-        assert aggregate["results"]["tiers"]["curated"]["acceptance"]["total"] == 92
-        assert aggregate["case_set_size"] == 92
+        assert compliance["correct"] == 93  # ...which is lint-clean
+        assert aggregate["results"]["tiers"]["curated"]["acceptance"]["total"] == 93
+        assert aggregate["case_set_size"] == 93
         assert aggregate["model"]["label"] == "Mock Model"
 
     def test_sample_rows_have_stable_schema(self, mock_run):
@@ -291,7 +291,7 @@ class TestExport:
             .read_text(encoding="utf-8")
             .splitlines()
         ]
-        assert len(rows) == 92
+        assert len(rows) == 93
         required = {
             "id",
             "source",
@@ -325,7 +325,7 @@ class TestExport:
             .read_text(encoding="utf-8")
             .splitlines()
         ]
-        assert len(flat) == 92
+        assert len(flat) == 93
         assert flat[0]["model_id"] == "mock"
         assert flat[0]["benchmark_id"] == "almanbench-public"
 

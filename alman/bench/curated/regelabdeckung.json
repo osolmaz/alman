@@ -335,6 +335,15 @@
         "case-inflection-retention"
       ],
       "note": "The genitive personal pronoun 'ihrer' (object of the genitive-governing adjective 'überdrüssig') is a retained pronoun case form, not a possessive determiner, and survives unchanged (genitive-objects rule, pronoun clause); only the adjective ending in 'kurzer' takes the invariant -e."
+    },
+    {
+      "source": "Der Roman des Autors, eines bekannten Berliners, erscheint morgen.",
+      "pattern": "Die Roman {der|von die}@1d Autor, {ein|von ein}@1e bekannte Berliner, erscheint morgen.",
+      "rule": "apposition",
+      "covers": [
+        "apposition"
+      ],
+      "note": "The appositive 'eines bekannten Berliners' renames its genitive anchor. Canonically it stands in the plain invariant form ('ein bekannte Berliner'); repeating the anchor's genitive marking with 'von ein' is accepted (apposition rule). The anchor itself takes the retained 'der' or the von-periphrasis (von-die-usage rule). The axes are independent: plain and matched appositives are licensed under either anchor rendering."
     }
   ]
 }
