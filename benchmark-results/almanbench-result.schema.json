@@ -18,6 +18,7 @@
     "model_id",
     "model_label",
     "model_name",
+    "reasoning_effort",
     "platform",
     "backend",
     "model_revision",
@@ -59,6 +60,11 @@
       "type": "string",
       "minLength": 1,
       "description": "Requested API model ID or canonical model repository."
+    },
+    "reasoning_effort": {
+      "type": ["string", "null"],
+      "enum": [null, "none", "minimal", "low", "medium", "high", "xhigh", "max"],
+      "description": "Requested reasoning effort, or null when the model profile does not expose one."
     },
     "platform": {
       "enum": ["openai-api", "anthropic-api", "huggingface-inference-providers", "local"]

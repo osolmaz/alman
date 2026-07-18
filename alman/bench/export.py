@@ -494,6 +494,7 @@ def _write_publication_rows(
                 "model_id": profile.name,
                 "model_label": profile.label,
                 "model_name": profile.requested_model,
+                "reasoning_effort": profile.generate.get("reasoning_effort"),
                 "platform": profile.platform,
                 "backend": profile.model.split("/")[0],
                 "model_revision": None,

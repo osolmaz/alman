@@ -20,7 +20,7 @@ defaults:
 
 profiles:
   gpt-5.5-xhigh:
-    label: GPT-5.5
+    label: GPT-5.5 xhigh
     platform: openai-api
     model: openai/gpt-5.5
     generate:
@@ -38,7 +38,7 @@ profiles:
       observed: 2026-07-18
 
   gpt-5.6-sol-xhigh:
-    label: GPT-5.6 Sol
+    label: GPT-5.6 Sol xhigh
     platform: openai-api
     model: openai/gpt-5.6-sol
     generate:
@@ -51,8 +51,22 @@ profiles:
       output_per_million_tokens: 30.0
       observed: 2026-07-16
 
+  gpt-5.6-sol-max:
+    label: GPT-5.6 Sol max
+    platform: openai-api
+    model: openai/gpt-5.6-sol
+    generate:
+      reasoning_effort: max
+      max_tokens: 16384
+    pricing:
+      uncached_input_per_million_tokens: 5.0
+      cached_input_per_million_tokens: 0.5
+      cache_creation_input_per_million_tokens: 6.25
+      output_per_million_tokens: 30.0
+      observed: 2026-07-18
+
   gpt-5.6-terra-xhigh:
-    label: GPT-5.6 Terra
+    label: GPT-5.6 Terra xhigh
     platform: openai-api
     model: openai/gpt-5.6-terra
     generate:
@@ -66,7 +80,7 @@ profiles:
       observed: 2026-07-16
 
   gpt-5.6-luna-xhigh:
-    label: GPT-5.6 Luna
+    label: GPT-5.6 Luna xhigh
     platform: openai-api
     model: openai/gpt-5.6-luna
     generate:
@@ -80,7 +94,7 @@ profiles:
       observed: 2026-07-16
 
   claude-sonnet-5-xhigh:
-    label: Claude Sonnet 5
+    label: Claude Sonnet 5 xhigh
     platform: anthropic-api
     model: anthropic-http/claude-sonnet-5
     generate:
@@ -94,7 +108,7 @@ profiles:
       observed: 2026-07-16
 
   claude-fable-5-high:
-    label: Claude Fable 5
+    label: Claude Fable 5 high
     platform: anthropic-api
     model: anthropic-http/claude-fable-5
     max_connections: 8
@@ -109,7 +123,7 @@ profiles:
       observed: 2026-07-17
 
   claude-opus-4.8-max:
-    label: Claude Opus 4.8
+    label: Claude Opus 4.8 max
     platform: anthropic-api
     model: anthropic-http/claude-opus-4-8
     max_connections: 8

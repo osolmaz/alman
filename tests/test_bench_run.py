@@ -142,6 +142,7 @@ class TestRegistry:
             == "deepseek-ai/DeepSeek-V4-Flash:novita"
         )
         assert load_profile("gpt-5.6-sol-xhigh").requested_model == "gpt-5.6-sol"
+        assert load_profile("gpt-5.6-sol-max").requested_model == "gpt-5.6-sol"
         assert load_profile("gpt-5.5-xhigh").requested_model == "gpt-5.5"
         assert load_profile("claude-opus-4.8-max").requested_model == "claude-opus-4-8"
 
@@ -346,6 +347,7 @@ class TestExport:
         assert len(flat) == 93
         assert flat[0]["model_id"] == "mock"
         assert flat[0]["benchmark_id"] == "almanbench-public"
+        assert flat[0]["reasoning_effort"] is None
 
     def test_run_id_derives_from_start_time(self, mock_run):
         _, out_dir = mock_run
