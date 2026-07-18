@@ -576,9 +576,9 @@ import worldMap from "../assets/world-map.svg?raw";
   // Wide screens: the step block nearest the reading line drives one global
   // step, which selects the visible card (data-stage) and its inner state.
   //
-  // Small screens: the layout is linear (text first, then card) and each
-  // card scrubs through its own sub-steps as it travels up the viewport,
-  // so the transformation plays under the reader's thumb and rewinds when
+  // Small screens: the layout is linear (text first, then card); animated
+  // cards pin while a scroll runway plays their sub-steps, so the
+  // transformation runs under the reader's thumb and rewinds when
   // scrolling back.
   const section = document.getElementById("demo")!;
   const steps = [...section.querySelectorAll<HTMLElement>(".step")];
@@ -616,17 +616,25 @@ import worldMap from "../assets/world-map.svg?raw";
   }
 
   function narrowFrame() {
-    const vh = window.innerHeight;
+    // Animated cards pin near the top of the viewport (see .stage-sticky in
+    // the narrow media query) while their column's ::after runway scrolls
+    // by underneath; progress through the runway drives the sub-steps, so
+    // the animation plays over several scrolls with the card fixed, and
+    // rewinds when scrolling back.
+    const pin = window.innerHeight * 0.08;
     for (const card of cards) {
       if (card.dataset.from === undefined) continue;
       const from = Number(card.dataset.from);
       const to = Number(card.dataset.to);
-      const r = card.getBoundingClientRect();
-      // Progress 0 as the card's top enters at the bottom edge; progress 1
-      // once it has risen far enough that its lower edge is in view (capped
-      // between 15% and 40% from the top for very tall or short cards).
-      const end = Math.max(vh * 0.15, Math.min(vh * 0.4, vh * 0.85 - r.height));
-      const p = Math.min(1, Math.max(0, (vh - r.top) / (vh - end)));
+      const sticky = card.parentElement!;
+      const col = sticky.parentElement!;
+      const cr = col.getBoundingClientRect();
+      const sh = sticky.getBoundingClientRect().height;
+      const runway = cr.height - sh;
+      let p = 1;
+      if (runway > 1) {
+        p = Math.min(1, Math.max(0, 1 - (cr.bottom - sh - pin) / runway));
+      }
       setDone(card, from + Math.round(p * (to - from)));
     }
   }
@@ -1320,11 +1328,12 @@ import worldMap from "../assets/world-map.svg?raw";
 
   @media (max-width: 860px) {
     /*
-     * Nothing pins and nothing overlaps: each group renders all of its
-     * step text first, then its card in normal flow. Animated cards scrub
-     * through their sub-steps as they travel up the viewport (annex
-     * revealing, table collapsing, corrections striking through one by
-     * one), driven per-frame by the script above.
+     * Each group renders all of its step text first, then its card, so no
+     * text is ever covered. Animated cards then pin near the top of the
+     * viewport while their runway (the ::after spacer sized per sub-step)
+     * scrolls by, playing their transformation over several scrolls before
+     * sliding up and away; the script above drives the sub-steps. Static
+     * cards have no runway and simply flow past.
      */
     .group {
       display: flex;
@@ -1343,6 +1352,28 @@ import worldMap from "../assets/world-map.svg?raw";
     .stage-col {
       order: 3;
       padding-top: 1rem;
+    }
+
+    .stage-sticky {
+      position: sticky;
+      top: 8vh;
+    }
+
+    .stage-col::after {
+      content: "";
+      display: block;
+      height: calc(var(--subs, 0) * 55vh);
+    }
+
+    .stage-col:has(.stage-f1),
+    .stage-col:has(.stage-oe),
+    .stage-col:has(.stage-de2),
+    .stage-col:has(.stage-world) {
+      --subs: 1;
+    }
+
+    .stage-col:has(.stage-doc) {
+      --subs: 5;
     }
 
     .step {
