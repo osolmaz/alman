@@ -30,7 +30,7 @@ We are developing under the following constraints:
 
 ## Language of this website
 
-The specification and related documentation are primarily written in English, because the target audience is non-native speakers of German. German and Alman versions of the specification are currently under development.
+The specification and related documentation are primarily written in English, because the target audience is non-native speakers of German. The specification is also available in German and in Alman itself, through the language switcher.
 
 ---
 
