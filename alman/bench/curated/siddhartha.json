@@ -86,9 +86,9 @@
     },
     {
       "source": "Siddhartha schenkte sein Gewand einem armen Brahmanen auf der Straße.",
-      "pattern": "Siddhartha schenkte {sein Gewand an ein arme Brahmane|ein arme Brahmane sein Gewand}@9c auf die Straße.",
+      "pattern": "Siddhartha schenkte {sein Gewand an ein arme Brahmane|ein arme Brahmane sein Gewand|sein Gewand ein arme Brahmane}@9c auf die Straße.",
       "rule": "ditransitive",
-      "note": "Standard German places the theme first here, so the 'an' construction is canonical; the reordered recipient-first variant is also spec-valid."
+      "note": "Standard German places the theme first here, so the 'an' construction is canonical; the reordered recipient-first variant and the bare source-order rendering are also spec-valid (9c imposes no strict rule, and verb semantics resolve the roles; see the ditransitives casebook entry)."
     },
     {
       "source": "Heiße Träume flackerten aus seinen vergrößerten Augen, an seinen dorrenden Fingern wuchsen lang die Nägel und am Kinn der trockne, struppige Bart.",

@@ -419,6 +419,8 @@ The **Alman** dialect governs adjective morphology through a single form-based p
 
 Whenever an adjective carries a declensional ending in **Standard German** — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in **Alman**. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, adjectives nominalized after **etwas**, **nichts**, and **alles** (*etwas Gutes*, *nichts Neues*), and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically. Standalone pronominal neuters built on the same pattern — *niemand anderes*, *jemand anderes*, *folgendes*, *etwas andres* — level in the same way: *niemand andere*, *folgende*. Because the **Standard German** forms remain ubiquitous in everyday usage, the retained -es is accepted as a variant in these standalone pronominal uses, with the leveled form as the canonical one. This tolerance never extends to attributive position: *ein verlegenes Betragen* becomes *ein verlegene Betragen*, without exception.
 
+Leveling replaces only the ending; the stem is kept exactly as the source spells it. Historical and poetic texts often elide a schwa, and the elision must not move during leveling: where it sits in the stem, it stays (*verlornen* → *verlorne*, *muntres* → *muntre*), and where it sits in the ending, replacing the ending restores nothing (*finstern*, that is *finster* + *-n*, → *finstere*; *heitern* → *heitere*). A rendering that shifts the elision (*finstern* → *finstre*) or silently restores the full form (*verlornen* → *verlorene*) is not licensed.
+
 Adjectives that carry no declensional ending in **Standard German** — predicative adjectives and forms used adverbially — remain unchanged; no ending is added (see the section on adverbs).
 
 Comparison suffixes (**-er**, **-st**) are word formation rather than declension and are preserved: *schneller laufen* remains *schneller laufen*. Likewise, lexicalized adverbs such as **anders** or **meistens** carry no declensional ending and remain unchanged.
@@ -442,6 +444,8 @@ The sole exception to this principle is the adverbial superlative **am** + super
 | ein verlegenes Betragen | ein verlegene Betragen |
 | alles Gute (already ends in -e) | alles Gute |
 | Das Auto ist schnell. (predicative, no ending) | Die Auto ist schnell. |
+| in finstern Zeiten (ending elided: finster + -n) | in finstere Zeiten |
+| ein muntres Lied (stem elided: muntr + -es) | ein muntre Lied |
 
 
 

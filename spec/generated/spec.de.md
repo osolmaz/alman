@@ -419,6 +419,8 @@ Der **Alman**-Dialekt regelt die Adjektivmorphologie über ein einziges formbasi
 
 Wann immer ein Adjektiv im **Standarddeutsch** eine Deklinationsendung trägt — eine Endung, die Kasus, Genus oder Numerus markiert —, wird diese Endung in **Alman** durch das invariante **-e** ersetzt. Dies gilt einheitlich, unabhängig von Funktion oder Position des Adjektivs: Attributive Adjektive vor Substantiven, nominalisierte Adjektive, nach **etwas**, **nichts** und **alles** nominalisierte Adjektive (*etwas Gutes*, *nichts Neues*) sowie Adjektive in festen adverbialen Wendungen (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) werden alle gleich behandelt. Alleinstehende pronominale Neutra nach demselben Muster — *niemand anderes*, *jemand anderes*, *folgendes*, *etwas andres* — werden auf dieselbe Weise nivelliert: *niemand andere*, *folgende*. Da die **Standarddeutsch**-Formen im alltäglichen Gebrauch allgegenwärtig bleiben, ist das beibehaltene -es in diesen alleinstehenden pronominalen Verwendungen als Variante zugelassen; die nivellierte Form ist die kanonische. Diese Toleranz erstreckt sich nie auf die attributive Position: *ein verlegenes Betragen* wird ausnahmslos zu *ein verlegene Betragen*.
 
+Die Nivellierung ersetzt nur die Endung; der Stamm bleibt genau so, wie die Quelle ihn schreibt. Historische und poetische Texte elidieren oft ein Schwa, und die Elision darf bei der Nivellierung nicht wandern: Sitzt sie im Stamm, bleibt sie erhalten (*verlornen* → *verlorne*, *muntres* → *muntre*); sitzt sie in der Endung, stellt der Endungsersatz nichts wieder her (*finstern*, also *finster* + *-n*, → *finstere*; *heitern* → *heitere*). Eine Wiedergabe, die die Elision verschiebt (*finstern* → *finstre*) oder stillschweigend die volle Form wiederherstellt (*verlornen* → *verlorene*), ist nicht lizenziert.
+
 Adjektive, die im **Standarddeutsch** keine Deklinationsendung tragen — prädikative Adjektive und adverbial gebrauchte Formen —, bleiben unverändert; es wird keine Endung hinzugefügt (siehe den Abschnitt über Adverbien).
 
 Komparationssuffixe (**-er**, **-st**) sind Wortbildung und keine Deklination und bleiben erhalten: *schneller laufen* bleibt *schneller laufen*. Ebenso tragen lexikalisierte Adverbien wie **anders** oder **meistens** keine Deklinationsendung und bleiben unverändert.
@@ -442,6 +444,8 @@ Die einzige Ausnahme von diesem Prinzip ist der adverbiale Superlativ **am** + S
 | ein verlegenes Betragen | ein verlegene Betragen |
 | alles Gute (already ends in -e) | alles Gute |
 | Das Auto ist schnell. (predicative, no ending) | Die Auto ist schnell. |
+| in finstern Zeiten (ending elided: finster + -n) | in finstere Zeiten |
+| ein muntres Lied (stem elided: muntr + -es) | ein muntre Lied |
 
 
 
