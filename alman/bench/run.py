@@ -160,7 +160,11 @@ def main() -> None:
     from alman.bench.export import export_log
 
     aggregate = export_log(
-        Path(log.location), profile, out_dir, execution_ids=execution_ids
+        Path(log.location),
+        profile,
+        out_dir,
+        execution_ids=execution_ids,
+        max_connections=args.max_connections or profile.max_connections,
     )
     print(
         json.dumps(

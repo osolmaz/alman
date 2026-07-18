@@ -143,10 +143,7 @@ class TestRegistry:
         )
         assert load_profile("gpt-5.6-sol-xhigh").requested_model == "gpt-5.6-sol"
         assert load_profile("gpt-5.5-xhigh").requested_model == "gpt-5.5"
-        assert (
-            load_profile("claude-opus-4.8-max").requested_model
-            == "claude-opus-4-8"
-        )
+        assert load_profile("claude-opus-4.8-max").requested_model == "claude-opus-4-8"
 
 
 class TestCost:
@@ -238,6 +235,22 @@ class TestForcedFinal:
 
 
 class TestExport:
+    def test_effective_concurrency_overrides_retry_log_metadata(
+        self, mock_run, tmp_path
+    ):
+        log_path, _ = mock_run
+        out_dir = tmp_path / "effective-concurrency"
+        aggregate = export_log(
+            log_path,
+            MOCK_PROFILE,
+            out_dir,
+            allow_dirty=True,
+            max_connections=32,
+        )
+        assert aggregate["model"]["logged_generate_config"]["max_connections"] == 32
+        manifest = json.loads((out_dir / "manifest.json").read_text(encoding="utf-8"))
+        assert manifest["max_connections"] == 32
+
     def test_completion_falls_back_from_condensed_choice_attachment(self):
         from inspect_ai.model import ModelOutput
 

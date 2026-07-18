@@ -259,6 +259,7 @@ def export_log(
     out_dir: Path,
     allow_dirty: bool = False,
     execution_ids: dict[str, str] | None = None,
+    max_connections: int | None = None,
 ) -> dict[str, Any]:
     """Write the artifact set for a finished run; returns the aggregate.
 
@@ -267,6 +268,9 @@ def export_log(
     tests. ``execution_id`` is the id of the Inspect execution that produced
     each row; for retried runs the runner passes ``execution_ids`` mapping
     carried-over sample ids to the execution that actually produced them.
+    Inspect preserves the original generation config in retry logs, so the
+    runner also passes the effective ``max_connections`` used by the latest
+    execution.
     """
     # Inspect condenses repeated long content into per-sample attachments,
     # especially after eval-retry. Resolve core fields before hashing the
@@ -391,6 +395,10 @@ def export_log(
 
     case_set_id = case_set_identity(rows)
     tokens = {key: sum(row["tokens"][key] for row in rows) for key in rows[0]["tokens"]}
+    effective_generate_config = logged_config.model_dump(exclude_none=True)
+    if max_connections is not None:
+        effective_generate_config["max_connections"] = max_connections
+
     aggregate = {
         "schema_version": SCHEMA_VERSION,
         "benchmark_id": BENCHMARK_ID,
@@ -411,7 +419,7 @@ def export_log(
             "platform": profile.platform,
             "inspect_model": log.eval.model,
             "generate": profile.generate,
-            "logged_generate_config": logged_config.model_dump(exclude_none=True),
+            "logged_generate_config": effective_generate_config,
         },
         "results": {
             **_group_scores(rows),
@@ -455,6 +463,7 @@ def export_log(
         "started_at": started,
         "prompt_sha256": prompt_sha256,
         "inspect_model": log.eval.model,
+        "max_connections": effective_generate_config.get("max_connections"),
     }
     (out_dir / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
@@ -537,8 +546,14 @@ def main() -> None:
     parser.add_argument("--log", type=Path, required=True)
     parser.add_argument("--profile", required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--max-connections", type=int)
     args = parser.parse_args()
-    aggregate = export_log(args.log, load_profile(args.profile), args.out)
+    aggregate = export_log(
+        args.log,
+        load_profile(args.profile),
+        args.out,
+        max_connections=args.max_connections,
+    )
     print(json.dumps(aggregate["results"]["acceptance"], indent=2))
     print(f"wrote artifacts to {args.out}")
 
