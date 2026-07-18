@@ -123,7 +123,7 @@ The retained **der** occupies the same postnominal position as the **Standard Ge
 
 The demonstrative pronoun 'das' retains its form in nominative, accusative, and dative contexts when functioning as a neutral demonstrative ('that'). In genitive constructions, the form 'dessen' is replaced by 'deren' while maintaining the invariant article system.
 
-This exception is strictly positional: it applies only when 'das' stands alone, without a following noun. Directly before a noun, the article rules always apply and every definite article form becomes **die**, regardless of stress or demonstrative intent. Demonstrative force before a noun is expressed with **diese** or **jene** (see the section on determiners), mirroring English *this/that* + noun. Likewise, the **Standard German** demonstrative pronouns 'der', 'den', and 'dem' used standalone (*Der war's!*) are replaced by the neutral **das** (*Das war's!*), with the article-aligned **die** as an accepted variant, consistent with the treatment of relative pronouns.
+This exception is strictly positional: it applies only when 'das' stands alone, without a following noun. Directly before a noun, the article rules always apply and every definite article form becomes **die**, regardless of stress or demonstrative intent. Demonstrative force before a noun is expressed with **diese** or **jene** (see the section on determiners), mirroring English *this/that* + noun. Likewise, the **Standard German** demonstrative pronouns 'der', 'die', 'den', and 'dem' used standalone (*Der war's!*, *die hab ich gefunden*) are replaced by the neutral **das** (*Das war's!*, *das hab ich gefunden*), with the article-aligned **die** as an accepted variant, consistent with the treatment of relative pronouns. The alignment is symmetric, exactly as with relativizers: every standalone demonstrative may surface as **das** or as **die**, including a retained neutral 'das' (*Das glaube ich nicht.* / *Die glaube ich nicht.*). **das**, the cognate of English *that*, is the canonical form throughout.
 
 
 **Examples:**
@@ -134,6 +134,8 @@ This exception is strictly positional: it applies only when 'das' stands alone, 
 | dessen Haus | deren Haus |
 | DAS Buch will ich! (stressed, attributive) | Diese Buch will ich! |
 | Der war's! (standalone demonstrative) | Das war's! / Die war's! |
+| an einer Schäferin, die hab ich gefunden (standalone feminine demonstrative) | an ein Schäfer, das hab ich gefunden / die hab ich gefunden |
+| Das glaube ich nicht. | Das glaube ich nicht. / Die glaube ich nicht. |
 
 
 
@@ -415,7 +417,7 @@ The **Alman** dialect governs adjective morphology through a single form-based p
 
 #### §4a. Invariant -e for All Declensional Endings
 
-Whenever an adjective carries a declensional ending in **Standard German** — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in **Alman**. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, adjectives nominalized after **etwas**, **nichts**, and **alles** (*etwas Gutes*, *nichts Neues*), and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically.
+Whenever an adjective carries a declensional ending in **Standard German** — an ending that marks case, gender, or number — that ending is replaced by the invariant **-e** in **Alman**. This applies uniformly regardless of the adjective's function or position: attributive adjectives before nouns, nominalized adjectives, adjectives nominalized after **etwas**, **nichts**, and **alles** (*etwas Gutes*, *nichts Neues*), and adjectives inside fixed adverbial expressions (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) are all treated identically. Standalone pronominal neuters built on the same pattern — *niemand anderes*, *jemand anderes*, *folgendes*, *etwas andres* — level in the same way: *niemand andere*, *folgende*. Because the **Standard German** forms remain ubiquitous in everyday usage, the retained -es is accepted as a variant in these standalone pronominal uses, with the leveled form as the canonical one. This tolerance never extends to attributive position: *ein verlegenes Betragen* becomes *ein verlegene Betragen*, without exception.
 
 Adjectives that carry no declensional ending in **Standard German** — predicative adjectives and forms used adverbially — remain unchanged; no ending is added (see the section on adverbs).
 
@@ -436,6 +438,8 @@ The sole exception to this principle is the adverbial superlative **am** + super
 | vor kurzem (fixed expression) | vor kurze |
 | etwas Gutes | etwas Gute |
 | nichts Neues | nichts Neue |
+| niemand anderes | niemand andere (anderes accepted) |
+| ein verlegenes Betragen | ein verlegene Betragen |
 | alles Gute (already ends in -e) | alles Gute |
 | Das Auto ist schnell. (predicative, no ending) | Die Auto ist schnell. |
 
@@ -459,7 +463,7 @@ Genitive constructions retain the analytical 'der' article while maintaining inv
 
 Nominalized adjectives, when functioning as nouns, receive the invariant **-e** ending in the singular, irrespective of their syntactic role, thereby preserving uniformity with regular adjective forms.
 
-In the plural, nominalized adjectives behave as nouns: consistent with the preservation of noun plural morphology described in the section on nouns, they retain the **-en** ending as a plural marker (not a case marker). This distinguishes *die Schöne* (singular) from *die Schönen* (plural).
+In the plural, nominalized adjectives behave as nouns: consistent with the preservation of noun plural morphology described in the section on nouns, they retain the **-en** ending as a plural marker (not a case marker). This distinguishes *die Schöne* (singular) from *die Schönen* (plural). This covers plural nominalized adjectives and possessives of every kind: *die anderen* ('the others'), *die meisten*, *die übrigen*, *die Ihren* ('her family'), *sein Gleichen* (for *seinesgleichen*). English shows the same split: *the other* (singular) versus *the others* (plural). Because the surface -en could equally be read as a declensional ending under the invariant-e rule, the leveled -e form is accepted as a variant; the plural-marked form is canonical.
 
 
 **Examples:**
@@ -468,6 +472,7 @@ In the plural, nominalized adjectives behave as nouns: consistent with the prese
 |------------------|-------|
 | Das Gute im Menschen | Die Gute in die Mensch |
 | An die Schönen (Dative, plural) | An die Schönen (-en retained as plural marker) |
+| Die anderen warteten draußen. | Die anderen warteten draußen. (die andere accepted) |
 | Wegen des Bekannten | Wegen der Bekannte / Wegen die Bekannte |
 | unter anderem | unter andere |
 
@@ -758,7 +763,7 @@ This paragraph describes the simplification of determiner and demonstrative form
 
 #### §7a. Unified Forms for Non-Genitive Contexts
 
-In non-genitive contexts, any determiner or pronoun that inflects for gender or case in **Standard German** adopts the invariant feminine "die..." form, i.e. the form ending in -e. This is a general principle covering the entire class: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe**, and all analogous items are employed regardless of the gender or case of the referent. Determiners that already end in -e and do not inflect for gender in the relevant contexts (**beide, einige, mehrere**) remain unchanged.
+In non-genitive contexts, any determiner or pronoun that inflects for gender or case in **Standard German** adopts the invariant feminine "die..." form, i.e. the form ending in -e. This is a general principle covering the entire class: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe**, and all analogous items are employed regardless of the gender or case of the referent. Determiners that already end in -e and do not inflect for gender in the relevant contexts (**beide, einige, mehrere**) remain unchanged. The invariance extends to number: plural forms such as *diejenigen* and *dieselben* likewise appear as **diejenige**, **dieselbe** (*diejenige, das bestanden haben*). Der-type determiners have one form for all genders, cases, and numbers, just as **diese** covers both English *this* and *these*; only nominalized adjectives mark plural (see the section on adjectives).
 
 This principle covers the der-type (strong-inflecting) determiners. Words built on **ein** — the negative article **kein**, the possessive determiners, and compounds such as **irgendein** — do not take the -e form; they follow the invariant base-form pattern described in the rule on possessive determiners and the negative article.
 
@@ -781,6 +786,7 @@ The paired quantifiers described in the rule on indefinite and negative quantifi
 | welches Buch | welche Buch |
 | demjenigen Weg | diejenige Weg |
 | dasselbe Buch | dieselbe Buch |
+| diejenigen, die bestanden haben (Plural) | diejenige, das bestanden haben |
 
 
 
