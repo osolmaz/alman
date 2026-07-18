@@ -142,6 +142,11 @@ class TestRegistry:
             == "deepseek-ai/DeepSeek-V4-Flash:novita"
         )
         assert load_profile("gpt-5.6-sol-xhigh").requested_model == "gpt-5.6-sol"
+        assert load_profile("gpt-5.5-xhigh").requested_model == "gpt-5.5"
+        assert (
+            load_profile("claude-opus-4.8-max").requested_model
+            == "claude-opus-4-8"
+        )
 
 
 class TestCost:
