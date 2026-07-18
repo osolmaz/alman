@@ -47,6 +47,11 @@ const copy = {
       "specifically in German. Its 1,029 public items test whether a language model can apply " +
       "the complete Alman specification to real German prose, from " +
       "canonical literature to contemporary text.",
+    lead2:
+      "Almanbench also enjoys a rare form of benchmark integrity. No lab " +
+      "is going to burn a training run on gaming a German simplification " +
+      "dataset, so the scores measure what the models can actually do. " +
+      "Obscurity is our contamination policy.",
     linkDataset: "Dataset",
     linkResults: "Results",
     linkGithub: "GitHub",
@@ -108,6 +113,12 @@ const copy = {
       "Sprachmodell die vollständige Alman-Spezifikation auf echte " +
       "deutsche Prosa anwenden kann, von kanonischer Literatur bis zu " +
       "zeitgenössischen Texten.",
+    lead2:
+      "Almanbench genießt außerdem eine seltene Form von " +
+      "Benchmark-Integrität. Kein Labor wird einen Trainingslauf darauf " +
+      "verschwenden, einen Datensatz zur deutschen Sprachvereinfachung zu " +
+      "manipulieren, also messen die Scores, was die Modelle tatsächlich " +
+      "können. Obskurität ist unsere Kontaminationsrichtlinie.",
     linkDataset: "Datensatz",
     linkResults: "Ergebnisse",
     linkGithub: "GitHub",
@@ -171,6 +182,12 @@ const copy = {
       "Sprachmodell die vollständige Alman-Spezifikation auf echte " +
       "deutsche Prosa anwenden kann, von kanonische Literatur bis zu " +
       "zeitgenössische Texte.",
+    lead2:
+      "Almanbench genießt außerdem ein seltene Form von " +
+      "Benchmark-Integrität. Kein Labor wird ein Trainingslauf darauf " +
+      "verschwenden, ein Datensatz zu die deutsche Sprachvereinfachung zu " +
+      "manipulieren, also messen die Scores, was die Modelle tatsächlich " +
+      "können. Obskurität ist unser Kontaminationsrichtlinie.",
     linkDataset: "Datensatz",
     linkResults: "Ergebnisse",
     linkGithub: "GitHub",
@@ -257,6 +274,7 @@ const bibtex = `@misc{almanbench2026,
 
   <h1>Almanbench</h1>
   <p>{copy.lead}</p>
+  <p>{copy.lead2}</p>
 
   <nav class="resource-links">
     <a href={lb.dataset}>
