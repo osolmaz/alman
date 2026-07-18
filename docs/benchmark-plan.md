@@ -112,7 +112,7 @@ membership conditions. Every condition is checkable by script from the item
 metadata, so the finished benchmark can be audited against this table rather
 than against intent.
 
-Public set, 1,028 items (1,025 at the v0.1 freeze; three curated items were added with the genitive-objects rule on 2026-07-18):
+Public set, 1,029 items (1,025 at the v0.1 freeze; three curated items were added with the genitive-objects rule and one with the apposition rule on 2026-07-18):
 
 | Bin | Quota | Inclusion conditions |
 |---|---|---|
@@ -124,7 +124,7 @@ Public set, 1,028 items (1,025 at the v0.1 freeze; three curated items were adde
 | naturalistic-modern, authored | 60 | Hand-written, register label from {instructions, casual, correspondence, news} |
 | targeted | 216 | Lifts a named rule that was under the 25-floor at selection time, with the tagger confirming the source genuinely exercises that rule. Hand-authored, since the held-out corpus could not supply the rare rules (see the tier structure note). 200 items from the original composition round plus a 16-item top-up for the adverbial-genitive rule (§3c), added to the spec after the freeze |
 | guards | 120 | Guard family label from the eight families below, 15 items each |
-| curated | 92 | The `alman/bench/curated/` collections (89 at the freeze, plus three items added with the genitive-objects rule) |
+| curated | 93 | The `alman/bench/curated/` collections (89 at the freeze, plus items added with the genitive-objects and apposition rules) |
 
 Within the canonical bins, at least 30 items are drama and at least 15 are
 verse, mirroring the corpus genre mix. Works without a resolvable publication
@@ -472,7 +472,7 @@ entry (Inspect model string, provider env, generation config, pricing).
    uv run bench-run <profile> --limit 3
    ```
 
-2. **Full run** (the 1,028-item public set):
+2. **Full run** (the 1,029-item public set):
 
    ```bash
    uv run bench-run <profile>

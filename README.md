@@ -57,7 +57,7 @@ Localized content lives in `site/src/content/`. See
 
 Almanbench is a Standard German → Alman translation benchmark built on
 [Inspect AI](https://inspect.aisi.org.uk/). The v0.1 public set contains
-1,028 items across four tiers (naturalistic, targeted, guards, curated) and
+1,029 items across four tiers (naturalistic, targeted, guards, curated) and
 is distributed as the Hugging Face dataset
 [osolmaz/almanbench](https://huggingface.co/datasets/osolmaz/almanbench).
 The current leaderboard is published at
@@ -79,7 +79,7 @@ Inspect model string, provider environment, generation config, and observed
 pricing for each named profile:
 
 ```bash
-uv run bench-run deepseek-v4-flash              # full 1,028-item public set
+uv run bench-run deepseek-v4-flash              # full 1,029-item public set
 uv run bench-run kimi-k2.7-code --limit 3       # smoke test
 uv run bench-run glm-5.2 --tiers guards,curated # tier subset
 ```
@@ -105,7 +105,7 @@ to `logs/` and can be browsed with `uv run inspect view`.
 Task options, passed with `-T`:
 
 ```bash
--T dataset=almanbench      # the full 1,028-item public set (default: curated)
+-T dataset=almanbench      # the full 1,029-item public set (default: curated)
 -T dataset=almanbench -T tiers=guards,curated
 -T include_spec=false      # translate without the spec in the system prompt
 -T dataset=spec            # diagnostic spec-example run; pair with include_spec=false
