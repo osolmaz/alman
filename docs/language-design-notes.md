@@ -3,7 +3,9 @@
 Internal rationale for Alman's design decisions. These notes are for
 maintainers and agents working on the spec; they are not published on the
 site and are deliberately more speculative in tone than the specification
-itself.
+itself. The heuristic developed here is applied case by case in
+`docs/adjudication-casebook.md`, which records every contentious grammar
+and benchmark decision with its resolution.
 
 ## English as the evolutionary precedent
 

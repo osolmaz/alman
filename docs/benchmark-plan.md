@@ -336,7 +336,29 @@ detectable, or the hand-written pattern when it is not, citing the rule.
 If no rule licenses the output, the model is wrong and nothing changes,
 regardless of how many strong models produced the same output. Agreement
 among models justifies a closer look at the reference, but the deciding
-test is always the spec rule.
+test is always the spec rule. Decided cases, with the competing readings
+and the rationale for each resolution, are catalogued in
+`docs/adjudication-casebook.md`; check it before re-adjudicating a family
+that has already been settled, and record any new decision there.
+
+Failure triage on a stored run starts with token-level diffs. The script
+`alman-research/scripts/screen_run_diffs.py` compares every failing output
+against its closest accepted rendering and buckets the rows by how many
+tokens differ. Rows differing in one or two tokens are reviewed by hand,
+because that is where reference bugs concentrate; the July 2026
+adjudication rounds found nearly all gold and generator defects among
+one-token near-misses, while wholly different outputs were genuine model
+errors (paraphrase, modernization, or refusal).
+
+Three tolerance decisions from the July 2026 rounds shape how acceptance
+sets are written. Plural nominalized adjectives keep the plural `-en` as
+the canonical rendering with the leveled `-e` accepted as a variant (§4c).
+Standalone pronominal neuters (`niemand anderes`, `folgendes`) level to
+`-e` canonically with the retained `-es` accepted as a variant (§4a);
+attributive adjectives get no such tolerance. Standalone demonstratives
+canonicalize to `das` with `die` accepted in both directions (§1c), and
+der-type determiners, including `diejenigen`, stay number-invariant (§7a).
+The full case list is in the casebook.
 
 Surface fidelity is part of the task. Alman is defined as a set of
 grammatical transformations applied to a Standard German source; everything

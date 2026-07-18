@@ -123,7 +123,7 @@ Das beibehaltene **der** steht an derselben nachgestellten Position wie der **St
 
 Das Demonstrativpronomen 'das' behält seine Form in nominativischen, akkusativischen und dativischen Kontexten, wenn es als neutrales Demonstrativum ('that') fungiert. In Genitivkonstruktionen wird die Form 'dessen' durch 'deren' ersetzt, unter Beibehaltung des invarianten Artikelsystems.
 
-Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohne nachfolgendes Substantiv. Unmittelbar vor einem Substantiv gelten stets die Artikelregeln, und jede Form des bestimmten Artikels wird zu **die**, unabhängig von Betonung oder demonstrativer Absicht. Demonstrative Kraft vor einem Substantiv wird mit **diese** oder **jene** ausgedrückt (siehe den Abschnitt über Begleiter), analog zum englischen *this/that* + Substantiv. Ebenso werden die alleinstehend gebrauchten **Standarddeutsch**-Demonstrativpronomen 'der', 'den' und 'dem' (*Der war's!*) durch das neutrale **das** ersetzt (*Das war's!*); das artikelgleiche **die** ist als Variante zugelassen, im Einklang mit der Behandlung der Relativpronomen.
+Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohne nachfolgendes Substantiv. Unmittelbar vor einem Substantiv gelten stets die Artikelregeln, und jede Form des bestimmten Artikels wird zu **die**, unabhängig von Betonung oder demonstrativer Absicht. Demonstrative Kraft vor einem Substantiv wird mit **diese** oder **jene** ausgedrückt (siehe den Abschnitt über Begleiter), analog zum englischen *this/that* + Substantiv. Ebenso werden die alleinstehend gebrauchten **Standarddeutsch**-Demonstrativpronomen 'der', 'die', 'den' und 'dem' (*Der war's!*, *die hab ich gefunden*) durch das neutrale **das** ersetzt (*Das war's!*, *das hab ich gefunden*); das artikelgleiche **die** ist als Variante zugelassen, im Einklang mit der Behandlung der Relativpronomen. Die Angleichung ist symmetrisch, genau wie bei den Relativpronomen: Jedes alleinstehende Demonstrativum kann als **das** oder als **die** erscheinen, auch ein beibehaltenes neutrales 'das' (*Das glaube ich nicht.* / *Die glaube ich nicht.*). **das**, das Kognat des englischen *that*, ist durchgehend die kanonische Form.
 
 
 **Beispiele:**
@@ -134,6 +134,8 @@ Diese Ausnahme ist strikt positional: Sie gilt nur, wenn 'das' allein steht, ohn
 | dessen Haus | deren Haus |
 | DAS Buch will ich! (stressed, attributive) | Diese Buch will ich! |
 | Der war's! (standalone demonstrative) | Das war's! / Die war's! |
+| an einer Schäferin, die hab ich gefunden (standalone feminine demonstrative) | an ein Schäfer, das hab ich gefunden / die hab ich gefunden |
+| Das glaube ich nicht. | Das glaube ich nicht. / Die glaube ich nicht. |
 
 
 
@@ -415,7 +417,7 @@ Der **Alman**-Dialekt regelt die Adjektivmorphologie über ein einziges formbasi
 
 #### §4a. Invariantes -e für alle Deklinationsendungen
 
-Wann immer ein Adjektiv im **Standarddeutsch** eine Deklinationsendung trägt — eine Endung, die Kasus, Genus oder Numerus markiert —, wird diese Endung in **Alman** durch das invariante **-e** ersetzt. Dies gilt einheitlich, unabhängig von Funktion oder Position des Adjektivs: Attributive Adjektive vor Substantiven, nominalisierte Adjektive, nach **etwas**, **nichts** und **alles** nominalisierte Adjektive (*etwas Gutes*, *nichts Neues*) sowie Adjektive in festen adverbialen Wendungen (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) werden alle gleich behandelt.
+Wann immer ein Adjektiv im **Standarddeutsch** eine Deklinationsendung trägt — eine Endung, die Kasus, Genus oder Numerus markiert —, wird diese Endung in **Alman** durch das invariante **-e** ersetzt. Dies gilt einheitlich, unabhängig von Funktion oder Position des Adjektivs: Attributive Adjektive vor Substantiven, nominalisierte Adjektive, nach **etwas**, **nichts** und **alles** nominalisierte Adjektive (*etwas Gutes*, *nichts Neues*) sowie Adjektive in festen adverbialen Wendungen (**unter anderem**, **vor kurzem**, **seit langem**, **von neuem**, **bei weitem**, **ohne weiteres**) werden alle gleich behandelt. Alleinstehende pronominale Neutra nach demselben Muster — *niemand anderes*, *jemand anderes*, *folgendes*, *etwas andres* — werden auf dieselbe Weise nivelliert: *niemand andere*, *folgende*. Da die **Standarddeutsch**-Formen im alltäglichen Gebrauch allgegenwärtig bleiben, ist das beibehaltene -es in diesen alleinstehenden pronominalen Verwendungen als Variante zugelassen; die nivellierte Form ist die kanonische. Diese Toleranz erstreckt sich nie auf die attributive Position: *ein verlegenes Betragen* wird ausnahmslos zu *ein verlegene Betragen*.
 
 Adjektive, die im **Standarddeutsch** keine Deklinationsendung tragen — prädikative Adjektive und adverbial gebrauchte Formen —, bleiben unverändert; es wird keine Endung hinzugefügt (siehe den Abschnitt über Adverbien).
 
@@ -436,6 +438,8 @@ Die einzige Ausnahme von diesem Prinzip ist der adverbiale Superlativ **am** + S
 | vor kurzem (fixed expression) | vor kurze |
 | etwas Gutes | etwas Gute |
 | nichts Neues | nichts Neue |
+| niemand anderes | niemand andere (anderes accepted) |
+| ein verlegenes Betragen | ein verlegene Betragen |
 | alles Gute (already ends in -e) | alles Gute |
 | Das Auto ist schnell. (predicative, no ending) | Die Auto ist schnell. |
 
@@ -459,7 +463,7 @@ Genitivkonstruktionen behalten den analytischen Artikel 'der' bei und bewahren z
 
 Nominalisierte Adjektive erhalten, wenn sie als Substantive fungieren, im Singular die invariante Endung **-e**, unabhängig von ihrer syntaktischen Rolle; die Einheitlichkeit mit regulären Adjektivformen bleibt so gewahrt.
 
-Im Plural verhalten sich nominalisierte Adjektive wie Substantive: Im Einklang mit der Bewahrung der Substantiv-Pluralmorphologie, die im Abschnitt über Substantive beschrieben ist, behalten sie die Endung **-en** als Pluralmarker (nicht als Kasusmarker). Dies unterscheidet *die Schöne* (Singular) von *die Schönen* (Plural).
+Im Plural verhalten sich nominalisierte Adjektive wie Substantive: Im Einklang mit der Bewahrung der Substantiv-Pluralmorphologie, die im Abschnitt über Substantive beschrieben ist, behalten sie die Endung **-en** als Pluralmarker (nicht als Kasusmarker). Dies unterscheidet *die Schöne* (Singular) von *die Schönen* (Plural). Dies erfasst nominalisierte Adjektive und Possessive im Plural jeder Art: *die anderen* („the others“), *die meisten*, *die übrigen*, *die Ihren* („ihre Familie“), *sein Gleichen* (für *seinesgleichen*). Das Englische zeigt dieselbe Aufteilung: *the other* (Singular) gegenüber *the others* (Plural). Da das oberflächliche -en unter der Regel des invarianten -e ebenso als Deklinationsendung gelesen werden könnte, ist die nivellierte -e-Form als Variante zugelassen; die pluralmarkierte Form ist die kanonische.
 
 
 **Beispiele:**
@@ -468,6 +472,7 @@ Im Plural verhalten sich nominalisierte Adjektive wie Substantive: Im Einklang m
 |------------------|-------|
 | Das Gute im Menschen | Die Gute in die Mensch |
 | An die Schönen (Dative, plural) | An die Schönen (-en retained as plural marker) |
+| Die anderen warteten draußen. | Die anderen warteten draußen. (die andere accepted) |
 | Wegen des Bekannten | Wegen der Bekannte / Wegen die Bekannte |
 | unter anderem | unter andere |
 
@@ -758,7 +763,7 @@ Dieser Paragraph beschreibt die Vereinfachung der Begleiter- und Demonstrativfor
 
 #### §7a. Einheitliche Formen für nicht-genitivische Kontexte
 
-In nicht-genitivischen Kontexten nimmt jeder Begleiter und jedes Pronomen, das im **Standarddeutsch** nach Genus oder Kasus flektiert, die invariante feminine „die…“-Form an, d. h. die auf -e endende Form. Dies ist ein allgemeines Prinzip, das die gesamte Klasse abdeckt: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe** und alle analogen Elemente werden unabhängig von Genus oder Kasus des Referenten verwendet. Begleiter, die bereits auf -e enden und in den relevanten Kontexten nicht nach Genus flektieren (**beide, einige, mehrere**), bleiben unverändert.
+In nicht-genitivischen Kontexten nimmt jeder Begleiter und jedes Pronomen, das im **Standarddeutsch** nach Genus oder Kasus flektiert, die invariante feminine „die…“-Form an, d. h. die auf -e endende Form. Dies ist ein allgemeines Prinzip, das die gesamte Klasse abdeckt: **diese, jene, jede, welche, manche, solche, diejenige, dieselbe** und alle analogen Elemente werden unabhängig von Genus oder Kasus des Referenten verwendet. Begleiter, die bereits auf -e enden und in den relevanten Kontexten nicht nach Genus flektieren (**beide, einige, mehrere**), bleiben unverändert. Die Invarianz erstreckt sich auf den Numerus: Pluralformen wie *diejenigen* und *dieselben* erscheinen ebenfalls als **diejenige**, **dieselbe** (*diejenige, das bestanden haben*). Begleiter des der-Typs haben eine Form für alle Genera, Kasus und Numeri, so wie **diese** das englische *this* und *these* zugleich abdeckt; nur nominalisierte Adjektive markieren den Plural (siehe den Abschnitt über Adjektive).
 
 Dieses Prinzip erfasst die Begleiter des der-Typs (stark flektierend). Auf **ein** aufgebaute Wörter — der Negativartikel **kein**, die Possessivbegleiter und Komposita wie **irgendein** — nehmen die -e-Form nicht an; sie folgen dem invarianten Grundform-Muster aus der Regel zu Possessivbegleitern und dem Negativartikel.
 
@@ -781,6 +786,7 @@ Die gepaarten Quantoren aus der Regel zu indefiniten und negativen Quantoren (**
 | welches Buch | welche Buch |
 | demjenigen Weg | diejenige Weg |
 | dasselbe Buch | dieselbe Buch |
+| diejenigen, die bestanden haben (Plural) | diejenige, das bestanden haben |
 
 
 
