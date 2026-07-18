@@ -144,7 +144,7 @@ class TestRegistry:
         assert load_profile("gpt-5.6-sol-xhigh").requested_model == "gpt-5.6-sol"
         sol_max = load_profile("gpt-5.6-sol-max")
         assert sol_max.requested_model == "gpt-5.6-sol"
-        assert sol_max.max_connections == 32
+        assert sol_max.max_connections == 8
         assert sol_max.generate["extra_body"]["prompt_cache_key"] == (
             "almanbench-public"
         )

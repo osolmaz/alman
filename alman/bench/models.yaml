@@ -58,7 +58,9 @@ profiles:
     label: GPT-5.6 Sol max
     platform: openai-api
     model: openai/gpt-5.6-sol
-    max_connections: 32
+    # GPT-5.6 implicit prompt caching stayed cache-local at eight concurrent
+    # requests; 32-way fan-out repeatedly fell back to uncached prefill.
+    max_connections: 8
     generate:
       reasoning_effort: max
       max_tokens: 16384
