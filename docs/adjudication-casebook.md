@@ -246,16 +246,59 @@ generator because a false positive would license a wrong rendering.
 
 A recurring family of near-miss rejections comes from models improving the
 text: modernizing *Thür* to *Tür*, *daß* to *dass*, or *grade* to *gerade*,
-dropping the fossilized dative -e in *zu Hause* or *nach dem Tode*,
 expanding *bzw.*, or fixing archaic word order. All of it stays rejected.
 Alman is defined as a set of grammatical transformations over a Standard
 German source, and everything the spec does not transform must be
 reproduced exactly, or scores stop measuring rule application and start
-measuring paraphrasing habits. The dative -e is worth singling out because
-it looks like case morphology: the spec's case-ending elimination targets
-the article system and weak-noun oblique -n, and the noun's own fossilized
--e is spelling, not declension. Scoring is case-sensitive throughout,
-since German capitalization is grammatical.
+measuring paraphrasing habits. The archaic dative -e is not part of this
+family: the spec's case-ending elimination explicitly drops it (*dem
+Kinde* → *die Kind*, *zu Hause* → *zu Haus*, *zu Pferde* → *zu Pferd*),
+so keeping *Hause* in running text is a model error, not fidelity. An
+earlier revision of this entry claimed the opposite and misstated the
+spec; the spec rule on archaic dative endings decides it. Scoring is
+case-sensitive throughout, since German capitalization is grammatical.
+
+## Elided schwa: the stem stays as written, only the ending is replaced (§4a)
+
+Historical and poetic sources elide schwas freely, and the elision can sit
+in the stem (*geschriebnen* = *geschriebn* + *-en*) or in the ending
+(*größern* = *größer* + *-n*). The July 2026 round-4 adjudication found
+the golds split on this: *geschriebnen* was correctly leveled to
+*geschriebne*, but *größern* became *größre* (inventing a stem elision the
+source does not have), and *andrer* became *andere* in one item while
+*andres* became *andre* in another. The decision is mechanical: keep the
+stem exactly as the source spells it and replace only the declensional
+ending. So *größern* → *größere*, *innern* → *innere*, *andern* →
+*andere*, but *geschriebnen* → *geschriebne* and *andres* → *andre*.
+Shifting the elision or restoring the full form are both modernizations
+and stay rejected. The convention is enforced corpus-wide by the
+schwa-shift check in `alman-research/scripts/reference_checks.py`, which
+found five gold violations on the day it was written, including one
+(*saubre*) no model had tripped over yet.
+
+## Printer artifacts: read charitably, accept the verbatim surface too
+
+One source prints *ihn wie der abzuholen*, a split *wieder* from the
+original typesetting. The gold read the stray *der* as a standalone
+demonstrative and converted it (*wie die*), with the repaired *wieder* as
+a variant. Fable reproduced the source verbatim (*wie der*), which is
+neither reading, and the round-4 decision accepts it as a third variant:
+under the fidelity principle the artifact is spelling, and a verbatim
+spelling of untransformed material is never wrong. All three renderings
+are licensed; none is added to the spec, since this is a property of one
+damaged source rather than of the grammar.
+
+## Ditransitives: bare theme-first order is licensed, an-marking optional (§9c)
+
+The spec says the recipient "may" take **an** when the theme comes first,
+imposes no strict rule, and tolerates residual ambiguity the way English
+does. A curated gold nevertheless required *an* (*schenkte sein Gewand an
+ein arme Brahmane*) and rejected the bare source-order rendering, while a
+naturalistic gold for the same construction (*alle Kummer die Lüfte der
+Himmel geben*) kept the bare form canonical. Round 4 aligned them: the
+bare theme-first rendering is accepted wherever verb semantics resolve the
+roles, and the an-marked form stays available. English tolerates the same
+ambiguity in its double-object construction, which is the §9c rationale.
 
 ## Quoted Standard German: mentions are exempt
 
