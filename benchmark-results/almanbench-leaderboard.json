@@ -4,7 +4,7 @@
   "version": "v0.1",
   "caseSetSize": 1029,
   "caseSetId": "sha256:9f5d67b364b4fd1ca97f129e5d3dfbf1783577e892cd321c9a4e42d5925bd576",
-  "scoringRevision": "3df60f6a95a00af82159691375f22d58807bfa14",
+  "scoringRevision": "eb6f4a25491aa905e61ac1ded020fe1dd4e84794",
   "evaluated": "2026-07-18",
   "dataset": "https://huggingface.co/datasets/osolmaz/almanbench",
   "results": "https://huggingface.co/datasets/osolmaz/almanbench-results",
