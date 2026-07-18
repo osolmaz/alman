@@ -1,5 +1,5 @@
 {
-  "$comment": "Leaderboard data for the /almanbench/ site page. Counts are [correct, total]. Entries are 2026-07-17 full-set runs, rescored (and rerun on affected rows) after the 2026-07-18 in-place acceptance-set updates; runs from before the updates cover 1,025 of the 1,029 items. Per-sample results are published in the osolmaz/almanbench-results dataset; raw run artifacts live in the private osolmaz/alman bucket under benchmark-runs/2026-07-17/.",
+  "$comment": "Leaderboard data for the /almanbench/ site page. Counts are [correct, total]. Entries are 2026-07-17 full-set runs, rescored (and rerun on affected rows) after the 2026-07-18 in-place acceptance-set updates; every run covers the full 1,029-item set. Per-sample results are published in the osolmaz/almanbench-results dataset; raw run artifacts live in the private osolmaz/alman bucket under benchmark-runs/2026-07-17/.",
   "benchmark": "almanbench",
   "version": "v0.1",
   "caseSetSize": 1029,
@@ -15,24 +15,24 @@
       "route": "Anthropic API",
       "reasoning": "high",
       "acceptance": [
-        931,
-        1025
+        939,
+        1029
       ],
       "compliance": [
-        1022,
-        1025
+        1027,
+        1029
       ],
       "tiers": {
         "curated": [
-          84,
-          89
+          88,
+          93
         ],
         "guards": [
           105,
           120
         ],
         "naturalistic": [
-          533,
+          537,
           600
         ],
         "targeted": [
@@ -47,24 +47,24 @@
       "route": "OpenAI API",
       "reasoning": "xhigh",
       "acceptance": [
-        930,
-        1025
+        939,
+        1029
       ],
       "compliance": [
-        1023,
-        1025
+        1027,
+        1029
       ],
       "tiers": {
         "curated": [
-          84,
-          89
+          88,
+          93
         ],
         "guards": [
           105,
           120
         ],
         "naturalistic": [
-          529,
+          534,
           600
         ],
         "targeted": [
@@ -106,6 +106,70 @@
       }
     },
     {
+      "label": "GPT-5.6 Terra",
+      "vendor": "openai",
+      "route": "OpenAI API",
+      "reasoning": "xhigh",
+      "acceptance": [
+        880,
+        1029
+      ],
+      "compliance": [
+        1027,
+        1029
+      ],
+      "tiers": {
+        "curated": [
+          87,
+          93
+        ],
+        "guards": [
+          106,
+          120
+        ],
+        "naturalistic": [
+          482,
+          600
+        ],
+        "targeted": [
+          205,
+          216
+        ]
+      }
+    },
+    {
+      "label": "GPT-5.6 Luna",
+      "vendor": "openai",
+      "route": "OpenAI API",
+      "reasoning": "xhigh",
+      "acceptance": [
+        877,
+        1029
+      ],
+      "compliance": [
+        1010,
+        1029
+      ],
+      "tiers": {
+        "curated": [
+          86,
+          93
+        ],
+        "guards": [
+          103,
+          120
+        ],
+        "naturalistic": [
+          479,
+          600
+        ],
+        "targeted": [
+          209,
+          216
+        ]
+      }
+    },
+    {
       "label": "Kimi K2.7 Code",
       "vendor": "moonshot",
       "route": "HF Inference Providers, Novita",
@@ -133,70 +197,6 @@
         ],
         "targeted": [
           202,
-          216
-        ]
-      }
-    },
-    {
-      "label": "GPT-5.6 Terra",
-      "vendor": "openai",
-      "route": "OpenAI API",
-      "reasoning": "xhigh",
-      "acceptance": [
-        867,
-        1025
-      ],
-      "compliance": [
-        1023,
-        1025
-      ],
-      "tiers": {
-        "curated": [
-          83,
-          89
-        ],
-        "guards": [
-          106,
-          120
-        ],
-        "naturalistic": [
-          473,
-          600
-        ],
-        "targeted": [
-          205,
-          216
-        ]
-      }
-    },
-    {
-      "label": "GPT-5.6 Luna",
-      "vendor": "openai",
-      "route": "OpenAI API",
-      "reasoning": "xhigh",
-      "acceptance": [
-        863,
-        1025
-      ],
-      "compliance": [
-        1003,
-        1025
-      ],
-      "tiers": {
-        "curated": [
-          82,
-          89
-        ],
-        "guards": [
-          103,
-          120
-        ],
-        "naturalistic": [
-          469,
-          600
-        ],
-        "targeted": [
-          209,
           216
         ]
       }
@@ -234,6 +234,38 @@
       }
     },
     {
+      "label": "Claude Sonnet 5",
+      "vendor": "anthropic",
+      "route": "Anthropic API",
+      "reasoning": "xhigh",
+      "acceptance": [
+        823,
+        1029
+      ],
+      "compliance": [
+        968,
+        1029
+      ],
+      "tiers": {
+        "curated": [
+          82,
+          93
+        ],
+        "guards": [
+          107,
+          120
+        ],
+        "naturalistic": [
+          430,
+          600
+        ],
+        "targeted": [
+          204,
+          216
+        ]
+      }
+    },
+    {
       "label": "MiniMax M3",
       "vendor": "minimax",
       "route": "HF Inference Providers, Novita",
@@ -261,38 +293,6 @@
         ],
         "targeted": [
           205,
-          216
-        ]
-      }
-    },
-    {
-      "label": "Claude Sonnet 5",
-      "vendor": "anthropic",
-      "route": "Anthropic API",
-      "reasoning": "xhigh",
-      "acceptance": [
-        786,
-        1025
-      ],
-      "compliance": [
-        947,
-        1025
-      ],
-      "tiers": {
-        "curated": [
-          78,
-          89
-        ],
-        "guards": [
-          107,
-          120
-        ],
-        "naturalistic": [
-          397,
-          600
-        ],
-        "targeted": [
-          204,
           216
         ]
       }
