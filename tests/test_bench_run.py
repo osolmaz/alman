@@ -153,6 +153,7 @@ class TestRegistry:
         inkling = load_profile("inkling-max")
         assert inkling.requested_model == "thinkingmachines/Inkling:together"
         assert inkling.generate["reasoning_effort"] == "max"
+        assert inkling.max_connections == 32
 
 
 class TestCost:

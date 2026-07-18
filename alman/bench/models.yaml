@@ -302,6 +302,7 @@ profiles:
     label: Inkling max
     platform: huggingface-inference-providers
     model: openai-api/hf/thinkingmachines/Inkling:together
+    max_connections: 32
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
       HF_API_KEY: ${HF_TOKEN}
