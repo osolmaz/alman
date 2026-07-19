@@ -118,6 +118,14 @@ def main() -> None:
             if task_args.get("include_spec", True) is not True:
                 raise SystemExit("retry log was run without the spec")
             prior_config = prior.eval.model_generate_config
+            prior_model_args = prior.eval.model_args or {}
+            for key, value in profile.model_args.items():
+                if prior_model_args.get(key) != value:
+                    raise SystemExit(
+                        f"retry log was generated with model_args[{key!r}]="
+                        f"{prior_model_args.get(key)!r}; profile "
+                        f"{profile.name!r} declares {value!r}"
+                    )
             for key, value in profile.generate.items():
                 if getattr(prior_config, key, None) != value:
                     raise SystemExit(
@@ -141,6 +149,7 @@ def main() -> None:
         logs = inspect_eval(
             task,
             model=profile.model,
+            model_args=profile.model_args,
             log_dir=str(log_dir),
             limit=args.limit,
             max_connections=args.max_connections or profile.max_connections,

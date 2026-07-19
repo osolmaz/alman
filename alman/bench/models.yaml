@@ -225,6 +225,10 @@ profiles:
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
       HF_API_KEY: ${HF_TOKEN}
+    # Streaming keeps long reasoning responses alive through provider
+    # gateways without changing the requested generation configuration.
+    model_args:
+      stream: true
     generate:
       max_tokens: 16384
       temperature: 1.0

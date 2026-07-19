@@ -296,6 +296,14 @@ def export_log(
             f"log was run with model {log.eval.model!r}, but profile "
             f"{profile.name!r} declares {profile.model!r}"
         )
+    logged_model_args = log.eval.model_args or {}
+    for key, value in profile.model_args.items():
+        if logged_model_args.get(key) != value:
+            raise ValueError(
+                f"log was generated with model_args[{key!r}]="
+                f"{logged_model_args.get(key)!r}, but profile "
+                f"{profile.name!r} declares {value!r}"
+            )
     logged_config = log.eval.model_generate_config
     for key, value in profile.generate.items():
         logged = getattr(logged_config, key, None)
@@ -419,6 +427,7 @@ def export_log(
             "platform": profile.platform,
             "inspect_model": log.eval.model,
             "generate": profile.generate,
+            "model_args": profile.model_args,
             "logged_generate_config": effective_generate_config,
         },
         "results": {
@@ -458,6 +467,7 @@ def export_log(
         "scoring_revision": scoring_revision,
         "model": profile.requested_model,
         "model_id": profile.name,
+        "model_args": profile.model_args,
         "logical_run_id": run_id,
         "execution_id": execution_id,
         "started_at": started,

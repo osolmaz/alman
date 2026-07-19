@@ -154,6 +154,7 @@ class TestRegistry:
         assert inkling.requested_model == "thinkingmachines/Inkling:together"
         assert inkling.generate["reasoning_effort"] == "max"
         assert inkling.max_connections == 64
+        assert load_profile("glm-5.2").model_args == {"stream": True}
 
 
 class TestCost:
@@ -310,6 +311,7 @@ class TestExport:
         assert aggregate["results"]["tiers"]["curated"]["acceptance"]["total"] == 93
         assert aggregate["case_set_size"] == 93
         assert aggregate["model"]["label"] == "Mock Model"
+        assert aggregate["model"]["model_args"] == {}
 
     def test_sample_rows_have_stable_schema(self, mock_run):
         _, out_dir = mock_run
@@ -385,6 +387,18 @@ class TestExport:
         )
         with pytest.raises(ValueError, match="profile 'wrong' declares"):
             export_log(log_path, wrong, tmp_path / "out")
+
+    def test_export_rejects_declared_model_arg_mismatch(self, mock_run, tmp_path):
+        log_path, _ = mock_run
+        streaming = Profile(
+            name="mock-streaming",
+            label="Mock Streaming",
+            platform="local",
+            model="mockllm/model",
+            model_args={"stream": True},
+        )
+        with pytest.raises(ValueError, match=r"model_args\['stream'\]=None"):
+            export_log(log_path, streaming, tmp_path / "out", allow_dirty=True)
 
     def test_export_rejects_unfinished_or_wrong_dataset(self, mock_run, tmp_path):
         from inspect_ai import eval as inspect_eval

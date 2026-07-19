@@ -30,6 +30,7 @@ class Profile:
     platform: str
     model: str
     env: dict[str, str] = field(default_factory=dict)
+    model_args: dict[str, Any] = field(default_factory=dict)
     generate: dict[str, Any] = field(default_factory=dict)
     max_connections: int = 8
     pricing: dict[str, Any] | None = None
@@ -74,6 +75,7 @@ def load_registry(path: Path = REGISTRY_PATH) -> dict[str, Profile]:
             platform=merged["platform"],
             model=merged["model"],
             env=merged.get("env", {}),
+            model_args=merged.get("model_args", {}),
             generate=merged.get("generate", {}),
             max_connections=merged.get("max_connections", 8),
             pricing=pricing,
