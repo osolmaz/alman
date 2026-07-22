@@ -44,7 +44,7 @@
     "executable": "/home/onur/runtimes/vllm/versions/vllm-0.23.1-gemma4-sm121/.venv/bin/vllm",
     "manifest": "/home/onur/runtimes/vllm/versions/vllm-0.23.1-gemma4-sm121/manifest.json",
     "recipe": {
-      "repository": "https://github.com/dutifuldev/localperf.git",
+      "repository": "https://github.com/osolmaz/localperf.git",
       "commit": "e1570cea896765e84ddca6bbd82c9d0f3a083ada",
       "path": "examples/gb10-dgx-spark-nvfp4-optimized/gemma4-26b.json",
       "profile": "32k",
