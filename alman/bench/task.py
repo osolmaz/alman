@@ -29,7 +29,7 @@ from pathlib import Path
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import MemoryDataset, Sample
-from inspect_ai.model import ChatMessageSystem, ChatMessageUser
+from inspect_ai.model import ChatMessageSystem, ChatMessageUser, GenerateConfig
 from inspect_ai.scorer import (
     CORRECT,
     INCORRECT,
@@ -102,6 +102,25 @@ FORCED_FINAL_PROMPT = (
 FORCED_FINAL_MAX_TOKENS = 2048
 
 
+def _forced_final_overrides(config: GenerateConfig) -> dict:
+    overrides: dict = {"max_tokens": FORCED_FINAL_MAX_TOKENS}
+    if config.reasoning_effort is not None:
+        overrides["reasoning_effort"] = "none"
+    extra_body = config.extra_body or {}
+    chat_template_kwargs = extra_body.get("chat_template_kwargs")
+    if isinstance(chat_template_kwargs, dict) and chat_template_kwargs.get(
+        "enable_thinking"
+    ):
+        overrides["extra_body"] = {
+            **extra_body,
+            "chat_template_kwargs": {
+                **chat_template_kwargs,
+                "enable_thinking": False,
+            },
+        }
+    return overrides
+
+
 @solver
 def forced_final():
     """Recover a final answer when reasoning exhausted the output budget.
@@ -121,10 +140,10 @@ def forced_final():
         if answer.strip():
             return state
         state.messages.append(ChatMessageUser(content=FORCED_FINAL_PROMPT))
-        overrides: dict = {"max_tokens": FORCED_FINAL_MAX_TOKENS}
-        if active_generate_config().reasoning_effort is not None:
-            overrides["reasoning_effort"] = "none"
-        state = await generate(state, **overrides)
+        state = await generate(
+            state,
+            **_forced_final_overrides(active_generate_config()),
+        )
         state.metadata["forced_final"] = True
         return state
 

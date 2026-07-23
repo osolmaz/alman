@@ -10,7 +10,12 @@ from alman.bench.almanbench import ALMANBENCH_DIR, case_set_identity
 from alman.bench.export import _completion_parts, estimated_cost_usd, export_log
 from alman.bench.registry import Profile, load_profile, load_registry
 from alman.bench.scoring import split_thinking
-from alman.bench.task import alman_bench, almanbench_samples
+from alman.bench.task import (
+    FORCED_FINAL_MAX_TOKENS,
+    _forced_final_overrides,
+    alman_bench,
+    almanbench_samples,
+)
 
 
 class TestAlmanBenchDataset:
@@ -217,6 +222,28 @@ def mock_run(tmp_path_factory) -> tuple[Path, Path]:
 
 
 class TestForcedFinal:
+    def test_disables_chat_template_thinking(self):
+        from inspect_ai.model import GenerateConfig
+
+        config = GenerateConfig(
+            max_tokens=8192,
+            extra_body={
+                "chat_template_kwargs": {
+                    "enable_thinking": True,
+                    "preserve_thinking": True,
+                }
+            },
+        )
+        assert _forced_final_overrides(config) == {
+            "max_tokens": FORCED_FINAL_MAX_TOKENS,
+            "extra_body": {
+                "chat_template_kwargs": {
+                    "enable_thinking": False,
+                    "preserve_thinking": True,
+                }
+            },
+        }
+
     def test_empty_answer_triggers_follow_up(self, tmp_path):
         """A response that is all reasoning and no final text gets one
         follow-up call, and the sample is marked forced_final."""
