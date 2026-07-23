@@ -4,8 +4,8 @@
   "version": "v0.1",
   "caseSetSize": 1029,
   "caseSetId": "sha256:9f5d67b364b4fd1ca97f129e5d3dfbf1783577e892cd321c9a4e42d5925bd576",
-  "scoringRevision": "36137761100444f65b907564302fc6c407ce4964",
-  "evaluated": "2026-07-19",
+  "scoringRevision": "3db96d059bb55fee8f56b2289771bfe199bddc42",
+  "evaluated": "2026-07-23",
   "dataset": "https://huggingface.co/datasets/osolmaz/almanbench",
   "results": "https://huggingface.co/datasets/osolmaz/almanbench-results",
   "entries": [
@@ -613,6 +613,38 @@
         ],
         "targeted": [
           163,
+          216
+        ]
+      }
+    },
+    {
+      "label": "Laguna S 2.1",
+      "vendor": "poolside",
+      "route": "HF Inference Endpoint, 2× H200",
+      "reasoning": "default",
+      "acceptance": [
+        417,
+        1029
+      ],
+      "compliance": [
+        709,
+        1029
+      ],
+      "tiers": {
+        "curated": [
+          46,
+          93
+        ],
+        "guards": [
+          79,
+          120
+        ],
+        "naturalistic": [
+          159,
+          600
+        ],
+        "targeted": [
+          133,
           216
         ]
       }
