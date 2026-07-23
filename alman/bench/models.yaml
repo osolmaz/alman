@@ -331,6 +331,7 @@ profiles:
       image: vllm/vllm-openai:v0.25.1@sha256:f0b9a0dc75a9fca3b6811e3279367b2d6a448055a000bfd13859587d74cef268
       endpoint: osolmaz/laguna-s21-fp8-h200x2-almanbench
       hardware: 2x Nvidia H200
+      quantization: FP8
       region: aws-us-west-2
       max_model_len: 32768
       reasoning_parser: poolside_v1

@@ -620,7 +620,7 @@
     {
       "label": "Laguna S 2.1",
       "vendor": "poolside",
-      "route": "HF Inference Endpoint, 2× H200",
+      "route": "HF Inference Endpoint, FP8, 2× H200",
       "reasoning": "default",
       "acceptance": [
         417,
