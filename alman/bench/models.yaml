@@ -340,8 +340,6 @@ profiles:
     env:
       LAGUNA_BASE_URL: ${LAGUNA_BASE_URL}
       LAGUNA_API_KEY: ${LAGUNA_API_KEY}
-    model_args:
-      stream: true
     generate:
       max_tokens: 8192
       temperature: 0.7
