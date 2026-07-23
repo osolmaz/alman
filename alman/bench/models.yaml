@@ -320,6 +320,36 @@ profiles:
       output_per_million_tokens: 4.05
       observed: 2026-07-19
 
+  laguna-s-2.1:
+    label: Laguna S 2.1
+    platform: huggingface-inference-endpoint
+    model: openai-api/laguna/poolside/Laguna-S-2.1-FP8
+    model_revision: fc72eb9025540b2225a681bb81950cc1225ff286
+    runtime:
+      engine: vllm
+      version: 0.25.1
+      image: vllm/vllm-openai:v0.25.1@sha256:f0b9a0dc75a9fca3b6811e3279367b2d6a448055a000bfd13859587d74cef268
+      endpoint: osolmaz/laguna-s21-fp8-h200x2-almanbench
+      hardware: 2x Nvidia H200
+      region: aws-us-west-2
+      max_model_len: 32768
+      reasoning_parser: poolside_v1
+      thinking: true
+      prefix_caching: true
+    max_connections: 16
+    env:
+      LAGUNA_BASE_URL: ${LAGUNA_BASE_URL}
+      LAGUNA_API_KEY: ${LAGUNA_API_KEY}
+    model_args:
+      stream: true
+    generate:
+      max_tokens: 16384
+      temperature: 0.7
+      top_p: 0.95
+    pricing:
+      endpoint_per_hour_usd: 10.0
+      observed: 2026-07-23
+
   ternary-bonsai-27b:
     label: Ternary Bonsai 27B
     platform: huggingface-inference-providers

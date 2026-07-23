@@ -29,6 +29,8 @@ class Profile:
     label: str
     platform: str
     model: str
+    model_revision: str | None = None
+    runtime: dict[str, Any] = field(default_factory=dict)
     env: dict[str, str] = field(default_factory=dict)
     model_args: dict[str, Any] = field(default_factory=dict)
     generate: dict[str, Any] = field(default_factory=dict)
@@ -74,6 +76,8 @@ def load_registry(path: Path = REGISTRY_PATH) -> dict[str, Profile]:
             label=merged["label"],
             platform=merged["platform"],
             model=merged["model"],
+            model_revision=merged.get("model_revision"),
+            runtime=merged.get("runtime", {}),
             env=merged.get("env", {}),
             model_args=merged.get("model_args", {}),
             generate=merged.get("generate", {}),

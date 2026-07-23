@@ -116,8 +116,13 @@ class TestRegistry:
             assert profile.label
             assert profile.model.count("/") >= 1
             assert profile.pricing is not None
-            assert "uncached_input_per_million_tokens" in profile.pricing
-            assert "output_per_million_tokens" in profile.pricing
+            assert (
+                "endpoint_per_hour_usd" in profile.pricing
+                or (
+                    "uncached_input_per_million_tokens" in profile.pricing
+                    and "output_per_million_tokens" in profile.pricing
+                )
+            )
             assert "observed" in profile.pricing
 
     def test_env_expansion(self, monkeypatch):
@@ -174,6 +179,10 @@ class TestCost:
 
     def test_no_pricing_is_none(self):
         assert estimated_cost_usd({}, None) is None
+
+    def test_endpoint_pricing_uses_duration(self):
+        pricing = {"endpoint_per_hour_usd": 10.0}
+        assert estimated_cost_usd({}, pricing, duration_seconds=5400) == 15.0
 
 
 MOCK_PROFILE = Profile(

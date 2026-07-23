@@ -178,11 +178,17 @@ def _grouped(rows: list[dict[str, Any]], key: str) -> dict[str, Any]:
 
 
 def estimated_cost_usd(
-    tokens: dict[str, int], pricing: dict[str, Any] | None
+    tokens: dict[str, int],
+    pricing: dict[str, Any] | None,
+    duration_seconds: float | None = None,
 ) -> float | None:
-    """Token usage priced per the registry (USD per million tokens)."""
+    """Estimate token-billed or dedicated-endpoint cost from the registry."""
     if pricing is None:
         return None
+    if "endpoint_per_hour_usd" in pricing:
+        if duration_seconds is None:
+            return None
+        return round(duration_seconds * pricing["endpoint_per_hour_usd"] / 3600, 5)
     cached_rate = pricing.get(
         "cached_input_per_million_tokens",
         pricing["uncached_input_per_million_tokens"],
@@ -337,6 +343,9 @@ def export_log(
     execution_id = log.eval.run_id
     started = log.stats.started_at
     completed = log.stats.completed_at
+    duration_seconds = (
+        datetime.fromisoformat(completed) - datetime.fromisoformat(started)
+    ).total_seconds()
     started_compact = (
         datetime.fromisoformat(started)
         .astimezone(timezone.utc)
@@ -425,6 +434,8 @@ def export_log(
             "label": profile.label,
             "requested": profile.requested_model,
             "platform": profile.platform,
+            "model_revision": profile.model_revision,
+            "runtime": profile.runtime,
             "inspect_model": log.eval.model,
             "generate": profile.generate,
             "model_args": profile.model_args,
@@ -438,7 +449,11 @@ def export_log(
             ),
             "collections": _grouped(rows, "collection"),
             "tokens": tokens,
-            "estimated_cost_usd": estimated_cost_usd(tokens, profile.pricing),
+            "estimated_cost_usd": estimated_cost_usd(
+                tokens,
+                profile.pricing,
+                duration_seconds,
+            ),
             "samples_with_reasoning": sum(row["thinking_observed"] for row in rows),
         },
         "pricing": profile.pricing,
@@ -467,6 +482,8 @@ def export_log(
         "scoring_revision": scoring_revision,
         "model": profile.requested_model,
         "model_id": profile.name,
+        "model_revision": profile.model_revision,
+        "runtime": profile.runtime,
         "model_args": profile.model_args,
         "logical_run_id": run_id,
         "execution_id": execution_id,
@@ -507,7 +524,7 @@ def _write_publication_rows(
                 "reasoning_effort": profile.generate.get("reasoning_effort"),
                 "platform": profile.platform,
                 "backend": profile.model.split("/")[0],
-                "model_revision": None,
+                "model_revision": profile.model_revision,
                 "output": row["output"],
                 "reasoning": row["reasoning"],
                 "reasoning_summary": row["reasoning_summary"],
