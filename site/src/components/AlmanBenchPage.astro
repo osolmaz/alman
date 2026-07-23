@@ -307,15 +307,33 @@ const bibtex = `@misc{almanbench2026,
           <tr>
             <td class="num mono">{index + 1}</td>
             <td class={index === 0 ? "lb-best" : undefined}>
-              <span class="lb-model" tabindex="0" data-tip={runTip(entry)}>
-                <img
-                  class="lb-logo"
-                  src={`/assets/icons/models/${entry.vendor}.svg`}
-                  alt=""
-                  aria-hidden="true"
-                />
-                {entry.label}
-              </span>
+              {"modelUrl" in entry ? (
+                <a
+                  class="lb-model"
+                  data-tip={runTip(entry)}
+                  href={entry.modelUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    class="lb-logo"
+                    src={`/assets/icons/models/${entry.vendor}.svg`}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  {entry.label}
+                </a>
+              ) : (
+                <span class="lb-model" tabindex="0" data-tip={runTip(entry)}>
+                  <img
+                    class="lb-logo"
+                    src={`/assets/icons/models/${entry.vendor}.svg`}
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  {entry.label}
+                </span>
+              )}
             </td>
             <td class="lb-bar-col">
               <div class="lb-bar">

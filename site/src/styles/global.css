@@ -232,6 +232,11 @@ td.mono {
   white-space: nowrap;
 }
 
+.lb-model[href] {
+  color: inherit;
+  cursor: pointer;
+}
+
 [data-tip] {
   position: relative;
   cursor: default;
