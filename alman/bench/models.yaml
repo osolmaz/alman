@@ -336,7 +336,7 @@ profiles:
       reasoning_parser: poolside_v1
       thinking: true
       prefix_caching: true
-    max_connections: 16
+    max_connections: 32
     env:
       LAGUNA_BASE_URL: ${LAGUNA_BASE_URL}
       LAGUNA_API_KEY: ${LAGUNA_API_KEY}
