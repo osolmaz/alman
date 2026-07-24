@@ -33,6 +33,9 @@ const germanSibling =
   description={post.data.description}
   locale={locale}
   translations={translationsFor(`blog/${slug}`)}
+  ogType="article"
+  datePublished={post.data.date}
+  author="Onur Solmaz"
 >
   <article lang={fallback ? "en" : undefined}>
     {fallback && <p class="i18n-notice" lang={locale === "al" ? "de-AL" : "de"}>{t["blog.untranslated"]}</p>}

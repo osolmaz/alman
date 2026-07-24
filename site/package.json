@@ -13,12 +13,14 @@
     "@fontsource/barlow-semi-condensed": "^5.2.7",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.8",
+    "@resvg/resvg-js": "^2.6.2",
     "astro": "^7.0.7",
     "katex": "^0.16.21",
     "rehype-katex": "^7.0.1",
     "remark-custom-heading-id": "^2.0.0",
     "remark-math": "^6.0.0",
-    "remark-smartypants": "^3.0.2"
+    "remark-smartypants": "^3.0.2",
+    "satori": "^0.28.2"
   },
   "allowScripts": {
     "esbuild@0.28.1": true

@@ -17,6 +17,8 @@ import {
   ui,
   type Locale,
 } from "../i18n/ui";
+import { mdPath } from "../lib/markdown-url";
+import { DEFAULT_OG_PATH, ogPath } from "../lib/og-path";
 
 interface Props {
   title?: string;
@@ -24,6 +26,13 @@ interface Props {
   locale?: Locale;
   /** Locales this page exists in, mapped to their paths (for hreflang). */
   translations?: Partial<Record<Locale, string>>;
+  /** Whether this page has a raw Markdown mirror and machine-readable indexes. */
+  machineReadable?: boolean;
+  ogType?: "website" | "article";
+  ogImage?: string;
+  datePublished?: Date;
+  dateModified?: Date;
+  author?: string;
 }
 
 const {
@@ -31,9 +40,43 @@ const {
   description = "A Simplified German Dialect",
   locale = "en",
   translations,
+  machineReadable = true,
+  ogType = "website",
+  ogImage,
+  datePublished,
+  dateModified,
+  author,
 } = Astro.props;
 const pageTitle = title ? `${title} | Alman Institut` : "Alman Institut";
 const currentPath = Astro.url.pathname;
+const canonical = new URL(currentPath, Astro.site).toString();
+const imagePath = ogImage ?? (machineReadable ? ogPath(currentPath) : DEFAULT_OG_PATH);
+const imageUrl = new URL(imagePath, Astro.site).toString();
+const ogLocales: Record<Locale, string> = {
+  en: "en_US",
+  de: "de_DE",
+  al: "de_AL",
+};
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": ogType === "article" ? "BlogPosting" : "WebPage",
+  name: title ?? "Alman Institut",
+  headline: title ?? "Alman Institut",
+  description,
+  url: canonical,
+  inLanguage: langCodes[locale],
+  image: imageUrl,
+  ...(author ? { author: { "@type": "Person", name: author } } : {}),
+  ...(datePublished ? { datePublished: datePublished.toISOString() } : {}),
+  ...(datePublished || dateModified
+    ? { dateModified: (dateModified ?? datePublished)?.toISOString() }
+    : {}),
+  publisher: {
+    "@type": "Organization",
+    name: "Alman Institut für Sprachvereinfachung",
+    url: new URL("/", Astro.site).toString(),
+  },
+};
 const t = ui[locale];
 
 const homePath = localeHome(locale);
@@ -61,9 +104,45 @@ const switcherTarget = (loc: Locale): string =>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta property="og:title" content={title ?? "Alman Institut"} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Alman Institut" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content={ogLocales[locale]} />
+    {
+      translations &&
+        Object.keys(translations)
+          .filter((loc) => loc !== locale)
+          .map((loc) => (
+            <meta property="og:locale:alternate" content={ogLocales[loc as Locale]} />
+          ))
+    }
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title ?? "Alman Institut"} />
+    {datePublished && <meta property="article:published_time" content={datePublished.toISOString()} />}
+    {(dateModified || datePublished) && <meta property="article:modified_time" content={(dateModified ?? datePublished)?.toISOString()} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? "Alman Institut"} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={title ?? "Alman Institut"} />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="Alman Institut" href="/feed.xml" />
-    <link rel="canonical" href={new URL(currentPath, Astro.site)} />
+    <link rel="canonical" href={canonical} />
+    {
+      machineReadable && (
+        <>
+          <link rel="alternate" type="text/markdown" href={mdPath(currentPath)} />
+          <link rel="alternate" type="text/plain" href="/llms.txt" />
+          <link rel="alternate" type="text/plain" href="/llms-full.txt" />
+        </>
+      )
+    }
     {
       translations &&
         Object.entries(translations).map(([loc, path]) => (
