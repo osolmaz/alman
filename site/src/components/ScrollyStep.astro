@@ -1,0 +1,17 @@
+---
+import { scrollyContent } from "../lib/scrolly-content";
+import { richTextHtml } from "../lib/scrolly-html";
+
+interface Props {
+  step: number;
+}
+
+const { step } = Astro.props;
+const copy = scrollyContent.steps[step];
+if (!copy) throw new Error(`Scrolly step ${step} not found.`);
+---
+
+<div class="step" data-step={step}>
+  <p class="step-kicker">{copy.kicker}</p>
+  <p set:html={richTextHtml(copy.body)} />
+</div>

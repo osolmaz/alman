@@ -1,0 +1,40 @@
+---
+import type { TransformRow } from "../lib/scrolly-content";
+
+interface Props {
+  headers: readonly string[];
+  rows: readonly TransformRow[];
+}
+
+const { headers, rows } = Astro.props;
+---
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      {headers.map((header) => <th>{header}</th>)}
+    </tr>
+  </thead>
+  <tbody>
+    {
+      rows.map((row) => (
+        <tr class={row.className}>
+          <th>{row.label}</th>
+          {row.cells.map((cell) => (
+            <td class={cell.stays ? "stays" : undefined}>
+              {cell.from && cell.to ? (
+                <>
+                  <del>{cell.from}</del>
+                  <ins>{cell.to}</ins>
+                </>
+              ) : (
+                cell.text
+              )}
+            </td>
+          ))}
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
