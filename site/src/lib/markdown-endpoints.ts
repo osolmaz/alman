@@ -16,6 +16,7 @@ import {
   getAlmanBenchCopy,
 } from "./almanbench";
 import { mdPath } from "./markdown-url";
+import { scrollyTranscript } from "./scrolly-transcript";
 
 export const SITE_URL = "https://alman.ai";
 
@@ -177,7 +178,10 @@ export async function markdownDocs(): Promise<MarkdownDoc[]> {
       language: langCodes[locale],
       title: ui[locale]["spec.title"],
       section: "specification",
-      body: (spec.body ?? "").trim(),
+      body:
+        locale === "en"
+          ? `${scrollyTranscript.trim()}\n\n---\n\n${(spec.body ?? "").trim()}`
+          : (spec.body ?? "").trim(),
     });
 
     const benchmarkUrl = routeFor(locale, "almanbench");
