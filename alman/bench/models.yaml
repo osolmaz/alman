@@ -209,7 +209,7 @@ profiles:
       served_revision_pinned: false
       context_length: 262144
       thinking: true
-    max_connections: 32
+    max_connections: 16
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
       HF_API_KEY: ${HF_TOKEN}
@@ -269,7 +269,7 @@ profiles:
       reasoning_parser: step3p5
       thinking: true
       prefix_caching: true
-    max_connections: 16
+    max_connections: 32
     env:
       STEP35_BASE_URL: ${STEP35_BASE_URL}
       STEP35_API_KEY: ${STEP35_API_KEY}
