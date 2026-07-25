@@ -166,6 +166,14 @@ class TestRegistry:
         assert opus_max.generate["reasoning_effort"] == "max"
         assert opus_max.generate["max_tokens"] == 65536
         assert opus_max.max_connections == 8
+        fable_max = load_profile("claude-fable-5-max")
+        assert fable_max.requested_model == "claude-fable-5"
+        assert fable_max.model_args == {
+            "thinking": {"type": "adaptive", "display": "summarized"}
+        }
+        assert fable_max.generate["reasoning_effort"] == "max"
+        assert fable_max.generate["max_tokens"] == 65536
+        assert fable_max.max_connections == 8
         inkling = load_profile("inkling-max")
         assert inkling.requested_model == "thinkingmachines/Inkling:together"
         assert inkling.generate["reasoning_effort"] == "max"

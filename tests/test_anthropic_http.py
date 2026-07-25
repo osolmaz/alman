@@ -48,6 +48,27 @@ def test_opus_5_request_uses_adaptive_thinking_at_max_effort() -> None:
     assert "top_p" not in request
 
 
+def test_fable_5_max_request_preserves_summarized_thinking() -> None:
+    request = _request_payload(
+        "claude-fable-5",
+        [
+            ChatMessageSystem(content="shared spec"),
+            ChatMessageUser(content="case-specific sentence"),
+        ],
+        GenerateConfig(max_tokens=65536, reasoning_effort="max"),
+        {"thinking": {"type": "adaptive", "display": "summarized"}},
+    )
+
+    assert request["thinking"] == {
+        "type": "adaptive",
+        "display": "summarized",
+    }
+    assert request["output_config"] == {"effort": "max"}
+    assert request["max_tokens"] == 65536
+    assert "temperature" not in request
+    assert "top_p" not in request
+
+
 def test_response_preserves_reasoning_and_cache_usage() -> None:
     output = _model_output(
         {
