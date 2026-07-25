@@ -8,6 +8,13 @@ Per-sample results for every leaderboard run are published in the
 [osolmaz/almanbench-results](https://huggingface.co/datasets/osolmaz/almanbench-results)
 dataset.
 
+Claude Sonnet 5 at max effort is intentionally absent. A partial run showed
+that its hidden reasoning would make the full evaluation cost roughly $180 to
+$220, so the run was cancelled and retained privately without publishing a
+score. The published `xhigh` result remains in place. The
+[run decision](../benchmark-results/2026-07-25-claude-sonnet-5-max-run-decision.md)
+records the measurements and artifact location.
+
 The earlier combined 87-row leaderboard is in the
 [expanded curated thinking comparison](../benchmark-results/2026-07-15-expanded-curated-thinking-comparison.md).
 The GPT-5.5 result below is the historical 48-row baseline retained as the
@@ -18,7 +25,7 @@ source for that report's combined GPT-5.5 score.
 This is the curated-only informed-ceiling baseline from the
 [benchmark plan](benchmark-plan.md). It was filtered from a completed run that
 also contained 179 explicit spec-example rows. Two additional curated rows were
-found to duplicate spec examples and are also discarded here; each sample is
+found to duplicate spec examples and are also discarded here. Each sample is
 independent.
 
 | Setting | Value |
@@ -55,19 +62,18 @@ independent.
 
 The three acceptance failures were:
 
-- `curated/die-verwandlung/2`: used `irgendeine Besorgung` instead of the
-  accepted `irgendein Besorgung`.
-- `curated/siddhartha/2`: used `der Gelehrte` instead of the accepted Alman
-  article form `die Gelehrte`.
-- `curated/steppenwolf/0`: diverged from the acceptance set in demonstrative
-  and pronoun choices.
+| Row | Failure |
+| --- | --- |
+| `curated/die-verwandlung/2` | Used `irgendeine Besorgung` instead of the accepted `irgendein Besorgung` |
+| `curated/siddhartha/2` | Used `der Gelehrte` instead of the accepted Alman article form `die Gelehrte` |
+| `curated/steppenwolf/0` | Diverged from the acceptance set in demonstrative and pronoun choices |
 
-The 48 evaluated rows used 674,541 total tokens: 19,537 uncached input tokens,
-577,536 cached input tokens, and 77,468 output tokens, including 75,919
-reasoning tokens. The two discarded requests account for the difference from
-the raw run totals.
+The 48 evaluated rows used 674,541 total tokens. This comprised 19,537
+uncached input tokens, 577,536 cached input tokens, and 77,468 output tokens,
+including 75,919 reasoning tokens. The two discarded requests account for the
+difference from the raw run totals.
 
 The source Inspect log is retained locally at
 `logs/2026-07-10T20-59-22-00-00_alman-bench_B9AC5hZQnPr2rbT9WePck4.eval`.
-The `logs/` directory is gitignored. Do not report the full-run aggregate;
-it includes the discarded spec-example rows.
+The `logs/` directory is gitignored. Do not report the full-run aggregate
+because it includes the discarded spec-example rows.
