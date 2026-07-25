@@ -1,5 +1,5 @@
 {
-  "$comment": "One direct run per model over the current case set; updated in place, no run history.",
+  "$comment": "One direct run per model profile over the current case set; reasoning-effort profiles remain separate.",
   "benchmark": "almanbench",
   "version": "v0.1",
   "caseSetSize": 1029,
@@ -8,6 +8,10 @@
   "evaluated": "2026-07-25",
   "dataset": "https://huggingface.co/datasets/osolmaz/almanbench",
   "results": "https://huggingface.co/datasets/osolmaz/almanbench-results",
+  "annotations": {
+    "Claude Fable 5 high": "These are single direct runs. Max received 14 content-filtered responses versus 8 for high, accounting for six of its seven additional misses. A max-effort run is not guaranteed to outscore a high-effort run.",
+    "Claude Fable 5 max": "These are single direct runs. Max received 14 content-filtered responses versus 8 for high, accounting for six of its seven additional misses. A max-effort run is not guaranteed to outscore a high-effort run."
+  },
   "entries": [
     {
       "label": "GPT-5.5 xhigh",

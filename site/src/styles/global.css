@@ -267,6 +267,12 @@ td.mono {
   visibility: visible;
 }
 
+.lb-model[data-tip]::after {
+  width: max-content;
+  max-width: min(36rem, 80vw);
+  white-space: normal;
+}
+
 .lb-bar-label[data-tip]::after,
 td.num [data-tip]::after {
   left: auto;

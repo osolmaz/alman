@@ -40,13 +40,20 @@ const fmtTick = (tick: number): string =>
   locale === "en" ? `${tick}%` : `${tick} %`;
 
 // Per-model run details, shown as the hover popover on the model name.
+const annotations = lb.annotations as Record<string, string>;
+const annotationFor = (entry: (typeof lb.entries)[number]): string | undefined =>
+  annotations[entry.label];
 const runTip = (entry: (typeof lb.entries)[number]): string => {
   const reasoning =
     "thinking" in entry
       ? `Thinking: ${entry.thinking}`
       : `Reasoning: ${entry.reasoning}`;
-  return `${entry.route} · ${reasoning} · ${lb.evaluated}`;
+  const annotation = annotationFor(entry);
+  const note = annotation ? ` · ${annotation}` : "";
+  return `${entry.route} · ${reasoning} · ${lb.evaluated}${note}`;
 };
+const modelLabel = (entry: (typeof lb.entries)[number]): string =>
+  `${entry.label}${annotationFor(entry) ? "*" : ""}`;
 
 const copy = getAlmanBenchCopy(locale);
 const example = almanBenchExample;
@@ -113,7 +120,7 @@ const bibtex = almanBenchBibtex;
                     alt=""
                     aria-hidden="true"
                   />
-                  {entry.label}
+                  {modelLabel(entry)}
                 </a>
               ) : (
                 <span class="lb-model" tabindex="0" data-tip={runTip(entry)}>
@@ -123,7 +130,7 @@ const bibtex = almanBenchBibtex;
                     alt=""
                     aria-hidden="true"
                   />
-                  {entry.label}
+                  {modelLabel(entry)}
                 </span>
               )}
             </td>
@@ -185,7 +192,11 @@ const bibtex = almanBenchBibtex;
       {
         lb.entries.map((entry) => (
           <tr>
-            <td>{entry.label}</td>
+            <td>
+              <span class="lb-model" tabindex="0" data-tip={runTip(entry)}>
+                {modelLabel(entry)}
+              </span>
+            </td>
             {tierKeys.map((tier) => (
               <td class="num mono">
                 <span
