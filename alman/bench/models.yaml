@@ -174,6 +174,111 @@ profiles:
   # Hugging Face Inference Providers (router). Provider suffixes are pinned
   # for reproducibility; pricing is the pinned provider's router price.
 
+  gpt-oss-120b-high:
+    label: GPT-OSS 120B high
+    platform: huggingface-inference-providers
+    model: openai-api/hf/openai/gpt-oss-120b:novita
+    model_revision: b5c939de8f754692c1647ca79fbf85e8c1e70f8a
+    runtime:
+      provider: novita
+      provider_model_id: openai/gpt-oss-120b
+      hub_weights_quantization: MXFP4
+      served_revision_pinned: false
+      context_length: 131072
+    max_connections: 16
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      reasoning_effort: high
+      max_tokens: 16384
+    pricing:
+      uncached_input_per_million_tokens: 0.05
+      output_per_million_tokens: 0.25
+      observed: 2026-07-25
+
+  qwen3.6-27b:
+    label: Qwen3.6 27B
+    platform: huggingface-inference-providers
+    model: openai-api/hf/Qwen/Qwen3.6-27B:deepinfra
+    model_revision: 6a9e13bd6fc8f0983b9b99948120bc37f49c13e9
+    runtime:
+      provider: deepinfra
+      provider_model_id: Qwen/Qwen3.6-27B
+      quantization: FP8
+      served_revision_pinned: false
+      context_length: 262144
+      thinking: true
+    max_connections: 16
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 32768
+      temperature: 1.0
+      top_p: 0.95
+      presence_penalty: 0.0
+      extra_body:
+        top_k: 20
+    pricing:
+      uncached_input_per_million_tokens: 0.32
+      output_per_million_tokens: 3.2
+      observed: 2026-07-25
+
+  gemma-4-26b-a4b-it:
+    label: Gemma 4 26B A4B IT
+    platform: huggingface-inference-providers
+    model: openai-api/hf/google/gemma-4-26B-A4B-it:novita
+    model_revision: 4d7ae4984b7db7de8f8457170b3f1a419ee76d52
+    runtime:
+      provider: novita
+      provider_model_id: google/gemma-4-26b-a4b-it
+      served_revision_pinned: false
+      context_length: 262144
+      thinking: true
+    max_connections: 16
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 0.95
+      extra_body:
+        chat_template_kwargs:
+          enable_thinking: true
+    pricing:
+      uncached_input_per_million_tokens: 0.13
+      output_per_million_tokens: 0.4
+      observed: 2026-07-25
+
+  step-3.5-flash:
+    label: Step 3.5 Flash
+    platform: huggingface-inference-providers
+    # DeepInfra now substitutes Step 3.7 for this model id. Featherless still
+    # returns the requested Step 3.5 model, so the exact route is pinned here.
+    model: openai-api/hf/stepfun-ai/Step-3.5-Flash:featherless-ai
+    model_revision: ab446a3de5e171ea341227e24bb1f090e1b771f7
+    runtime:
+      provider: featherless-ai
+      provider_model_id: stepfun-ai/Step-3.5-Flash
+      quantization: FP8
+      served_revision_pinned: false
+      context_length: 262144
+      thinking: true
+    max_connections: 16
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 0.95
+    pricing:
+      uncached_input_per_million_tokens: 0.1
+      output_per_million_tokens: 0.3
+      observed: 2026-07-25
+
   kimi-k2.7-code:
     label: Kimi K2.7 Code
     platform: huggingface-inference-providers

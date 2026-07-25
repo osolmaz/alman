@@ -121,12 +121,9 @@ class TestRegistry:
             assert profile.label
             assert profile.model.count("/") >= 1
             assert profile.pricing is not None
-            assert (
-                "endpoint_per_hour_usd" in profile.pricing
-                or (
-                    "uncached_input_per_million_tokens" in profile.pricing
-                    and "output_per_million_tokens" in profile.pricing
-                )
+            assert "endpoint_per_hour_usd" in profile.pricing or (
+                "uncached_input_per_million_tokens" in profile.pricing
+                and "output_per_million_tokens" in profile.pricing
             )
             assert "observed" in profile.pricing
 
@@ -179,6 +176,21 @@ class TestRegistry:
         assert inkling.generate["reasoning_effort"] == "max"
         assert inkling.max_connections == 64
         assert load_profile("glm-5.2").model_args == {"stream": True}
+        gpt_oss = load_profile("gpt-oss-120b-high")
+        assert gpt_oss.requested_model == "openai/gpt-oss-120b:novita"
+        assert gpt_oss.generate["reasoning_effort"] == "high"
+        assert gpt_oss.runtime["provider"] == "novita"
+        qwen = load_profile("qwen3.6-27b")
+        assert qwen.requested_model == "Qwen/Qwen3.6-27B:deepinfra"
+        assert qwen.runtime["quantization"] == "FP8"
+        gemma = load_profile("gemma-4-26b-a4b-it")
+        assert gemma.generate["extra_body"]["chat_template_kwargs"] == {
+            "enable_thinking": True
+        }
+        assert gemma.runtime["provider"] == "novita"
+        step = load_profile("step-3.5-flash")
+        assert step.requested_model == ("stepfun-ai/Step-3.5-Flash:featherless-ai")
+        assert step.runtime["provider"] == "featherless-ai"
 
 
 class TestCost:
