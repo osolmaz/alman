@@ -189,9 +189,11 @@ class TestRegistry:
         }
         assert gemma.runtime["provider"] == "novita"
         step = load_profile("step-3.5-flash")
-        assert step.requested_model == ("stepfun-ai/Step-3.5-Flash:featherless-ai")
-        assert step.runtime["provider"] == "featherless-ai"
-        assert step.max_connections == 2
+        assert step.requested_model == "stepfun-ai/Step-3.5-Flash-FP8"
+        assert step.platform == "huggingface-inference-endpoint"
+        assert step.runtime["quantization"] == "FP8"
+        assert step.runtime["endpoint"] == "osolmaz/step35-fp8-h200x2-ab-20260725"
+        assert step.max_connections == 16
 
 
 class TestCost:
