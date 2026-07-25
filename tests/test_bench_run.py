@@ -193,7 +193,7 @@ class TestRegistry:
         assert step.platform == "huggingface-inference-endpoint"
         assert step.runtime["quantization"] == "FP8"
         assert step.runtime["endpoint"] == "osolmaz/step35-fp8-h200x2-ab-20260725"
-        assert step.max_connections == 16
+        assert step.max_connections == 32
 
 
 class TestCost:
