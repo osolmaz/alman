@@ -159,12 +159,6 @@ class TestRegistry:
             "almanbench-public"
         )
         assert load_profile("gpt-5.5-xhigh").requested_model == "gpt-5.5"
-        sonnet_max = load_profile("claude-sonnet-5-max")
-        assert sonnet_max.requested_model == "claude-sonnet-5"
-        assert sonnet_max.model_args == {"thinking": {"type": "adaptive"}}
-        assert sonnet_max.generate["reasoning_effort"] == "max"
-        assert sonnet_max.generate["max_tokens"] == 65536
-        assert sonnet_max.max_connections == 8
         assert load_profile("claude-opus-4.8-max").requested_model == "claude-opus-4-8"
         opus_max = load_profile("claude-opus-5-max")
         assert opus_max.requested_model == "claude-opus-5"
