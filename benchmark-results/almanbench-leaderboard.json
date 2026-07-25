@@ -107,6 +107,38 @@
       }
     },
     {
+      "label": "Claude Fable 5 high",
+      "vendor": "anthropic",
+      "route": "Anthropic API",
+      "reasoning": "high",
+      "acceptance": [
+        968,
+        1029
+      ],
+      "compliance": [
+        1027,
+        1029
+      ],
+      "tiers": {
+        "curated": [
+          89,
+          93
+        ],
+        "guards": [
+          105,
+          120
+        ],
+        "naturalistic": [
+          562,
+          600
+        ],
+        "targeted": [
+          212,
+          216
+        ]
+      }
+    },
+    {
       "label": "GPT-5.6 Sol xhigh",
       "vendor": "openai",
       "route": "OpenAI API",
