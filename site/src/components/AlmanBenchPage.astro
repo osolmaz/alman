@@ -40,8 +40,13 @@ const fmtTick = (tick: number): string =>
   locale === "en" ? `${tick}%` : `${tick} %`;
 
 // Per-model run details, shown as the hover popover on the model name.
-const runTip = (entry: (typeof lb.entries)[number]): string =>
-  `${entry.route} · Reasoning: ${entry.reasoning} · ${lb.evaluated}`;
+const runTip = (entry: (typeof lb.entries)[number]): string => {
+  const reasoning =
+    "thinking" in entry
+      ? `Thinking: ${entry.thinking}`
+      : `Reasoning: ${entry.reasoning}`;
+  return `${entry.route} · ${reasoning} · ${lb.evaluated}`;
+};
 
 const copy = getAlmanBenchCopy(locale);
 const example = almanBenchExample;
