@@ -177,9 +177,9 @@ class TestRegistry:
         assert inkling.max_connections == 64
         assert load_profile("glm-5.2").model_args == {"stream": True}
         gpt_oss = load_profile("gpt-oss-120b-high")
-        assert gpt_oss.requested_model == "openai/gpt-oss-120b:novita"
+        assert gpt_oss.requested_model == "openai/gpt-oss-120b:cerebras"
         assert gpt_oss.generate["reasoning_effort"] == "high"
-        assert gpt_oss.runtime["provider"] == "novita"
+        assert gpt_oss.runtime["provider"] == "cerebras"
         qwen = load_profile("qwen3.6-27b")
         assert qwen.requested_model == "Qwen/Qwen3.6-27B:deepinfra"
         assert qwen.runtime["quantization"] == "FP8"
@@ -191,6 +191,7 @@ class TestRegistry:
         step = load_profile("step-3.5-flash")
         assert step.requested_model == ("stepfun-ai/Step-3.5-Flash:featherless-ai")
         assert step.runtime["provider"] == "featherless-ai"
+        assert step.max_connections == 2
 
 
 class TestCost:

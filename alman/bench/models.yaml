@@ -177,15 +177,15 @@ profiles:
   gpt-oss-120b-high:
     label: GPT-OSS 120B high
     platform: huggingface-inference-providers
-    model: openai-api/hf/openai/gpt-oss-120b:novita
+    model: openai-api/hf/openai/gpt-oss-120b:cerebras
     model_revision: b5c939de8f754692c1647ca79fbf85e8c1e70f8a
     runtime:
-      provider: novita
+      provider: cerebras
       provider_model_id: openai/gpt-oss-120b
       hub_weights_quantization: MXFP4
       served_revision_pinned: false
       context_length: 131072
-    max_connections: 16
+    max_connections: 64
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
       HF_API_KEY: ${HF_TOKEN}
@@ -193,8 +193,8 @@ profiles:
       reasoning_effort: high
       max_tokens: 16384
     pricing:
-      uncached_input_per_million_tokens: 0.05
-      output_per_million_tokens: 0.25
+      uncached_input_per_million_tokens: 0.25
+      output_per_million_tokens: 0.69
       observed: 2026-07-25
 
   qwen3.6-27b:
@@ -266,7 +266,9 @@ profiles:
       served_revision_pinned: false
       context_length: 262144
       thinking: true
-    max_connections: 16
+      provider_concurrency_units_per_request: 4
+      provider_concurrency_units_limit: 10
+    max_connections: 2
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
       HF_API_KEY: ${HF_TOKEN}
