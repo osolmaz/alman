@@ -1,5 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="PrismML">
-  <path d="M12 2.6 22 21H2Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-  <path d="M12 2.6V21" stroke="currentColor" stroke-width="1" opacity="0.55"/>
-  <path d="M12 8.5 17.4 21M12 8.5 6.6 21" stroke="currentColor" stroke-width="1" opacity="0.55" fill="none"/>
-</svg>
+<svg fill="currentColor" height="1em" viewBox="0 0 36.2855 30" width="1em" xmlns="http://www.w3.org/2000/svg"><title>Prism</title><path d="M13.88 24.0311L17.1878 29.7604H0L17.1901 0L24.4489 12.5726H20.4956L13.88 24.0311Z"></path><path d="M32.4659 25.9408H17.2078L19.4159 29.7603H32.4659V25.9408Z"></path><path d="M30.5562 14.4823H21.6042L19.4756 18.3018H30.5562V14.4823Z"></path><path d="M36.2855 20.2115H18.302L16.0938 24.031H36.2855V20.2115Z"></path></svg>

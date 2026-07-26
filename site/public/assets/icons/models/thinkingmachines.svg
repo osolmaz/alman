@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="Thinking Machines Lab">
-  <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.6"/>
-  <path d="M6.5 8h11M12 8v9M7.5 17h9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-</svg>
+<svg fill="currentColor" height="1em" viewBox="0 0 120 120" width="1em" xmlns="http://www.w3.org/2000/svg"><title>Thinking Machines Lab</title><rect width="120" height="120" rx="10"></rect></svg>
