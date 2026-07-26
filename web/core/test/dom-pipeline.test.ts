@@ -134,6 +134,33 @@ test("pipeline keeps inline element identity and translated placeholder text acr
   expect(document.getElementById("link")?.textContent).toBe("die Mann");
   document.getElementById("link")?.click();
   expect(clicks).toBe(2);
+  expect(controller.stats().translatedNodes).toBe(3);
+  controller.stop();
+});
+
+test("pipeline creates a detached difference layer without changing the live article", async () => {
+  const source = "Siehe <x0>dem Mann</x0> heute.";
+  document.body.innerHTML = `<main><p id="p">Siehe <a href="/wiki/Mann">dem Mann</a> heute.</p></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      return text === source ? "Siehe <x0>die Mann</x0> heute." : text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.querySelector("main")!, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  const difference = controller.createDifferenceClone();
+  expect(difference).not.toBe(document.querySelector("main"));
+  expect(Array.from(difference.querySelectorAll("del"), (node) => node.textContent)).toEqual(["dem Mann"]);
+  expect(Array.from(difference.querySelectorAll("ins"), (node) => node.textContent)).toEqual(["die Mann"]);
+  expect(difference.querySelector('ins a[href="/wiki/Mann"]')?.textContent).toBe("die Mann");
+  expect(document.getElementById("p")?.textContent).toBe("Siehe die Mann heute.");
   controller.stop();
 });
 

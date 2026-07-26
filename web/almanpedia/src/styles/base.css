@@ -41,8 +41,8 @@ code {
   max-width: 60rem;
   margin: 0 auto;
   padding: 0.75rem 1rem;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: auto minmax(12rem, 1fr);
   gap: 0.75rem 1.5rem;
   align-items: center;
 }
@@ -67,23 +67,31 @@ code {
 }
 
 .header-status {
-  margin-left: auto;
+  grid-column: 1 / -1;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 0.5rem;
-  min-height: 1.5rem;
+  min-width: 0;
+}
+
+.header-status:empty,
+.header-status:has(> [hidden]:only-child) {
+  display: none;
 }
 
 .status-error {
   color: var(--grey-1);
   font-size: 0.8rem;
+  text-align: right;
 }
 
 /* Search */
 .search-box {
   position: relative;
-  flex: 1 1 16rem;
+  width: 100%;
   max-width: 24rem;
+  justify-self: end;
 }
 
 .search-box input {
@@ -198,11 +206,18 @@ h4 {
 /* Article chrome */
 .article-head {
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 1rem;
   border-bottom: 2px solid var(--ink);
   margin-bottom: 1rem;
+}
+
+.article-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .article-title {
@@ -211,6 +226,7 @@ h4 {
 }
 
 .toggle-original,
+.toggle-differences,
 .retry {
   font-family: var(--font-din);
   font-size: 0.75rem;
@@ -225,13 +241,15 @@ h4 {
 }
 
 .toggle-original:hover:not([disabled]),
+.toggle-differences:hover:not([disabled]),
 .retry:hover {
   background: var(--form-blue);
   border-color: var(--form-blue);
   color: #fff;
 }
 
-.toggle-original[disabled] {
+.toggle-original[disabled],
+.toggle-differences[disabled] {
   color: var(--grey-1);
   border-color: var(--grey-2);
   cursor: default;
@@ -251,6 +269,59 @@ h4 {
 
 .error-view h1 {
   margin-top: 0.5rem;
+}
+
+.wiki-difference del {
+  color: var(--grey-1);
+  text-decoration-color: #b42318;
+  text-decoration-thickness: 1.5px;
+}
+
+.wiki-difference ins {
+  color: var(--form-blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (max-width: 40rem) {
+  .header-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .header-status,
+  .search-box {
+    grid-column: 1;
+    justify-self: stretch;
+    max-width: none;
+  }
+
+  .header-status,
+  .progress {
+    justify-content: flex-start;
+  }
+
+  .progress {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .progress-track {
+    width: 100%;
+  }
+
+  .progress-label {
+    white-space: normal;
+  }
+
+  .article-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .article-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 }
 
 /* Footer */

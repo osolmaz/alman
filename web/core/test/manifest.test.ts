@@ -2,9 +2,9 @@ import { createRequire } from "node:module";
 import { createHash } from "node:crypto";
 import { readFileSync, statSync } from "node:fs";
 import { join, sep } from "node:path";
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { MODEL_PACKAGE, assetUrl } from "../src/model/manifest";
-import { modelCacheKey, MODEL_CACHE_KEY_BASE } from "../src/model/assets";
+import { modelAssetSha256, modelCacheKey, MODEL_CACHE_KEY_BASE } from "../src/model/assets";
 
 test("manifest is internally consistent", () => {
   expect(MODEL_PACKAGE.files).toHaveLength(6);
@@ -26,6 +26,16 @@ test("asset URLs resolve against the pinned repo and custom bases", () => {
 
 test("cache keys live under the synthetic model origin", () => {
   expect(modelCacheKey("model/tokenizer.json")).toBe(`${MODEL_CACHE_KEY_BASE}model/tokenizer.json`);
+});
+
+test("model asset hashing works without the secure-context Web Crypto API", async () => {
+  vi.stubGlobal("crypto", undefined);
+  try {
+    const bytes = new TextEncoder().encode("abc") as Uint8Array<ArrayBuffer>;
+    expect(await modelAssetSha256(bytes)).toBe("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+  } finally {
+    vi.unstubAllGlobals();
+  }
 });
 
 test("npm onnxruntime-web dist is hash-identical to the qualified WASM runtime", () => {
