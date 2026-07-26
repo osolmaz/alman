@@ -1,0 +1,19 @@
+{"id":"english","text":"This paragraph must remain exactly as written.","route":"passthrough"}
+{"id":"french","text":"Cette phrase doit rester exactement inchangée.","route":"passthrough"}
+{"id":"arabic-rtl","text":"هذا النص يجب أن يبقى كما هو.\u200f","route":"passthrough"}
+{"id":"japanese","text":"この文章は変更しないでください。","route":"passthrough"}
+{"id":"mixed-scripts","text":"Project 東京 uses модуль alpha_7.","route":"passthrough"}
+{"id":"emoji","text":"🧪👩🏽‍💻🚀\ufe0f","route":"passthrough"}
+{"id":"url-only","text":"https://example.org/a?x=1&y=%C3%84#teil","route":"passthrough"}
+{"id":"numeric-only","text":"00123,45 +49 30 123456 2026-07-21","route":"passthrough"}
+{"id":"code-like","text":"const x = input?.value ?? '<b>safe</b>';","route":"passthrough"}
+{"id":"control-characters","text":"alpha\u0000beta\u0007gamma\u200bdelta","route":"passthrough"}
+{"id":"nfd-foreign","text":"Café naïve résumé","route":"passthrough"}
+{"id":"german-basic","text":"Während des Treffens bleibt die Tür geöffnet.","detected":"de","route":"translate"}
+{"id":"german-nfd","text":"Während des Treffens bleibt die Tür geöffnet.","detected":"de","route":"translate"}
+{"id":"german-url","text":"Weitere Informationen stehen auf https://example.org/a?x=1&y=2.","detected":"de","route":"translate","protected":["https://example.org/a?x=1&y=2"]}
+{"id":"german-numbers","text":"Die Rechnung über 1.234,56 Euro ist am 21.07.2026 fällig.","detected":"de","route":"translate","protected":["1.234,56","21.07.2026"]}
+{"id":"german-name","text":"Miyuki Tanaka besucht morgen Düsseldorf.","detected":"de","route":"translate","report_only":["Miyuki Tanaka"]}
+{"id":"repeated-characters","text":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","route":"passthrough"}
+{"id":"pathological-punctuation","text":"!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?","route":"passthrough"}
+{"id":"over-limit-german","text":"Dieser deutsche Abschnitt überschreitet absichtlich die geprüfte Modellgrenze.","detected":"de","route":"passthrough","tokens":513}

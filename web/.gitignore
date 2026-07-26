@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.output/
+.wxt/
+*.local
+almanpedia/public/ort/
+extension/public/ort/
+almanpedia/public/model/

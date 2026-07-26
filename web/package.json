@@ -1,0 +1,27 @@
+{
+  "name": "alman-web",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "core",
+    "extension",
+    "almanpedia"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "test:model": "MODEL_IT=1 vitest run --project core",
+    "build": "npm run build --workspaces --if-present",
+    "dev:pedia": "npm run dev --workspace almanpedia",
+    "dev:ext": "npm run dev --workspace extension"
+  },
+  "devDependencies": {
+    "happy-dom": "^20.11.1",
+    "jsdom": "^29.1.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

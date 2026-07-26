@@ -1,0 +1,12 @@
+{"id": "curated/ablaut/0", "collection": "curated", "source": "hoher Turm", "expected": "hohe Turm"}
+{"id": "curated/ablaut/1", "collection": "curated", "source": "größerer Turm", "expected": "größere Turm"}
+{"id": "curated/berufe/2", "collection": "curated", "source": "Die Lehrerin unterrichtet Mathematik in der Schule.", "expected": "Die Lehrer unterrichtet Mathematik in die Schule."}
+{"id": "almanbench/guards/pub-000", "collection": "guards", "source": "Der Turm ist sehr hoch.", "expected": "Die Turm ist sehr hoch."}
+{"id": "almanbench/guards/pub-001", "collection": "guards", "source": "Die Suppe ist noch heiß.", "expected": "Die Suppe ist noch heiß."}
+{"id": "almanbench/guards/pub-002", "collection": "guards", "source": "Das Wasser ist eiskalt.", "expected": "Die Wasser ist eiskalt."}
+{"id": "almanbench/canonical/0081", "collection": "naturalistic", "source": "Während der Direktor des Puppentheaters vor dem Vorhang auf den Brettern sitzt und über den Jahrmarkt schaut, befällt ihn beim Anblick des bunten Treibens eine tiefe Melancholie.", "expected": "Während die Direktor von die Puppentheater vor die Vorhang auf die Bretter sitzt und über die Jahrmarkt schaut, befällt ihn bei die Anblick von die bunte Treiben ein tiefe Melancholie."}
+{"id": "almanbench/canonical/0082", "collection": "naturalistic", "source": "Ja, das ist der Jahrmarkt der Eitelkeit; gewiß kein moralischer Ort und auch kein lustiger, wenn es auch lärmend genug zugeht.", "expected": "Ja, das ist die Jahrmarkt der Eitelkeit; gewiß kein moralische Ort und auch kein lustige, wenn es auch lärmend genug zugeht."}
+{"id": "almanbench/canonical/0089", "collection": "naturalistic", "source": "Wohl will sie jetzt, doch kann sie Rath nicht schaffen.", "expected": "Wohl will sie jetzt, doch kann sie Rath nicht schaffen."}
+{"id": "almanbench/targeted/pub-000", "collection": "targeted", "source": "Womit kann ich Ihnen helfen?", "expected": "Womit kann ich Ihnen helfen?"}
+{"id": "almanbench/targeted/pub-001", "collection": "targeted", "source": "Wovon handelt dieses Buch?", "expected": "Wovon handelt diese Buch?"}
+{"id": "almanbench/targeted/pub-002", "collection": "targeted", "source": "Worüber habt ihr so lange geredet?", "expected": "Worüber habt ihr so lange geredet?"}

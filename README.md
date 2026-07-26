@@ -14,6 +14,7 @@ The repository holds four things, each in its own top-level directory.
 spec/                the language: source JSON and the generated spec documents
 alman/               Python package: spec compiler, Alman linter, benchmark harness
 site/                the alman.ai website (Astro)
+web/                 browser products: translation engine, extension, almanpedia.org
 benchmark-results/   published leaderboard data and dated run reports
 docs/                internal maintainer notes
 tests/               one test suite covering the spec, the tooling, and site content
