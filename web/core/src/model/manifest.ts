@@ -13,8 +13,7 @@ export interface ModelPackageFile {
 
 export const MODEL_PACKAGE = {
   repo: "osolmaz/GoePT-1-20M",
-  // TODO(pin): replace with the mirror's commit hash once the first upload lands.
-  revision: "main",
+  revision: "5f8145012d666bc68b48bd0d89d47847fc950d90",
   source: "osolmaz/alman-student-spm16k-base-10m-h50-onnx@8049cbd9cee1f9f417540e14df788022e9e7a5b7",
   files: [
     {
