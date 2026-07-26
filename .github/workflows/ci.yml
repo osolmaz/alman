@@ -27,3 +27,49 @@ jobs:
         working-directory: site
       - run: npm run build
         working-directory: site
+
+  web-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+        working-directory: web
+      - run: npm run typecheck
+        working-directory: web
+      - run: npm test
+        working-directory: web
+      - run: npm run build
+        working-directory: web
+      - run: npm run zip --workspace @alman/extension
+        working-directory: web
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extension-zips
+          path: web/extension/.output/*.zip
+
+  web-model-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/alman-model
+          key: goept-model-${{ hashFiles('web/core/src/model/manifest.ts') }}
+      - run: npm ci
+        working-directory: web
+      - run: node --experimental-strip-types scripts/fetch-model.mjs ~/.cache/alman-model
+        working-directory: web
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - run: MODEL_IT=1 ALMAN_MODEL_DIR=~/.cache/alman-model npm run test:model
+        working-directory: web
