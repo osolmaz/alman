@@ -41,6 +41,24 @@ test("block plans preserve inline punctuation while restoring link and italic no
   expect(paragraph.querySelector("i")?.textContent).toBe("terrae tuber");
 });
 
+test("block plans build a semantic word diff while preserving inline links", async () => {
+  document.body.innerHTML = `<p id="p">dem Wort für <a href="/wiki/Trüffel">Trüffel</a>.</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const result = await translateBlockPlan(
+    plan,
+    translator({ [plan.source]: "die Wort für <x0>Trüffelchen</x0>." }),
+  );
+
+  const difference = paragraph.cloneNode(false) as HTMLParagraphElement;
+  difference.append(...result.differenceChildren.map((child) => child.cloneNode(true)));
+
+  expect(Array.from(difference.querySelectorAll("del"), (node) => node.textContent)).toEqual(["dem", "Trüffel"]);
+  expect(Array.from(difference.querySelectorAll("ins"), (node) => node.textContent)).toEqual(["die", "Trüffelchen"]);
+  expect(difference.querySelector('ins a[href="/wiki/Trüffel"]')?.textContent).toBe("Trüffelchen");
+  expect(paragraph.innerHTML).toBe('dem Wort für <a href="/wiki/Trüffel">Trüffel</a>.');
+});
+
 test("block plans keep comment anchors as opaque placeholders", async () => {
   document.body.innerHTML = `<p id="p">Hallo <!--anchor-->Welt.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;
@@ -131,6 +149,19 @@ test("nested inline placeholder text updates without replacing the outer element
 
 test("nested emphasis placeholder text keeps a stable emphasized suffix when possible", async () => {
   document.body.innerHTML = `<p id="p">Siehe <a id="link" href="/wiki/Mann">dem <em>Mann</em></a>.</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const plan = createBlockTranslationPlan(paragraph)!;
+
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: "Siehe <x0>die Mann</x0>." }));
+
+  applyPlaceholderUpdates(result.placeholderTextUpdates);
+  paragraph.replaceChildren(...result.translatedChildren);
+  expect(document.getElementById("link")?.textContent).toBe("die Mann");
+  expect(document.querySelector("#link em")?.textContent).toBe("Mann");
+});
+
+test("nested emphasis remains populated when its translated suffix changes", async () => {
+  document.body.innerHTML = `<p id="p">Siehe <a id="link" href="/wiki/Mann">dem <em>Mannes</em></a>.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;
   const plan = createBlockTranslationPlan(paragraph)!;
 

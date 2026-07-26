@@ -56,6 +56,8 @@
 }
 
 .wiki-content table {
+  display: block;
+  overflow-x: auto;
   border-collapse: collapse;
   font-size: 0.9rem;
   background: #fff;

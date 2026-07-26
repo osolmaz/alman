@@ -1,3 +1,4 @@
+import { diffWordsWithSpace } from "diff";
 import { elementBlocksTranslation, type ComputedStyleGetter, type SafeTranslator } from "../engine/safe-translation";
 
 const INLINE_PLACEHOLDER_TAGS = new Set([
@@ -62,6 +63,7 @@ export interface BlockTranslationResult {
   translated: boolean;
   translatedText: string;
   translatedChildren: Node[];
+  differenceChildren: Node[];
   placeholderTextUpdates: PlaceholderTextUpdate[];
 }
 
@@ -156,18 +158,42 @@ function descendantTextNodes(element: Element): Text[] {
   return nodes;
 }
 
+function distributeTranslatedPrefix(originals: string[], translated: string): string[] {
+  if (originals.length <= 1) return [translated];
+  const output = Array<string>(originals.length).fill("");
+  const totalOriginalLength = originals.reduce((sum, part) => sum + part.length, 0);
+  const whitespaceEnds = Array.from(translated.matchAll(/\s+/gu), (match) => (match.index ?? 0) + match[0].length);
+  let sourceLength = 0;
+  let translatedOffset = 0;
+  for (let index = 0; index < originals.length - 1; index += 1) {
+    sourceLength += originals[index]?.length ?? 0;
+    const ideal = totalOriginalLength === 0 ? translatedOffset : (translated.length * sourceLength) / totalOriginalLength;
+    const boundary = whitespaceEnds
+      .filter((candidate) => candidate > translatedOffset)
+      .sort((a, b) => Math.abs(a - ideal) - Math.abs(b - ideal))[0] ?? translatedOffset;
+    output[index] = translated.slice(translatedOffset, boundary);
+    translatedOffset = boundary;
+  }
+  output[originals.length - 1] = translated.slice(translatedOffset);
+  return output;
+}
+
 function splitTranslatedTextAcrossNodes(originals: string[], translated: string): string[] {
   if (originals.length <= 1) return [translated];
   const output = Array<string>(originals.length).fill("");
   let remaining = translated;
+  let suffixStart = originals.length;
   for (let index = originals.length - 1; index > 0; index -= 1) {
     const original = originals[index] ?? "";
-    if (original && remaining.endsWith(original)) {
-      output[index] = original;
-      remaining = remaining.slice(0, -original.length);
-    }
+    if (!original || !remaining.endsWith(original)) break;
+    output[index] = original;
+    remaining = remaining.slice(0, -original.length);
+    suffixStart = index;
   }
-  output[0] = remaining;
+  const prefix = distributeTranslatedPrefix(originals.slice(0, suffixStart), remaining);
+  prefix.forEach((part, index) => {
+    output[index] = part;
+  });
   return output;
 }
 
@@ -186,7 +212,40 @@ function materializePlaceholder(placeholder: BlockPlaceholder): Node {
   return placeholder.node;
 }
 
-function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string): { children: Node[]; placeholderTextUpdates: PlaceholderTextUpdate[] } | null {
+export function createTextDifferenceNodes(document: Document, original: string, translated: string): Node[] {
+  if (original === translated) return original ? [document.createTextNode(original)] : [];
+  return diffWordsWithSpace(original, translated).map((change) => {
+    if (!change.added && !change.removed) return document.createTextNode(change.value);
+    const element = document.createElement(change.added ? "ins" : "del");
+    element.textContent = change.value;
+    return element;
+  });
+}
+
+function translatedPlaceholderClone(document: Document, placeholder: BlockPlaceholder, translatedText: string): Node {
+  const clone = placeholder.node.cloneNode(true);
+  if (placeholder.opaque || !placeholder.element || clone.nodeType !== Node.ELEMENT_NODE) return clone;
+  const element = clone as Element;
+  const nodes = descendantTextNodes(element);
+  const originals = nodes.map((node) => node.nodeValue ?? "");
+  const translatedParts = splitTranslatedTextAcrossNodes(originals, decodePlaceholderText(document, translatedText));
+  nodes.forEach((node, index) => {
+    node.nodeValue = translatedParts[index] ?? "";
+  });
+  return clone;
+}
+
+function differencePlaceholderNodes(document: Document, placeholder: BlockPlaceholder, translatedText: string): Node[] {
+  const decoded = decodePlaceholderText(document, translatedText);
+  if (placeholder.opaque || placeholder.text === decoded) return [placeholder.node.cloneNode(true)];
+  const removed = document.createElement("del");
+  removed.append(placeholder.node.cloneNode(true));
+  const added = document.createElement("ins");
+  added.append(translatedPlaceholderClone(document, placeholder, translatedText));
+  return [removed, added];
+}
+
+function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string): { children: Node[]; differenceChildren: Node[]; placeholderTextUpdates: PlaceholderTextUpdate[] } | null {
   const document = plan.element.ownerDocument;
   const parts: Array<{ before: string; placeholder: BlockPlaceholder; translatedText: string }> = [];
   let cursor = 0;
@@ -207,15 +266,24 @@ function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string)
   if (expectedId !== plan.placeholders.length) return null;
 
   const children: Node[] = [];
+  const differenceChildren: Node[] = [];
   const updates: PlaceholderTextUpdate[] = [];
+  let sourceCursor = 0;
   for (const part of parts) {
+    const sourceOpen = placeholderOpen(part.placeholder.id);
+    const sourceIndex = plan.source.indexOf(sourceOpen, sourceCursor);
+    if (sourceIndex < sourceCursor) return null;
+    differenceChildren.push(...createTextDifferenceNodes(document, plan.source.slice(sourceCursor, sourceIndex), part.before));
     if (part.before) children.push(document.createTextNode(part.before));
     children.push(materializePlaceholder(part.placeholder));
+    differenceChildren.push(...differencePlaceholderNodes(document, part.placeholder, part.translatedText));
     updates.push(...placeholderTextUpdates(document, part.placeholder, part.translatedText));
+    sourceCursor = sourceIndex + placeholderToken(part.placeholder.id, part.placeholder.text).length;
   }
   const after = translatedText.slice(cursor);
   if (after) children.push(document.createTextNode(after));
-  return { children, placeholderTextUpdates: updates };
+  differenceChildren.push(...createTextDifferenceNodes(document, plan.source.slice(sourceCursor), after));
+  return { children, differenceChildren, placeholderTextUpdates: updates };
 }
 
 export async function translateBlockPlan(
@@ -224,16 +292,30 @@ export async function translateBlockPlan(
 ): Promise<BlockTranslationResult> {
   const translatedText = await engine.translateText(plan.source);
   if (translatedText === plan.source) {
-    return { translated: false, translatedText, translatedChildren: cloneChildren(plan.element), placeholderTextUpdates: [] };
+    const children = cloneChildren(plan.element);
+    return {
+      translated: false,
+      translatedText,
+      translatedChildren: children,
+      differenceChildren: cloneChildren(plan.element),
+      placeholderTextUpdates: [],
+    };
   }
   const parsed = parseTranslatedPlan(plan, translatedText);
   if (!parsed) {
-    return { translated: false, translatedText: plan.source, translatedChildren: cloneChildren(plan.element), placeholderTextUpdates: [] };
+    return {
+      translated: false,
+      translatedText: plan.source,
+      translatedChildren: cloneChildren(plan.element),
+      differenceChildren: cloneChildren(plan.element),
+      placeholderTextUpdates: [],
+    };
   }
   return {
     translated: true,
     translatedText,
     translatedChildren: parsed.children,
+    differenceChildren: parsed.differenceChildren,
     placeholderTextUpdates: parsed.placeholderTextUpdates,
   };
 }

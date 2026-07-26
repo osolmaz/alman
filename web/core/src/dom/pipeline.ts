@@ -1,5 +1,10 @@
 import type { ComputedStyleGetter, SafeTranslator } from "../engine/safe-translation";
-import { createBlockTranslationPlan, translateBlockPlan, type PlaceholderTextUpdate } from "./block-plan";
+import {
+  createBlockTranslationPlan,
+  createTextDifferenceNodes,
+  translateBlockPlan,
+  type PlaceholderTextUpdate,
+} from "./block-plan";
 import { collectTextBlocks, isBlockElement, type TextBlock } from "./blocks";
 
 export interface DomTranslationStats {
@@ -31,6 +36,10 @@ export interface DomTranslatorController {
   restoreOriginals(): void;
   /** Re-apply stored translations without re-running inference. */
   reapplyTranslations(): void;
+  /** Prioritize every pending block, including content outside the viewport. */
+  translateAll(): void;
+  /** Build a detached semantic comparison without mutating the live page. */
+  createDifferenceClone(): Element;
   stats(): DomTranslationStats;
   /** Resolves when the work queue is fully drained (primarily for tests). */
   whenIdle(): Promise<void>;
@@ -39,7 +48,8 @@ export interface DomTranslatorController {
 interface BlockRecord {
   originalChildren: Node[];
   translatedChildren: Node[];
-  translatedNodes: number;
+  differenceChildren: Node[];
+  translatedTextNodes: Text[];
 }
 
 interface TextRecord {
@@ -87,12 +97,16 @@ export function createDomTranslator({
   }
 
   function stats(): DomTranslationStats {
+    const translatedTextNodes = new Set<Text>(textRecords.keys());
+    for (const record of records.values()) {
+      for (const node of record.translatedTextNodes) translatedTextNodes.add(node);
+    }
     return {
       totalBlocks: items.length,
       translatedBlocks,
       pendingBlocks: items.filter((item) => !item.done).length,
       pendingVisibleBlocks: items.filter((item) => !item.done && item.visible).length,
-      translatedNodes: Array.from(records.values()).reduce((sum, record) => sum + record.translatedNodes, textRecords.size),
+      translatedNodes: translatedTextNodes.size,
     };
   }
 
@@ -105,6 +119,26 @@ export function createDomTranslator({
       intersection?.observe(block.element);
     }
     drain();
+  }
+
+  function pathFromRoot(node: Node): number[] | null {
+    const path: number[] = [];
+    let current: Node | null = node;
+    while (current && current !== root) {
+      const parent: Node | null = current.parentNode;
+      if (!parent) return null;
+      const index = Array.prototype.indexOf.call(parent.childNodes, current) as number;
+      if (index < 0) return null;
+      path.unshift(index);
+      current = parent;
+    }
+    return current === root ? path : null;
+  }
+
+  function nodeAtPath(start: Node, path: number[]): Node | null {
+    let current: Node | null = start;
+    for (const index of path) current = current?.childNodes[index] ?? null;
+    return current;
   }
 
   function replaceBlockChildren(element: Element, children: Node[]): void {
@@ -189,7 +223,8 @@ export function createDomTranslator({
     const record: BlockRecord = {
       originalChildren,
       translatedChildren: result.translatedChildren,
-      translatedNodes: item.block.nodes.length,
+      differenceChildren: result.differenceChildren,
+      translatedTextNodes: item.block.nodes,
     };
     records.set(item.block.element, record);
     if (!showingOriginals) replaceRecordedBlockChildren(item.block.element, record, result.translatedChildren);
@@ -310,6 +345,37 @@ export function createDomTranslator({
         if (node.isConnected) node.nodeValue = record.translated;
       }
       drain();
+    },
+    translateAll() {
+      for (const item of items) {
+        if (!item.done) item.visible = true;
+      }
+      drain();
+      emitStats();
+    },
+    createDifferenceClone() {
+      const clone = root.cloneNode(true) as Element;
+      for (const [element, record] of records) {
+        const path = pathFromRoot(element);
+        if (!path) continue;
+        const clonedElement = nodeAtPath(clone, path);
+        if (clonedElement?.nodeType !== Node.ELEMENT_NODE) continue;
+        (clonedElement as Element).replaceChildren(...record.differenceChildren.map((child) => child.cloneNode(true)));
+      }
+      const recordedElements = Array.from(records.keys());
+      for (const [node, record] of textRecords) {
+        if (recordedElements.some((element) => element.contains(node))) continue;
+        const path = pathFromRoot(node);
+        if (!path) continue;
+        const clonedNode = nodeAtPath(clone, path);
+        const parent = clonedNode?.parentNode;
+        if (!clonedNode || !parent) continue;
+        for (const child of createTextDifferenceNodes(root.ownerDocument, record.original, record.translated)) {
+          parent.insertBefore(child, clonedNode);
+        }
+        parent.removeChild(clonedNode);
+      }
+      return clone;
     },
     stats,
     whenIdle() {

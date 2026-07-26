@@ -7,7 +7,7 @@ import { getEngine, initModel } from "../engine";
 import { ArticleNotFoundError, articleUrl, displayTitle, fetchArticleHtml, historyUrl } from "../wiki/api";
 import { rewriteArticleDom } from "../wiki/rewrite";
 import { sanitizeParsoidBody } from "../wiki/sanitize";
-import { el } from "./dom";
+import { el, namespaceIds } from "./dom";
 import { createSearchBox } from "./search";
 import { MODEL_PACKAGE } from "@alman/core";
 
@@ -149,11 +149,21 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   rewriteArticleDom(fragment);
 
   const heading = el("h1", { class: "article-title" }, [displayTitle(article.title)]);
-  const toggle = el("button", { class: "toggle-original", type: "button", disabled: "" }, ["Original anzeigen"]);
+  const toggle = el(
+    "button",
+    { class: "toggle-original", type: "button", disabled: "", "aria-pressed": "false" },
+    ["Original anzeigen"],
+  );
+  const differenceToggle = el(
+    "button",
+    { class: "toggle-differences", type: "button", disabled: "", "aria-pressed": "false" },
+    ["Änderungen anzeigen"],
+  );
+  const actions = el("div", { class: "article-actions" }, [toggle, differenceToggle]);
   const content = el("article", { class: "wiki-content", lang: "de" });
   content.append(fragment);
   shell.main.replaceChildren(
-    el("div", { class: "article-head" }, [heading, toggle]),
+    el("div", { class: "article-head" }, [heading, actions]),
     content,
     attributionBlock(article.title),
   );
@@ -163,9 +173,56 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   }
 
   let showingOriginal = false;
+  let showingDifferences = false;
   let translationComplete = false;
+  let differenceContent: Element | null = null;
+
+  const hideDifferences = () => {
+    showingDifferences = false;
+    differenceContent?.remove();
+    differenceContent = null;
+    content.hidden = false;
+    differenceToggle.textContent = "Änderungen anzeigen";
+    differenceToggle.setAttribute("aria-pressed", "false");
+  };
+
+  const showDifferences = () => {
+    if (!activeController) return;
+    const clone = activeController.createDifferenceClone();
+    clone.classList.add("wiki-difference");
+    clone.removeAttribute("hidden");
+    clone.setAttribute("lang", translationComplete ? "de-AL" : "de");
+    const namespacedIds = namespaceIds(clone, "diff-", { rewriteFragmentLinks: false });
+    clone.addEventListener("click", (event) => {
+      if (!(event instanceof MouseEvent) || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+      const anchor = (event.target as Element | null)?.closest?.('a[href^="#"]');
+      const href = anchor?.getAttribute("href");
+      if (!href) return;
+      const rawId = href.slice(1);
+      let canonicalId = rawId;
+      try {
+        canonicalId = decodeURIComponent(rawId);
+      } catch {
+        // Keep the raw fragment when it is not valid percent-encoding.
+      }
+      const targetId = namespacedIds.get(canonicalId);
+      const target = targetId ? clone.querySelector<HTMLElement>(`#${CSS.escape(targetId)}`) : null;
+      if (!target) return;
+      event.preventDefault();
+      history.pushState(null, "", href);
+      target.scrollIntoView();
+    });
+    differenceContent?.replaceWith(clone);
+    if (!differenceContent) content.after(clone);
+    differenceContent = clone;
+    content.hidden = true;
+  };
+
   toggle.addEventListener("click", () => {
     if (!activeController) return;
+    if (showingDifferences) hideDifferences();
     showingOriginal = !showingOriginal;
     if (showingOriginal) {
       activeController.restoreOriginals();
@@ -175,6 +232,27 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       content.lang = translationComplete ? "de-AL" : "de";
     }
     toggle.textContent = showingOriginal ? "Alman anzeigen" : "Original anzeigen";
+    toggle.setAttribute("aria-pressed", String(showingOriginal));
+  });
+
+  differenceToggle.addEventListener("click", () => {
+    if (!activeController) return;
+    if (showingDifferences) {
+      hideDifferences();
+      return;
+    }
+    if (showingOriginal) {
+      showingOriginal = false;
+      activeController.reapplyTranslations();
+      toggle.textContent = "Original anzeigen";
+      toggle.setAttribute("aria-pressed", "false");
+      content.lang = translationComplete ? "de-AL" : "de";
+    }
+    showingDifferences = true;
+    activeController.translateAll();
+    showDifferences();
+    differenceToggle.textContent = "Änderungen ausblenden";
+    differenceToggle.setAttribute("aria-pressed", "true");
   });
 
   try {
@@ -201,8 +279,9 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     onStats: (stats) => {
       if (stats.totalBlocks === 0) return;
       const done = stats.totalBlocks - stats.pendingBlocks;
+      if (stats.pendingBlocks === 0) translationComplete = true;
+      if (stats.pendingBlocks === 0 && showingDifferences) showDifferences();
       if (stats.pendingBlocks === 0) {
-        translationComplete = true;
         if (!showingOriginal) content.lang = "de-AL";
         progress.done();
         return;
@@ -216,6 +295,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   });
   activeController = controller;
   toggle.removeAttribute("disabled");
+  differenceToggle.removeAttribute("disabled");
   controller.start();
 }
 

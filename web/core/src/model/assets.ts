@@ -1,3 +1,4 @@
+import { sha256 } from "@noble/hashes/sha2.js";
 import { MODEL_PACKAGE, assetUrl, type ModelPackageFile } from "./manifest";
 import type { AssetProgress } from "./protocol";
 
@@ -19,16 +20,53 @@ export function modelCacheKey(path: string): string {
   return `${MODEL_CACHE_KEY_BASE}${path}`;
 }
 
-async function sha256Hex(bytes: Uint8Array<ArrayBuffer>): Promise<string> {
-  const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+export async function modelAssetSha256(bytes: Uint8Array<ArrayBuffer>): Promise<string> {
+  const digest = globalThis.crypto?.subtle
+    ? new Uint8Array(await globalThis.crypto.subtle.digest("SHA-256", bytes))
+    : sha256(bytes);
+  return [...digest].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 function contentType(path: string): string {
   return path.endsWith(".json") ? "application/json" : "application/octet-stream";
 }
 
+export interface ModelAssetStore {
+  match(key: string): Promise<Response | undefined>;
+  put(key: string, response: Response): Promise<void>;
+}
+
+class MemoryAssetStore implements ModelAssetStore {
+  private responses = new Map<string, Response>();
+
+  async match(key: string): Promise<Response | undefined> {
+    return this.responses.get(key)?.clone();
+  }
+
+  async put(key: string, response: Response): Promise<void> {
+    this.responses.set(key, response.clone());
+  }
+}
+
+const memoryAssetStores = new Map<string, MemoryAssetStore>();
+
+async function openModelAssetStore(): Promise<ModelAssetStore> {
+  if (typeof caches !== "undefined") return caches.open(modelCacheName());
+  let store = memoryAssetStores.get(modelCacheName());
+  if (!store) {
+    store = new MemoryAssetStore();
+    memoryAssetStores.set(modelCacheName(), store);
+  }
+  return store;
+}
+
 export async function deleteStaleModelCaches(): Promise<void> {
+  if (typeof caches === "undefined") {
+    for (const name of memoryAssetStores.keys()) {
+      if (name.startsWith(CACHE_PREFIX) && name !== modelCacheName()) memoryAssetStores.delete(name);
+    }
+    return;
+  }
   const names = await caches.keys();
   await Promise.all(
     names
@@ -63,7 +101,7 @@ async function downloadVerified(
   if (offset !== file.bytes) {
     throw new Error(`model asset size mismatch: ${file.path} (${offset} of ${file.bytes} bytes)`);
   }
-  const digest = await sha256Hex(bytes);
+  const digest = await modelAssetSha256(bytes);
   if (digest !== file.sha256) {
     throw new Error(`model asset integrity check failed: ${file.path}`);
   }
@@ -79,14 +117,14 @@ export interface EnsureModelAssetsOptions {
  * Ensures every manifest file is present and verified in the model cache.
  * Downloads are streamed with progress, hashed, and rejected on any mismatch.
  */
-export async function ensureModelAssets({ baseUrl, onProgress }: EnsureModelAssetsOptions = {}): Promise<Cache> {
+export async function ensureModelAssets({ baseUrl, onProgress }: EnsureModelAssetsOptions = {}): Promise<ModelAssetStore> {
   try {
     await (navigator as { storage?: { persist?: () => Promise<boolean> } }).storage?.persist?.();
   } catch {
     // Best effort only.
   }
   await deleteStaleModelCaches().catch(() => {});
-  const cache = await caches.open(modelCacheName());
+  const cache = await openModelAssetStore();
 
   const missing: ModelPackageFile[] = [];
   for (const file of MODEL_PACKAGE.files) {
