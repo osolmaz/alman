@@ -1,0 +1,144 @@
+/* Restrained styling for stable Parsoid content classes. Almanpedia keeps the
+   alman.ai identity rather than imitating Wikipedia's trade dress. */
+
+.wiki-content {
+  overflow-wrap: break-word;
+}
+
+.wiki-content h2 {
+  border-bottom: 1px solid var(--grey-2);
+  padding-bottom: 0.2rem;
+  margin-top: 2rem;
+}
+
+.wiki-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.wiki-content figure,
+.wiki-content .thumb {
+  margin: 0.5rem 0 1rem;
+  max-width: 100%;
+}
+
+.wiki-content figure[typeof~="mw:File/Thumb"],
+.wiki-content figure.mw-halign-right,
+.wiki-content .tright {
+  float: right;
+  clear: right;
+  margin: 0.25rem 0 0.75rem 1rem;
+  max-width: min(45%, 22rem);
+}
+
+.wiki-content figure.mw-halign-left,
+.wiki-content .tleft {
+  float: left;
+  clear: left;
+  margin: 0.25rem 1rem 0.75rem 0;
+  max-width: min(45%, 22rem);
+}
+
+.wiki-content figcaption {
+  font-size: 0.8rem;
+  color: var(--grey-1);
+  border: 1px solid var(--grey-2);
+  border-top: none;
+  padding: 0.3rem 0.5rem;
+  background: #fff;
+}
+
+.wiki-content figure > a > img,
+.wiki-content figure > img {
+  border: 1px solid var(--grey-2);
+  background: #fff;
+  display: block;
+}
+
+.wiki-content table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: #fff;
+  margin: 1rem 0;
+  max-width: 100%;
+}
+
+.wiki-content table.wikitable td,
+.wiki-content table.wikitable th,
+.wiki-content table.infobox td,
+.wiki-content table.infobox th {
+  border: 1px solid var(--grey-2);
+  padding: 0.25rem 0.5rem;
+  vertical-align: top;
+}
+
+.wiki-content table.wikitable th,
+.wiki-content table.infobox th {
+  font-family: var(--font-din);
+  letter-spacing: 0.03em;
+  text-align: left;
+  background: var(--paper);
+}
+
+.wiki-content .infobox,
+.wiki-content table.float-right {
+  float: right;
+  clear: right;
+  margin: 0.25rem 0 1rem 1rem;
+  max-width: min(50%, 24rem);
+}
+
+.wiki-content .hatnote,
+.wiki-content .noprint.sisterproject,
+.wiki-content .bausteinwrapper {
+  font-size: 0.85rem;
+  color: var(--grey-1);
+  border-left: 3px solid var(--grey-2);
+  padding-left: 0.75rem;
+  margin: 0.75rem 0;
+}
+
+.wiki-content .gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+}
+
+.wiki-content .gallerybox {
+  max-width: 12rem;
+}
+
+.wiki-content ol.mw-references,
+.wiki-content .mw-references-wrap {
+  font-size: 0.8rem;
+  color: var(--grey-1);
+}
+
+.wiki-content sup.mw-ref a {
+  text-decoration: none;
+}
+
+.wiki-content .mw-empty-elt {
+  display: none;
+}
+
+.wiki-content math,
+.wiki-content .mwe-math-element {
+  overflow-x: auto;
+}
+
+@media (max-width: 40rem) {
+  .wiki-content .infobox,
+  .wiki-content figure[typeof~="mw:File/Thumb"],
+  .wiki-content figure.mw-halign-right,
+  .wiki-content figure.mw-halign-left,
+  .wiki-content .tright,
+  .wiki-content .tleft {
+    float: none;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+  }
+}

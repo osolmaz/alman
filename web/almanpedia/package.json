@@ -1,0 +1,22 @@
+{
+  "name": "almanpedia",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/copy-ort.mjs && vite",
+    "build": "node scripts/copy-ort.mjs && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@alman/core": "*",
+    "@fontsource/barlow-semi-condensed": "^5.2.7",
+    "@fontsource/ibm-plex-mono": "^5.2.7",
+    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "dompurify": "^3.4.12"
+  },
+  "devDependencies": {
+    "vite": "^8.1.5"
+  }
+}

@@ -1,0 +1,19 @@
+import DOMPurify from "dompurify";
+
+/**
+ * Sanitizes Parsoid article HTML before it enters our DOM. Scripts, event
+ * handlers, and embedding elements are dropped; content structure (tables,
+ * figures, references) survives. `<style>` blocks are dropped in v1 — some
+ * template styling degrades, which is preferred over shipping foreign CSS.
+ */
+export function sanitizeParsoidBody(html: string): DocumentFragment {
+  if (!DOMPurify.isSupported) {
+    // Rendering unsanitized foreign HTML is never acceptable; fail loudly.
+    throw new Error("DOMPurify is not supported in this environment");
+  }
+  return DOMPurify.sanitize(html, {
+    RETURN_DOM_FRAGMENT: true,
+    FORBID_TAGS: ["style", "link", "meta", "iframe", "form", "input", "button", "select", "object", "embed", "video", "audio", "base"],
+    FORBID_ATTR: ["srcdoc"],
+  });
+}

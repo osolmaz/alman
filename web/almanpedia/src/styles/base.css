@@ -1,0 +1,268 @@
+:root {
+  --paper: #fafaf8;
+  --ink: #1a1a1a;
+  --form-blue: #1f4e9b;
+  --grey-1: #6b6b6b;
+  --grey-2: #d9d9d6;
+  --font-din: "Barlow Semi Condensed", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--form-blue);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Header */
+.site-header {
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.header-inner {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+}
+
+.brand {
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-family: var(--font-din);
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+}
+
+.brand-sub {
+  font-size: 0.75rem;
+  color: var(--grey-1);
+}
+
+.header-status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.5rem;
+}
+
+.status-error {
+  color: var(--grey-1);
+  font-size: 0.8rem;
+}
+
+/* Search */
+.search-box {
+  position: relative;
+  flex: 1 1 16rem;
+  max-width: 24rem;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  background: #fff;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.search-box input:focus {
+  outline: 2px solid var(--form-blue);
+  outline-offset: -1px;
+}
+
+.search-suggestions {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid var(--ink);
+  border-top: none;
+}
+
+.search-suggestions li {
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+}
+
+.search-suggestions li:hover {
+  background: var(--form-blue);
+  color: #fff;
+}
+
+/* Progress */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progress-track {
+  width: 10rem;
+  height: 0.5rem;
+  border: 1px solid var(--ink);
+  background: #fff;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: var(--form-blue);
+  transition: width 0.2s;
+}
+
+.progress-label {
+  font-family: var(--font-din);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--grey-1);
+  white-space: nowrap;
+}
+
+/* Main layout */
+.site-main {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-din);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.form-tag {
+  font-family: var(--font-din);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--grey-1);
+  border-bottom: 1px solid var(--grey-2);
+  padding-bottom: 0.25rem;
+}
+
+.landing .lead {
+  font-size: 1.1rem;
+}
+
+.url-example {
+  font-family: var(--font-mono);
+  background: #fff;
+  border: 1px solid var(--grey-2);
+  padding: 0.75rem 1rem;
+  overflow-x: auto;
+}
+
+.url-arrow {
+  color: var(--form-blue);
+  font-weight: 600;
+}
+
+/* Article chrome */
+.article-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 2px solid var(--ink);
+  margin-bottom: 1rem;
+}
+
+.article-title {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+}
+
+.toggle-original,
+.retry {
+  font-family: var(--font-din);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.toggle-original:hover:not([disabled]),
+.retry:hover {
+  background: var(--form-blue);
+  border-color: var(--form-blue);
+  color: #fff;
+}
+
+.toggle-original[disabled] {
+  color: var(--grey-1);
+  border-color: var(--grey-2);
+  cursor: default;
+}
+
+.attribution {
+  margin-top: 2rem;
+  border-top: 1px solid var(--grey-2);
+  padding-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--grey-1);
+}
+
+.loading {
+  color: var(--grey-1);
+}
+
+.error-view h1 {
+  margin-top: 0.5rem;
+}
+
+/* Footer */
+.site-footer {
+  border-top: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.footer-inner {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  color: var(--grey-1);
+}
