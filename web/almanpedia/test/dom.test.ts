@@ -24,3 +24,14 @@ test("namespaceIds makes cloned ids unique and rewrites local references", () =>
   expect(root.querySelector("a")?.getAttribute("aria-describedby")).toBe("diff-note");
   expect(root.querySelector("label")?.getAttribute("for")).toBe("diff-field");
 });
+
+test("namespaceIds can preserve canonical fragment URLs", () => {
+  const root = document.createElement("article");
+  root.innerHTML = `<h2 id="Geschichte">Geschichte</h2><a href="#Geschichte">Jump</a>`;
+
+  const ids = namespaceIds(root, "diff-", { rewriteFragmentLinks: false });
+
+  expect(ids.get("Geschichte")).toBe("diff-Geschichte");
+  expect(root.querySelector("h2")?.id).toBe("diff-Geschichte");
+  expect(root.querySelector("a")?.getAttribute("href")).toBe("#Geschichte");
+});

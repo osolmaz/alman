@@ -192,7 +192,28 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     clone.classList.add("wiki-difference");
     clone.removeAttribute("hidden");
     clone.setAttribute("lang", translationComplete ? "de-AL" : "de");
-    namespaceIds(clone, "diff-");
+    const namespacedIds = namespaceIds(clone, "diff-", { rewriteFragmentLinks: false });
+    clone.addEventListener("click", (event) => {
+      if (!(event instanceof MouseEvent) || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+      const anchor = (event.target as Element | null)?.closest?.('a[href^="#"]');
+      const href = anchor?.getAttribute("href");
+      if (!href) return;
+      const rawId = href.slice(1);
+      let canonicalId = rawId;
+      try {
+        canonicalId = decodeURIComponent(rawId);
+      } catch {
+        // Keep the raw fragment when it is not valid percent-encoding.
+      }
+      const targetId = namespacedIds.get(canonicalId);
+      const target = targetId ? clone.querySelector<HTMLElement>(`#${CSS.escape(targetId)}`) : null;
+      if (!target) return;
+      event.preventDefault();
+      history.pushState(null, "", href);
+      target.scrollIntoView();
+    });
     differenceContent?.replaceWith(clone);
     if (!differenceContent) content.after(clone);
     differenceContent = clone;

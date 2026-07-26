@@ -1,5 +1,9 @@
 /** Namespace cloned ids and the local references that point to them. */
-export function namespaceIds(root: Element, prefix: string): void {
+export function namespaceIds(
+  root: Element,
+  prefix: string,
+  { rewriteFragmentLinks = true }: { rewriteFragmentLinks?: boolean } = {},
+): ReadonlyMap<string, string> {
   const firstId = new Map<string, string>();
   const counts = new Map<string, number>();
   const elements = [root, ...Array.from(root.querySelectorAll<HTMLElement>("[id]"))];
@@ -15,7 +19,7 @@ export function namespaceIds(root: Element, prefix: string): void {
 
   for (const element of [root, ...Array.from(root.querySelectorAll<HTMLElement>("*"))]) {
     const href = element.getAttribute("href");
-    if (href?.startsWith("#")) {
+    if (rewriteFragmentLinks && href?.startsWith("#")) {
       const target = firstId.get(href.slice(1));
       if (target) element.setAttribute("href", `#${target}`);
     }
@@ -30,6 +34,7 @@ export function namespaceIds(root: Element, prefix: string): void {
       );
     }
   }
+  return firstId;
 }
 
 /** Tiny element builder; text content only, never HTML strings. */
