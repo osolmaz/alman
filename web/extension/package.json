@@ -1,0 +1,21 @@
+{
+  "name": "@alman/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assets": "node scripts/copy-ort.mjs && node scripts/build-worker.mjs",
+    "dev": "npm run assets && wxt",
+    "dev:firefox": "npm run assets && wxt -b firefox",
+    "build": "npm run assets && wxt build -b chrome && wxt build -b firefox",
+    "zip": "npm run assets && wxt zip -b chrome && wxt zip -b firefox",
+    "postinstall": "wxt prepare",
+    "typecheck": "wxt prepare && tsc --noEmit"
+  },
+  "dependencies": {
+    "@alman/core": "*"
+  },
+  "devDependencies": {
+    "wxt": "^0.20.27"
+  }
+}
