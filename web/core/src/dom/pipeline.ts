@@ -36,6 +36,8 @@ export interface DomTranslatorController {
   restoreOriginals(): void;
   /** Re-apply stored translations without re-running inference. */
   reapplyTranslations(): void;
+  /** Prioritize every pending block, including content outside the viewport. */
+  translateAll(): void;
   /** Build a detached semantic comparison without mutating the live page. */
   createDifferenceClone(): Element;
   stats(): DomTranslationStats;
@@ -343,6 +345,13 @@ export function createDomTranslator({
         if (node.isConnected) node.nodeValue = record.translated;
       }
       drain();
+    },
+    translateAll() {
+      for (const item of items) {
+        if (!item.done) item.visible = true;
+      }
+      drain();
+      emitStats();
     },
     createDifferenceClone() {
       const clone = root.cloneNode(true) as Element;

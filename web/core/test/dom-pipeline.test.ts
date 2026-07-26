@@ -351,6 +351,41 @@ test("pipeline preserves queued nested blocks", async () => {
   controller.stop();
 });
 
+test("translateAll drains off-screen work beyond the idle budget", async () => {
+  class IdleIntersectionObserver implements IntersectionObserver {
+    readonly root = null;
+    readonly rootMargin = "0px";
+    readonly scrollMargin = "0px";
+    readonly thresholds: readonly number[] = [];
+    disconnect(): void {}
+    observe(): void {}
+    takeRecords(): IntersectionObserverEntry[] { return []; }
+    unobserve(): void {}
+  }
+  vi.stubGlobal("IntersectionObserver", IdleIntersectionObserver);
+  try {
+    document.body.innerHTML = `<main><p>${GERMAN_A}</p><p>${GERMAN_B}</p></main>`;
+    const controller = createDomTranslator({
+      root: document.querySelector("main")!,
+      engine: markerEngine(),
+      idleBudgetSegments: 0,
+      observeMutations: false,
+    });
+    controller.start();
+    await controller.whenIdle();
+    expect(controller.stats().pendingBlocks).toBe(2);
+
+    controller.translateAll();
+    await controller.whenIdle();
+    expect(controller.stats().pendingBlocks).toBe(0);
+    expect(document.querySelector("main")?.textContent).toContain(`⟦${GERMAN_A}⟧`);
+    expect(document.querySelector("main")?.textContent).toContain(`⟦${GERMAN_B}⟧`);
+    controller.stop();
+  } finally {
+    vi.unstubAllGlobals();
+  }
+});
+
 test("restoring after stop leaves the page in its original state", async () => {
   setupPage();
   const controller = createDomTranslator({ root: document.body, engine: markerEngine(), observeMutations: false });

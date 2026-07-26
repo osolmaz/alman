@@ -228,6 +228,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       content.lang = translationComplete ? "de-AL" : "de";
     }
     showingDifferences = true;
+    activeController.translateAll();
     showDifferences();
     differenceToggle.textContent = "Änderungen ausblenden";
     differenceToggle.setAttribute("aria-pressed", "true");
@@ -258,7 +259,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       if (stats.totalBlocks === 0) return;
       const done = stats.totalBlocks - stats.pendingBlocks;
       if (stats.pendingBlocks === 0) translationComplete = true;
-      if (showingDifferences) showDifferences();
+      if (stats.pendingBlocks === 0 && showingDifferences) showDifferences();
       if (stats.pendingBlocks === 0) {
         if (!showingOriginal) content.lang = "de-AL";
         progress.done();
