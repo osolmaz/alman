@@ -15,7 +15,7 @@ const shell = renderShell(root, (path) => navigateFn(path));
 
 const { navigate } = startRouter((route) => {
   window.scrollTo(0, 0);
-  if (route.kind === "article") void renderArticle(shell, route.title);
+  if (route.kind === "article") void renderArticle(shell, route.title, route.hash);
   else renderLanding(shell);
 });
 navigateFn = navigate;

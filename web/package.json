@@ -15,8 +15,8 @@
     "test": "vitest run",
     "test:model": "MODEL_IT=1 vitest run --project core",
     "build": "npm run build --workspaces --if-present",
-    "dev:pedia": "npm run dev --workspace almanpedia",
-    "dev:ext": "npm run dev --workspace extension"
+    "dev:pedia": "npm run dev --workspace almanpedia --",
+    "dev:ext": "npm run dev --workspace extension --"
   },
   "devDependencies": {
     "happy-dom": "^20.11.1",

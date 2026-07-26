@@ -27,6 +27,13 @@ export {
 } from "./model/client";
 export { collectTextBlocks, type TextBlock } from "./dom/blocks";
 export {
+  createBlockTranslationPlan,
+  translateBlockPlan,
+  type BlockPlaceholder,
+  type BlockTranslationPlan,
+  type BlockTranslationResult,
+} from "./dom/block-plan";
+export {
   createDomTranslator,
   type DomTranslationStats,
   type DomTranslatorController,
