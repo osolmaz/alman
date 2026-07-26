@@ -1,5 +1,6 @@
-import type { SafeTranslator } from "../engine/safe-translation";
-import { collectTextBlocks, type TextBlock } from "./blocks";
+import type { ComputedStyleGetter, SafeTranslator } from "../engine/safe-translation";
+import { createBlockTranslationPlan, translateBlockPlan, type PlaceholderTextUpdate } from "./block-plan";
+import { collectTextBlocks, isBlockElement, type TextBlock } from "./blocks";
 
 export interface DomTranslationStats {
   totalBlocks: number;
@@ -35,7 +36,13 @@ export interface DomTranslatorController {
   whenIdle(): Promise<void>;
 }
 
-interface NodeRecord {
+interface BlockRecord {
+  originalChildren: Node[];
+  translatedChildren: Node[];
+  translatedNodes: number;
+}
+
+interface TextRecord {
   original: string;
   translated: string;
 }
@@ -53,7 +60,8 @@ export function createDomTranslator({
   observeMutations = true,
   idleBudgetSegments = 800,
 }: DomTranslatorOptions): DomTranslatorController {
-  const records = new Map<Text, NodeRecord>();
+  const records = new Map<Element, BlockRecord>();
+  const textRecords = new Map<Text, TextRecord>();
   const queued = new Set<Element>();
   const items: WorkItem[] = [];
   let translatedBlocks = 0;
@@ -64,6 +72,7 @@ export function createDomTranslator({
   let idleWaiters: Array<() => void> = [];
   let intersection: IntersectionObserver | null = null;
   let mutations: MutationObserver | null = null;
+  const ignoredMutationTargets = new WeakSet<Element>();
 
   const view = root.ownerDocument?.defaultView;
   // The timeout forces progress in idle-starved pages (background tabs,
@@ -83,7 +92,7 @@ export function createDomTranslator({
       translatedBlocks,
       pendingBlocks: items.filter((item) => !item.done).length,
       pendingVisibleBlocks: items.filter((item) => !item.done && item.visible).length,
-      translatedNodes: records.size,
+      translatedNodes: Array.from(records.values()).reduce((sum, record) => sum + record.translatedNodes, textRecords.size),
     };
   }
 
@@ -98,21 +107,93 @@ export function createDomTranslator({
     drain();
   }
 
-  async function translateItem(item: WorkItem): Promise<void> {
-    item.done = true;
+  function replaceBlockChildren(element: Element, children: Node[]): void {
+    ignoredMutationTargets.add(element);
+    element.replaceChildren(...children);
+    setTimeout(() => ignoredMutationTargets.delete(element), 0);
+  }
+
+  function replaceRecordedBlockChildren(element: Element, record: BlockRecord, children: Node[]): void {
+    const currentChildren = Array.from(element.childNodes);
+    const current = new Set<Node>(currentChildren);
+    const originalSet = new Set(record.originalChildren);
+    const translatedSet = new Set(record.translatedChildren);
+    const otherChildren = children === record.originalChildren ? record.translatedChildren : record.originalChildren;
+    const targetChildren = children.filter((child, index) => {
+      const sharedLiveNode = originalSet.has(child) && translatedSet.has(child);
+      if (sharedLiveNode) return current.has(child);
+      const counterpart = otherChildren[index];
+      return current.has(child) || counterpart === undefined || current.has(counterpart);
+    });
+    const known = new Set([...record.originalChildren, ...record.translatedChildren]);
+    const merged = [...targetChildren];
+    for (const [index, child] of currentChildren.entries()) {
+      if (known.has(child)) continue;
+      merged.splice(Math.min(index, merged.length), 0, child);
+    }
+    replaceBlockChildren(element, merged);
+  }
+
+  function recordPlaceholderUpdates(updates: PlaceholderTextUpdate[], apply: boolean): void {
+    for (const update of updates) {
+      if (update.translated !== update.original) textRecords.set(update.node, update);
+      if (apply && update.node.isConnected) update.node.nodeValue = update.translated;
+    }
+  }
+
+  function elementContainsNestedBlock(element: Element): boolean {
+    const view = element.ownerDocument.defaultView;
+    const getComputedStyle: ComputedStyleGetter | undefined = view?.getComputedStyle
+      ? (candidate) => view.getComputedStyle(candidate as Element)
+      : undefined;
+    return Array.from(element.children).some((child) => isBlockElement(child, getComputedStyle) || elementContainsNestedBlock(child));
+  }
+
+  async function translateTextNodes(item: WorkItem): Promise<void> {
     let touched = false;
     for (const node of item.block.nodes) {
       if (!running) return;
       if (!node.isConnected) continue;
-      const original = records.get(node)?.original ?? node.nodeValue;
+      const original = textRecords.get(node)?.original ?? node.nodeValue;
       if (!original) continue;
       const translated = await engine.translateText(original);
       if (translated === original) continue;
-      records.set(node, { original, translated });
+      textRecords.set(node, { original, translated });
       if (!showingOriginals) node.nodeValue = translated;
       touched = true;
     }
     if (touched) translatedBlocks += 1;
+  }
+
+  async function translateItem(item: WorkItem): Promise<void> {
+    item.done = true;
+    if (!item.block.element.isConnected) return;
+    if (records.has(item.block.element)) return;
+    if (elementContainsNestedBlock(item.block.element)) {
+      await translateTextNodes(item);
+      intersection?.unobserve(item.block.element);
+      return;
+    }
+    const plan = createBlockTranslationPlan(item.block.element, {
+      getComputedStyle: (element) => item.block.element.ownerDocument.defaultView?.getComputedStyle(element as Element),
+    });
+    if (!plan) return;
+    const originalChildren = Array.from(item.block.element.childNodes);
+    const result = await translateBlockPlan(plan, engine);
+    if (!running) return;
+    if (!result.translated) {
+      intersection?.unobserve(item.block.element);
+      return;
+    }
+    recordPlaceholderUpdates(result.placeholderTextUpdates, !showingOriginals);
+    const record: BlockRecord = {
+      originalChildren,
+      translatedChildren: result.translatedChildren,
+      translatedNodes: item.block.nodes.length,
+    };
+    records.set(item.block.element, record);
+    if (!showingOriginals) replaceRecordedBlockChildren(item.block.element, record, result.translatedChildren);
+    translatedBlocks += 1;
     intersection?.unobserve(item.block.element);
   }
 
@@ -180,6 +261,7 @@ export function createDomTranslator({
       mutations = new MutationObserver((entries) => {
         const added: Element[] = [];
         for (const entry of entries) {
+          if (entry.target instanceof Element && ignoredMutationTargets.has(entry.target)) continue;
           for (const node of entry.addedNodes) {
             if (node.nodeType === 1) added.push(node as Element);
           }
@@ -212,13 +294,19 @@ export function createDomTranslator({
     },
     restoreOriginals() {
       showingOriginals = true;
-      for (const [node, record] of records) {
+      for (const [element, record] of records) {
+        if (element.isConnected) replaceRecordedBlockChildren(element, record, record.originalChildren);
+      }
+      for (const [node, record] of textRecords) {
         if (node.isConnected) node.nodeValue = record.original;
       }
     },
     reapplyTranslations() {
       showingOriginals = false;
-      for (const [node, record] of records) {
+      for (const [element, record] of records) {
+        if (element.isConnected) replaceRecordedBlockChildren(element, record, record.translatedChildren);
+      }
+      for (const [node, record] of textRecords) {
         if (node.isConnected) node.nodeValue = record.translated;
       }
       drain();

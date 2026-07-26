@@ -123,7 +123,14 @@ function progressBar(): { element: HTMLElement; set: (fraction: number, label: s
   };
 }
 
-export async function renderArticle(shell: AppShell, title: string): Promise<void> {
+function scrollToArticleHash(hash: string | undefined): void {
+  if (!hash) return;
+  requestAnimationFrame(() => {
+    document.getElementById(hash)?.scrollIntoView();
+  });
+}
+
+export async function renderArticle(shell: AppShell, title: string, hash?: string): Promise<void> {
   stopActiveTranslation();
   document.title = `${displayTitle(title)} – Almanpedia`;
   const progress = progressBar();
@@ -150,16 +157,23 @@ export async function renderArticle(shell: AppShell, title: string): Promise<voi
     content,
     attributionBlock(article.title),
   );
+  scrollToArticleHash(hash);
   if (document.title !== `${displayTitle(article.title)} – Almanpedia`) {
     document.title = `${displayTitle(article.title)} – Almanpedia`;
   }
 
   let showingOriginal = false;
+  let translationComplete = false;
   toggle.addEventListener("click", () => {
     if (!activeController) return;
     showingOriginal = !showingOriginal;
-    if (showingOriginal) activeController.restoreOriginals();
-    else activeController.reapplyTranslations();
+    if (showingOriginal) {
+      activeController.restoreOriginals();
+      content.lang = "de";
+    } else {
+      activeController.reapplyTranslations();
+      content.lang = translationComplete ? "de-AL" : "de";
+    }
     toggle.textContent = showingOriginal ? "Alman anzeigen" : "Original anzeigen";
   });
 
@@ -186,13 +200,17 @@ export async function renderArticle(shell: AppShell, title: string): Promise<voi
     engine: getEngine(),
     onStats: (stats) => {
       if (stats.totalBlocks === 0) return;
-      // Long articles translate on approach; hide the bar once the
-      // user-perceived (near-viewport) backlog is drained.
-      if (stats.pendingVisibleBlocks === 0) {
+      const done = stats.totalBlocks - stats.pendingBlocks;
+      if (stats.pendingBlocks === 0) {
+        translationComplete = true;
+        if (!showingOriginal) content.lang = "de-AL";
         progress.done();
         return;
       }
-      const done = stats.totalBlocks - stats.pendingBlocks;
+      if (stats.pendingVisibleBlocks === 0) {
+        progress.set(done / stats.totalBlocks, "SICHTBARER ABSCHNITT ÜBERSETZT. REST FOLGT BEIM SCROLLEN.");
+        return;
+      }
       progress.set(done / stats.totalBlocks, `ÜBERSETZUNG: ${Math.round((done / stats.totalBlocks) * 100)} %`);
     },
   });

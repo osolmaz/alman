@@ -1,0 +1,239 @@
+import { elementBlocksTranslation, type ComputedStyleGetter, type SafeTranslator } from "../engine/safe-translation";
+
+const INLINE_PLACEHOLDER_TAGS = new Set([
+  "A",
+  "ABBR",
+  "B",
+  "BDI",
+  "BDO",
+  "CITE",
+  "CODE",
+  "DATA",
+  "DEL",
+  "DFN",
+  "EM",
+  "I",
+  "INS",
+  "KBD",
+  "LABEL",
+  "MARK",
+  "NOBR",
+  "Q",
+  "RP",
+  "RT",
+  "RUBY",
+  "S",
+  "SAMP",
+  "SMALL",
+  "SPAN",
+  "STRIKE",
+  "STRONG",
+  "SUB",
+  "SUP",
+  "TIME",
+  "U",
+  "VAR",
+]);
+
+const STRUCTURAL_INLINE_TAGS = new Set(["BR", "WBR"]);
+const PLACEHOLDER_RE = /<x(\d+)>([\s\S]*?)<\/x\1>/gu;
+
+export interface BlockPlaceholder {
+  id: number;
+  node: Node;
+  element?: Element;
+  text: string;
+  opaque: boolean;
+}
+
+export interface BlockTranslationPlan {
+  element: Element;
+  source: string;
+  placeholders: BlockPlaceholder[];
+}
+
+export interface PlaceholderTextUpdate {
+  node: Text;
+  original: string;
+  translated: string;
+}
+
+export interface BlockTranslationResult {
+  translated: boolean;
+  translatedText: string;
+  translatedChildren: Node[];
+  placeholderTextUpdates: PlaceholderTextUpdate[];
+}
+
+function cloneChildren(element: Element): Node[] {
+  return Array.from(element.childNodes, (child) => child.cloneNode(true));
+}
+
+function containsProtectedDescendant(element: Element, getComputedStyle?: ComputedStyleGetter): boolean {
+  for (const child of Array.from(element.children)) {
+    if (elementBlocksTranslation(child, getComputedStyle) || containsProtectedDescendant(child, getComputedStyle)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function placeholderIsOpaque(element: Element, getComputedStyle?: ComputedStyleGetter): boolean {
+  return (
+    STRUCTURAL_INLINE_TAGS.has(element.tagName) ||
+    elementBlocksTranslation(element, getComputedStyle) ||
+    containsProtectedDescendant(element, getComputedStyle) ||
+    !INLINE_PLACEHOLDER_TAGS.has(element.tagName)
+  );
+}
+
+function shouldPlaceholder(element: Element, getComputedStyle?: ComputedStyleGetter): boolean {
+  if (placeholderIsOpaque(element, getComputedStyle)) return true;
+  return INLINE_PLACEHOLDER_TAGS.has(element.tagName);
+}
+
+function escapePlaceholderText(text: string): string {
+  return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+function placeholderOpen(id: number): string {
+  return `<x${id}>`;
+}
+
+function placeholderClose(id: number): string {
+  return `</x${id}>`;
+}
+
+function placeholderToken(id: number, text: string): string {
+  return `${placeholderOpen(id)}${escapePlaceholderText(text)}${placeholderClose(id)}`;
+}
+
+function makeElementPlaceholder(element: Element, placeholders: BlockPlaceholder[], getComputedStyle?: ComputedStyleGetter): string {
+  const id = placeholders.length;
+  const opaque = placeholderIsOpaque(element, getComputedStyle);
+  const text = opaque ? "" : (element.textContent ?? "");
+  placeholders.push({ id, node: element, element, text, opaque });
+  return placeholderToken(id, text);
+}
+
+function makeOpaqueNodePlaceholder(node: Node, placeholders: BlockPlaceholder[]): string {
+  const id = placeholders.length;
+  placeholders.push({ id, node, text: "", opaque: true });
+  return placeholderToken(id, "");
+}
+
+function appendNodeSource(node: Node, placeholders: BlockPlaceholder[], getComputedStyle?: ComputedStyleGetter): string {
+  if (node.nodeType === Node.TEXT_NODE) return node.nodeValue ?? "";
+  if (node.nodeType !== Node.ELEMENT_NODE) return makeOpaqueNodePlaceholder(node, placeholders);
+  const element = node as Element;
+  if (shouldPlaceholder(element, getComputedStyle)) return makeElementPlaceholder(element, placeholders, getComputedStyle);
+  let source = "";
+  for (const child of Array.from(element.childNodes)) source += appendNodeSource(child, placeholders, getComputedStyle);
+  return source;
+}
+
+export function createBlockTranslationPlan(
+  element: Element,
+  { getComputedStyle }: { getComputedStyle?: ComputedStyleGetter } = {},
+): BlockTranslationPlan | null {
+  const placeholders: BlockPlaceholder[] = [];
+  let source = "";
+  for (const child of Array.from(element.childNodes)) source += appendNodeSource(child, placeholders, getComputedStyle);
+  if (!source.trim()) return null;
+  return { element, source, placeholders };
+}
+
+function decodePlaceholderText(document: Document, text: string): string {
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = text;
+  return textarea.value;
+}
+
+function descendantTextNodes(element: Element): Text[] {
+  const nodes: Text[] = [];
+  const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) nodes.push(node as Text);
+  return nodes;
+}
+
+function splitTranslatedTextAcrossNodes(originals: string[], translated: string): string[] {
+  if (originals.length <= 1) return [translated];
+  const output = Array<string>(originals.length).fill("");
+  let remaining = translated;
+  for (let index = originals.length - 1; index > 0; index -= 1) {
+    const original = originals[index] ?? "";
+    if (original && remaining.endsWith(original)) {
+      output[index] = original;
+      remaining = remaining.slice(0, -original.length);
+    }
+  }
+  output[0] = remaining;
+  return output;
+}
+
+function placeholderTextUpdates(document: Document, placeholder: BlockPlaceholder, translatedText: string): PlaceholderTextUpdate[] {
+  if (placeholder.opaque) return [];
+  const decoded = decodePlaceholderText(document, translatedText);
+  if (!placeholder.element) return [];
+  const nodes = descendantTextNodes(placeholder.element);
+  if (nodes.length === 0) return [];
+  const originals = nodes.map((node) => node.nodeValue ?? "");
+  const translatedParts = splitTranslatedTextAcrossNodes(originals, decoded);
+  return nodes.map((node, index) => ({ node, original: originals[index] ?? "", translated: translatedParts[index] ?? "" }));
+}
+
+function materializePlaceholder(placeholder: BlockPlaceholder): Node {
+  return placeholder.node;
+}
+
+function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string): { children: Node[]; placeholderTextUpdates: PlaceholderTextUpdate[] } | null {
+  const document = plan.element.ownerDocument;
+  const parts: Array<{ before: string; placeholder: BlockPlaceholder; translatedText: string }> = [];
+  let cursor = 0;
+  let expectedId = 0;
+  PLACEHOLDER_RE.lastIndex = 0;
+
+  for (const match of translatedText.matchAll(PLACEHOLDER_RE)) {
+    const id = Number(match[1]);
+    const index = match.index ?? 0;
+    if (id !== expectedId || index < cursor) return null;
+    const placeholder = plan.placeholders[id];
+    if (!placeholder) return null;
+    parts.push({ before: translatedText.slice(cursor, index), placeholder, translatedText: match[2] ?? "" });
+    cursor = index + match[0].length;
+    expectedId += 1;
+  }
+
+  if (expectedId !== plan.placeholders.length) return null;
+
+  const children: Node[] = [];
+  const updates: PlaceholderTextUpdate[] = [];
+  for (const part of parts) {
+    if (part.before) children.push(document.createTextNode(part.before));
+    children.push(materializePlaceholder(part.placeholder));
+    updates.push(...placeholderTextUpdates(document, part.placeholder, part.translatedText));
+  }
+  const after = translatedText.slice(cursor);
+  if (after) children.push(document.createTextNode(after));
+  return { children, placeholderTextUpdates: updates };
+}
+
+export async function translateBlockPlan(
+  plan: BlockTranslationPlan,
+  engine: SafeTranslator,
+): Promise<BlockTranslationResult> {
+  const translatedText = await engine.translateText(plan.source);
+  if (translatedText === plan.source) {
+    return { translated: false, translatedText, translatedChildren: cloneChildren(plan.element), placeholderTextUpdates: [] };
+  }
+  const parsed = parseTranslatedPlan(plan, translatedText);
+  if (!parsed) {
+    return { translated: false, translatedText: plan.source, translatedChildren: cloneChildren(plan.element), placeholderTextUpdates: [] };
+  }
+  return {
+    translated: true,
+    translatedText,
+    translatedChildren: parsed.children,
+    placeholderTextUpdates: parsed.placeholderTextUpdates,
+  };
+}

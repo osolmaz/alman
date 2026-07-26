@@ -73,6 +73,257 @@ test("pipeline translates, toggles, and picks up dynamic content", async () => {
   controller.stop();
 });
 
+test("pipeline translates whole inline blocks without gluing punctuation", async () => {
+  const source = "Das Wort <x0>Trüffel</x0>, das wiederum von <x1>terrae tuber</x1> kommt.";
+  document.body.innerHTML = `<main><p id="glue">Das Wort <a href="/wiki/Trüffel">Trüffel</a>, das wiederum von <i>terrae tuber</i> kommt.</p></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      return text === source ? "Die Wort <x0>Trüffel</x0>, das wiederum von <x1>terrae tuber</x1> kommt." : text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  const paragraph = document.getElementById("glue") as HTMLElement;
+  expect(paragraph.textContent).toBe("Die Wort Trüffel, das wiederum von terrae tuber kommt.");
+  expect(paragraph.querySelector("a")?.getAttribute("href")).toBe("/wiki/Trüffel");
+  expect(paragraph.querySelector("i")?.textContent).toBe("terrae tuber");
+
+  controller.restoreOriginals();
+  expect(paragraph.textContent).toBe("Das Wort Trüffel, das wiederum von terrae tuber kommt.");
+  controller.stop();
+});
+
+test("pipeline keeps inline element identity and translated placeholder text across toggles", async () => {
+  const source = "Siehe <x0>dem Mann</x0>.";
+  document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
+  let clicks = 0;
+  document.getElementById("link")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    clicks += 1;
+  });
+  const originalLink = document.getElementById("link");
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      return text === source ? "Siehe <x0>die Mann</x0>." : text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(document.getElementById("link")).toBe(originalLink);
+  expect(document.getElementById("link")?.textContent).toBe("die Mann");
+  controller.restoreOriginals();
+  expect(document.getElementById("link")).toBe(originalLink);
+  expect(document.getElementById("link")?.textContent).toBe("dem Mann");
+  document.getElementById("link")?.click();
+  controller.reapplyTranslations();
+  expect(document.getElementById("link")).toBe(originalLink);
+  expect(document.getElementById("link")?.textContent).toBe("die Mann");
+  document.getElementById("link")?.click();
+  expect(clicks).toBe(2);
+  controller.stop();
+});
+
+test("pipeline leaves pending inline translations original after restoring originals", async () => {
+  const source = "Siehe <x0>dem Mann</x0>.";
+  document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
+  let resolveTranslation: ((value: string) => void) | undefined;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    translateText(text) {
+      if (text !== source) return Promise.resolve(text);
+      return new Promise((resolve) => {
+        resolveTranslation = resolve;
+      });
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await vi.waitFor(() => expect(resolveTranslation).toBeTypeOf("function"));
+  controller.restoreOriginals();
+  resolveTranslation?.("Siehe <x0>die Mann</x0>.");
+  await controller.whenIdle();
+
+  expect(document.getElementById("p")?.textContent).toBe("Siehe dem Mann.");
+  controller.reapplyTranslations();
+  expect(document.getElementById("p")?.textContent).toBe("Siehe die Mann.");
+  controller.stop();
+});
+
+test("pipeline does not resurrect removed block children on toggles", async () => {
+  const source = "Das ist <x0>wichtig</x0>.";
+  document.body.innerHTML = `<main><p id="p">Das ist <a id="link" href="/wiki/Wichtig">wichtig</a>.</p></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      return text === source ? "Das ist <x0>wichtig</x0> alman." : text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  document.getElementById("link")?.remove();
+  controller.restoreOriginals();
+  expect(document.getElementById("link")).toBeNull();
+  controller.reapplyTranslations();
+  expect(document.getElementById("link")).toBeNull();
+  controller.stop();
+});
+
+test("pipeline does not resurrect removed placeholders after translated reordering", async () => {
+  const source = "Ich sehe <x0>dem Mann</x0>.";
+  document.body.innerHTML = `<main><p id="p">Ich sehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      return text === source ? "<x0>die Mann</x0> sehe ich." : text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  document.getElementById("link")?.remove();
+  controller.restoreOriginals();
+  expect(document.getElementById("link")).toBeNull();
+  controller.stop();
+});
+
+test("pipeline treats inline-block descendants as inline placeholders", async () => {
+  const source = "Das ist <x0>wichtig</x0>.";
+  document.body.innerHTML = `<main><p id="p">Das ist <span id="inline" style="display:inline-block">wichtig</span>.</p></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      return text === source ? "Das ist <x0>wichtig</x0> alman." : text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(document.getElementById("p")?.textContent).toBe("Das ist wichtig alman.");
+  controller.stop();
+});
+
+test("pipeline preserves dynamic block children across toggles", async () => {
+  const source = "Das ist <x0>wichtig</x0>.";
+  document.body.innerHTML = `<main><p id="p">Das ist <a id="link" href="/wiki/Wichtig">wichtig</a>.</p></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      return text === source ? "Das ist <x0>wichtig</x0> alman." : text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  const extra = document.createElement("span");
+  extra.id = "extra";
+  extra.textContent = "NEU";
+  document.getElementById("p")?.insertBefore(extra, document.getElementById("link"));
+  controller.restoreOriginals();
+  expect(document.getElementById("p")?.childNodes[1]).toBe(extra);
+  controller.reapplyTranslations();
+  expect(document.getElementById("p")?.childNodes[1]).toBe(extra);
+  controller.stop();
+});
+
+test("pipeline preserves dynamic children added while block translation is pending", async () => {
+  const source = "Das ist <x0>wichtig</x0>.";
+  document.body.innerHTML = `<main><p id="p">Das ist <a id="link" href="/wiki/Wichtig">wichtig</a>.</p></main>`;
+  let resolveTranslation: ((value: string) => void) | undefined;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    translateText(text) {
+      if (text !== source) return Promise.resolve(text);
+      return new Promise((resolve) => {
+        resolveTranslation = resolve;
+      });
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await vi.waitFor(() => expect(resolveTranslation).toBeTypeOf("function"));
+  const extra = document.createElement("span");
+  extra.id = "extra";
+  extra.textContent = "NEU";
+  document.getElementById("p")?.insertBefore(extra, document.getElementById("link"));
+  resolveTranslation?.("Das ist <x0>wichtig</x0> alman.");
+  await controller.whenIdle();
+
+  expect(document.getElementById("extra")?.textContent).toBe("NEU");
+  expect(document.getElementById("p")?.childNodes[1]).toBe(extra);
+  controller.stop();
+});
+
+test("pipeline preserves queued nested blocks", async () => {
+  const parent = "Die Eltern lesen.";
+  const child = "Die Kinder schlafen.";
+  document.body.innerHTML = `<main><ul><li id="parent">${parent}<ul><li id="child">${child}</li></ul></li></ul></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      if (text === parent) return "Die Eltern lesen alman.";
+      if (text === child) return "Die Kinder schlafen alman.";
+      return text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(document.getElementById("parent")?.childNodes[0]?.nodeValue).toBe("Die Eltern lesen alman.");
+  expect(document.getElementById("child")?.textContent).toBe("Die Kinder schlafen alman.");
+  controller.restoreOriginals();
+  expect(document.getElementById("parent")?.childNodes[0]?.nodeValue).toBe(parent);
+  expect(document.getElementById("child")?.textContent).toBe(child);
+  controller.stop();
+});
+
 test("restoring after stop leaves the page in its original state", async () => {
   setupPage();
   const controller = createDomTranslator({ root: document.body, engine: markerEngine(), observeMutations: false });

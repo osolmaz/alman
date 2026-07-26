@@ -29,7 +29,7 @@ function resolveStyleGetter(root: Element, override?: ComputedStyleGetter): Comp
     : undefined;
 }
 
-function isBlockElement(element: Element, getStyle?: ComputedStyleGetter): boolean {
+export function isBlockElement(element: Element, getStyle?: ComputedStyleGetter): boolean {
   const display = getStyle?.(element)?.display;
   if (display) return BLOCK_DISPLAY_VALUES.has(display);
   return BLOCK_FALLBACK_TAGS.has(element.tagName);

@@ -1,13 +1,25 @@
-export type Route = { kind: "landing" } | { kind: "article"; title: string };
+export type Route = { kind: "landing" } | { kind: "article"; title: string; hash?: string };
 
-export function parseRoute(pathname: string): Route {
+function decodeHash(hash: string): string | undefined {
+  if (!hash) return undefined;
+  const raw = hash.startsWith("#") ? hash.slice(1) : hash;
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
+export function parseRoute(pathname: string, hash = ""): Route {
+  const decodedHash = decodeHash(hash);
   if (pathname.startsWith("/wiki/")) {
     const raw = pathname.slice("/wiki/".length);
     if (raw) {
       try {
-        return { kind: "article", title: decodeURIComponent(raw) };
+        const title = decodeURIComponent(raw);
+        return decodedHash ? { kind: "article", title, hash: decodedHash } : { kind: "article", title };
       } catch {
-        return { kind: "article", title: raw };
+        return decodedHash ? { kind: "article", title: raw, hash: decodedHash } : { kind: "article", title: raw };
       }
     }
   }
@@ -18,11 +30,12 @@ export type RenderRoute = (route: Route) => void;
 
 export function startRouter(render: RenderRoute): { navigate: (path: string) => void } {
   function navigate(path: string): void {
+    const url = new URL(path, window.location.href);
     history.pushState(null, "", path);
-    render(parseRoute(new URL(path, window.location.href).pathname));
+    render(parseRoute(url.pathname, url.hash));
   }
 
-  window.addEventListener("popstate", () => render(parseRoute(window.location.pathname)));
+  window.addEventListener("popstate", () => render(parseRoute(window.location.pathname, window.location.hash)));
 
   // Delegated interception keeps rewritten article links client-side.
   document.addEventListener("click", (event) => {
@@ -36,6 +49,6 @@ export function startRouter(render: RenderRoute): { navigate: (path: string) => 
     navigate(href);
   });
 
-  render(parseRoute(window.location.pathname));
+  render(parseRoute(window.location.pathname, window.location.hash));
   return { navigate };
 }
