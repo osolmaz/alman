@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="de" data-text-size="standard" data-color-mode="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,6 +10,19 @@
     />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <script>
+      try {
+        const settings = JSON.parse(localStorage.getItem("almanpedia:reader-settings:v1"));
+        if (settings?.version === 1) {
+          if (["small", "standard", "large"].includes(settings.textSize)) {
+            document.documentElement.dataset.textSize = settings.textSize;
+          }
+          if (["auto", "light", "dark"].includes(settings.colorMode)) {
+            document.documentElement.dataset.colorMode = settings.colorMode;
+          }
+        }
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="app"></div>

@@ -13,12 +13,13 @@ import { createArticleContents } from "./contents";
 import { el, namespaceIds } from "./dom";
 import { createSearchBox } from "./search";
 import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
-import { createReaderSettingsPanel } from "./settings";
+import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } from "./settings";
 
 export interface AppShell {
   main: HTMLElement;
   status: HTMLElement;
   navigate: (path: string) => void;
+  storage: Pick<Storage, "getItem" | "setItem">;
 }
 
 let activeController: DomTranslatorController | null = null;
@@ -34,7 +35,21 @@ function stopActiveTranslation(): void {
   stopActiveContents = null;
 }
 
+function readerSettingsStorage(): Pick<Storage, "getItem" | "setItem"> {
+  try {
+    return window.localStorage;
+  } catch {
+    const values = new Map<string, string>();
+    return {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => void values.set(key, value),
+    };
+  }
+}
+
 export function renderShell(root: HTMLElement, navigate: (path: string) => void): AppShell {
+  const storage = readerSettingsStorage();
+  applyReaderSettings(document.documentElement, loadReaderSettings(storage));
   const status = el("div", { class: "header-status", role: "status" });
   const header = el("header", { class: "site-header" }, [
     el("div", { class: "header-inner" }, [createHeaderBrand(), createSearchBox(navigate), status]),
@@ -54,7 +69,7 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
     ]),
   ]);
   root.replaceChildren(header, main, footer);
-  return { main, status, navigate };
+  return { main, status, navigate, storage };
 }
 
 export function renderLanding(shell: AppShell): void {
@@ -194,30 +209,18 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   content.append(fragment);
   const contents = createArticleContents(content, window.matchMedia?.("(max-width: 56rem)"));
   stopActiveContents = () => contents.destroy();
-  const storage = (() => {
-    try {
-      return window.localStorage;
-    } catch {
-      const values = new Map<string, string>();
-      return {
-        getItem: (key: string) => values.get(key) ?? null,
-        setItem: (key: string, value: string) => void values.set(key, value),
-      };
-    }
-  })();
-  const settings = createReaderSettingsPanel(document.documentElement, storage);
+  const settings = createReaderSettingsPanel(document.documentElement, shell.storage);
   const settingsToggle = el("button", {
     class: "toggle-settings",
     type: "button",
     "aria-expanded": "false",
-  }, ["Darstellung"]);
+  }, ["Erscheinungsbild"]);
   settingsToggle.addEventListener("click", () => {
-    settings.element.open = !settings.element.open;
-    settingsToggle.setAttribute("aria-expanded", String(settings.element.open));
-    if (settings.element.open) settings.element.scrollIntoView({ block: "nearest" });
+    settings.setExpanded(!settings.expanded());
+    if (settings.expanded()) settings.element.scrollIntoView({ block: "nearest" });
   });
   settings.element.addEventListener("toggle", () => {
-    settingsToggle.setAttribute("aria-expanded", String(settings.element.open));
+    settingsToggle.setAttribute("aria-expanded", String(settings.expanded()));
   });
   actions.append(settingsToggle);
   const articleColumn = el("div", { class: "article-column" }, [
