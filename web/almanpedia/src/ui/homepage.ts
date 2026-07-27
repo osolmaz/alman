@@ -49,7 +49,6 @@ export function createShortcutGuide(): HTMLElement {
         el("span", { class: "browser-demo-tab-title" }, ["Kartoffel"]),
       ]),
       el("div", { class: "browser-demo-address" }, [
-        el("span", { class: "demo-site-control" }, ["⌁"]),
         addressFrames,
         el("kbd", { class: "demo-enter" }, ["↵"]),
       ]),
