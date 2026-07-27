@@ -17,7 +17,7 @@ const translations = translationsFor("translate");
 
 const copyByLocale = {
   en: {
-    title: "Translator",
+    title: "Alman Translate",
     description:
       "Translate Standard German into Alman in your browser. The GoePT-1-20M model runs entirely on your device.",
     lead: "Type or paste Standard German on the left and read it in Alman on the right. The translation comes from GoePT-1-20M, a model with 20 million parameters that runs entirely in your browser. The first translation downloads the model, about 34 MB. After that everything runs on your device, and no text is sent to any server.",
@@ -42,7 +42,7 @@ const copyByLocale = {
     how3: 'The same model powers <a href="https://almanpedia.org">Almanpedia</a>, which translates German Wikipedia articles into Alman as you read them. Translations are machine output and can contain mistakes. The <a href="/">specification</a> is the reference for Alman grammar.',
   },
   de: {
-    title: "Übersetzer",
+    title: "Alman Translate",
     description:
       "Übersetzen Sie Standarddeutsch im Browser nach Alman. Das Modell GoePT-1-20M läuft vollständig auf Ihrem Gerät.",
     lead: "Geben Sie links Standarddeutsch ein und lesen Sie rechts die Alman-Fassung. Die Übersetzung kommt von GoePT-1-20M, einem Modell mit 20 Millionen Parametern, das vollständig im Browser läuft. Die erste Übersetzung lädt das Modell herunter, rund 34 MB. Danach läuft alles auf Ihrem Gerät, und kein Text wird an einen Server gesendet.",
@@ -67,7 +67,7 @@ const copyByLocale = {
     how3: 'Dasselbe Modell steckt in <a href="https://almanpedia.org">Almanpedia</a>, das deutsche Wikipedia-Artikel beim Lesen nach Alman übersetzt. Übersetzungen sind Maschinenausgaben und können Fehler enthalten. Maßgeblich für die Alman-Grammatik ist die <a href="/de/">Spezifikation</a>.',
   },
   al: {
-    title: "Übersetzer",
+    title: "Alman Translate",
     description:
       "Übersetzen Sie Standarddeutsch in die Browser nach Alman. Die Modell GoePT-1-20M läuft vollständig auf Ihr Gerät.",
     lead: "Geben Sie links Standarddeutsch ein und lesen Sie rechts die Alman-Fassung. Die Übersetzung kommt von GoePT-1-20M, ein Modell mit 20 Millionen Parameter, das vollständig in die Browser läuft. Die erste Übersetzung lädt die Modell herunter, rund 34 MB. Danach läuft alles auf Ihr Gerät, und kein Text wird an ein Server gesendet.",
@@ -128,7 +128,6 @@ const strings = {
   </div>
 
   <h1>{copy.title}</h1>
-  <p>{copy.lead}</p>
 
   <section class="xl" id="translator" data-state="idle" aria-label={copy.title}>
     <div class="xl-card">
@@ -188,6 +187,8 @@ const strings = {
     <script type="application/json" data-translator-strings set:html={JSON.stringify(strings)} />
   </section>
 
+  <p>{copy.lead}</p>
+
   <h2>{copy.howTitle}</h2>
   <p set:html={copy.how1} />
   <p>{copy.how2}</p>
@@ -203,7 +204,7 @@ const strings = {
 
 <style>
   .xl {
-    margin: 2rem 0 1rem;
+    margin: 1.5rem 0 1.75rem;
   }
 
   .xl-card {
