@@ -1,5 +1,4 @@
 import {
-  MODEL_PACKAGE,
   createDomTranslator,
   type AssetProgress,
   type DomTranslatorController,
@@ -25,9 +24,12 @@ import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } fr
 export interface AppShell {
   main: HTMLElement;
   status: HTMLElement;
+  footer: HTMLElement;
   navigate: (path: string) => void;
   storage: Pick<Storage, "getItem" | "setItem">;
 }
+
+const MODEL_REPOSITORY_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
 
 let activeController: DomTranslatorController | null = null;
 let activeRevealController: TranslationRevealController | null = null;
@@ -72,15 +74,18 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
       ]),
       el("span", {}, [". Übersetzung nach "]),
       el("a", { href: "https://alman.ai", target: "_blank", rel: "noopener" }, ["Alman"]),
-      el("span", {}, [` durch GoePT-1-20M, lokal im Browser. Ein Projekt von alman.ai.`]),
+      el("span", {}, [" durch "]),
+      el("a", { href: MODEL_REPOSITORY_URL, target: "_blank", rel: "noopener" }, ["GoePT-1-20M"]),
+      el("span", {}, [", lokal im Browser. Ein Projekt von alman.ai."]),
     ]),
   ]);
   root.replaceChildren(header, main, footer);
-  return { main, status, navigate, storage };
+  return { main, status, footer, navigate, storage };
 }
 
 export async function renderLanding(shell: AppShell): Promise<void> {
   stopActiveTranslation();
+  shell.footer.hidden = false;
   document.title = "Almanpedia — Die freie Enzyklopädie, vereinfacht";
   const progress = progressBar();
   const feed = el("div", { class: "landing-feed wiki-content", lang: "de" }, [
@@ -179,16 +184,20 @@ export async function renderLanding(shell: AppShell): Promise<void> {
   controller.translateAll();
 }
 
-function attributionBlock(title: string): HTMLElement {
+export function createArticleAttribution(title: string): HTMLElement {
   return el("div", { class: "attribution" }, [
     el("span", {}, ["Quelle: "]),
     el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, [`„${displayTitle(title)}“ (de.wikipedia.org)`]),
     el("span", {}, [", "]),
     el("a", { href: historyUrl(title), target: "_blank", rel: "noopener" }, ["Autorinnen und Autoren"]),
     el("span", {}, [
-      ". Text: CC BY-SA 4.0; diese maschinelle Alman-Fassung ist ein Bearbeitung unter derselben Lizenz. " +
-        `Automatisch übersetzt durch GoePT-1-20M (${MODEL_PACKAGE.revision.slice(0, 7)}); Fehler vorbehalten.`,
+      ". Text: CC BY-SA 4.0. Die maschinelle Alman-Fassung steht als Bearbeitung unter derselben Lizenz. " +
+        "Automatisch übersetzt durch ",
     ]),
+    el("a", { href: MODEL_REPOSITORY_URL, target: "_blank", rel: "noopener" }, ["GoePT-1-20M"]),
+    el("span", {}, ["; Fehler vorbehalten. Ein Projekt von "]),
+    el("a", { href: "https://alman.ai/", target: "_blank", rel: "noopener" }, ["alman.ai"]),
+    el("span", {}, ["."]),
   ]);
 }
 
@@ -241,6 +250,7 @@ function revealTranslatedBlock(element: Element): void {
 
 export async function renderArticle(shell: AppShell, title: string, hash?: string): Promise<void> {
   stopActiveTranslation();
+  shell.footer.hidden = true;
   document.title = `${displayTitle(title)} – Almanpedia`;
   const progress = progressBar();
   shell.status.replaceChildren(progress.element);
@@ -290,7 +300,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   const articleColumn = el("div", { class: "article-column" }, [
     el("div", { class: "article-head" }, [heading, actions]),
     content,
-    attributionBlock(article.title),
+    createArticleAttribution(article.title),
   ]);
   shell.main.className = "site-main article-page";
   shell.main.replaceChildren(
