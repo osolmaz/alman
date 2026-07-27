@@ -248,8 +248,8 @@ function ownerAtBoundary(plan: BlockTranslationPlan, offset: number): BlockTextR
   const left = [...plan.runs].reverse().find((run) => !run.structural && run.end === offset);
   const right = plan.runs.find((run) => !run.structural && run.start === offset);
   if (left && right && plan.anchors.some((anchor) => anchor.offset === offset)) return null;
-  if (!left) return right ?? null;
-  if (!right) return left;
+  if (!left) return right && right.ancestors.length === 0 ? right : null;
+  if (!right) return left.ancestors.length === 0 ? left : null;
   if (sameAncestors(left.ancestors, right.ancestors)) return left;
   if (isAncestorPrefix(left.ancestors, right.ancestors)) return left;
   if (isAncestorPrefix(right.ancestors, left.ancestors)) return right;
@@ -426,6 +426,25 @@ function unchangedResult(
   };
 }
 
+function runStructureIsCurrent(plan: BlockTranslationPlan, run: BlockTextRun): boolean {
+  if (run.structural) {
+    return run.structural.isConnected && run.structural.parentNode === run.structuralParent;
+  }
+  if (!run.node.isConnected || run.node.nodeValue !== run.original) return false;
+  const expectedParent = run.ancestors.at(-1) ?? plan.element;
+  if (run.node.parentNode !== expectedParent) return false;
+  if (run.ancestors.length > 0 && run.ancestors[0]?.parentNode !== plan.element) return false;
+  return run.ancestors.slice(1).every((ancestor, index) => ancestor.parentNode === run.ancestors[index]);
+}
+
+function runOrderIsCurrent(plan: BlockTranslationPlan): boolean {
+  const nodes = plan.runs.map((run) => run.structural ?? run.node);
+  return nodes.slice(1).every((node, index) => {
+    const previous = nodes[index]!;
+    return Boolean(previous.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+}
+
 export async function translateBlockPlan(
   plan: BlockTranslationPlan,
   engine: SafeTranslator,
@@ -433,10 +452,9 @@ export async function translateBlockPlan(
 ): Promise<BlockTranslationResult> {
   const translatedText = await engine.translateText(plan.source);
   if (translatedText === plan.source) return unchangedResult(plan);
-  const stale = plan.runs.some((run) => run.structural
-    ? !run.structural.isConnected || run.structural.parentNode !== run.structuralParent
-    : !run.node.isConnected || run.node.nodeValue !== run.original);
-  if (stale) return unchangedResult(plan, "stale");
+  if (plan.runs.some((run) => !runStructureIsCurrent(plan, run)) || !runOrderIsCurrent(plan)) {
+    return unchangedResult(plan, "stale");
+  }
   const projection = projectTranslation(plan, translatedText, markChanges);
   if (!projection) return unchangedResult(plan, "ambiguous");
   const document = plan.element.ownerDocument;

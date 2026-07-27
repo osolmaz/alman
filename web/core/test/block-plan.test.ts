@@ -282,6 +282,17 @@ test("plain text can reorder when no inline scope needs projection", async () =>
   expect(paragraph.textContent).toBe("Sie sieht er.");
 });
 
+test("unscoped insertions cannot expand a terminal link", async () => {
+  document.body.innerHTML = `<p id="p"><a id="link" href="/wiki/Foo">foo</a></p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: "foo alman" }));
+
+  expect(result.translated).toBe(false);
+  expect(result.failure).toBe("ambiguous");
+  expect(paragraph.innerHTML).toBe('<a id="link" href="/wiki/Foo">foo</a>');
+});
+
 test("one-way lexical moves cannot change a live link target", async () => {
   document.body.innerHTML = `<p id="p"><a id="link" href="/wiki/Foo">foo</a> bar baz</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;
@@ -316,6 +327,29 @@ test("a translation cannot empty a live link label", async () => {
   expect(result.translated).toBe(false);
   expect(result.failure).toBe("ambiguous");
   expect(document.getElementById("link")?.textContent).toBe("Artikel");
+});
+
+test("reparented text nodes reject a completed projection", async () => {
+  document.body.innerHTML = `<p id="p"><span id="source">foo</span> bar</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText() {
+      const link = document.createElement("a");
+      link.id = "new-link";
+      link.href = "/wiki/Foo";
+      link.append(document.getElementById("source")!.firstChild!);
+      paragraph.append(link);
+      return "die foo bar";
+    },
+    async dispose() {},
+  };
+
+  const result = await translateBlockPlan(plan, engine);
+  expect(result.translated).toBe(false);
+  expect(result.failure).toBe("stale");
+  expect(document.getElementById("new-link")?.textContent).toBe("foo");
 });
 
 test("stale text nodes reject a completed projection", async () => {
