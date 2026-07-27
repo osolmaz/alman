@@ -111,7 +111,7 @@ code {
 
 .brand-sub {
   color: var(--muted);
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-size: 0.64rem;
   font-weight: 400;
   letter-spacing: 0.02em;
