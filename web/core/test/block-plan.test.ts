@@ -216,6 +216,36 @@ test("protected and hidden subtrees never enter model input", () => {
   expect(plan.source).not.toContain("versteckt");
 });
 
+test("foreign inline text separates model calls without blocking surrounding translation", async () => {
+  document.body.innerHTML = `<p id="p">Der <span id="foreign" lang="en">API</span> Mann kommt.</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const foreign = document.getElementById("foreign");
+  const inputs: string[] = [];
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText(text) {
+      inputs.push(text);
+      if (text === "Der ") return "Die ";
+      if (text === " Mann kommt.") return " Typ kommt.";
+      return text;
+    },
+    async dispose() {},
+  };
+
+  expect(plan.source).toBe("Der  Mann kommt.");
+  expect(plan.translationBoundaries).toEqual([4]);
+  const result = await translateBlockPlan(plan, engine);
+  applyResult(paragraph, result);
+
+  expect(inputs).toEqual(["Der ", " Mann kommt."]);
+  expect(result.translated).toBe(true);
+  expect(result.translatedText).toBe("Die  Typ kommt.");
+  expect(paragraph.textContent).toBe("Die API Typ kommt.");
+  expect(document.getElementById("foreign")).toBe(foreign);
+  expect(foreign?.textContent).toBe("API");
+});
+
 test("inline wrappers containing protected descendants remain untouched", async () => {
   document.body.innerHTML = `<p id="p">Bitte <a id="code-link" href="/wiki/Code"><code>const der = 1;</code></a> lesen.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;

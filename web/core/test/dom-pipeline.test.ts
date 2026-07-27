@@ -63,6 +63,33 @@ test("nested German language overrides remain translatable", async () => {
   controller.stop();
 });
 
+test("pipeline translates German runs around foreign inline text", async () => {
+  document.body.innerHTML = `
+    <main><p id="mixed">Der <span id="foreign" lang="en">API</span> Mann kommt.</p></main>
+  `;
+  const inputs: string[] = [];
+  const foreign = document.getElementById("foreign");
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText(text) {
+      inputs.push(text);
+      if (text === "Der ") return "Die ";
+      if (text === " Mann kommt.") return " Typ kommt.";
+      return text;
+    },
+    async dispose() {},
+  };
+  const controller = createDomTranslator({ root: document.querySelector("main")!, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(inputs).toEqual(["Der ", " Mann kommt."]);
+  expect(document.getElementById("mixed")?.textContent).toBe("Die API Typ kommt.");
+  expect(document.getElementById("foreign")).toBe(foreign);
+  expect(foreign?.textContent).toBe("API");
+  controller.stop();
+});
+
 test("pipeline translates, toggles, and picks up dynamic content", async () => {
   setupPage();
   const controller = createDomTranslator({ root: document.body, engine: markerEngine() });
