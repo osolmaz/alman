@@ -1,5 +1,10 @@
 import { diffArrays, diffWordsWithSpace } from "diff";
-import { elementBlocksTranslation, type ComputedStyleGetter, type SafeTranslator } from "../engine/safe-translation";
+import {
+  elementBlocksTranslation,
+  sentenceSegments,
+  type ComputedStyleGetter,
+  type SafeTranslator,
+} from "../engine/safe-translation";
 import { isBlockElement } from "./blocks";
 
 const INLINE_TRANSLATABLE_TAGS = new Set([
@@ -286,7 +291,7 @@ function setsOverlap(left: Set<string>, right: Set<string>): boolean {
 }
 
 /** Reject lexical moves that a monotonic diff would otherwise disguise as substitutions. */
-function hasLexicalMoves(source: string, translated: string): boolean {
+function segmentHasLexicalMoves(source: string, translated: string): boolean {
   const hunks: EditHunk[] = [];
   let current: EditHunk | null = null;
   for (const change of diffWordsWithSpace(source, translated)) {
@@ -308,6 +313,20 @@ function hasLexicalMoves(source: string, translated: string): boolean {
     }
   }
   return false;
+}
+
+function hasLexicalMoves(source: string, translated: string): boolean {
+  const sourceSegments = sentenceSegments(source);
+  const translatedSegments = sentenceSegments(translated);
+  if (sourceSegments.length === translatedSegments.length && sourceSegments.length > 1) {
+    // SafeTranslator translates source sentences independently. Words cannot
+    // move between those model calls, so identical inflections in different
+    // sentences must not trigger the cross-scope move guard.
+    return sourceSegments.some((segment, index) =>
+      segmentHasLexicalMoves(segment, translatedSegments[index] ?? ""),
+    );
+  }
+  return segmentHasLexicalMoves(source, translated);
 }
 
 interface Projection {
