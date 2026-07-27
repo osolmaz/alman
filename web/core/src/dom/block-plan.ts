@@ -65,6 +65,11 @@ interface BlockElementRange {
   end: number;
 }
 
+interface BlockChildSnapshot {
+  parent: Element;
+  children: Node[];
+}
+
 export interface BlockTranslationPlan {
   element: Element;
   /** Plain rendered prose. Synthetic DOM tags never enter this string. */
@@ -72,6 +77,8 @@ export interface BlockTranslationPlan {
   runs: BlockTextRun[];
   anchors: BlockAnchor[];
   elementRanges: BlockElementRange[];
+  /** Child identity and order for every element whose text entered the source. */
+  childSnapshots: BlockChildSnapshot[];
 }
 
 export interface TextUpdate {
@@ -125,6 +132,7 @@ export function createBlockTranslationPlan(
   const runs: BlockTextRun[] = [];
   const anchors: BlockAnchor[] = [];
   const elementRanges: BlockElementRange[] = [];
+  const childSnapshots: BlockChildSnapshot[] = [{ parent: element, children: Array.from(element.childNodes) }];
   let offset = 0;
 
   function append(node: Node, ancestors: Element[]): void {
@@ -166,14 +174,16 @@ export function createBlockTranslationPlan(
     }
     const start = offset;
     const nextAncestors = [...ancestors, child];
-    for (const descendant of Array.from(child.childNodes)) append(descendant, nextAncestors);
+    const descendants = Array.from(child.childNodes);
+    childSnapshots.push({ parent: child, children: descendants });
+    for (const descendant of descendants) append(descendant, nextAncestors);
     elementRanges.push({ element: child, start, end: offset });
   }
 
   for (const child of Array.from(element.childNodes)) append(child, []);
   const source = sourceParts.join("");
   if (!source.trim()) return null;
-  return { element, source, runs, anchors, elementRanges };
+  return { element, source, runs, anchors, elementRanges, childSnapshots };
 }
 
 function differenceSeparator(document: Document, removed: string, added: string): Node[] {
@@ -447,6 +457,13 @@ function runOrderIsCurrent(plan: BlockTranslationPlan): boolean {
   });
 }
 
+function childSnapshotsAreCurrent(plan: BlockTranslationPlan): boolean {
+  return plan.childSnapshots.every(({ parent, children }) => {
+    const current = Array.from(parent.childNodes);
+    return current.length === children.length && current.every((node, index) => node === children[index]);
+  });
+}
+
 export async function translateBlockPlan(
   plan: BlockTranslationPlan,
   engine: SafeTranslator,
@@ -454,7 +471,11 @@ export async function translateBlockPlan(
 ): Promise<BlockTranslationResult> {
   const translatedText = await engine.translateText(plan.source);
   if (translatedText === plan.source) return unchangedResult(plan);
-  if (plan.runs.some((run) => !runStructureIsCurrent(plan, run)) || !runOrderIsCurrent(plan)) {
+  if (
+    plan.runs.some((run) => !runStructureIsCurrent(plan, run)) ||
+    !runOrderIsCurrent(plan) ||
+    !childSnapshotsAreCurrent(plan)
+  ) {
     return unchangedResult(plan, "stale");
   }
   const projection = projectTranslation(plan, translatedText, markChanges);

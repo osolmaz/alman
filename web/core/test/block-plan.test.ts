@@ -352,6 +352,28 @@ test("reparented text nodes reject a completed projection", async () => {
   expect(document.getElementById("new-link")?.textContent).toBe("foo");
 });
 
+test("descendants added during inference reject a completed projection", async () => {
+  document.body.innerHTML = `<p id="p"><a id="link" href="/wiki/Foo">foo</a></p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText() {
+      const addition = document.createElement("span");
+      addition.id = "addition";
+      addition.textContent = "new";
+      document.getElementById("link")!.append(addition);
+      return "bar";
+    },
+    async dispose() {},
+  };
+
+  const result = await translateBlockPlan(plan, engine);
+  expect(result.translated).toBe(false);
+  expect(result.failure).toBe("stale");
+  expect(document.getElementById("link")?.textContent).toBe("foonew");
+});
+
 test("stale text nodes reject a completed projection", async () => {
   document.body.innerHTML = `<p id="p">Der Mann kommt.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;

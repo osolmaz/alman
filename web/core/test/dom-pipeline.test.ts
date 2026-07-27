@@ -458,6 +458,11 @@ test("pipeline preserves dynamic children added while block translation is pendi
 
   expect(document.getElementById("extra")?.textContent).toBe("NEU");
   expect(document.getElementById("p")?.childNodes[1]).toBe(extra);
+  expect(document.getElementById("p")?.textContent).toBe("Das ist NEUwichtig.");
+  controller.restoreOriginals();
+  expect(document.getElementById("extra")).toBe(extra);
+  controller.reapplyTranslations();
+  expect(document.getElementById("extra")).toBe(extra);
   controller.stop();
 });
 
