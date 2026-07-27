@@ -8,7 +8,7 @@ const POTATO_SRCSET = [
   "/brand/almanpedia-potato.png 973w",
 ].join(", ");
 const WORDMARK_SRC = "/brand/almanpedia-wordmark.svg";
-const TAGLINE = "Die freie Enzyklopädie, amtlich vereinfacht";
+const WORDMARK_ALT = "ALMANPEDIA – Die freie Enzyklopädie, amtlich vereinfacht";
 
 function potatoImage(sizes: string): HTMLImageElement {
   return el("img", {
@@ -27,9 +27,9 @@ function wordmarkImage(): HTMLImageElement {
   return el("img", {
     class: "brand-wordmark",
     src: WORDMARK_SRC,
-    alt: "ALMANPEDIA",
-    width: "5028",
-    height: "940",
+    alt: WORDMARK_ALT,
+    width: "5020",
+    height: "1143",
   });
 }
 
@@ -37,7 +37,6 @@ function brandContents(orientation: "horizontal" | "vertical"): Node[] {
   return [
     potatoImage(orientation === "horizontal" ? "60px" : "(max-width: 40rem) 160px, 220px"),
     wordmarkImage(),
-    el("span", { class: "brand-sub" }, [TAGLINE]),
   ];
 }
 
