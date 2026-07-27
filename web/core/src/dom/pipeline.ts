@@ -156,7 +156,8 @@ export function createDomTranslator({
     while (current && current !== root) {
       const parent: Element | null = current.parentElement;
       if (!parent) return null;
-      const index = Array.prototype.indexOf.call(parent.children, current) as number;
+      const siblings = Array.from(parent.children).filter((child) => !isGeneratedProjectionElement(child));
+      const index = siblings.indexOf(current);
       if (index < 0) return null;
       path.unshift(index);
       current = parent;

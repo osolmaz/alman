@@ -1,5 +1,6 @@
 import { diffWordsWithSpace } from "diff";
 import { elementBlocksTranslation, type ComputedStyleGetter, type SafeTranslator } from "../engine/safe-translation";
+import { isBlockElement } from "./blocks";
 
 const INLINE_TRANSLATABLE_TAGS = new Set([
   "A",
@@ -110,6 +111,7 @@ function elementIsOpaque(element: Element, getComputedStyle?: ComputedStyleGette
   return (
     element.matches(CITATION_SELECTOR) ||
     elementBlocksTranslation(element, getComputedStyle) ||
+    isBlockElement(element, getComputedStyle) ||
     containsProtectedDescendant(element, getComputedStyle) ||
     !INLINE_TRANSLATABLE_TAGS.has(element.tagName)
   );

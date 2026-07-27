@@ -378,6 +378,29 @@ test("pipeline treats inline-block descendants as inline prose", async () => {
   controller.stop();
 });
 
+test("CSS block descendants translate once and restore the German source", async () => {
+  document.body.innerHTML = `<main><p id="parent">Vor <span id="child" style="display:block">alt</span> nach</p></main>`;
+  const inputs: string[] = [];
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText(text) {
+      inputs.push(text);
+      if (text === "alt") return "neu";
+      return text;
+    },
+    async dispose() {},
+  };
+  const controller = createDomTranslator({ root: document.querySelector("main")!, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(document.getElementById("parent")?.textContent).toBe("Vor neu nach");
+  expect(inputs).toEqual(["Vor  nach", "alt"]);
+  controller.restoreOriginals();
+  expect(document.getElementById("parent")?.textContent).toBe("Vor alt nach");
+  controller.stop();
+});
+
 test("pipeline preserves dynamic block children across toggles", async () => {
   const source = "Das ist wichtig.";
   document.body.innerHTML = `<main><p id="p">Das ist <a id="link" href="/wiki/Wichtig">wichtig</a>.</p></main>`;
@@ -479,7 +502,12 @@ test("comparison overlays nested translated blocks", async () => {
     },
     async dispose() {},
   };
-  const controller = createDomTranslator({ root: document.querySelector("main")!, engine, observeMutations: false });
+  const controller = createDomTranslator({
+    root: document.querySelector("main")!,
+    engine,
+    markChanges: true,
+    observeMutations: false,
+  });
   controller.start();
   await controller.whenIdle();
 
