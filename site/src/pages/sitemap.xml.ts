@@ -60,6 +60,10 @@ export const GET: APIRoute = async () => {
     addUrl(`${SITE_URL}${doc.url}`, doc, alternates);
     addUrl(`${SITE_URL}${doc.markdownUrl}`, doc, alternates, true);
   }
+  // App pages without Markdown mirrors.
+  addUrl(`${SITE_URL}/translate/`);
+  addUrl(`${SITE_URL}/de/translate/`);
+  addUrl(`${SITE_URL}/al/translate/`);
   addUrl(`${SITE_URL}/llms.txt`);
   addUrl(`${SITE_URL}/llms-full.txt`);
   addUrl(`${SITE_URL}/feed.xml`);

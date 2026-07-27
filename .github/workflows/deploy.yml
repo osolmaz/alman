@@ -23,7 +23,13 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: site/package-lock.json
+          cache-dependency-path: |
+            site/package-lock.json
+            web/package-lock.json
+      # The translator page links @alman/core (file:../web/core), whose
+      # dependencies live in web/node_modules.
+      - run: npm ci
+        working-directory: web
       - run: npm ci
         working-directory: site
       - run: npm run build

@@ -12,6 +12,8 @@ build/spec.md
 node_modules/
 dist/
 .astro/
+# ORT WASM runtime copied from node_modules by site/scripts/copy-ort.mjs
+site/public/ort/
 .DS_Store
 local-benchmark-artifacts/
 

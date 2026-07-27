@@ -1,0 +1,474 @@
+---
+// The translator page, rendered once per locale. Layout follows the
+// established two-pane translator pattern (Google Translate, DeepL):
+// language bar pinned on top, source and target panes side by side with a
+// toolbar under each, live translation while typing. The "backend" is the
+// GoePT-1-20M on-device model shared with almanpedia.org, so the card also
+// carries a download progress strip and a model status line.
+import Base from "../layouts/Base.astro";
+import { translationsFor, type Locale } from "../i18n/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const translations = translationsFor("translate");
+
+const copyByLocale = {
+  en: {
+    title: "Translator",
+    description:
+      "Translate Standard German into Alman in your browser. The GoePT-1-20M model runs entirely on your device.",
+    lead: "Type or paste Standard German on the left and read it in Alman on the right. The translation comes from GoePT-1-20M, a model with 20 million parameters that runs entirely in your browser. The first translation downloads the model, about 34 MB. After that everything runs on your device, and no text is sent to any server.",
+    sourceLabel: "Deutsch",
+    targetLabel: "Alman",
+    placeholder: "Type or paste German text …",
+    targetPlaceholder: "Translation",
+    clear: "Clear text",
+    copy: "Copy",
+    copied: "Copied",
+    chars: "characters",
+    samplesLabel: "Examples",
+    statusIdle: "Model not loaded · about 34 MB download on first translation",
+    statusDownloading: "Downloading model … {loaded} / {total} MB",
+    statusPreparing: "Preparing model …",
+    statusReady: "Model ready · translating locally",
+    statusTranslating: "Translating …",
+    statusError: "The model could not be loaded. Check your connection and try again.",
+    howTitle: "How it works",
+    how1: 'The translator runs <a href="https://huggingface.co/osolmaz/GoePT-1-20M">GoePT-1-20M</a>, an open model trained to translate German into Alman. It scores 86.8&nbsp;% on <a href="/almanbench/">AlmanBench</a>, the project\u2019s acceptance benchmark.',
+    how2: "The model is downloaded once and cached by your browser. Text is translated sentence by sentence, and a sentence the model cannot handle safely, for example one that is far too long, is left unchanged.",
+    how3: 'The same model powers <a href="https://almanpedia.org">Almanpedia</a>, which translates German Wikipedia articles into Alman as you read them. Translations are machine output and can contain mistakes. The <a href="/">specification</a> is the reference for Alman grammar.',
+  },
+  de: {
+    title: "Übersetzer",
+    description:
+      "Übersetzen Sie Standarddeutsch im Browser nach Alman. Das Modell GoePT-1-20M läuft vollständig auf Ihrem Gerät.",
+    lead: "Geben Sie links Standarddeutsch ein und lesen Sie rechts die Alman-Fassung. Die Übersetzung kommt von GoePT-1-20M, einem Modell mit 20 Millionen Parametern, das vollständig im Browser läuft. Die erste Übersetzung lädt das Modell herunter, rund 34 MB. Danach läuft alles auf Ihrem Gerät, und kein Text wird an einen Server gesendet.",
+    sourceLabel: "Deutsch",
+    targetLabel: "Alman",
+    placeholder: "Deutschen Text eingeben oder einfügen …",
+    targetPlaceholder: "Übersetzung",
+    clear: "Text löschen",
+    copy: "Kopieren",
+    copied: "Kopiert",
+    chars: "Zeichen",
+    samplesLabel: "Beispiele",
+    statusIdle: "Modell nicht geladen · ca. 34 MB Download bei der ersten Übersetzung",
+    statusDownloading: "Modell wird geladen … {loaded} / {total} MB",
+    statusPreparing: "Modell wird vorbereitet …",
+    statusReady: "Modell bereit · übersetzt lokal",
+    statusTranslating: "Übersetzung läuft …",
+    statusError: "Das Modell konnte nicht geladen werden. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    howTitle: "So funktioniert es",
+    how1: 'Der Übersetzer verwendet <a href="https://huggingface.co/osolmaz/GoePT-1-20M">GoePT-1-20M</a>, ein offenes Modell für die Übersetzung von Deutsch nach Alman. Es erreicht 86,8&nbsp;% auf <a href="/de/almanbench/">AlmanBench</a>, dem Abnahme-Benchmark des Projekts.',
+    how2: "Das Modell wird einmal heruntergeladen und vom Browser zwischengespeichert. Der Text wird Satz für Satz übersetzt. Einen Satz, den das Modell nicht sicher verarbeiten kann, zum Beispiel einen viel zu langen, lässt es unverändert.",
+    how3: 'Dasselbe Modell steckt in <a href="https://almanpedia.org">Almanpedia</a>, das deutsche Wikipedia-Artikel beim Lesen nach Alman übersetzt. Übersetzungen sind Maschinenausgaben und können Fehler enthalten. Maßgeblich für die Alman-Grammatik ist die <a href="/de/">Spezifikation</a>.',
+  },
+  al: {
+    title: "Übersetzer",
+    description:
+      "Übersetzen Sie Standarddeutsch in die Browser nach Alman. Die Modell GoePT-1-20M läuft vollständig auf Ihr Gerät.",
+    lead: "Geben Sie links Standarddeutsch ein und lesen Sie rechts die Alman-Fassung. Die Übersetzung kommt von GoePT-1-20M, ein Modell mit 20 Millionen Parameter, das vollständig in die Browser läuft. Die erste Übersetzung lädt die Modell herunter, rund 34 MB. Danach läuft alles auf Ihr Gerät, und kein Text wird an ein Server gesendet.",
+    sourceLabel: "Deutsch",
+    targetLabel: "Alman",
+    placeholder: "Deutsche Text eingeben oder einfügen …",
+    targetPlaceholder: "Übersetzung",
+    clear: "Text löschen",
+    copy: "Kopieren",
+    copied: "Kopiert",
+    chars: "Zeichen",
+    samplesLabel: "Beispiele",
+    statusIdle: "Modell nicht geladen · ca. 34 MB Download bei die erste Übersetzung",
+    statusDownloading: "Modell wird geladen … {loaded} / {total} MB",
+    statusPreparing: "Modell wird vorbereitet …",
+    statusReady: "Modell bereit · übersetzt lokal",
+    statusTranslating: "Übersetzung läuft …",
+    statusError: "Die Modell konnte nicht geladen werden. Prüfen Sie Ihr Verbindung und versuchen Sie es erneut.",
+    howTitle: "So funktioniert es",
+    how1: 'Die Übersetzer verwendet <a href="https://huggingface.co/osolmaz/GoePT-1-20M">GoePT-1-20M</a>, ein offene Modell für die Übersetzung von Deutsch nach Alman. Es erreicht 86,8&nbsp;% auf <a href="/al/almanbench/">AlmanBench</a>, die Abnahme-Benchmark der Projekt.',
+    how2: "Die Modell wird einmal heruntergeladen und von die Browser zwischengespeichert. Die Text wird Satz für Satz übersetzt. Ein Satz, das die Modell nicht sicher verarbeiten kann, etwa ein viel zu lange, lässt es unverändert.",
+    how3: 'Dieselbe Modell steckt in <a href="https://almanpedia.org">Almanpedia</a>, das deutsche Wikipedia-Artikel bei die Lesen nach Alman übersetzt. Übersetzungen sind Maschinenausgaben und können Fehler enthalten. Maßgeblich für die Alman-Grammatik ist die <a href="/al/">Spezifikation</a>.',
+  },
+} as const;
+
+const copy = copyByLocale[locale];
+
+// Standard German inputs showing the core transformations: relativizer,
+// dative articles, adnominal genitive, adjective endings.
+const samples = [
+  "Der Hund, der neben dem alten Baum wartet, gehört dem Nachbarn.",
+  "Die Farbe des Autos gefällt dem kleinen Kind.",
+  "Wegen des schlechten Wetters bleiben wir heute zu Hause.",
+];
+
+// Dynamic strings needed by the client script.
+const strings = {
+  numberLocale: locale === "en" ? "en-US" : "de-DE",
+  statusDownloading: copy.statusDownloading,
+  statusPreparing: copy.statusPreparing,
+  statusReady: copy.statusReady,
+  statusTranslating: copy.statusTranslating,
+  statusError: copy.statusError,
+  copied: copy.copied,
+};
+---
+
+<Base
+  title={copy.title}
+  description={copy.description}
+  locale={locale}
+  translations={translations}
+  machineReadable={false}
+>
+  <div class="doc-band">
+    <span>Amtliche Übersetzungsstelle · Formblatt AL-3</span>
+    <span>Modell GoePT-1-20M · 20 Mio. Parameter</span>
+  </div>
+
+  <h1>{copy.title}</h1>
+  <p>{copy.lead}</p>
+
+  <section class="xl" id="translator" data-state="idle" aria-label={copy.title}>
+    <div class="xl-card">
+      <div class="xl-langbar" aria-hidden="true">
+        <span class="xl-lang">{copy.sourceLabel}</span>
+        <span class="xl-arrow">→</span>
+        <span class="xl-lang">{copy.targetLabel}</span>
+      </div>
+      <div class="xl-panes">
+        <div class="xl-pane">
+          <textarea
+            data-source
+            lang="de"
+            rows="7"
+            placeholder={copy.placeholder}
+            aria-label={copy.sourceLabel}
+            autocomplete="off"
+            autocapitalize="sentences"
+            spellcheck="false"></textarea>
+          <button type="button" class="xl-clear" data-clear aria-label={copy.clear} title={copy.clear}
+            >×</button
+          >
+          <div class="xl-toolbar">
+            <span><span data-char-count>0</span> {copy.chars}</span>
+          </div>
+        </div>
+        <div class="xl-pane xl-pane-target">
+          <div
+            class="xl-target"
+            data-target
+            lang="de-AL"
+            data-placeholder={copy.targetPlaceholder}
+            aria-live="polite"
+            aria-label={copy.targetLabel}
+          >
+          </div>
+          <div class="xl-toolbar">
+            <span class="xl-toolbar-pad"></span>
+            <button type="button" class="xl-copy" data-copy disabled>{copy.copy}</button>
+          </div>
+        </div>
+      </div>
+      <div class="xl-progress" data-progress hidden>
+        <span class="xl-progress-fill" data-progress-fill></span>
+      </div>
+      <div class="xl-statusbar">
+        <span class="xl-dot" aria-hidden="true"></span>
+        <span data-status aria-live="polite">{copy.statusIdle}</span>
+      </div>
+    </div>
+
+    <div class="xl-samples">
+      <span class="xl-samples-label">{copy.samplesLabel}</span>
+      {samples.map((sample) => <button type="button" class="xl-sample" data-sample lang="de">{sample}</button>)}
+    </div>
+
+    <script type="application/json" data-translator-strings set:html={JSON.stringify(strings)} />
+  </section>
+
+  <h2>{copy.howTitle}</h2>
+  <p set:html={copy.how1} />
+  <p>{copy.how2}</p>
+  <p set:html={copy.how3} />
+</Base>
+
+<script>
+  import { initTranslator } from "../lib/translator-app";
+
+  const root = document.getElementById("translator");
+  if (root) initTranslator(root);
+</script>
+
+<style>
+  .xl {
+    margin: 2rem 0 1rem;
+  }
+
+  .xl-card {
+    background: #ffffff;
+    border: 1px solid var(--ink);
+    border-top-width: 2px;
+    transition: border-color 0.15s ease;
+  }
+
+  .xl-card:focus-within {
+    border-color: var(--form-blue);
+  }
+
+  /* Language bar pinned on top, as in the usual translator layout. */
+  .xl-langbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .xl-lang {
+    font-family: var(--font-din);
+    font-weight: 600;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.55rem 1rem;
+  }
+
+  .xl-lang:last-child {
+    text-align: left;
+    padding-left: 1rem;
+  }
+
+  .xl-arrow {
+    color: var(--form-blue);
+    font-size: 1rem;
+    padding: 0 0.75rem;
+  }
+
+  .xl-panes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .xl-pane {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .xl-pane + .xl-pane {
+    border-left: 1px solid var(--grey-2);
+  }
+
+  textarea[data-source],
+  .xl-target {
+    flex: 1;
+    min-height: 13rem;
+    padding: 0.9rem 1rem;
+    font: inherit;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  textarea[data-source] {
+    border: none;
+    background: transparent;
+    resize: vertical;
+    outline: none;
+    padding-right: 2.4rem;
+  }
+
+  textarea[data-source]::placeholder {
+    color: var(--grey-1);
+    opacity: 1;
+  }
+
+  .xl-target {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    background: var(--paper);
+  }
+
+  .xl-target:empty::before {
+    content: attr(data-placeholder);
+    color: var(--grey-1);
+  }
+
+  .xl-clear {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.5rem;
+    border: none;
+    background: none;
+    color: var(--grey-1);
+    font-size: 1.35rem;
+    line-height: 1;
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+    visibility: hidden;
+  }
+
+  .xl-pane:focus-within .xl-clear,
+  .xl:not([data-state="idle"]) .xl-clear {
+    visibility: visible;
+  }
+
+  .xl-clear:hover {
+    color: var(--fail-red);
+  }
+
+  .xl-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px solid var(--grey-2);
+    padding: 0.4rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--grey-1);
+    min-height: 2.2rem;
+  }
+
+  .xl-pane-target .xl-toolbar {
+    background: var(--paper);
+  }
+
+  .xl-copy {
+    font-family: var(--font-din);
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: #ffffff;
+    border: 1px solid var(--ink);
+    padding: 0.25rem 0.7rem;
+    cursor: pointer;
+  }
+
+  .xl-copy:hover:enabled {
+    color: var(--form-blue);
+    border-color: var(--form-blue);
+  }
+
+  .xl-copy:disabled {
+    color: var(--grey-1);
+    border-color: var(--grey-2);
+    cursor: default;
+  }
+
+  /* Model download progress, shown only while assets load. */
+  .xl-progress {
+    display: block;
+    height: 3px;
+    background: var(--grey-2);
+  }
+
+  .xl-progress[hidden] {
+    display: none;
+  }
+
+  .xl-progress-fill {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--form-blue);
+    transition: width 0.2s ease;
+  }
+
+  .xl-statusbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-top: 1px solid var(--ink);
+    padding: 0.45rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--grey-1);
+  }
+
+  .xl-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--grey-2);
+    flex: none;
+  }
+
+  .xl[data-state="loading"] .xl-dot {
+    background: #d4a017;
+  }
+
+  .xl[data-state="translating"] .xl-dot {
+    background: var(--form-blue);
+  }
+
+  .xl[data-state="ready"] .xl-dot {
+    background: var(--pass-green);
+  }
+
+  .xl[data-state="error"] .xl-dot {
+    background: var(--fail-red);
+  }
+
+  .xl[data-state="error"] .xl-statusbar {
+    color: var(--fail-red);
+  }
+
+  .xl-samples {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .xl-samples-label {
+    font-family: var(--font-din);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey-1);
+    margin-right: 0.3rem;
+  }
+
+  .xl-sample {
+    font: inherit;
+    font-size: 0.82rem;
+    color: var(--ink);
+    background: #ffffff;
+    border: 1px solid var(--grey-2);
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .xl-sample:hover {
+    color: var(--form-blue);
+    border-color: var(--form-blue);
+  }
+
+  @media (max-width: 640px) {
+    .xl-panes {
+      grid-template-columns: 1fr;
+    }
+
+    .xl-pane + .xl-pane {
+      border-left: none;
+      border-top: 1px solid var(--grey-2);
+    }
+
+    .xl-langbar {
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    textarea[data-source],
+    .xl-target {
+      min-height: 8.5rem;
+    }
+  }
+</style>

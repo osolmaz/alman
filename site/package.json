@@ -3,11 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "node scripts/copy-ort.mjs && astro dev",
+    "build": "node scripts/copy-ort.mjs && astro build",
     "preview": "astro preview"
   },
   "dependencies": {
+    "@alman/core": "file:../web/core",
     "@astrojs/markdown-remark": "^7.2.1",
     "@astrojs/rss": "^4.0.19",
     "@fontsource/barlow-semi-condensed": "^5.2.7",
