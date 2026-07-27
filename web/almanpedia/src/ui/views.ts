@@ -8,9 +8,11 @@ import { getEngine, initModel } from "../engine";
 import { ArticleNotFoundError, articleUrl, displayTitle, fetchArticleHtml, historyUrl } from "../wiki/api";
 import { rewriteArticleDom } from "../wiki/rewrite";
 import { sanitizeParsoidBody } from "../wiki/sanitize";
+import { createHeaderBrand, createLandingBrand } from "./brand";
 import { createArticleContents } from "./contents";
 import { el, namespaceIds } from "./dom";
 import { createSearchBox } from "./search";
+import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
 import { createReaderSettingsPanel } from "./settings";
 
 export interface AppShell {
@@ -20,23 +22,22 @@ export interface AppShell {
 }
 
 let activeController: DomTranslatorController | null = null;
+let activeRevealController: TranslationRevealController | null = null;
 let stopActiveContents: (() => void) | null = null;
 
 function stopActiveTranslation(): void {
   activeController?.stop();
   activeController = null;
+  activeRevealController?.destroy();
+  activeRevealController = null;
   stopActiveContents?.();
   stopActiveContents = null;
 }
 
 export function renderShell(root: HTMLElement, navigate: (path: string) => void): AppShell {
   const status = el("div", { class: "header-status", role: "status" });
-  const brand = el("a", { href: "/", "data-route": "", class: "brand" }, [
-    el("span", { class: "brand-name" }, ["ALMANPEDIA"]),
-    el("span", { class: "brand-sub" }, ["Die freie Enzyklopädie, amtlich vereinfacht"]),
-  ]);
   const header = el("header", { class: "site-header" }, [
-    el("div", { class: "header-inner" }, [brand, createSearchBox(navigate), status]),
+    el("div", { class: "header-inner" }, [createHeaderBrand(), createSearchBox(navigate), status]),
   ]);
   const main = el("main", { class: "site-main" });
   const footer = el("footer", { class: "site-footer" }, [
@@ -64,7 +65,7 @@ export function renderLanding(shell: AppShell): void {
   shell.main.replaceChildren(
     el("section", { class: "landing" }, [
       el("p", { class: "form-tag" }, ["FORMBLATT AP-1 — HINWEIS ZUR BENUTZUNG"]),
-      el("h1", {}, ["Almanpedia"]),
+      createLandingBrand(),
       el("p", { class: "lead" }, [
         "Almanpedia zeigt Artikel der deutschsprachigen Wikipedia in ",
         el("a", { href: "https://alman.ai", target: "_blank", rel: "noopener" }, ["Alman"]),
@@ -138,7 +139,6 @@ function scrollToArticleHash(hash: string | undefined): void {
   });
 }
 
-const TRANSLATING_BLOCK_MINIMUM_MS = 180;
 const CHANGE_REVEAL_DURATION_MS = 1_500;
 
 function revealTranslatedBlock(element: Element): void {
@@ -237,8 +237,14 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
 
   let showingOriginal = false;
   let showingDifferences = false;
-  let translationComplete = false;
+  let inferenceComplete = false;
   let differenceContent: Element | null = null;
+  let revealController: TranslationRevealController | null = null;
+
+  const syncContentLanguage = () => {
+    const fullyRevealed = inferenceComplete && (revealController?.pendingCount() ?? 0) === 0;
+    content.lang = !showingOriginal && fullyRevealed ? "de-AL" : "de";
+  };
 
   const hideDifferences = () => {
     showingDifferences = false;
@@ -247,6 +253,8 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     content.hidden = false;
     differenceToggle.textContent = "Änderungen anzeigen";
     differenceToggle.setAttribute("aria-pressed", "false");
+    revealController?.setPaused(showingOriginal);
+    syncContentLanguage();
   };
 
   const showDifferences = () => {
@@ -254,7 +262,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     const clone = activeController.createDifferenceClone();
     clone.classList.add("wiki-difference");
     clone.removeAttribute("hidden");
-    clone.setAttribute("lang", translationComplete ? "de-AL" : "de");
+    clone.setAttribute("lang", inferenceComplete ? "de-AL" : "de");
     const namespacedIds = namespaceIds(clone, "diff-", { rewriteFragmentLinks: false });
     clone.addEventListener("click", (event) => {
       if (!(event instanceof MouseEvent) || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
@@ -281,19 +289,21 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     if (!differenceContent) content.after(clone);
     differenceContent = clone;
     content.hidden = true;
+    revealController?.setPaused(true);
   };
 
   toggle.addEventListener("click", () => {
     if (!activeController) return;
-    if (showingDifferences) hideDifferences();
     showingOriginal = !showingOriginal;
+    if (showingDifferences) hideDifferences();
     if (showingOriginal) {
+      revealController?.setPaused(true);
       activeController.restoreOriginals();
-      content.lang = "de";
     } else {
       activeController.reapplyTranslations();
-      content.lang = translationComplete ? "de-AL" : "de";
+      revealController?.setPaused(false);
     }
+    syncContentLanguage();
     contents.refresh();
     toggle.textContent = showingOriginal ? "Alman anzeigen" : "Original anzeigen";
     toggle.setAttribute("aria-pressed", String(showingOriginal));
@@ -310,9 +320,10 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       activeController.reapplyTranslations();
       toggle.textContent = "Original anzeigen";
       toggle.setAttribute("aria-pressed", "false");
-      content.lang = translationComplete ? "de-AL" : "de";
+      syncContentLanguage();
     }
     showingDifferences = true;
+    revealController?.setPaused(true);
     activeController.translateAll();
     showDifferences();
     differenceToggle.textContent = "Änderungen ausblenden";
@@ -341,30 +352,39 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     root: content,
     engine: getEngine(),
     markChanges: true,
-    minimumTranslatingMs: TRANSLATING_BLOCK_MINIMUM_MS,
+    deferApplication: true,
     onStats: (stats) => {
       if (stats.totalBlocks === 0) {
-        translationComplete = true;
+        inferenceComplete = true;
+        syncContentLanguage();
         progress.done();
         return;
       }
       const done = stats.totalBlocks - stats.pendingBlocks;
       if (stats.pendingBlocks === 0) {
-        translationComplete = true;
+        inferenceComplete = true;
         contents.refresh();
         if (showingDifferences) showDifferences();
-        if (!showingOriginal) content.lang = "de-AL";
+        syncContentLanguage();
         progress.done();
         return;
       }
       progress.set(done / stats.totalBlocks, `ARTIKEL WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
     },
-    onBlockState: ({ element, state }) => {
-      element.setAttribute("data-alman-state", state);
-      if (state === "translated") revealTranslatedBlock(element);
+    onBlockState: (event) => revealController?.handleBlockState(event),
+  });
+  revealController = createTranslationRevealController({
+    root: content,
+    applyTranslation: (element) => controller.applyTranslation(element),
+    onReveal: (element) => {
+      revealTranslatedBlock(element);
+      contents.refresh();
+      syncContentLanguage();
     },
+    onPendingChange: () => syncContentLanguage(),
   });
   activeController = controller;
+  activeRevealController = revealController;
   toggle.removeAttribute("disabled");
   differenceToggle.removeAttribute("disabled");
   controller.start();
