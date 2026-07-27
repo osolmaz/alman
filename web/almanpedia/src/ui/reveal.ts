@@ -120,6 +120,7 @@ export function createTranslationRevealController({
     },
     setPaused(value) {
       paused = value;
+      root.toggleAttribute("data-alman-reveal-paused", paused);
       if (!paused) {
         for (const element of [...ready]) reveal(element);
       }
@@ -132,6 +133,7 @@ export function createTranslationRevealController({
     },
     destroy() {
       observer?.disconnect();
+      root.removeAttribute("data-alman-reveal-paused");
       ready.clear();
       visible.clear();
       notifyPending();
