@@ -434,23 +434,28 @@ h1,
 /* Translation states */
 @keyframes alman-translation-wave {
   from {
-    background-position: 130% 0;
+    background-position: 140% 0;
   }
   to {
-    background-position: -130% 0;
+    background-position: -140% 0;
   }
 }
 
 @keyframes alman-change-poof {
   0% {
     opacity: 0;
-    filter: blur(0.32rem) brightness(1.45);
-    text-shadow: 0 0 0.65rem rgb(51 102 204 / 55%);
+    filter: blur(0.42rem) brightness(1.6);
+    text-shadow: 0 0 0.8rem rgb(51 102 204 / 62%);
   }
-  55% {
+  38% {
+    opacity: 0.86;
+    filter: blur(0.08rem) brightness(1.28);
+    text-shadow: 0 0 0.4rem rgb(51 102 204 / 35%);
+  }
+  72% {
     opacity: 1;
-    filter: blur(0) brightness(1.15);
-    text-shadow: 0 0 0.25rem rgb(51 102 204 / 22%);
+    filter: blur(0) brightness(1.08);
+    text-shadow: 0 0 0.12rem rgb(51 102 204 / 18%);
   }
   100% {
     opacity: 1;
@@ -459,25 +464,59 @@ h1,
   }
 }
 
+html[data-translation-wave="on"] [data-alman-state="queued"],
+html[data-translation-wave="on"] [data-alman-state="translating"] {
+  background-repeat: no-repeat;
+  border-radius: 2px;
+}
+
+html[data-translation-wave="on"] [data-alman-state="queued"] {
+  background-image: linear-gradient(
+    105deg,
+    rgb(234 243 255 / 10%) 0%,
+    rgb(234 243 255 / 10%) 34%,
+    rgb(51 102 204 / 22%) 47%,
+    rgb(255 255 255 / 80%) 50%,
+    rgb(51 102 204 / 22%) 53%,
+    rgb(234 243 255 / 10%) 66%,
+    rgb(234 243 255 / 10%) 100%
+  );
+  background-position: 140% 0;
+  background-size: 260% 100%;
+  box-shadow: inset 0 0 1.1rem rgb(51 102 204 / 8%);
+  text-shadow: 0 0 0.18rem rgb(51 102 204 / 15%);
+  animation: alman-translation-wave 2.4s linear infinite;
+}
+
+html[data-translation-wave="on"] [data-alman-state="queued"]:nth-child(3n + 2) {
+  animation-delay: -0.8s;
+}
+
+html[data-translation-wave="on"] [data-alman-state="queued"]:nth-child(3n + 3) {
+  animation-delay: -1.6s;
+}
+
 html[data-translation-wave="on"] [data-alman-state="translating"] {
   background-image: linear-gradient(
     105deg,
-    transparent 0%,
-    transparent 38%,
-    rgb(234 243 255 / 18%) 45%,
-    rgb(51 102 204 / 18%) 50%,
-    rgb(234 243 255 / 18%) 55%,
-    transparent 62%,
-    transparent 100%
+    rgb(234 243 255 / 14%) 0%,
+    rgb(234 243 255 / 14%) 30%,
+    rgb(51 102 204 / 34%) 46%,
+    rgb(255 255 255 / 95%) 50%,
+    rgb(51 102 204 / 34%) 54%,
+    rgb(234 243 255 / 14%) 70%,
+    rgb(234 243 255 / 14%) 100%
   );
-  background-position: 130% 0;
+  background-position: 140% 0;
   background-size: 240% 100%;
-  animation: alman-translation-wave 1.25s linear infinite;
+  box-shadow: inset 0.2rem 0 rgb(51 102 204 / 55%);
+  animation: alman-translation-wave 1.05s linear infinite;
 }
 
 html[data-change-effects="on"] [data-alman-reveal] [data-alman-change],
 html[data-change-effects="on"] [data-alman-reveal][data-alman-change] {
-  animation: alman-change-poof 420ms ease-out both;
+  animation: alman-change-poof 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--alman-reveal-delay, 0ms);
 }
 
 .attribution {

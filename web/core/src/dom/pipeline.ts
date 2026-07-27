@@ -31,6 +31,8 @@ export interface DomTranslatorOptions {
   onBlockState?: (event: DomTranslationBlockEvent) => void;
   /** Mark inserted words and changed inline elements for an opt-in UI effect. */
   markChanges?: boolean;
+  /** Minimum time a block remains in the translating lifecycle state. */
+  minimumTranslatingMs?: number;
   /** Observe DOM additions and translate them as they appear. */
   observeMutations?: boolean;
   /**
@@ -81,6 +83,7 @@ export function createDomTranslator({
   onStats,
   onBlockState,
   markChanges = false,
+  minimumTranslatingMs = 0,
   observeMutations = true,
   idleBudgetSegments = 800,
 }: DomTranslatorOptions): DomTranslatorController {
@@ -292,9 +295,14 @@ export function createDomTranslator({
       }
       const charge = !item.visible;
       const run = () => {
+        const startedAt = performance.now();
         emitBlockState(item.block.element, "translating");
         return translateItem(item)
-          .then((state) => emitBlockState(item.block.element, state))
+          .then(async (state) => {
+            const remaining = minimumTranslatingMs - (performance.now() - startedAt);
+            if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, remaining));
+            emitBlockState(item.block.element, state);
+          })
           .catch(() => emitBlockState(item.block.element, "failed"))
           .then(() => {
             if (charge) idleBudgetLeft -= item.block.nodes.length;
