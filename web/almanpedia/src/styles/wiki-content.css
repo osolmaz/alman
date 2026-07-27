@@ -3,8 +3,8 @@
 .wiki-content {
   min-width: 0;
   overflow-wrap: break-word;
-  font-size: 0.875rem;
-  line-height: 1.65;
+  font-size: var(--article-font-size);
+  line-height: var(--article-line-height);
 }
 
 .wiki-content p {
@@ -15,14 +15,14 @@
   clear: both;
   margin: 1.5rem 0 0.45rem;
   padding-bottom: 0.15rem;
-  font-size: 1.55rem;
+  font-size: 1.55em;
   border-bottom: 1px solid var(--border);
 }
 
 .wiki-content h3 {
   clear: both;
   margin: 1.25rem 0 0.35rem;
-  font-size: 1.18rem;
+  font-size: 1.18em;
 }
 
 .wiki-content ul,
@@ -65,7 +65,7 @@
   background: var(--surface-subtle);
   border: 1px solid var(--border-subtle);
   border-top: 0;
-  font-size: 0.75rem;
+  font-size: 0.75em;
   line-height: 1.4;
 }
 
@@ -81,9 +81,10 @@
   max-width: 100%;
   margin: 1rem 0;
   overflow-x: auto;
-  background: #fff;
+  color: var(--ink);
+  background: var(--surface-raised);
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-size: 0.8em;
 }
 
 .wiki-content table.wikitable td,
@@ -119,7 +120,7 @@
   padding-left: 0.75rem;
   color: var(--muted);
   border-left: 3px solid var(--border-subtle);
-  font-size: 0.8rem;
+  font-size: 0.8em;
 }
 
 .wiki-content .gallery {
@@ -137,7 +138,7 @@
 .wiki-content ol.mw-references,
 .wiki-content .mw-references-wrap {
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: 0.75em;
 }
 
 .wiki-content sup.mw-ref a {
@@ -151,6 +152,30 @@
 .wiki-content math,
 .wiki-content .mwe-math-element {
   overflow-x: auto;
+}
+
+html[data-color-mode="dark"] .wiki-content table,
+html[data-color-mode="dark"] .wiki-content .infobox {
+  color: var(--ink) !important;
+  background: var(--surface-raised) !important;
+}
+
+html[data-color-mode="dark"] .wiki-content :is(table.wikitable, table.infobox) th {
+  color: var(--ink) !important;
+  background: var(--surface-subtle) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-color-mode="auto"] .wiki-content table,
+  html[data-color-mode="auto"] .wiki-content .infobox {
+    color: var(--ink) !important;
+    background: var(--surface-raised) !important;
+  }
+
+  html[data-color-mode="auto"] .wiki-content :is(table.wikitable, table.infobox) th {
+    color: var(--ink) !important;
+    background: var(--surface-subtle) !important;
+  }
 }
 
 @media (max-width: 40rem) {

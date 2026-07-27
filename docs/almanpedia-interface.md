@@ -22,13 +22,15 @@ When a translated block reveals, inserted word runs fade in from a soft blur ove
 
 The light bands and word reveal do not hide source text or change layout.
 
-Both effects are enabled by default. The `Darstellung` panel lets visitors disable either effect and stores this versioned record under `almanpedia:reader-settings:v1` in localStorage:
+Both effects are enabled by default. The `Erscheinungsbild` panel follows Wikipedia's current text and color controls. Article text ranges from 14 to 20 pixels, with 16 pixels as the standard size. Color can follow the operating-system preference or stay fixed in light or dark mode. The same panel lets visitors disable either translation effect and stores this record under `almanpedia:reader-settings:v1` in localStorage:
 
 ```json
 {
   "version": 1,
   "translationWave": true,
-  "changeEffects": true
+  "changeEffects": true,
+  "textSize": "standard",
+  "colorMode": "light"
 }
 ```
 
@@ -36,7 +38,7 @@ The effects stay enabled even when the operating system requests reduced motion.
 
 ## Page layout
 
-The article page follows the reading structure familiar from Wikipedia. It has a compact wordmark and search header, a serif article title, a sticky contents column on wide screens, a central article column, and a small appearance column. At intermediate widths the appearance column moves behind the `Darstellung` button. At narrow widths the contents become a collapsed in-flow panel and media or infobox floats return to the article column.
+The article page follows the reading structure familiar from Wikipedia. It has a compact wordmark and search header, a serif article title, a sticky contents column on wide screens, a central article column, and a small appearance column. At intermediate widths the appearance column moves behind the `Erscheinungsbild` button. At narrow widths the contents become a collapsed in-flow panel and media or infobox floats return to the article column.
 
 The CSS is maintained in `web/almanpedia/src/styles/base.css` and `web/almanpedia/src/styles/wiki-content.css`. It is an independent implementation using Wikipedia-like proportions and colors. The bundle excludes Vector stylesheets and inactive Wikimedia controls. Almanpedia's name, model status, source links, and license notice remain visible.
 
@@ -46,6 +48,6 @@ Generated contents links use the source heading IDs. Their labels refresh after 
 
 ## Accessibility and performance
 
-Settings use native checkboxes inside a native `details` control. Translation status remains available through the header's status region. The source language stays `de` while model work is incomplete, while translated blocks still wait for reveal, or while the German layer is selected. The article uses `de-AL` after model work is complete and every stored translation has been revealed.
+Settings use native radio buttons and checkboxes in labelled groups. The panel stays visible in the right column on wide screens and becomes a closable overlay at narrower widths. Translation status remains available through the header's status region. The source language stays `de` while model work is incomplete, while translated blocks still wait for reveal, or while the German layer is selected. The article uses `de-AL` after model work is complete and every stored translation has been revealed.
 
 The light animation continues through queued work and stored ready work, including the active model block. Revealed blocks receive a short-lived marker, which prevents a settings change from replaying effects across the whole article. Full-article scheduling raises every article block to the inference queue while the worker keeps one bounded inference stream.
