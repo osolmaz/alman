@@ -11,6 +11,12 @@ import { sanitizeParsoidBody } from "../wiki/sanitize";
 import { createHeaderBrand, createLandingBrand } from "./brand";
 import { createArticleContents } from "./contents";
 import { el, namespaceIds } from "./dom";
+import {
+  arrangeWikipediaMainPageSections,
+  createLandingIntroduction,
+  extractWikipediaMainPageSections,
+  WIKIPEDIA_MAIN_PAGE_TITLE,
+} from "./homepage";
 import { createSearchBox } from "./search";
 import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
 import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } from "./settings";
@@ -72,47 +78,103 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
   return { main, status, navigate, storage };
 }
 
-export function renderLanding(shell: AppShell): void {
+export async function renderLanding(shell: AppShell): Promise<void> {
   stopActiveTranslation();
-  document.title = "Almanpedia — Die freie Enzyklopädie, amtlich vereinfacht";
-  shell.main.className = "site-main";
-  shell.status.replaceChildren();
+  document.title = "Almanpedia — Die freie Enzyklopädie, vereinfacht";
+  const progress = progressBar();
+  const feed = el("div", { class: "landing-feed wiki-content", lang: "de" }, [
+    el("p", { class: "loading" }, ["Inhalte der deutschsprachigen Wikipedia werden geladen …"]),
+  ]);
+  shell.main.className = "site-main landing-page";
+  shell.status.replaceChildren(progress.element);
   shell.main.replaceChildren(
     el("section", { class: "landing" }, [
-      el("p", { class: "form-tag" }, ["FORMBLATT AP-1 — HINWEIS ZUR BENUTZUNG"]),
       createLandingBrand(),
-      el("p", { class: "lead" }, [
-        "Almanpedia zeigt Artikel der deutschsprachigen Wikipedia in ",
-        el("a", { href: "https://alman.ai", target: "_blank", rel: "noopener" }, ["Alman"]),
-        " — ein vereinfachte Fassung des Deutschen ohne grammatisches Geschlecht und ohne die meisten Kasusformen.",
+      createLandingIntroduction(),
+      el("div", { class: "landing-feed-heading" }, [
+        el("h2", {}, ["Aktuell in die deutschsprachige Wikipedia"]),
+        el("a", { href: articleUrl(WIKIPEDIA_MAIN_PAGE_TITLE), target: "_blank", rel: "noopener" }, ["Originale Hauptseite"]),
       ]),
-      el("h2", {}, ["§1 Benutzung"]),
-      el("p", {}, [
-        "Ersetzen Sie in ein beliebige Adresse der deutschsprachigen Wikipedia das Wort ",
-        el("code", {}, ["wikipedia"]),
-        " durch ",
-        el("code", {}, ["almanpedia"]),
-        ":",
-      ]),
-      el("p", { class: "url-example" }, [
-        el("code", {}, ["de.wikipedia.org/wiki/Kartoffel"]),
-        el("span", { class: "url-arrow" }, [" → "]),
-        el("code", {}, ["de.almanpedia.org/wiki/Kartoffel"]),
-      ]),
-      el("p", {}, ["Oder benutzen Sie die Suche oben."]),
-      el("h2", {}, ["§2 Verfahren"]),
-      el("p", {}, [
-        "Die Übersetzung erfolgt vollständig in Ihr Browser durch das Sprachmodell GoePT-1-20M (20 Millionen Parameter). " +
-          "Beim ersten Besuch lädt Ihr Browser das Modell einmalig herunter (ca. 34 MB); danach arbeitet es lokal. " +
-          "Es werden keine Inhalte an ein Server von Almanpedia übertragen — es gibt kein solche Server.",
-      ]),
-      el("h2", {}, ["§3 Beispiel"]),
-      el("p", {}, [
-        el("a", { href: "/wiki/Kartoffel", "data-route": "" }, ["Kartoffel"]),
-        " — die Wappenknolle dieser Anstalt.",
-      ]),
+      feed,
     ]),
   );
+
+  try {
+    const page = await fetchArticleHtml(WIKIPEDIA_MAIN_PAGE_TITLE);
+    if (!feed.isConnected) return;
+    const fragment = sanitizeParsoidBody(page.html);
+    rewriteArticleDom(fragment);
+    const sections = extractWikipediaMainPageSections(fragment);
+    feed.replaceChildren(...arrangeWikipediaMainPageSections(sections));
+  } catch (error) {
+    if (!feed.isConnected) return;
+    progress.done();
+    feed.replaceChildren(el("p", { class: "landing-feed-error" }, [
+      "Die aktuelle Wikipedia-Hauptseite konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
+    ]));
+    console.error("Wikipedia main page fetch failed", error);
+    return;
+  }
+
+  try {
+    await initModel((assetProgress: AssetProgress) => {
+      if (!feed.isConnected) return;
+      if (assetProgress.phase === "download") {
+        progress.set(
+          assetProgress.overallLoaded / assetProgress.overallTotal,
+          `MODELL WIRD GELADEN: ${Math.round((assetProgress.overallLoaded / assetProgress.overallTotal) * 100)} %`,
+        );
+      } else {
+        progress.set(1, "MODELL WIRD VORBEREITET …");
+      }
+    });
+  } catch (error) {
+    if (!feed.isConnected) return;
+    progress.done();
+    shell.status.append(el("span", { class: "status-error" }, [
+      "Übersetzung nicht verfügbar. Die deutschsprachige Hauptseite bleibt sichtbar.",
+    ]));
+    console.error("model init failed", error);
+    return;
+  }
+  if (!feed.isConnected) return;
+
+  let inferenceComplete = false;
+  let revealController: TranslationRevealController | null = null;
+  const syncFeedLanguage = () => {
+    const fullyRevealed = inferenceComplete && (revealController?.pendingCount() ?? 0) === 0;
+    feed.lang = fullyRevealed ? "de-AL" : "de";
+  };
+  const controller = createDomTranslator({
+    root: feed,
+    engine: getEngine(),
+    markChanges: true,
+    deferApplication: true,
+    onStats: (stats) => {
+      if (stats.totalBlocks === 0 || stats.pendingBlocks === 0) {
+        inferenceComplete = true;
+        syncFeedLanguage();
+        progress.done();
+        return;
+      }
+      const done = stats.totalBlocks - stats.pendingBlocks;
+      progress.set(done / stats.totalBlocks, `HAUPTSEITE WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
+    },
+    onBlockState: (event) => revealController?.handleBlockState(event),
+  });
+  revealController = createTranslationRevealController({
+    root: feed,
+    applyTranslation: (element) => controller.applyTranslation(element),
+    onReveal: (element) => {
+      revealTranslatedBlock(element);
+      syncFeedLanguage();
+    },
+    onPendingChange: () => syncFeedLanguage(),
+  });
+  activeController = controller;
+  activeRevealController = revealController;
+  controller.start();
+  controller.translateAll();
 }
 
 function attributionBlock(title: string): HTMLElement {
@@ -224,7 +286,6 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   });
   actions.append(settingsToggle);
   const articleColumn = el("div", { class: "article-column" }, [
-    el("p", { class: "article-kicker" }, ["Aus Almanpedia, die freie Enzyklopädie"]),
     el("div", { class: "article-head" }, [heading, actions]),
     content,
     attributionBlock(article.title),
