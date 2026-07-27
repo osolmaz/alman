@@ -15,15 +15,13 @@ test("header brand combines the raster mark with the vector wordmark", () => {
   expect(potato.getAttribute("srcset")).toContain("almanpedia-potato.png 973w");
   expect(potato.getAttribute("sizes")).toBe("60px");
   expect(wordmark.getAttribute("src")).toBe("/brand/almanpedia-wordmark.svg");
-  expect(wordmark.alt).toBe(
-    "ALMANPEDIA – Die freie Enzyklopädie, amtlich vereinfacht",
-  );
-  expect(wordmark.width).toBe(5020);
-  expect(wordmark.height).toBe(1143);
+  expect(wordmark.alt).toBe("ALMANPEDIA – Die freie Enzyklopädie, vereinfacht");
+  expect(wordmark.width).toBe(5477);
+  expect(wordmark.height).toBe(1305);
   expect(brand.querySelector(".brand-sub")).toBeNull();
 });
 
-test("wordmark and subtitle use font-independent outlined paths", () => {
+test("wordmark uses official Linux Libertine small caps and outlined paths", () => {
   const svg = readFileSync(
     resolve(process.cwd(), "almanpedia/public/brand/almanpedia-wordmark.svg"),
     "utf8",
@@ -31,13 +29,15 @@ test("wordmark and subtitle use font-independent outlined paths", () => {
 
   expect(svg).toContain("<title id=\"title\">ALMANPEDIA</title>");
   expect(svg).toContain(
-    "<desc id=\"description\">Die freie Enzyklopädie, amtlich vereinfacht</desc>",
+    "<desc id=\"description\">Die freie Enzyklopädie, vereinfacht</desc>",
   );
+  expect(svg).toContain('data-outline-source="LinLibertine_Re-4.7.3.otf"');
+  expect(svg).toContain('data-lettering="small-caps"');
+  expect(svg).toContain('data-line-gap="120"');
   expect(svg).not.toContain("<text");
-  expect(svg.match(/<path /gu)).toHaveLength(49);
-  expect(svg.match(/scale\(1 -1\)/gu)).toHaveLength(2);
-  expect(svg.match(/scale\(0\.74 -0\.74\)/gu)).toHaveLength(8);
-  expect(svg.match(/scale\(0\.28173 -0\.28173\)/gu)).toHaveLength(39);
+  expect(svg.match(/<path /gu)).toHaveLength(42);
+  expect(svg.match(/scale\(1 -1\)/gu)).toHaveLength(10);
+  expect(svg.match(/scale\(0\.38104 -0\.38104\)/gu)).toHaveLength(32);
 });
 
 test("landing brand uses the same assets in a vertical heading", () => {
@@ -47,7 +47,7 @@ test("landing brand uses the same assets in a vertical heading", () => {
   expect(brand.matches("h1.brand-vertical")).toBe(true);
   expect(potato.getAttribute("sizes")).toBe("(max-width: 40rem) 160px, 220px");
   expect(brand.querySelector<HTMLImageElement>(".brand-wordmark")?.alt).toContain(
-    "Die freie Enzyklopädie, amtlich vereinfacht",
+    "Die freie Enzyklopädie, vereinfacht",
   );
   expect(brand.querySelector(".brand-sub")).toBeNull();
 });
