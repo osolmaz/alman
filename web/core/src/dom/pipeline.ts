@@ -11,15 +11,26 @@ export interface DomTranslationStats {
   totalBlocks: number;
   translatedBlocks: number;
   pendingBlocks: number;
-  /** Pending blocks in or near the viewport — the user-perceived backlog. */
+  /** Pending blocks in or near the viewport. */
   pendingVisibleBlocks: number;
   translatedNodes: number;
+}
+
+export type DomTranslationBlockState = "queued" | "translating" | "translated" | "unchanged" | "failed";
+
+export interface DomTranslationBlockEvent {
+  element: Element;
+  state: DomTranslationBlockState;
 }
 
 export interface DomTranslatorOptions {
   root: Element;
   engine: SafeTranslator;
   onStats?: (stats: DomTranslationStats) => void;
+  /** Presentation-neutral lifecycle notification for each scheduled block. */
+  onBlockState?: (event: DomTranslationBlockEvent) => void;
+  /** Mark inserted words and changed inline elements for an opt-in UI effect. */
+  markChanges?: boolean;
   /** Observe DOM additions and translate them as they appear. */
   observeMutations?: boolean;
   /**
@@ -50,6 +61,7 @@ interface BlockRecord {
   translatedChildren: Node[];
   differenceChildren: Node[];
   translatedTextNodes: Text[];
+  changedElements: Element[];
 }
 
 interface TextRecord {
@@ -67,6 +79,8 @@ export function createDomTranslator({
   root,
   engine,
   onStats,
+  onBlockState,
+  markChanges = false,
   observeMutations = true,
   idleBudgetSegments = 800,
 }: DomTranslatorOptions): DomTranslatorController {
@@ -96,6 +110,14 @@ export function createDomTranslator({
     onStats?.(stats());
   }
 
+  function emitBlockState(element: Element, state: DomTranslationBlockState): void {
+    try {
+      onBlockState?.({ element, state });
+    } catch {
+      // Presentation callbacks cannot interrupt translation.
+    }
+  }
+
   function stats(): DomTranslationStats {
     const translatedTextNodes = new Set<Text>(textRecords.keys());
     for (const record of records.values()) {
@@ -116,6 +138,7 @@ export function createDomTranslator({
       queued.add(block.element);
       const item: WorkItem = { block, visible: intersection === null, done: false };
       items.push(item);
+      emitBlockState(block.element, "queued");
       intersection?.observe(block.element);
     }
     drain();
@@ -175,6 +198,13 @@ export function createDomTranslator({
     }
   }
 
+  function markChangedElements(elements: Element[], changed: boolean): void {
+    for (const element of elements) {
+      if (changed) element.setAttribute("data-alman-change", "");
+      else element.removeAttribute("data-alman-change");
+    }
+  }
+
   function elementContainsNestedBlock(element: Element): boolean {
     const view = element.ownerDocument.defaultView;
     const getComputedStyle: ComputedStyleGetter | undefined = view?.getComputedStyle
@@ -183,10 +213,10 @@ export function createDomTranslator({
     return Array.from(element.children).some((child) => isBlockElement(child, getComputedStyle) || elementContainsNestedBlock(child));
   }
 
-  async function translateTextNodes(item: WorkItem): Promise<void> {
+  async function translateTextNodes(item: WorkItem): Promise<boolean> {
     let touched = false;
     for (const node of item.block.nodes) {
-      if (!running) return;
+      if (!running) return touched;
       if (!node.isConnected) continue;
       const original = textRecords.get(node)?.original ?? node.nodeValue;
       if (!original) continue;
@@ -197,27 +227,28 @@ export function createDomTranslator({
       touched = true;
     }
     if (touched) translatedBlocks += 1;
+    return touched;
   }
 
-  async function translateItem(item: WorkItem): Promise<void> {
+  async function translateItem(item: WorkItem): Promise<"translated" | "unchanged"> {
     item.done = true;
-    if (!item.block.element.isConnected) return;
-    if (records.has(item.block.element)) return;
+    if (!item.block.element.isConnected) return "unchanged";
+    if (records.has(item.block.element)) return "unchanged";
     if (elementContainsNestedBlock(item.block.element)) {
-      await translateTextNodes(item);
+      const translated = await translateTextNodes(item);
       intersection?.unobserve(item.block.element);
-      return;
+      return translated ? "translated" : "unchanged";
     }
     const plan = createBlockTranslationPlan(item.block.element, {
       getComputedStyle: (element) => item.block.element.ownerDocument.defaultView?.getComputedStyle(element as Element),
     });
-    if (!plan) return;
+    if (!plan) return "unchanged";
     const originalChildren = Array.from(item.block.element.childNodes);
-    const result = await translateBlockPlan(plan, engine);
-    if (!running) return;
+    const result = await translateBlockPlan(plan, engine, { markChanges });
+    if (!running) return "unchanged";
     if (!result.translated) {
       intersection?.unobserve(item.block.element);
-      return;
+      return "unchanged";
     }
     recordPlaceholderUpdates(result.placeholderTextUpdates, !showingOriginals);
     const record: BlockRecord = {
@@ -225,11 +256,16 @@ export function createDomTranslator({
       translatedChildren: result.translatedChildren,
       differenceChildren: result.differenceChildren,
       translatedTextNodes: item.block.nodes,
+      changedElements: result.changedElements,
     };
     records.set(item.block.element, record);
-    if (!showingOriginals) replaceRecordedBlockChildren(item.block.element, record, result.translatedChildren);
+    if (!showingOriginals) {
+      replaceRecordedBlockChildren(item.block.element, record, result.translatedChildren);
+      markChangedElements(record.changedElements, true);
+    }
     translatedBlocks += 1;
     intersection?.unobserve(item.block.element);
+    return "translated";
   }
 
   function nextItem(): WorkItem | undefined {
@@ -255,14 +291,17 @@ export function createDomTranslator({
         return;
       }
       const charge = !item.visible;
-      const run = () =>
-        translateItem(item)
-          .catch(() => {})
+      const run = () => {
+        emitBlockState(item.block.element, "translating");
+        return translateItem(item)
+          .then((state) => emitBlockState(item.block.element, state))
+          .catch(() => emitBlockState(item.block.element, "failed"))
           .then(() => {
             if (charge) idleBudgetLeft -= item.block.nodes.length;
             emitStats();
             step();
           });
+      };
       if (charge) scheduleIdle(run);
       else run();
     };
@@ -330,6 +369,7 @@ export function createDomTranslator({
     restoreOriginals() {
       showingOriginals = true;
       for (const [element, record] of records) {
+        markChangedElements(record.changedElements, false);
         if (element.isConnected) replaceRecordedBlockChildren(element, record, record.originalChildren);
       }
       for (const [node, record] of textRecords) {
@@ -339,7 +379,10 @@ export function createDomTranslator({
     reapplyTranslations() {
       showingOriginals = false;
       for (const [element, record] of records) {
-        if (element.isConnected) replaceRecordedBlockChildren(element, record, record.translatedChildren);
+        if (element.isConnected) {
+          replaceRecordedBlockChildren(element, record, record.translatedChildren);
+          markChangedElements(record.changedElements, true);
+        }
       }
       for (const [node, record] of textRecords) {
         if (node.isConnected) node.nodeValue = record.translated;

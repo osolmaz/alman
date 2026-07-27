@@ -39,6 +39,8 @@ test("block plans preserve inline punctuation while restoring link and italic no
   expect(paragraph.textContent).toBe("die Wort für Trüffelchen, das wiederum von terrae tuber kommt.");
   expect(paragraph.querySelector("a")?.getAttribute("href")).toBe("/wiki/Trüffel");
   expect(paragraph.querySelector("i")?.textContent).toBe("terrae tuber");
+  expect(paragraph.querySelector("[data-alman-change]")).toBeNull();
+  expect(result.changedElements).toEqual([]);
 });
 
 test("block plans build a semantic word diff while preserving inline links", async () => {
@@ -48,6 +50,7 @@ test("block plans build a semantic word diff while preserving inline links", asy
   const result = await translateBlockPlan(
     plan,
     translator({ [plan.source]: "die Wort für <x0>Trüffelchen</x0>." }),
+    { markChanges: true },
   );
 
   const difference = paragraph.cloneNode(false) as HTMLParagraphElement;
@@ -56,6 +59,11 @@ test("block plans build a semantic word diff while preserving inline links", asy
   expect(Array.from(difference.querySelectorAll("del"), (node) => node.textContent)).toEqual(["dem", "Trüffel"]);
   expect(Array.from(difference.querySelectorAll("ins"), (node) => node.textContent)).toEqual(["die", "Trüffelchen"]);
   expect(difference.querySelector('ins a[href="/wiki/Trüffel"]')?.textContent).toBe("Trüffelchen");
+
+  const translated = document.createElement("p");
+  translated.append(...result.translatedChildren.map((child) => child.cloneNode(true)));
+  expect(Array.from(translated.querySelectorAll("[data-alman-change]"), (node) => node.textContent)).toEqual(["die"]);
+  expect(result.changedElements).toEqual([paragraph.querySelector("a")]);
   expect(paragraph.innerHTML).toBe('dem Wort für <a href="/wiki/Trüffel">Trüffel</a>.');
 });
 

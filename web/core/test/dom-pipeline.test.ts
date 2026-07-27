@@ -164,6 +164,61 @@ test("pipeline creates a detached difference layer without changing the live art
   controller.stop();
 });
 
+test("pipeline reports block lifecycle and marks changed translated runs", async () => {
+  const source = "Siehe <x0>dem Mann</x0>.";
+  document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
+  let resolveTranslation: ((value: string) => void) | undefined;
+  const states: string[] = [];
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    translateText(text) {
+      if (text !== source) return Promise.resolve(text);
+      return new Promise((resolve) => {
+        resolveTranslation = resolve;
+      });
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({
+    root: document.querySelector("main")!,
+    engine,
+    markChanges: true,
+    observeMutations: false,
+    onBlockState: ({ state }) => states.push(state),
+  });
+  controller.start();
+  await vi.waitFor(() => expect(resolveTranslation).toBeTypeOf("function"));
+  expect(states).toEqual(["queued", "translating"]);
+
+  resolveTranslation?.("Siehe <x0>die Mann</x0>.");
+  await controller.whenIdle();
+  expect(states).toEqual(["queued", "translating", "translated"]);
+  expect(document.querySelector("#link[data-alman-change]")?.textContent).toBe("die Mann");
+
+  controller.restoreOriginals();
+  expect(document.querySelector("#link[data-alman-change]")).toBeNull();
+  controller.reapplyTranslations();
+  expect(document.querySelector("#link[data-alman-change]")?.textContent).toBe("die Mann");
+  controller.stop();
+});
+
+test("pipeline isolates lifecycle callback failures", async () => {
+  setupPage();
+  const controller = createDomTranslator({
+    root: document.body,
+    engine: markerEngine(),
+    observeMutations: false,
+    onBlockState: () => { throw new Error("presentation failed"); },
+  });
+  controller.start();
+  await controller.whenIdle();
+  expect(document.getElementById("a")?.textContent).toBe(`⟦${GERMAN_A}⟧`);
+  controller.stop();
+});
+
 test("pipeline leaves pending inline translations original after restoring originals", async () => {
   const source = "Siehe <x0>dem Mann</x0>.";
   document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;

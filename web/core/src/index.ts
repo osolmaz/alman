@@ -28,6 +28,7 @@ export {
 export { collectTextBlocks, type TextBlock } from "./dom/blocks";
 export {
   createBlockTranslationPlan,
+  createTranslatedTextNodes,
   translateBlockPlan,
   type BlockPlaceholder,
   type BlockTranslationPlan,
@@ -35,6 +36,8 @@ export {
 } from "./dom/block-plan";
 export {
   createDomTranslator,
+  type DomTranslationBlockEvent,
+  type DomTranslationBlockState,
   type DomTranslationStats,
   type DomTranslatorController,
   type DomTranslatorOptions,
