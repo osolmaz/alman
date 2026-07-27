@@ -28,7 +28,7 @@ function wordmarkImage(): HTMLImageElement {
     class: "brand-wordmark",
     src: WORDMARK_SRC,
     alt: "ALMANPEDIA",
-    width: "6291",
+    width: "5028",
     height: "940",
   });
 }

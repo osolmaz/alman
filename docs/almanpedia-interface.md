@@ -40,7 +40,7 @@ The article page follows the reading structure familiar from Wikipedia. It has a
 
 The CSS is maintained in `web/almanpedia/src/styles/base.css` and `web/almanpedia/src/styles/wiki-content.css`. It is an independent implementation using Wikipedia-like proportions and colors. The bundle excludes Vector stylesheets and inactive Wikimedia controls. Almanpedia's name, model status, source links, and license notice remain visible.
 
-The brand uses one raster emblem and one vector wordmark. The full 973 by 717 PNG lives under `web/almanpedia/public/brand/`, with smaller brand images from 96 through 384 pixels for responsive loading. Every brand PNG contains no metadata or trailing bytes. The wordmark uses outlined uppercase Libertinus Serif glyphs. The header places the brand assets side by side and keeps the subtitle within the wordmark width. The landing page stacks the same brand assets. Raster browser icons use the same emblem.
+The brand uses one raster emblem and one vector wordmark. The full 973 by 717 PNG lives under `web/almanpedia/public/brand/`, with smaller brand images from 96 through 384 pixels for responsive loading. Every brand PNG contains no metadata or trailing bytes. The wordmark uses outlined uppercase Libertinus Serif glyphs, with larger first and last letters. The serif subtitle stays within the wordmark width in the side-by-side header lockup. The landing page stacks the same brand assets. Raster browser icons use the same emblem.
 
 Generated contents links use the source heading IDs. Their labels refresh after translation and when the visitor changes between German and Alman. Comparison clones namespace their own IDs while canonical fragment URLs remain unchanged.
 
