@@ -24,6 +24,8 @@ test("shortcut guide demonstrates the address replacement and links the local mo
   const guide = createShortcutGuide();
 
   expect(guide.querySelector(".browser-demo")?.getAttribute("aria-hidden")).toBe("true");
+  expect(guide.querySelector(".demo-site-control")).toBeNull();
+  expect(guide.textContent).not.toContain("⌁");
   expect(guide.querySelector(".demo-address-start")?.textContent).toBe("de.wikipedia.org/wiki/Kartoffel");
   expect(guide.querySelector(".demo-address-select .demo-selection")?.textContent).toBe("wiki");
   expect(guide.querySelector(".demo-address-type .demo-typed-word")?.textContent).toBe("alman");
