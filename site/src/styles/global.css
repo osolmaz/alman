@@ -402,8 +402,10 @@ tbody tr:first-child .lb-bar-fill {
   border-bottom: 1px solid var(--ink);
 }
 
+/* The masthead spans a wider column than the text body so the full nav,
+   including the language switcher, fits on one line next to the brand. */
 .site-header .inner {
-  max-width: var(--content-width);
+  max-width: 60rem;
   margin: 0 auto;
   padding: 1.1rem 1.25rem;
   display: flex;
@@ -632,13 +634,17 @@ tbody tr:first-child .lb-bar-fill {
   color: var(--form-blue);
 }
 
-@media (max-width: 640px) {
+/* Below the one-line masthead width, stack the nav in its own row instead
+   of letting items wrap raggedly next to the brand. */
+@media (max-width: 960px) {
   .site-nav {
     margin-left: 0;
     width: 100%;
     justify-content: space-between;
   }
+}
 
+@media (max-width: 640px) {
   .site-brand img {
     height: 2.5rem;
   }

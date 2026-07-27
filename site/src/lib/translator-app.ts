@@ -135,6 +135,25 @@ export function initTranslator(root: HTMLElement): void {
     return initPromise;
   }
 
+  // Line breaks in pasted text are hard segment boundaries. Intl.Segmenter
+  // only splits on sentence punctuation, so without this a heading or a long
+  // list line would be glued into one oversized model input.
+  function* inputSegments(text: string): Generator<string> {
+    for (const part of text.split(/(\n)/)) {
+      if (part === "\n" || !part.trim()) {
+        if (part) yield part;
+        continue;
+      }
+      yield* sentenceSegments(part, "de");
+    }
+  }
+
+  // The model's task is a near-copy of its input, so a translation that is
+  // much longer than its source is a decoder repetition loop. Treat the
+  // segment as unsafe and keep the original, like other guarded inputs.
+  const looksDegenerate = (segment: string, translated: string): boolean =>
+    translated.length > segment.length * 1.5 + 80;
+
   async function translateNow(): Promise<void> {
     runId += 1;
     const id = runId;
@@ -156,9 +175,17 @@ export function initTranslator(root: HTMLElement): void {
     const activeEngine = getEngine();
     let output = "";
     target!.textContent = "";
-    for (const segment of sentenceSegments(text, "de")) {
-      const translated = await activeEngine.translateSegment(segment);
+    for (const segment of inputSegments(text)) {
+      if (segment === "\n" || !segment.trim()) {
+        output += segment;
+        target!.textContent = output;
+        continue;
+      }
+      let translated = await activeEngine.translateSegment(segment);
       if (id !== runId) return;
+      if (translated !== segment && looksDegenerate(segment, translated)) {
+        translated = segment;
+      }
       output += translated;
       target!.textContent = output;
       copyButton!.disabled = output.trim() === "";
@@ -170,16 +197,39 @@ export function initTranslator(root: HTMLElement): void {
     charCount!.textContent = String(source!.value.length);
   }
 
-  source.addEventListener("input", () => {
+  // Grow the source box with its content so it never scrolls internally.
+  // The CSS min-height (which is responsive) stays the floor.
+  function autosizeSource(): void {
+    const style = source!.style;
+    style.minHeight = "";
+    // flex-grow would keep the box stretched while measuring, so the box
+    // could never shrink back after text is deleted.
+    style.flex = "0 0 auto";
+    style.height = "0";
+    const floor = parseFloat(getComputedStyle(source!).minHeight) || 0;
+    const needed = Math.max(source!.scrollHeight, floor);
+    style.height = "";
+    style.flex = "";
+    style.minHeight = `${needed}px`;
+  }
+
+  function refreshSource(): void {
     refreshCharCount();
+    autosizeSource();
+  }
+
+  source.addEventListener("input", () => {
+    refreshSource();
     window.clearTimeout(debounceTimer);
     debounceTimer = window.setTimeout(() => void translateNow(), DEBOUNCE_MS);
   });
 
+  window.addEventListener("resize", autosizeSource);
+
   clearButton.addEventListener("click", () => {
     window.clearTimeout(debounceTimer);
     source!.value = "";
-    refreshCharCount();
+    refreshSource();
     void translateNow();
     source!.focus();
   });
@@ -200,7 +250,7 @@ export function initTranslator(root: HTMLElement): void {
     sample.addEventListener("click", () => {
       window.clearTimeout(debounceTimer);
       source!.value = sample.textContent?.trim() ?? "";
-      refreshCharCount();
+      refreshSource();
       void translateNow();
     });
   }
