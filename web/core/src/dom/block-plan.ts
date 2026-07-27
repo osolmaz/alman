@@ -345,7 +345,17 @@ function normalizedWordMatches(text: string): RegExpStringIterator<RegExpExecArr
   return text.matchAll(/[\p{L}\p{N}]+/gu);
 }
 
-/** Reject lexical moves only when a word crosses live DOM ownership scopes. */
+function anchorSeparatesHunks(plan: BlockTranslationPlan, left: EditHunk, right: EditHunk): boolean {
+  if (left.end <= right.start) {
+    return plan.anchors.some((anchor) => anchor.offset >= left.end && anchor.offset <= right.start);
+  }
+  if (right.end <= left.start) {
+    return plan.anchors.some((anchor) => anchor.offset >= right.end && anchor.offset <= left.start);
+  }
+  return false;
+}
+
+/** Reject lexical moves when a word crosses live DOM ownership or anchor boundaries. */
 function segmentHasLexicalMoves(
   plan: BlockTranslationPlan,
   source: string,
@@ -399,6 +409,7 @@ function segmentHasLexicalMoves(
       for (const word of addedHunk.added) {
         const removedScopes = removedHunk.removedScopes.get(word);
         if (!removedScopes) continue;
+        if (anchorSeparatesHunks(plan, addedHunk, removedHunk)) return true;
         if (!additionOwner || removedScopes.length === 0) return true;
         if (removedScopes.some((scope) => !sameAncestors(scope, additionOwner.ancestors))) return true;
       }
@@ -656,8 +667,9 @@ function projectTranslation(
   markChanges: boolean,
 ): { projection: Projection | null; failureDetail?: ProjectionFailureDetail } {
   const firstAncestors = plan.runs[0]?.ancestors ?? [];
-  const crossesInlineScopes = plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
-  if (crossesInlineScopes && hasLexicalMoves(plan, translated)) {
+  const crossesLiveBoundary = plan.anchors.length > 0
+    || plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
+  if (crossesLiveBoundary && hasLexicalMoves(plan, translated)) {
     return { projection: null, failureDetail: "lexical-move" };
   }
   const projection = projectWordChanges(plan, translated, markChanges)

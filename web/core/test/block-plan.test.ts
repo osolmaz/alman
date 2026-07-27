@@ -427,6 +427,19 @@ test("independent sentences do not confuse inflection changes with lexical moves
   expect(document.getElementById("day")).toBe(day);
 });
 
+test("lexical moves cannot cross omitted foreign inline content", async () => {
+  document.body.innerHTML = `<p id="p">Foo,<span id="foreign" lang="en">X</span> bar</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const original = paragraph.innerHTML;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: "bar, Foo" }));
+
+  expect(plan.source).toBe("Foo, bar");
+  expect(result.translated).toBe(false);
+  expect(result.failureDetail).toBe("lexical-move");
+  expect(paragraph.innerHTML).toBe(original);
+});
+
 test("same-scope inflections are not mistaken for moves around an inline link", async () => {
   document.body.innerHTML = `<p id="p">Dies ist ein <a id="link">Begriff</a>, das bleibt.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;
