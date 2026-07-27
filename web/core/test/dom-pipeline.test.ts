@@ -73,8 +73,7 @@ test("pipeline translates German runs around foreign inline text", async () => {
     async translateSegment(segment) { return segment; },
     async translateText(text) {
       inputs.push(text);
-      if (text === "Der ") return "Die ";
-      if (text === " Mann kommt.") return " Typ kommt.";
+      if (text === "Der Mann kommt.") return "Die Typ kommt.";
       return text;
     },
     async dispose() {},
@@ -83,7 +82,7 @@ test("pipeline translates German runs around foreign inline text", async () => {
   controller.start();
   await controller.whenIdle();
 
-  expect(inputs).toEqual(["Der ", " Mann kommt."]);
+  expect(inputs).toEqual(["Der Mann kommt."]);
   expect(document.getElementById("mixed")?.textContent).toBe("Die API Typ kommt.");
   expect(document.getElementById("foreign")).toBe(foreign);
   expect(foreign?.textContent).toBe("API");

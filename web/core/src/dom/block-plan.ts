@@ -56,6 +56,8 @@ export interface BlockTextRun {
   end: number;
   /** Inline ancestors from the block child inward. */
   ancestors: Element[];
+  /** Live prefix omitted from model input but retained in this text node. */
+  preservedPrefix?: string;
   /** Live structural node represented as whitespace in model input. */
   structural?: Node;
   structuralParent?: Node;
@@ -83,8 +85,6 @@ export interface BlockTranslationPlan {
   source: string;
   runs: BlockTextRun[];
   anchors: BlockAnchor[];
-  /** Source offsets where omitted foreign-language content separates model calls. */
-  translationBoundaries: number[];
   elementRanges: BlockElementRange[];
   /** Child identity and order for every element whose text entered the source. */
   childSnapshots: BlockChildSnapshot[];
@@ -144,10 +144,29 @@ export function createBlockTranslationPlan(
   const sourceParts: string[] = [];
   const runs: BlockTextRun[] = [];
   const anchors: BlockAnchor[] = [];
-  const translationBoundaries: number[] = [];
   const elementRanges: BlockElementRange[] = [];
   const childSnapshots: BlockChildSnapshot[] = [{ parent: element, children: Array.from(element.childNodes) }];
   let offset = 0;
+  let pendingForeignBoundary: Node | null = null;
+
+  function appendForeignBoundarySeparator(ancestors: Element[]): void {
+    if (!pendingForeignBoundary || offset === 0) return;
+    const previous = sourceParts.at(-1) ?? "";
+    if (/\s$/u.test(previous)) return;
+    const start = offset;
+    const synthetic = element.ownerDocument.createTextNode(" ");
+    sourceParts.push(" ");
+    offset += 1;
+    runs.push({
+      node: synthetic,
+      original: " ",
+      start,
+      end: offset,
+      ancestors,
+      structural: pendingForeignBoundary,
+      structuralParent: pendingForeignBoundary.parentNode ?? undefined,
+    });
+  }
 
   function append(node: Node, ancestors: Element[], language: TranslationLanguage): void {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -155,13 +174,28 @@ export function createBlockTranslationPlan(
       if (!original) return;
       if (language === "foreign") {
         anchors.push({ node, offset });
-        translationBoundaries.push(offset);
+        pendingForeignBoundary = node;
         return;
       }
+      appendForeignBoundarySeparator(ancestors);
+      let sourceOriginal = original;
+      let preservedPrefix = "";
+      if (pendingForeignBoundary && offset > 0 && /\s$/u.test(sourceParts.at(-1) ?? "")) {
+        preservedPrefix = sourceOriginal.match(/^\s+/u)?.[0] ?? "";
+        sourceOriginal = sourceOriginal.slice(preservedPrefix.length);
+      }
+      pendingForeignBoundary = null;
       const start = offset;
-      sourceParts.push(original);
-      offset += original.length;
-      runs.push({ node: node as Text, original, start, end: offset, ancestors });
+      sourceParts.push(sourceOriginal);
+      offset += sourceOriginal.length;
+      runs.push({
+        node: node as Text,
+        original,
+        start,
+        end: offset,
+        ancestors,
+        ...(preservedPrefix ? { preservedPrefix } : {}),
+      });
       return;
     }
     if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -174,7 +208,7 @@ export function createBlockTranslationPlan(
     if (separator !== undefined) {
       if (childLanguage === "foreign") {
         anchors.push({ node: child, offset });
-        translationBoundaries.push(offset);
+        pendingForeignBoundary = child;
         return;
       }
       const start = offset;
@@ -215,15 +249,7 @@ export function createBlockTranslationPlan(
   for (const child of Array.from(element.childNodes)) append(child, [], rootLanguage);
   const source = sourceParts.join("");
   if (!source.trim()) return null;
-  return {
-    element,
-    source,
-    runs,
-    anchors,
-    translationBoundaries: [...new Set(translationBoundaries)].sort((left, right) => left - right),
-    elementRanges,
-    childSnapshots,
-  };
+  return { element, source, runs, anchors, elementRanges, childSnapshots };
 }
 
 function differenceSeparator(document: Document, removed: string, added: string): Node[] {
@@ -428,11 +454,12 @@ function finishProjection(
   const updates: TextUpdate[] = [];
   const changedElements = new Set<Element>();
   for (const run of plan.runs) {
-    const target = output.get(run) ?? "";
+    const projectedTarget = output.get(run) ?? "";
     if (run.structural) {
-      if (!/^\s*$/u.test(target)) return null;
+      if (!/^\s*$/u.test(projectedTarget)) return null;
       continue;
     }
+    const target = `${run.preservedPrefix ?? ""}${projectedTarget}`;
     targets.set(run.node, target);
     if (target === run.original) continue;
     const directTextWithEffects = markChanges && run.node.parentNode === plan.element;
@@ -709,95 +736,13 @@ function childSnapshotsAreCurrent(plan: BlockTranslationPlan): boolean {
   });
 }
 
-interface TranslationRange {
-  start: number;
-  end: number;
-}
-
-function translationRanges(plan: BlockTranslationPlan): TranslationRange[] {
-  const boundaries = [
-    0,
-    ...plan.translationBoundaries.filter((offset) => offset > 0 && offset < plan.source.length),
-    plan.source.length,
-  ];
-  return boundaries.slice(0, -1).map((start, index) => ({ start, end: boundaries[index + 1]! }));
-}
-
-function sliceTranslationPlan(
-  plan: BlockTranslationPlan,
-  { start, end }: TranslationRange,
-): BlockTranslationPlan | null {
-  const overlapping = runsOverlapping(plan.runs, start, end);
-  if (overlapping.some((run) => run.start < start || run.end > end)) return null;
-  return {
-    element: plan.element,
-    source: plan.source.slice(start, end),
-    runs: overlapping.map((run) => ({ ...run, start: run.start - start, end: run.end - start })),
-    anchors: plan.anchors
-      .filter((anchor) => anchor.offset > start && anchor.offset < end)
-      .map((anchor) => ({ ...anchor, offset: anchor.offset - start })),
-    translationBoundaries: [],
-    elementRanges: plan.elementRanges
-      .filter((range) => range.start >= start && range.end <= end)
-      .map((range) => ({ ...range, start: range.start - start, end: range.end - start })),
-    childSnapshots: plan.childSnapshots,
-  };
-}
-
-async function translateAndProjectRanges(
-  plan: BlockTranslationPlan,
-  engine: SafeTranslator,
-  markChanges: boolean,
-): Promise<{
-  translatedText: string;
-  changed: boolean;
-  projection: Projection | null;
-  failureDetail?: ProjectionFailureDetail;
-}> {
-  const targets = new Map<Text, string>();
-  const updates: TextUpdate[] = [];
-  const changedElements = new Set<Element>();
-  const translatedParts: string[] = [];
-  let changed = false;
-
-  for (const range of translationRanges(plan)) {
-    const rangePlan = sliceTranslationPlan(plan, range);
-    if (!rangePlan) {
-      return { translatedText: plan.source, changed: false, projection: null, failureDetail: "ambiguous-ownership" };
-    }
-    const translated = rangePlan.source.trim()
-      ? await engine.translateText(rangePlan.source)
-      : rangePlan.source;
-    translatedParts.push(translated);
-    changed ||= translated !== rangePlan.source;
-    const attempt = projectTranslation(rangePlan, translated, markChanges);
-    if (!attempt.projection) {
-      return {
-        translatedText: translatedParts.join(""),
-        changed,
-        projection: null,
-        ...(attempt.failureDetail ? { failureDetail: attempt.failureDetail } : {}),
-      };
-    }
-    for (const [node, target] of attempt.projection.targets) targets.set(node, target);
-    updates.push(...attempt.projection.updates);
-    for (const element of attempt.projection.changedElements) changedElements.add(element);
-  }
-
-  return {
-    translatedText: translatedParts.join(""),
-    changed,
-    projection: { targets, updates, changedElements: [...changedElements] },
-  };
-}
-
 export async function translateBlockPlan(
   plan: BlockTranslationPlan,
   engine: SafeTranslator,
   { markChanges = false }: { markChanges?: boolean } = {},
 ): Promise<BlockTranslationResult> {
-  const attempt = await translateAndProjectRanges(plan, engine, markChanges);
-  if (!attempt.changed) return unchangedResult(plan);
+  const translatedText = await engine.translateText(plan.source);
+  if (translatedText === plan.source) return unchangedResult(plan);
   if (
     plan.runs.some((run) => !runStructureIsCurrent(plan, run)) ||
     !runOrderIsCurrent(plan) ||
@@ -805,11 +750,12 @@ export async function translateBlockPlan(
   ) {
     return unchangedResult(plan, "stale", "dom-stale");
   }
+  const attempt = projectTranslation(plan, translatedText, markChanges);
   if (!attempt.projection) return unchangedResult(plan, "ambiguous", attempt.failureDetail);
   const document = plan.element.ownerDocument;
   return {
     translated: true,
-    translatedText: attempt.translatedText,
+    translatedText,
     translatedChildren: translatedChildren(plan, attempt.projection, markChanges),
     differenceChildren: Array.from(plan.element.childNodes).flatMap((child) => differenceNode(child, document, attempt.projection!.targets)),
     textUpdates: attempt.projection.updates,

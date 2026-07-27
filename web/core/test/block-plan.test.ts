@@ -216,7 +216,7 @@ test("protected and hidden subtrees never enter model input", () => {
   expect(plan.source).not.toContain("versteckt");
 });
 
-test("foreign inline text separates model calls without blocking surrounding translation", async () => {
+test("foreign inline text keeps a stable model boundary without blocking surrounding translation", async () => {
   document.body.innerHTML = `<p id="p">Der <span id="foreign" lang="en">API</span> Mann kommt.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;
   const foreign = document.getElementById("foreign");
@@ -226,24 +226,37 @@ test("foreign inline text separates model calls without blocking surrounding tra
     async translateSegment(segment) { return segment; },
     async translateText(text) {
       inputs.push(text);
-      if (text === "Der ") return "Die ";
-      if (text === " Mann kommt.") return " Typ kommt.";
+      if (text === "Der Mann kommt.") return "Die Typ kommt.";
       return text;
     },
     async dispose() {},
   };
 
-  expect(plan.source).toBe("Der  Mann kommt.");
-  expect(plan.translationBoundaries).toEqual([4]);
+  expect(plan.source).toBe("Der Mann kommt.");
   const result = await translateBlockPlan(plan, engine);
   applyResult(paragraph, result);
 
-  expect(inputs).toEqual(["Der ", " Mann kommt."]);
+  expect(inputs).toEqual(["Der Mann kommt."]);
   expect(result.translated).toBe(true);
-  expect(result.translatedText).toBe("Die  Typ kommt.");
+  expect(result.translatedText).toBe("Die Typ kommt.");
   expect(paragraph.textContent).toBe("Die API Typ kommt.");
   expect(document.getElementById("foreign")).toBe(foreign);
   expect(foreign?.textContent).toBe("API");
+});
+
+test("foreign inline text without surrounding spaces still gets a plain-text boundary", async () => {
+  document.body.innerHTML = `<p id="p">Das<span id="foreign" lang="en">API</span>ist gut.</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const foreign = document.getElementById("foreign");
+  const plan = createBlockTranslationPlan(paragraph)!;
+
+  expect(plan.source).toBe("Das ist gut.");
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: "Die ist gut." }));
+  applyResult(paragraph, result);
+
+  expect(result.translated).toBe(true);
+  expect(paragraph.textContent).toBe("DieAPIist gut.");
+  expect(document.getElementById("foreign")).toBe(foreign);
 });
 
 test("inline wrappers containing protected descendants remain untouched", async () => {
