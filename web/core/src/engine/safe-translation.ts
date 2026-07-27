@@ -204,6 +204,8 @@ export function elementBlocksTranslation(element: ElementLike, getComputedStyle?
   const tagName = String(element?.tagName ?? "").toUpperCase();
   if (DEFAULT_EXCLUDED_TAGS.has(tagName)) return true;
   if (attributeValue(element, "translate")?.trim().toLowerCase() === "no") return true;
+  const language = attributeValue(element, "lang")?.trim().toLowerCase();
+  if (language && language !== "de" && !language.startsWith("de-")) return true;
   if (element?.hidden || attributeValue(element, "aria-hidden") === "true") return true;
   const contentEditable = attributeValue(element, "contenteditable");
   if (element?.isContentEditable || (contentEditable !== null && contentEditable !== "false")) {

@@ -402,10 +402,22 @@ test("pipeline does not resurrect removed inline elements after rejected reorder
     },
     async dispose() {},
   };
+  const failures: Array<{ failure?: string; failureDetail?: string }> = [];
 
-  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  const controller = createDomTranslator({
+    root: document.body,
+    engine,
+    observeMutations: false,
+    onBlockState: (event) => {
+      if (event.state === "failed") failures.push(event);
+    },
+  });
   controller.start();
   await controller.whenIdle();
+  expect(failures).toEqual([expect.objectContaining({
+    failure: "ambiguous",
+    failureDetail: "lexical-move",
+  })]);
 
   document.getElementById("link")?.remove();
   controller.restoreOriginals();

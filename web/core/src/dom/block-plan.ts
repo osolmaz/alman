@@ -278,55 +278,98 @@ function ownerAtBoundary(plan: BlockTranslationPlan, offset: number): BlockTextR
 }
 
 interface EditHunk {
-  removed: Set<string>;
+  start: number;
+  end: number;
+  removedScopes: Map<string, Element[][]>;
   added: Set<string>;
 }
 
-function normalizedWords(text: string): Set<string> {
-  return new Set(Array.from(text.matchAll(/[\p{L}\p{N}]+/gu), (match) => match[0]!.toLocaleLowerCase("de")));
+function normalizedWordMatches(text: string): RegExpStringIterator<RegExpExecArray> {
+  return text.matchAll(/[\p{L}\p{N}]+/gu);
 }
 
-function setsOverlap(left: Set<string>, right: Set<string>): boolean {
-  return [...left].some((word) => right.has(word));
-}
-
-/** Reject lexical moves that a monotonic diff would otherwise disguise as substitutions. */
-function segmentHasLexicalMoves(source: string, translated: string): boolean {
+/** Reject lexical moves only when a word crosses live DOM ownership scopes. */
+function segmentHasLexicalMoves(
+  plan: BlockTranslationPlan,
+  source: string,
+  translated: string,
+  segmentStart: number,
+): boolean {
   const hunks: EditHunk[] = [];
   let current: EditHunk | null = null;
+  let sourceOffset = segmentStart;
   for (const change of diffWordsWithSpace(source, translated)) {
     if (!change.added && !change.removed) {
       current = null;
+      sourceOffset += change.value.length;
       continue;
     }
     if (!current) {
-      current = { removed: new Set(), added: new Set() };
+      current = {
+        start: sourceOffset,
+        end: sourceOffset,
+        removedScopes: new Map(),
+        added: new Set(),
+      };
       hunks.push(current);
     }
-    const words = normalizedWords(change.value);
-    for (const word of words) (change.removed ? current.removed : current.added).add(word);
+    if (change.removed) {
+      for (const match of normalizedWordMatches(change.value)) {
+        const start = sourceOffset + (match.index ?? 0);
+        const end = start + match[0].length;
+        const word = match[0].toLocaleLowerCase("de");
+        const scopes = current.removedScopes.get(word) ?? [];
+        for (const run of runsOverlapping(plan.runs, start, end)) {
+          if (!run.structural) scopes.push(run.ancestors);
+        }
+        current.removedScopes.set(word, scopes);
+      }
+      sourceOffset += change.value.length;
+      current.end = sourceOffset;
+      continue;
+    }
+    for (const match of normalizedWordMatches(change.value)) {
+      current.added.add(match[0].toLocaleLowerCase("de"));
+    }
   }
-  for (let addedIndex = 0; addedIndex < hunks.length; addedIndex += 1) {
-    for (let removedIndex = 0; removedIndex < hunks.length; removedIndex += 1) {
+
+  for (const [addedIndex, addedHunk] of hunks.entries()) {
+    const additionOwner = addedHunk.end > addedHunk.start
+      ? ownerForReplacement(plan, addedHunk.start, addedHunk.end)
+      : ownerAtBoundary(plan, addedHunk.start);
+    for (const [removedIndex, removedHunk] of hunks.entries()) {
       if (addedIndex === removedIndex) continue;
-      if (setsOverlap(hunks[addedIndex]!.added, hunks[removedIndex]!.removed)) return true;
+      for (const word of addedHunk.added) {
+        const removedScopes = removedHunk.removedScopes.get(word);
+        if (!removedScopes) continue;
+        if (!additionOwner || removedScopes.length === 0) return true;
+        if (removedScopes.some((scope) => !sameAncestors(scope, additionOwner.ancestors))) return true;
+      }
     }
   }
   return false;
 }
 
-function hasLexicalMoves(source: string, translated: string): boolean {
-  const sourceSegments = sentenceSegments(source);
+function hasLexicalMoves(plan: BlockTranslationPlan, translated: string): boolean {
+  const sourceSegments = sentenceSegments(plan.source);
   const translatedSegments = sentenceSegments(translated);
   if (sourceSegments.length === translatedSegments.length && sourceSegments.length > 1) {
     // SafeTranslator translates source sentences independently. Words cannot
     // move between those model calls, so identical inflections in different
     // sentences must not trigger the cross-scope move guard.
-    return sourceSegments.some((segment, index) =>
-      segmentHasLexicalMoves(segment, translatedSegments[index] ?? ""),
-    );
+    let sourceOffset = 0;
+    return sourceSegments.some((segment, index) => {
+      const moved = segmentHasLexicalMoves(
+        plan,
+        segment,
+        translatedSegments[index] ?? "",
+        sourceOffset,
+      );
+      sourceOffset += segment.length;
+      return moved;
+    });
   }
-  return segmentHasLexicalMoves(source, translated);
+  return segmentHasLexicalMoves(plan, plan.source, translated, 0);
 }
 
 interface Projection {
@@ -556,7 +599,7 @@ function projectTranslation(
 ): { projection: Projection | null; failureDetail?: ProjectionFailureDetail } {
   const firstAncestors = plan.runs[0]?.ancestors ?? [];
   const crossesInlineScopes = plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
-  if (crossesInlineScopes && hasLexicalMoves(plan.source, translated)) {
+  if (crossesInlineScopes && hasLexicalMoves(plan, translated)) {
     return { projection: null, failureDetail: "lexical-move" };
   }
   const projection = projectWordChanges(plan, translated, markChanges)

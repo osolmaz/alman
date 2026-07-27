@@ -384,6 +384,20 @@ test("independent sentences do not confuse inflection changes with lexical moves
   expect(document.getElementById("day")).toBe(day);
 });
 
+test("same-scope inflections are not mistaken for moves around an inline link", async () => {
+  document.body.innerHTML = `<p id="p">Dies ist ein <a id="link">Begriff</a>, das bleibt.</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const link = document.getElementById("link");
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const target = "Das ist ein Begriff, die bleibt.";
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: target }));
+
+  applyResult(paragraph, result);
+  expect(result.translated).toBe(true);
+  expect(paragraph.textContent).toBe(target);
+  expect(document.getElementById("link")).toBe(link);
+});
+
 test("plain text can reorder when no inline scope needs projection", async () => {
   document.body.innerHTML = `<p id="p">Er sieht sie.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;
