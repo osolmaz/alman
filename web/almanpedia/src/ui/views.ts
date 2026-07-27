@@ -8,6 +8,7 @@ import { getEngine, initModel } from "../engine";
 import { ArticleNotFoundError, articleUrl, displayTitle, fetchArticleHtml, historyUrl } from "../wiki/api";
 import { rewriteArticleDom } from "../wiki/rewrite";
 import { sanitizeParsoidBody } from "../wiki/sanitize";
+import { createHeaderBrand, createLandingBrand } from "./brand";
 import { createArticleContents } from "./contents";
 import { el, namespaceIds } from "./dom";
 import { createSearchBox } from "./search";
@@ -35,12 +36,8 @@ function stopActiveTranslation(): void {
 
 export function renderShell(root: HTMLElement, navigate: (path: string) => void): AppShell {
   const status = el("div", { class: "header-status", role: "status" });
-  const brand = el("a", { href: "/", "data-route": "", class: "brand" }, [
-    el("span", { class: "brand-name" }, ["ALMANPEDIA"]),
-    el("span", { class: "brand-sub" }, ["Die freie Enzyklopädie, amtlich vereinfacht"]),
-  ]);
   const header = el("header", { class: "site-header" }, [
-    el("div", { class: "header-inner" }, [brand, createSearchBox(navigate), status]),
+    el("div", { class: "header-inner" }, [createHeaderBrand(), createSearchBox(navigate), status]),
   ]);
   const main = el("main", { class: "site-main" });
   const footer = el("footer", { class: "site-footer" }, [
@@ -68,7 +65,7 @@ export function renderLanding(shell: AppShell): void {
   shell.main.replaceChildren(
     el("section", { class: "landing" }, [
       el("p", { class: "form-tag" }, ["FORMBLATT AP-1 — HINWEIS ZUR BENUTZUNG"]),
-      el("h1", {}, ["Almanpedia"]),
+      createLandingBrand(),
       el("p", { class: "lead" }, [
         "Almanpedia zeigt Artikel der deutschsprachigen Wikipedia in ",
         el("a", { href: "https://alman.ai", target: "_blank", rel: "noopener" }, ["Alman"]),
