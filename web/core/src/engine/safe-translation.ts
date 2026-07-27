@@ -13,7 +13,7 @@ const DEFAULT_EXCLUDED_TAGS = new Set(["CODE", "PRE", "SCRIPT", "STYLE", "TEXTAR
 export interface SegmentTranslator {
   translate(
     texts: string[],
-    opts?: { signal?: AbortSignal; maxNewTokens?: number },
+    opts?: { signal?: AbortSignal; deadlineAt?: number; maxNewTokens?: number },
   ): Promise<string[]> | string[];
   diagnostics?(): { counts: Readonly<Record<string, number | undefined>> };
   dispose?(): Promise<void> | void;
@@ -132,7 +132,10 @@ export function createSafeTranslator({
     const controller = new AbortController();
     try {
       const outputs = await withTimeout(
-        Promise.resolve(translator.translate([normalized], { signal: controller.signal })),
+        Promise.resolve(translator.translate([normalized], {
+          signal: controller.signal,
+          deadlineAt: Date.now() + timeoutMs,
+        })),
         timeoutMs,
         controller,
       );

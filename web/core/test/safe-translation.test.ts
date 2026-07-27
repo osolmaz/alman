@@ -191,6 +191,27 @@ test("translation timeout is bounded and returns the original text", async () =>
   expect(performance.now() - started < 500).toBe(true);
 });
 
+test("translation calls carry the absolute timeout deadline", async () => {
+  const source = (rows.find(({ id }) => id === "german-basic") as CaseRow).text;
+  let deadlineAt: number | undefined;
+  const timeoutMs = 200;
+  const { safeTranslator } = fixtureSafeTranslator({
+    translator: {
+      async translate([text], options) {
+        deadlineAt = options?.deadlineAt;
+        return [text as string];
+      },
+    },
+    detector: async () => ({ language: "de", confidence: 0.99 }),
+    timeoutMs,
+  });
+  const started = Date.now();
+  await safeTranslator.translateSegment(source);
+
+  expect(deadlineAt).toBeGreaterThanOrEqual(started + timeoutMs);
+  expect(deadlineAt).toBeLessThanOrEqual(Date.now() + timeoutMs);
+});
+
 interface FakeNodeInit {
   nodeType: number;
   tagName?: string;

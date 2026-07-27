@@ -52,7 +52,12 @@ export default defineUnlistedScript(() => {
       };
       options.signal?.addEventListener("abort", cancel, { once: true });
       try {
-        const response = await hostRequest<{ texts: string[] }>({ kind: "translate", requestId, texts });
+        const response = await hostRequest<{ texts: string[] }>({
+          kind: "translate",
+          requestId,
+          deadlineAt: options.deadlineAt,
+          texts,
+        });
         if (options.signal?.aborted) throw options.signal.reason;
         return response.texts;
       } finally {

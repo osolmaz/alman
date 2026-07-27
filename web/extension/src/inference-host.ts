@@ -78,7 +78,16 @@ export function createInferenceHost(): void {
         case "translate": {
           const controller = new AbortController();
           requests.set(request.requestId, controller);
-          if (cancelledRequests.delete(request.requestId)) {
+          const remaining = request.deadlineAt === undefined
+            ? undefined
+            : Math.max(0, request.deadlineAt - Date.now());
+          const deadlineTimer = remaining === undefined
+            ? undefined
+            : setTimeout(
+                () => controller.abort(new DOMException("translation timed out", "AbortError")),
+                remaining,
+              );
+          if (cancelledRequests.delete(request.requestId) || remaining === 0) {
             controller.abort(new DOMException("translation timed out", "AbortError"));
           }
           try {
@@ -86,6 +95,7 @@ export function createInferenceHost(): void {
               texts: await ensureService().translate(request.texts, { signal: controller.signal }),
             };
           } finally {
+            clearTimeout(deadlineTimer);
             requests.delete(request.requestId);
           }
         }

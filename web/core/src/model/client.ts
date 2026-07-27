@@ -4,7 +4,10 @@ export interface TranslationClient {
   /** Resolves once the model runtime is downloaded, verified, and warm. */
   init(onProgress?: (progress: AssetProgress) => void): Promise<{ coldStartMs: number }>;
   countTokens(text: string): Promise<number>;
-  translate(texts: string[], options?: { signal?: AbortSignal; maxNewTokens?: number }): Promise<string[]>;
+  translate(
+    texts: string[],
+    options?: { signal?: AbortSignal; deadlineAt?: number; maxNewTokens?: number },
+  ): Promise<string[]>;
   dispose(): Promise<void>;
 }
 
