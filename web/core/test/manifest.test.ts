@@ -2,9 +2,15 @@ import { createRequire } from "node:module";
 import { createHash } from "node:crypto";
 import { readFileSync, statSync } from "node:fs";
 import { join, sep } from "node:path";
+import { IDBFactory } from "fake-indexeddb";
 import { expect, test, vi } from "vitest";
 import { MODEL_PACKAGE, assetUrl } from "../src/model/manifest";
-import { modelAssetSha256, modelCacheKey, MODEL_CACHE_KEY_BASE } from "../src/model/assets";
+import {
+  MODEL_CACHE_KEY_BASE,
+  modelAssetSha256,
+  modelCacheKey,
+  openIndexedDbModelAssetStore,
+} from "../src/model/assets";
 
 test("manifest is internally consistent", () => {
   expect(MODEL_PACKAGE.files).toHaveLength(6);
@@ -36,6 +42,38 @@ test("model asset hashing works without the secure-context Web Crypto API", asyn
   } finally {
     vi.unstubAllGlobals();
   }
+});
+
+test("IndexedDB model assets survive store reopen and preserve response metadata", async () => {
+  const factory = new IDBFactory();
+  const options = { factory, revision: "revision-a", dbName: "model-assets-persistence-test" };
+  const first = await openIndexedDbModelAssetStore(options);
+  await first.put(modelCacheKey("model/config.json"), new Response("cached model", {
+    headers: { "Content-Type": "application/json" },
+  }));
+  first.close();
+
+  const reopened = await openIndexedDbModelAssetStore(options);
+  const response = await reopened.match(modelCacheKey("model/config.json"));
+  expect(response?.headers.get("Content-Type")).toBe("application/json");
+  expect(await response?.text()).toBe("cached model");
+  reopened.close();
+});
+
+test("IndexedDB model asset cleanup removes superseded revisions", async () => {
+  const factory = new IDBFactory();
+  const dbName = "model-assets-revision-test";
+  const oldStore = await openIndexedDbModelAssetStore({ factory, revision: "old", dbName });
+  await oldStore.put(modelCacheKey("model/config.json"), new Response("old model"));
+  oldStore.close();
+
+  const currentStore = await openIndexedDbModelAssetStore({ factory, revision: "current", dbName });
+  await currentStore.deleteStale();
+  currentStore.close();
+
+  const oldStoreAfterCleanup = await openIndexedDbModelAssetStore({ factory, revision: "old", dbName });
+  expect(await oldStoreAfterCleanup.match(modelCacheKey("model/config.json"))).toBeUndefined();
+  oldStoreAfterCleanup.close();
 });
 
 test("npm onnxruntime-web dist is hash-identical to the qualified WASM runtime", () => {

@@ -138,6 +138,28 @@ function scrollToArticleHash(hash: string | undefined): void {
   });
 }
 
+const TRANSLATING_BLOCK_MINIMUM_MS = 180;
+const CHANGE_REVEAL_DURATION_MS = 1_500;
+
+function revealTranslatedBlock(element: Element): void {
+  const changed = [
+    ...(element.matches("[data-alman-change]") ? [element] : []),
+    ...element.querySelectorAll("[data-alman-change]"),
+  ];
+  for (const [index, node] of changed.entries()) {
+    if (node instanceof HTMLElement || node instanceof SVGElement) {
+      node.style.setProperty("--alman-reveal-delay", `${Math.min(index * 42, 336)}ms`);
+    }
+  }
+  element.setAttribute("data-alman-reveal", "");
+  window.setTimeout(() => {
+    element.removeAttribute("data-alman-reveal");
+    for (const node of changed) {
+      if (node instanceof HTMLElement || node instanceof SVGElement) node.style.removeProperty("--alman-reveal-delay");
+    }
+  }, CHANGE_REVEAL_DURATION_MS);
+}
+
 export async function renderArticle(shell: AppShell, title: string, hash?: string): Promise<void> {
   stopActiveTranslation();
   document.title = `${displayTitle(title)} – Almanpedia`;
@@ -319,6 +341,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     root: content,
     engine: getEngine(),
     markChanges: true,
+    minimumTranslatingMs: TRANSLATING_BLOCK_MINIMUM_MS,
     onStats: (stats) => {
       if (stats.totalBlocks === 0) {
         translationComplete = true;
@@ -338,9 +361,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     },
     onBlockState: ({ element, state }) => {
       element.setAttribute("data-alman-state", state);
-      if (state !== "translated") return;
-      element.setAttribute("data-alman-reveal", "");
-      window.setTimeout(() => element.removeAttribute("data-alman-reveal"), 500);
+      if (state === "translated") revealTranslatedBlock(element);
     },
   });
   activeController = controller;

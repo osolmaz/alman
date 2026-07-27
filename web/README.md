@@ -5,6 +5,8 @@ the **browser extension** (`extension/`) and **almanpedia.org** (`almanpedia/`),
 sharing one engine (`core/`). The model runs entirely in the visitor's browser
 (ONNX int8 + single-threaded WASM); there is no inference backend. Almanpedia's
 reader behavior is documented in [`../docs/almanpedia-interface.md`](../docs/almanpedia-interface.md).
+The persistent model store is documented in
+[`../docs/browser-model-cache.md`](../docs/browser-model-cache.md).
 
 ## Model provenance and production sign-off
 
@@ -30,7 +32,7 @@ app assets is asserted hash-identical to the qualified package by
   suite in `core/test/safe-translation.test.ts`), the model runtime worker
   (`@alman/core/worker`, transformers.js pinned to the ORT build the model
   qualified with), DOM pipeline (visible-first, mutation-aware, original/Alman
-  toggle), and an IndexedDB segment cache.
+  toggle), a persistent model asset store, and an IndexedDB segment cache.
 - **`extension/`** — WXT MV3 extension for Chrome and Firefox. Default flow is
   on-demand via the popup (activeTab only); auto-translate is opt-in and
   requests `<all_urls>` at runtime. Inference host: offscreen document
@@ -99,6 +101,9 @@ bump that dependency without re-running this gate.
 
 ## Notes
 
+- Model assets use Cache Storage when available, IndexedDB on restricted or
+  insecure origins, and memory as the final fallback. Every cached file is
+  checked against the pinned manifest before use.
 - The translation worker for the extension is prebuilt to a stable path
   (`extension/public/ort/worker.js`) by `extension/scripts/build-worker.mjs`;
   Vite's worker pipeline would otherwise inline the 24MB WASM into the

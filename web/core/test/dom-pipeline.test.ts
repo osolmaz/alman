@@ -205,6 +205,31 @@ test("pipeline reports block lifecycle and marks changed translated runs", async
   controller.stop();
 });
 
+test("pipeline can keep each block in the translating state for a visible minimum", async () => {
+  vi.useFakeTimers();
+  try {
+    document.body.innerHTML = `<main><p>${GERMAN_A}</p></main>`;
+    const states: string[] = [];
+    const controller = createDomTranslator({
+      root: document.querySelector("main")!,
+      engine: markerEngine(),
+      minimumTranslatingMs: 180,
+      observeMutations: false,
+      onBlockState: ({ state }) => states.push(state),
+    });
+    controller.start();
+    await vi.advanceTimersByTimeAsync(179);
+    expect(states).toEqual(["queued", "translating"]);
+
+    await vi.advanceTimersByTimeAsync(1);
+    await controller.whenIdle();
+    expect(states).toEqual(["queued", "translating", "translated"]);
+    controller.stop();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
 test("pipeline isolates lifecycle callback failures", async () => {
   setupPage();
   const controller = createDomTranslator({
