@@ -30,9 +30,11 @@ export {
   createBlockTranslationPlan,
   createTranslatedTextNodes,
   translateBlockPlan,
-  type BlockPlaceholder,
+  type BlockAnchor,
+  type BlockTextRun,
   type BlockTranslationPlan,
   type BlockTranslationResult,
+  type TextUpdate,
 } from "./dom/block-plan";
 export {
   createDomTranslator,

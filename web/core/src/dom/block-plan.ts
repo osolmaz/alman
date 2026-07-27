@@ -1,14 +1,13 @@
 import { diffWordsWithSpace } from "diff";
 import { elementBlocksTranslation, type ComputedStyleGetter, type SafeTranslator } from "../engine/safe-translation";
 
-const INLINE_PLACEHOLDER_TAGS = new Set([
+const INLINE_TRANSLATABLE_TAGS = new Set([
   "A",
   "ABBR",
   "B",
   "BDI",
   "BDO",
   "CITE",
-  "CODE",
   "DATA",
   "DEL",
   "DFN",
@@ -36,35 +35,56 @@ const INLINE_PLACEHOLDER_TAGS = new Set([
   "VAR",
 ]);
 
-const STRUCTURAL_INLINE_TAGS = new Set(["BR", "WBR"]);
-const PLACEHOLDER_RE = /<x(\d+)>([\s\S]*?)<\/x\1>/gu;
+const NONEMPTY_LABEL_TAGS = new Set(["A", "LABEL"]);
+const CITATION_SELECTOR = 'sup.mw-ref, sup.reference, sup[id^="cite_ref"], [role="doc-noteref"]';
+const WORD_END_RE = /[\p{L}\p{N}]$/u;
+const WORD_START_RE = /^[\p{L}\p{N}]/u;
 
-export interface BlockPlaceholder {
-  id: number;
+export interface BlockTextRun {
+  node: Text;
+  original: string;
+  start: number;
+  end: number;
+  /** Inline ancestors from the block child inward. */
+  ancestors: Element[];
+}
+
+export interface BlockAnchor {
   node: Node;
-  element?: Element;
-  text: string;
-  opaque: boolean;
+  offset: number;
+}
+
+interface BlockElementRange {
+  element: Element;
+  start: number;
+  end: number;
 }
 
 export interface BlockTranslationPlan {
   element: Element;
+  /** Plain rendered prose. Synthetic DOM tags never enter this string. */
   source: string;
-  placeholders: BlockPlaceholder[];
+  runs: BlockTextRun[];
+  anchors: BlockAnchor[];
+  elementRanges: BlockElementRange[];
 }
 
-export interface PlaceholderTextUpdate {
+export interface TextUpdate {
   node: Text;
   original: string;
   translated: string;
+  /** False when translated children render this top-level text with change spans. */
+  applyDirectly: boolean;
 }
 
 export interface BlockTranslationResult {
   translated: boolean;
+  /** Why a changed model result could not be applied safely. */
+  failure?: "stale" | "ambiguous";
   translatedText: string;
   translatedChildren: Node[];
   differenceChildren: Node[];
-  placeholderTextUpdates: PlaceholderTextUpdate[];
+  textUpdates: TextUpdate[];
   /** Existing inline elements whose text changed and can receive a UI effect. */
   changedElements: Element[];
 }
@@ -82,140 +102,55 @@ function containsProtectedDescendant(element: Element, getComputedStyle?: Comput
   return false;
 }
 
-function placeholderIsOpaque(element: Element, getComputedStyle?: ComputedStyleGetter): boolean {
+function elementIsOpaque(element: Element, getComputedStyle?: ComputedStyleGetter): boolean {
   return (
-    STRUCTURAL_INLINE_TAGS.has(element.tagName) ||
+    element.matches(CITATION_SELECTOR) ||
     elementBlocksTranslation(element, getComputedStyle) ||
     containsProtectedDescendant(element, getComputedStyle) ||
-    !INLINE_PLACEHOLDER_TAGS.has(element.tagName)
+    !INLINE_TRANSLATABLE_TAGS.has(element.tagName)
   );
-}
-
-function shouldPlaceholder(element: Element, getComputedStyle?: ComputedStyleGetter): boolean {
-  if (placeholderIsOpaque(element, getComputedStyle)) return true;
-  return INLINE_PLACEHOLDER_TAGS.has(element.tagName);
-}
-
-function escapePlaceholderText(text: string): string {
-  return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-}
-
-function placeholderOpen(id: number): string {
-  return `<x${id}>`;
-}
-
-function placeholderClose(id: number): string {
-  return `</x${id}>`;
-}
-
-function placeholderToken(id: number, text: string): string {
-  return `${placeholderOpen(id)}${escapePlaceholderText(text)}${placeholderClose(id)}`;
-}
-
-function makeElementPlaceholder(element: Element, placeholders: BlockPlaceholder[], getComputedStyle?: ComputedStyleGetter): string {
-  const id = placeholders.length;
-  const opaque = placeholderIsOpaque(element, getComputedStyle);
-  const text = opaque ? "" : (element.textContent ?? "");
-  placeholders.push({ id, node: element, element, text, opaque });
-  return placeholderToken(id, text);
-}
-
-function makeOpaqueNodePlaceholder(node: Node, placeholders: BlockPlaceholder[]): string {
-  const id = placeholders.length;
-  placeholders.push({ id, node, text: "", opaque: true });
-  return placeholderToken(id, "");
-}
-
-function appendNodeSource(node: Node, placeholders: BlockPlaceholder[], getComputedStyle?: ComputedStyleGetter): string {
-  if (node.nodeType === Node.TEXT_NODE) return node.nodeValue ?? "";
-  if (node.nodeType !== Node.ELEMENT_NODE) return makeOpaqueNodePlaceholder(node, placeholders);
-  const element = node as Element;
-  if (shouldPlaceholder(element, getComputedStyle)) return makeElementPlaceholder(element, placeholders, getComputedStyle);
-  let source = "";
-  for (const child of Array.from(element.childNodes)) source += appendNodeSource(child, placeholders, getComputedStyle);
-  return source;
 }
 
 export function createBlockTranslationPlan(
   element: Element,
   { getComputedStyle }: { getComputedStyle?: ComputedStyleGetter } = {},
 ): BlockTranslationPlan | null {
-  const placeholders: BlockPlaceholder[] = [];
-  let source = "";
-  for (const child of Array.from(element.childNodes)) source += appendNodeSource(child, placeholders, getComputedStyle);
+  const sourceParts: string[] = [];
+  const runs: BlockTextRun[] = [];
+  const anchors: BlockAnchor[] = [];
+  const elementRanges: BlockElementRange[] = [];
+  let offset = 0;
+
+  function append(node: Node, ancestors: Element[]): void {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const original = node.nodeValue ?? "";
+      if (!original) return;
+      const start = offset;
+      sourceParts.push(original);
+      offset += original.length;
+      runs.push({ node: node as Text, original, start, end: offset, ancestors });
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      anchors.push({ node, offset });
+      return;
+    }
+    const child = node as Element;
+    if (elementIsOpaque(child, getComputedStyle)) {
+      anchors.push({ node: child, offset });
+      return;
+    }
+    const start = offset;
+    const nextAncestors = [...ancestors, child];
+    for (const descendant of Array.from(child.childNodes)) append(descendant, nextAncestors);
+    elementRanges.push({ element: child, start, end: offset });
+  }
+
+  for (const child of Array.from(element.childNodes)) append(child, []);
+  const source = sourceParts.join("");
   if (!source.trim()) return null;
-  return { element, source, placeholders };
+  return { element, source, runs, anchors, elementRanges };
 }
-
-function decodePlaceholderText(document: Document, text: string): string {
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = text;
-  return textarea.value;
-}
-
-function descendantTextNodes(element: Element): Text[] {
-  const nodes: Text[] = [];
-  const walker = element.ownerDocument.createTreeWalker(element, NodeFilter.SHOW_TEXT);
-  for (let node = walker.nextNode(); node; node = walker.nextNode()) nodes.push(node as Text);
-  return nodes;
-}
-
-function distributeTranslatedPrefix(originals: string[], translated: string): string[] {
-  if (originals.length <= 1) return [translated];
-  const output = Array<string>(originals.length).fill("");
-  const totalOriginalLength = originals.reduce((sum, part) => sum + part.length, 0);
-  const whitespaceEnds = Array.from(translated.matchAll(/\s+/gu), (match) => (match.index ?? 0) + match[0].length);
-  let sourceLength = 0;
-  let translatedOffset = 0;
-  for (let index = 0; index < originals.length - 1; index += 1) {
-    sourceLength += originals[index]?.length ?? 0;
-    const ideal = totalOriginalLength === 0 ? translatedOffset : (translated.length * sourceLength) / totalOriginalLength;
-    const boundary = whitespaceEnds
-      .filter((candidate) => candidate > translatedOffset)
-      .sort((a, b) => Math.abs(a - ideal) - Math.abs(b - ideal))[0] ?? translatedOffset;
-    output[index] = translated.slice(translatedOffset, boundary);
-    translatedOffset = boundary;
-  }
-  output[originals.length - 1] = translated.slice(translatedOffset);
-  return output;
-}
-
-function splitTranslatedTextAcrossNodes(originals: string[], translated: string): string[] {
-  if (originals.length <= 1) return [translated];
-  const output = Array<string>(originals.length).fill("");
-  let remaining = translated;
-  let suffixStart = originals.length;
-  for (let index = originals.length - 1; index > 0; index -= 1) {
-    const original = originals[index] ?? "";
-    if (!original || !remaining.endsWith(original)) break;
-    output[index] = original;
-    remaining = remaining.slice(0, -original.length);
-    suffixStart = index;
-  }
-  const prefix = distributeTranslatedPrefix(originals.slice(0, suffixStart), remaining);
-  prefix.forEach((part, index) => {
-    output[index] = part;
-  });
-  return output;
-}
-
-function placeholderTextUpdates(document: Document, placeholder: BlockPlaceholder, translatedText: string): PlaceholderTextUpdate[] {
-  if (placeholder.opaque) return [];
-  const decoded = decodePlaceholderText(document, translatedText);
-  if (!placeholder.element) return [];
-  const nodes = descendantTextNodes(placeholder.element);
-  if (nodes.length === 0) return [];
-  const originals = nodes.map((node) => node.nodeValue ?? "");
-  const translatedParts = splitTranslatedTextAcrossNodes(originals, decoded);
-  return nodes.map((node, index) => ({ node, original: originals[index] ?? "", translated: translatedParts[index] ?? "" }));
-}
-
-function materializePlaceholder(placeholder: BlockPlaceholder): Node {
-  return placeholder.node;
-}
-
-const WORD_END_RE = /[\p{L}\p{N}]$/u;
-const WORD_START_RE = /^[\p{L}\p{N}]/u;
 
 function differenceSeparator(document: Document, removed: string, added: string): Node[] {
   return WORD_END_RE.test(removed) && WORD_START_RE.test(added)
@@ -260,84 +195,207 @@ export function createTranslatedTextNodes(document: Document, original: string, 
   return nodes;
 }
 
-function translatedPlaceholderClone(document: Document, placeholder: BlockPlaceholder, translatedText: string): Node {
-  const clone = placeholder.node.cloneNode(true);
-  if (placeholder.opaque || !placeholder.element || clone.nodeType !== Node.ELEMENT_NODE) return clone;
-  const element = clone as Element;
-  const nodes = descendantTextNodes(element);
-  const originals = nodes.map((node) => node.nodeValue ?? "");
-  const translatedParts = splitTranslatedTextAcrossNodes(originals, decodePlaceholderText(document, translatedText));
-  nodes.forEach((node, index) => {
-    node.nodeValue = translatedParts[index] ?? "";
-  });
-  return clone;
+function sameAncestors(left: Element[], right: Element[]): boolean {
+  return left.length === right.length && left.every((element, index) => element === right[index]);
 }
 
-function differencePlaceholderNodes(document: Document, placeholder: BlockPlaceholder, translatedText: string): Node[] {
-  const decoded = decodePlaceholderText(document, translatedText);
-  if (placeholder.opaque || placeholder.text === decoded) return [placeholder.node.cloneNode(true)];
-  const removed = document.createElement("del");
-  removed.append(placeholder.node.cloneNode(true));
-  const added = document.createElement("ins");
-  added.append(translatedPlaceholderClone(document, placeholder, translatedText));
-  return [removed, ...differenceSeparator(document, placeholder.text, decoded), added];
+function isAncestorPrefix(shorter: Element[], longer: Element[]): boolean {
+  return shorter.length <= longer.length && shorter.every((element, index) => element === longer[index]);
 }
 
-function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string, markChanges: boolean): {
-  children: Node[];
-  differenceChildren: Node[];
-  placeholderTextUpdates: PlaceholderTextUpdate[];
-  changedElements: Element[];
-} | null {
-  const document = plan.element.ownerDocument;
-  const parts: Array<{ before: string; placeholder: BlockPlaceholder; translatedText: string }> = [];
-  let cursor = 0;
-  let expectedId = 0;
-  PLACEHOLDER_RE.lastIndex = 0;
+function runsOverlapping(runs: BlockTextRun[], start: number, end: number): BlockTextRun[] {
+  return runs.filter((run) => run.start < end && run.end > start);
+}
 
-  for (const match of translatedText.matchAll(PLACEHOLDER_RE)) {
-    const id = Number(match[1]);
-    const index = match.index ?? 0;
-    if (id !== expectedId || index < cursor) return null;
-    const placeholder = plan.placeholders[id];
-    if (!placeholder) return null;
-    parts.push({ before: translatedText.slice(cursor, index), placeholder, translatedText: match[2] ?? "" });
-    cursor = index + match[0].length;
-    expectedId += 1;
-  }
+function ownerForReplacement(plan: BlockTranslationPlan, start: number, end: number): BlockTextRun | null {
+  if (plan.anchors.some((anchor) => anchor.offset > start && anchor.offset < end)) return null;
+  const affected = runsOverlapping(plan.runs, start, end);
+  if (affected.length === 0) return null;
+  if (affected.length === 1) return affected[0] ?? null;
+  const ancestors = affected[0]?.ancestors ?? [];
+  return affected.every((run) => sameAncestors(run.ancestors, ancestors)) ? (affected[0] ?? null) : null;
+}
 
-  if (expectedId !== plan.placeholders.length) return null;
+function ownerAtBoundary(plan: BlockTranslationPlan, offset: number): BlockTextRun | null {
+  const containing = plan.runs.find((run) => run.start < offset && run.end > offset);
+  if (containing) return containing;
 
-  const children: Node[] = [];
-  const differenceChildren: Node[] = [];
-  const updates: PlaceholderTextUpdate[] = [];
-  const changedElements: Element[] = [];
-  let sourceCursor = 0;
-  for (const part of parts) {
-    const sourceOpen = placeholderOpen(part.placeholder.id);
-    const sourceIndex = plan.source.indexOf(sourceOpen, sourceCursor);
-    if (sourceIndex < sourceCursor) return null;
-    const originalBefore = plan.source.slice(sourceCursor, sourceIndex);
-    differenceChildren.push(...createTextDifferenceNodes(document, originalBefore, part.before));
-    children.push(...(markChanges
-      ? createTranslatedTextNodes(document, originalBefore, part.before)
-      : part.before ? [document.createTextNode(part.before)] : []));
-    children.push(materializePlaceholder(part.placeholder));
-    differenceChildren.push(...differencePlaceholderNodes(document, part.placeholder, part.translatedText));
-    const decodedPlaceholder = decodePlaceholderText(document, part.translatedText);
-    if (markChanges && !part.placeholder.opaque && part.placeholder.element && decodedPlaceholder !== part.placeholder.text) {
-      changedElements.push(part.placeholder.element);
+  const left = [...plan.runs].reverse().find((run) => run.end === offset);
+  const right = plan.runs.find((run) => run.start === offset);
+  if (left && right && plan.anchors.some((anchor) => anchor.offset === offset)) return null;
+  if (!left) return right ?? null;
+  if (!right) return left;
+  if (sameAncestors(left.ancestors, right.ancestors)) return left;
+  if (isAncestorPrefix(left.ancestors, right.ancestors)) return left;
+  if (isAncestorPrefix(right.ancestors, left.ancestors)) return right;
+  return null;
+}
+
+interface EditHunk {
+  removed: Set<string>;
+  added: Set<string>;
+}
+
+function normalizedWords(text: string): Set<string> {
+  return new Set(Array.from(text.matchAll(/[\p{L}\p{N}]+/gu), (match) => match[0]!.toLocaleLowerCase("de")));
+}
+
+function setsOverlap(left: Set<string>, right: Set<string>): boolean {
+  return [...left].some((word) => right.has(word));
+}
+
+/** Reject lexical swaps that a monotonic diff would otherwise disguise as substitutions. */
+function hasCrossedLexicalMoves(source: string, translated: string): boolean {
+  const hunks: EditHunk[] = [];
+  let current: EditHunk | null = null;
+  for (const change of diffWordsWithSpace(source, translated)) {
+    if (!change.added && !change.removed) {
+      current = null;
+      continue;
     }
-    updates.push(...placeholderTextUpdates(document, part.placeholder, part.translatedText));
-    sourceCursor = sourceIndex + placeholderToken(part.placeholder.id, part.placeholder.text).length;
+    if (!current) {
+      current = { removed: new Set(), added: new Set() };
+      hunks.push(current);
+    }
+    const words = normalizedWords(change.value);
+    for (const word of words) (change.removed ? current.removed : current.added).add(word);
   }
-  const after = translatedText.slice(cursor);
-  const originalAfter = plan.source.slice(sourceCursor);
-  children.push(...(markChanges
-    ? createTranslatedTextNodes(document, originalAfter, after)
-    : after ? [document.createTextNode(after)] : []));
-  differenceChildren.push(...createTextDifferenceNodes(document, originalAfter, after));
-  return { children, differenceChildren, placeholderTextUpdates: updates, changedElements };
+  for (let left = 0; left < hunks.length; left += 1) {
+    for (let right = left + 1; right < hunks.length; right += 1) {
+      const earlier = hunks[left]!;
+      const later = hunks[right]!;
+      if (setsOverlap(earlier.added, later.removed) && setsOverlap(later.added, earlier.removed)) return true;
+    }
+  }
+  return false;
+}
+
+interface Projection {
+  targets: Map<Text, string>;
+  updates: TextUpdate[];
+  changedElements: Element[];
+}
+
+function projectTranslation(plan: BlockTranslationPlan, translated: string, markChanges: boolean): Projection | null {
+  const firstAncestors = plan.runs[0]?.ancestors ?? [];
+  const crossesInlineScopes = plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
+  if (crossesInlineScopes && hasCrossedLexicalMoves(plan.source, translated)) return null;
+  const output = new Map<BlockTextRun, string>(plan.runs.map((run) => [run, ""]));
+  let sourceOffset = 0;
+  let removedRange: { start: number; end: number } | null = null;
+
+  function append(run: BlockTextRun, value: string): void {
+    output.set(run, `${output.get(run) ?? ""}${value}`);
+  }
+
+  function copySourceRange(start: number, value: string): boolean {
+    const end = start + value.length;
+    if (plan.source.slice(start, end) !== value) return false;
+    for (const run of runsOverlapping(plan.runs, start, end)) {
+      const overlapStart = Math.max(start, run.start);
+      const overlapEnd = Math.min(end, run.end);
+      append(run, plan.source.slice(overlapStart, overlapEnd));
+    }
+    return true;
+  }
+
+  for (const change of diffWordsWithSpace(plan.source, translated)) {
+    if (change.removed) {
+      const start = sourceOffset;
+      const end = start + change.value.length;
+      if (plan.source.slice(start, end) !== change.value) return null;
+      removedRange = removedRange ? { start: removedRange.start, end } : { start, end };
+      sourceOffset = end;
+      continue;
+    }
+    if (change.added) {
+      const owner = removedRange
+        ? ownerForReplacement(plan, removedRange.start, removedRange.end)
+        : ownerAtBoundary(plan, sourceOffset);
+      if (!owner) return null;
+      append(owner, change.value);
+      continue;
+    }
+    removedRange = null;
+    if (!copySourceRange(sourceOffset, change.value)) return null;
+    sourceOffset += change.value.length;
+  }
+
+  if (sourceOffset !== plan.source.length) return null;
+  const projected = plan.runs.map((run) => output.get(run) ?? "").join("");
+  if (projected !== translated) return null;
+
+  const targets = new Map<Text, string>();
+  const updates: TextUpdate[] = [];
+  const changedElements = new Set<Element>();
+  for (const run of plan.runs) {
+    const target = output.get(run) ?? "";
+    targets.set(run.node, target);
+    if (target === run.original) continue;
+    const directTextWithEffects = markChanges && run.node.parentNode === plan.element;
+    updates.push({
+      node: run.node,
+      original: run.original,
+      translated: target,
+      applyDirectly: !directTextWithEffects,
+    });
+    const topInline = run.ancestors[0];
+    if (markChanges && topInline) changedElements.add(topInline);
+  }
+
+  for (const range of plan.elementRanges) {
+    if (!NONEMPTY_LABEL_TAGS.has(range.element.tagName)) continue;
+    const sourceLabel = plan.source.slice(range.start, range.end);
+    if (!sourceLabel.trim()) continue;
+    const targetLabel = plan.runs
+      .filter((run) => run.start >= range.start && run.end <= range.end)
+      .map((run) => output.get(run) ?? "")
+      .join("");
+    if (!targetLabel.trim()) return null;
+  }
+
+  return { targets, updates, changedElements: [...changedElements] };
+}
+
+function translatedChildren(plan: BlockTranslationPlan, projection: Projection, markChanges: boolean): Node[] {
+  const document = plan.element.ownerDocument;
+  return Array.from(plan.element.childNodes).flatMap((child): Node[] => {
+    if (child.nodeType !== Node.TEXT_NODE) return [child];
+    const text = child as Text;
+    const target = projection.targets.get(text);
+    if (target === undefined || target === text.nodeValue) return [text];
+    if (markChanges) return createTranslatedTextNodes(document, text.nodeValue ?? "", target);
+    return [text];
+  });
+}
+
+function differenceNode(node: Node, document: Document, targets: Map<Text, string>): Node[] {
+  if (node.nodeType === Node.TEXT_NODE) {
+    const text = node as Text;
+    const target = targets.get(text);
+    return target === undefined
+      ? [text.cloneNode(true)]
+      : createTextDifferenceNodes(document, text.nodeValue ?? "", target);
+  }
+  if (node.nodeType !== Node.ELEMENT_NODE) return [node.cloneNode(true)];
+  const clone = node.cloneNode(false) as Element;
+  for (const child of Array.from(node.childNodes)) clone.append(...differenceNode(child, document, targets));
+  return [clone];
+}
+
+function unchangedResult(
+  plan: BlockTranslationPlan,
+  failure?: BlockTranslationResult["failure"],
+): BlockTranslationResult {
+  return {
+    translated: false,
+    ...(failure ? { failure } : {}),
+    translatedText: plan.source,
+    translatedChildren: Array.from(plan.element.childNodes),
+    differenceChildren: cloneChildren(plan.element),
+    textUpdates: [],
+    changedElements: [],
+  };
 }
 
 export async function translateBlockPlan(
@@ -346,34 +404,19 @@ export async function translateBlockPlan(
   { markChanges = false }: { markChanges?: boolean } = {},
 ): Promise<BlockTranslationResult> {
   const translatedText = await engine.translateText(plan.source);
-  if (translatedText === plan.source) {
-    const children = cloneChildren(plan.element);
-    return {
-      translated: false,
-      translatedText,
-      translatedChildren: children,
-      differenceChildren: cloneChildren(plan.element),
-      placeholderTextUpdates: [],
-      changedElements: [],
-    };
+  if (translatedText === plan.source) return unchangedResult(plan);
+  if (plan.runs.some((run) => !run.node.isConnected || run.node.nodeValue !== run.original)) {
+    return unchangedResult(plan, "stale");
   }
-  const parsed = parseTranslatedPlan(plan, translatedText, markChanges);
-  if (!parsed) {
-    return {
-      translated: false,
-      translatedText: plan.source,
-      translatedChildren: cloneChildren(plan.element),
-      differenceChildren: cloneChildren(plan.element),
-      placeholderTextUpdates: [],
-      changedElements: [],
-    };
-  }
+  const projection = projectTranslation(plan, translatedText, markChanges);
+  if (!projection) return unchangedResult(plan, "ambiguous");
+  const document = plan.element.ownerDocument;
   return {
     translated: true,
     translatedText,
-    translatedChildren: parsed.children,
-    differenceChildren: parsed.differenceChildren,
-    placeholderTextUpdates: parsed.placeholderTextUpdates,
-    changedElements: parsed.changedElements,
+    translatedChildren: translatedChildren(plan, projection, markChanges),
+    differenceChildren: Array.from(plan.element.childNodes).flatMap((child) => differenceNode(child, document, projection.targets)),
+    textUpdates: projection.updates,
+    changedElements: projection.changedElements,
   };
 }

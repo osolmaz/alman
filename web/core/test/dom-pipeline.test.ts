@@ -74,14 +74,14 @@ test("pipeline translates, toggles, and picks up dynamic content", async () => {
 });
 
 test("pipeline translates whole inline blocks without gluing punctuation", async () => {
-  const source = "Das Wort <x0>Trüffel</x0>, das wiederum von <x1>terrae tuber</x1> kommt.";
+  const source = "Das Wort Trüffel, das wiederum von terrae tuber kommt.";
   document.body.innerHTML = `<main><p id="glue">Das Wort <a href="/wiki/Trüffel">Trüffel</a>, das wiederum von <i>terrae tuber</i> kommt.</p></main>`;
   const engine: SafeTranslator = {
     async translateSegment(segment) {
       return segment;
     },
     async translateText(text) {
-      return text === source ? "Die Wort <x0>Trüffel</x0>, das wiederum von <x1>terrae tuber</x1> kommt." : text;
+      return text === source ? "Die Wort Trüffel, das wiederum von terrae tuber kommt." : text;
     },
     async dispose() {},
   };
@@ -100,8 +100,8 @@ test("pipeline translates whole inline blocks without gluing punctuation", async
   controller.stop();
 });
 
-test("pipeline keeps inline element identity and translated placeholder text across toggles", async () => {
-  const source = "Siehe <x0>dem Mann</x0>.";
+test("pipeline keeps inline element identity and translated text across toggles", async () => {
+  const source = "Siehe dem Mann.";
   document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
   let clicks = 0;
   document.getElementById("link")?.addEventListener("click", (event) => {
@@ -114,7 +114,7 @@ test("pipeline keeps inline element identity and translated placeholder text acr
       return segment;
     },
     async translateText(text) {
-      return text === source ? "Siehe <x0>die Mann</x0>." : text;
+      return text === source ? "Siehe die Mann." : text;
     },
     async dispose() {},
   };
@@ -139,14 +139,14 @@ test("pipeline keeps inline element identity and translated placeholder text acr
 });
 
 test("pipeline creates a detached difference layer without changing the live article", async () => {
-  const source = "Siehe <x0>dem Mann</x0> heute.";
+  const source = "Siehe dem Mann heute.";
   document.body.innerHTML = `<main><p id="p">Siehe <a href="/wiki/Mann">dem Mann</a> heute.</p></main>`;
   const engine: SafeTranslator = {
     async translateSegment(segment) {
       return segment;
     },
     async translateText(text) {
-      return text === source ? "Siehe <x0>die Mann</x0> heute." : text;
+      return text === source ? "Siehe die Mann heute." : text;
     },
     async dispose() {},
   };
@@ -157,15 +157,15 @@ test("pipeline creates a detached difference layer without changing the live art
 
   const difference = controller.createDifferenceClone();
   expect(difference).not.toBe(document.querySelector("main"));
-  expect(Array.from(difference.querySelectorAll("del"), (node) => node.textContent)).toEqual(["dem Mann"]);
-  expect(Array.from(difference.querySelectorAll("ins"), (node) => node.textContent)).toEqual(["die Mann"]);
-  expect(difference.querySelector('ins a[href="/wiki/Mann"]')?.textContent).toBe("die Mann");
+  expect(Array.from(difference.querySelectorAll("del"), (node) => node.textContent)).toEqual(["dem"]);
+  expect(Array.from(difference.querySelectorAll("ins"), (node) => node.textContent)).toEqual(["die"]);
+  expect(difference.querySelector('a[href="/wiki/Mann"] ins')?.textContent).toBe("die");
   expect(document.getElementById("p")?.textContent).toBe("Siehe die Mann heute.");
   controller.stop();
 });
 
 test("pipeline reports block lifecycle and marks changed translated runs", async () => {
-  const source = "Siehe <x0>dem Mann</x0>.";
+  const source = "Siehe dem Mann.";
   document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
   let resolveTranslation: ((value: string) => void) | undefined;
   const states: string[] = [];
@@ -193,7 +193,7 @@ test("pipeline reports block lifecycle and marks changed translated runs", async
   await vi.waitFor(() => expect(resolveTranslation).toBeTypeOf("function"));
   expect(states).toEqual(["queued", "translating"]);
 
-  resolveTranslation?.("Siehe <x0>die Mann</x0>.");
+  resolveTranslation?.("Siehe die Mann.");
   await controller.whenIdle();
   expect(states).toEqual(["queued", "translating", "translated"]);
   expect(document.querySelector("#link[data-alman-change]")?.textContent).toBe("die Mann");
@@ -232,8 +232,8 @@ test("pipeline can finish inference before applying a translated block", async (
   controller.stop();
 });
 
-test("deferred application preserves live inline placeholders", async () => {
-  const source = "Siehe <x0>dem Mann</x0>.";
+test("deferred application preserves live inline elements", async () => {
+  const source = "Siehe dem Mann.";
   document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
   const originalLink = document.getElementById("link");
   const engine: SafeTranslator = {
@@ -241,7 +241,7 @@ test("deferred application preserves live inline placeholders", async () => {
       return segment;
     },
     async translateText(text) {
-      return text === source ? "Siehe <x0>die Mann</x0>." : text;
+      return text === source ? "Siehe die Mann." : text;
     },
     async dispose() {},
   };
@@ -280,7 +280,7 @@ test("pipeline isolates lifecycle callback failures", async () => {
 });
 
 test("pipeline leaves pending inline translations original after restoring originals", async () => {
-  const source = "Siehe <x0>dem Mann</x0>.";
+  const source = "Siehe dem Mann.";
   document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
   let resolveTranslation: ((value: string) => void) | undefined;
   const engine: SafeTranslator = {
@@ -300,7 +300,7 @@ test("pipeline leaves pending inline translations original after restoring origi
   controller.start();
   await vi.waitFor(() => expect(resolveTranslation).toBeTypeOf("function"));
   controller.restoreOriginals();
-  resolveTranslation?.("Siehe <x0>die Mann</x0>.");
+  resolveTranslation?.("Siehe die Mann.");
   await controller.whenIdle();
 
   expect(document.getElementById("p")?.textContent).toBe("Siehe dem Mann.");
@@ -310,14 +310,14 @@ test("pipeline leaves pending inline translations original after restoring origi
 });
 
 test("pipeline does not resurrect removed block children on toggles", async () => {
-  const source = "Das ist <x0>wichtig</x0>.";
+  const source = "Das ist wichtig.";
   document.body.innerHTML = `<main><p id="p">Das ist <a id="link" href="/wiki/Wichtig">wichtig</a>.</p></main>`;
   const engine: SafeTranslator = {
     async translateSegment(segment) {
       return segment;
     },
     async translateText(text) {
-      return text === source ? "Das ist <x0>wichtig</x0> alman." : text;
+      return text === source ? "Das ist wichtig alman." : text;
     },
     async dispose() {},
   };
@@ -334,15 +334,15 @@ test("pipeline does not resurrect removed block children on toggles", async () =
   controller.stop();
 });
 
-test("pipeline does not resurrect removed placeholders after translated reordering", async () => {
-  const source = "Ich sehe <x0>dem Mann</x0>.";
+test("pipeline does not resurrect removed inline elements after rejected reordering", async () => {
+  const source = "Ich sehe dem Mann.";
   document.body.innerHTML = `<main><p id="p">Ich sehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
   const engine: SafeTranslator = {
     async translateSegment(segment) {
       return segment;
     },
     async translateText(text) {
-      return text === source ? "<x0>die Mann</x0> sehe ich." : text;
+      return text === source ? "Die Mann sehe ich." : text;
     },
     async dispose() {},
   };
@@ -357,15 +357,15 @@ test("pipeline does not resurrect removed placeholders after translated reorderi
   controller.stop();
 });
 
-test("pipeline treats inline-block descendants as inline placeholders", async () => {
-  const source = "Das ist <x0>wichtig</x0>.";
+test("pipeline treats inline-block descendants as inline prose", async () => {
+  const source = "Das ist wichtig.";
   document.body.innerHTML = `<main><p id="p">Das ist <span id="inline" style="display:inline-block">wichtig</span>.</p></main>`;
   const engine: SafeTranslator = {
     async translateSegment(segment) {
       return segment;
     },
     async translateText(text) {
-      return text === source ? "Das ist <x0>wichtig</x0> alman." : text;
+      return text === source ? "Das ist wichtig alman." : text;
     },
     async dispose() {},
   };
@@ -379,14 +379,14 @@ test("pipeline treats inline-block descendants as inline placeholders", async ()
 });
 
 test("pipeline preserves dynamic block children across toggles", async () => {
-  const source = "Das ist <x0>wichtig</x0>.";
+  const source = "Das ist wichtig.";
   document.body.innerHTML = `<main><p id="p">Das ist <a id="link" href="/wiki/Wichtig">wichtig</a>.</p></main>`;
   const engine: SafeTranslator = {
     async translateSegment(segment) {
       return segment;
     },
     async translateText(text) {
-      return text === source ? "Das ist <x0>wichtig</x0> alman." : text;
+      return text === source ? "Das ist wichtig alman." : text;
     },
     async dispose() {},
   };
@@ -407,7 +407,7 @@ test("pipeline preserves dynamic block children across toggles", async () => {
 });
 
 test("pipeline preserves dynamic children added while block translation is pending", async () => {
-  const source = "Das ist <x0>wichtig</x0>.";
+  const source = "Das ist wichtig.";
   document.body.innerHTML = `<main><p id="p">Das ist <a id="link" href="/wiki/Wichtig">wichtig</a>.</p></main>`;
   let resolveTranslation: ((value: string) => void) | undefined;
   const engine: SafeTranslator = {
@@ -430,7 +430,7 @@ test("pipeline preserves dynamic children added while block translation is pendi
   extra.id = "extra";
   extra.textContent = "NEU";
   document.getElementById("p")?.insertBefore(extra, document.getElementById("link"));
-  resolveTranslation?.("Das ist <x0>wichtig</x0> alman.");
+  resolveTranslation?.("Das ist wichtig alman.");
   await controller.whenIdle();
 
   expect(document.getElementById("extra")?.textContent).toBe("NEU");
