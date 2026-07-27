@@ -3,6 +3,7 @@ import { expect, test } from "vitest";
 import {
   arrangeWikipediaMainPageSections,
   createLandingIntroduction,
+  createShortcutGuide,
   extractWikipediaMainPageSections,
 } from "../src/ui/homepage";
 
@@ -13,8 +14,25 @@ test("landing introduction explains Alman AI and the self-study audience", () =>
   expect(introduction.textContent).toContain("Selbstlern-Website von Alman AI");
   expect(introduction.textContent).toContain("ohne für jede Substantiv die grammatische Geschlecht auswendig lernen zu müssen");
   expect(introduction.textContent).toContain("ein vereinfachte deutsche Dialekt");
+  expect(introduction.querySelectorAll('a[href="https://alman.ai/"]')).toHaveLength(2);
+  expect(introduction.textContent).toContain("Die interaktive Einführung auf alman.ai");
   expect(introduction.querySelector('a[href="/wiki/Kartoffel"][data-route]')?.textContent).toBe("Beispielartikel lesen");
   expect(introduction.querySelector('a[href="https://alman.ai/al/"]')?.textContent).toBe("Alman-Spezifikation");
+});
+
+test("shortcut guide demonstrates the address replacement and links the local model", () => {
+  const guide = createShortcutGuide();
+
+  expect(guide.querySelector(".browser-demo")?.getAttribute("aria-hidden")).toBe("true");
+  expect(guide.querySelector(".demo-address-start")?.textContent).toBe("de.wikipedia.org/wiki/Kartoffel");
+  expect(guide.querySelector(".demo-address-select .demo-selection")?.textContent).toBe("wiki");
+  expect(guide.querySelector(".demo-address-type .demo-typed-word")?.textContent).toBe("alman");
+  expect(guide.querySelector(".demo-address-alias")?.textContent).toBe("de.almanpedia.org/wiki/Kartoffel");
+  expect(guide.querySelector(".demo-address-final")?.textContent).toBe("almanpedia.org/wiki/Kartoffel");
+  expect(guide.querySelector<HTMLAnchorElement>(".shortcut-url")?.href).toBe("https://de.almanpedia.org/wiki/Kartoffel");
+  expect(guide.querySelector<HTMLAnchorElement>('a[href="https://huggingface.co/osolmaz/GoePT-1-20M"]')?.textContent).toBe("GoePT-1-20M");
+  expect(guide.textContent).toContain("rund 34 MB");
+  expect(guide.textContent).toContain("20 Millionen Parameter");
 });
 
 test("German Wikipedia main page sections omit its welcome box and upward links", () => {
