@@ -203,6 +203,7 @@ function attributeValue(element: ElementLike | null | undefined, name: string): 
 export function elementBlocksTranslation(element: ElementLike, getComputedStyle?: ComputedStyleGetter): boolean {
   const tagName = String(element?.tagName ?? "").toUpperCase();
   if (DEFAULT_EXCLUDED_TAGS.has(tagName)) return true;
+  if (attributeValue(element, "translate")?.trim().toLowerCase() === "no") return true;
   if (element?.hidden || attributeValue(element, "aria-hidden") === "true") return true;
   const contentEditable = attributeValue(element, "contenteditable");
   if (element?.isContentEditable || (contentEditable !== null && contentEditable !== "false")) {

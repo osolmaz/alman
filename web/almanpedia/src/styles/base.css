@@ -1011,6 +1011,14 @@ html[data-translation-wave="on"] [data-alman-state="translating"] {
   animation: alman-translation-wave 1.05s linear infinite;
 }
 
+html[data-translation-wave="on"] [data-alman-reveal-paused][data-alman-state],
+html[data-translation-wave="on"] [data-alman-reveal-paused] [data-alman-state] {
+  background-image: none;
+  box-shadow: none;
+  text-shadow: none;
+  animation: none;
+}
+
 html[data-change-effects="on"] [data-alman-reveal] [data-alman-change],
 html[data-change-effects="on"] [data-alman-reveal][data-alman-change] {
   animation: alman-change-poof 1.05s cubic-bezier(0.16, 1, 0.3, 1) both;

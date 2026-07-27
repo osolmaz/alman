@@ -13,6 +13,8 @@ afterEach(() => {
 test("article attribution links the model without exposing its revision", () => {
   const attribution = createArticleAttribution("Liste_der_Kaiser_von_Äthiopien");
 
+  expect(attribution.getAttribute("translate")).toBe("no");
+  expect(attribution.lang).toBe("de");
   expect(attribution.textContent).toContain("Automatisch übersetzt durch GoePT-1-20M; Fehler vorbehalten.");
   expect(attribution.textContent).not.toMatch(/\b[0-9a-f]{7,40}\b/u);
   expect(attribution.querySelector<HTMLAnchorElement>(`a[href="${MODEL_URL}"]`)?.textContent).toBe("GoePT-1-20M");

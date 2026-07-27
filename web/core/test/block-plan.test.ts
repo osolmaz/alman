@@ -364,6 +364,26 @@ test("a deletion spanning sibling inline scopes remains ambiguous", async () => 
   expect(paragraph.innerHTML).toBe(original);
 });
 
+test("independent sentences do not confuse inflection changes with lexical moves", async () => {
+  document.body.innerHTML = `
+    <p id="p"><b id="title">Der heimliche Aufmarsch</b> ist ein <a id="poem">Gedicht</a> von Erich Weinert, das er im Jahre 1927 schrieb. Es wurde 1929 von Wladimir Vogel anlässlich des ersten internationalen <a id="day">Antikriegstages</a> vertont.</p>
+  `;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const title = document.getElementById("title");
+  const poem = document.getElementById("poem");
+  const day = document.getElementById("day");
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const target = "Die heimliche Aufmarsch ist ein Gedicht von Erich Weinert, das er in die Jahr 1927 schrieb. Es wurde 1929 von Wladimir Vogel anlässlich der erste internationale Antikriegstag vertont.";
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: target }));
+
+  applyResult(paragraph, result);
+  expect(result.translated).toBe(true);
+  expect(paragraph.textContent).toBe(target);
+  expect(document.getElementById("title")).toBe(title);
+  expect(document.getElementById("poem")).toBe(poem);
+  expect(document.getElementById("day")).toBe(day);
+});
+
 test("plain text can reorder when no inline scope needs projection", async () => {
   document.body.innerHTML = `<p id="p">Er sieht sie.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;

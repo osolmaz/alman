@@ -80,10 +80,12 @@ test("pause holds visible translations until the Alman view resumes", () => {
   intersect(holder.current!, paragraph, true);
   controller.setPaused(true);
   controller.handleBlockState({ element: paragraph, state: "translated" });
+  expect(root.hasAttribute("data-alman-reveal-paused")).toBe(true);
   expect(paragraph.dataset.almanState).toBe("ready");
   expect(apply).not.toHaveBeenCalled();
 
   controller.setPaused(false);
+  expect(root.hasAttribute("data-alman-reveal-paused")).toBe(false);
   expect(apply).toHaveBeenCalledOnce();
   expect(paragraph.dataset.almanState).toBe("translated");
   controller.destroy();

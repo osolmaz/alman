@@ -52,8 +52,8 @@ export interface DomTranslatorController {
   applyTranslation(element: Element): boolean;
   /** Prioritize every pending block, including content outside the viewport. */
   translateAll(): void;
-  /** Build a detached semantic comparison without mutating the live page. */
-  createDifferenceClone(): Element;
+  /** Build a detached semantic comparison of the root or one of its descendants. */
+  createDifferenceClone(scope?: Element): Element;
   stats(): DomTranslationStats;
   /** Resolves when the work queue is fully drained (primarily for tests). */
   whenIdle(): Promise<void>;
@@ -150,10 +150,10 @@ export function createDomTranslator({
     drain();
   }
 
-  function elementPathFromRoot(element: Element): number[] | null {
+  function elementPathFrom(scope: Element, element: Element): number[] | null {
     const path: number[] = [];
     let current: Element | null = element;
-    while (current && current !== root) {
+    while (current && current !== scope) {
       const parent: Element | null = current.parentElement;
       if (!parent) return null;
       const siblings = Array.from(parent.children).filter((child) => !isGeneratedProjectionElement(child));
@@ -162,7 +162,7 @@ export function createDomTranslator({
       path.unshift(index);
       current = parent;
     }
-    return current === root ? path : null;
+    return current === scope ? path : null;
   }
 
   function isGeneratedProjectionElement(element: Element): boolean {
@@ -391,10 +391,13 @@ export function createDomTranslator({
       drain();
       emitStats();
     },
-    createDifferenceClone() {
-      const clone = root.cloneNode(true) as Element;
+    createDifferenceClone(scope = root) {
+      if (scope !== root && !root.contains(scope)) {
+        throw new RangeError("difference scope must belong to the translation root");
+      }
+      const clone = scope.cloneNode(true) as Element;
       const overlays = Array.from(records, ([element, record]) => ({
-        path: elementPathFromRoot(element),
+        path: elementPathFrom(scope, element),
         record,
       }))
         .filter((entry): entry is { path: number[]; record: BlockRecord } => entry.path !== null)

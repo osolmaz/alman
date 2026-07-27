@@ -185,7 +185,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
 }
 
 export function createArticleAttribution(title: string): HTMLElement {
-  return el("div", { class: "attribution" }, [
+  return el("div", { class: "attribution", translate: "no", lang: "de" }, [
     el("span", {}, ["Quelle: "]),
     el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, [`„${displayTitle(title)}“ (de.wikipedia.org)`]),
     el("span", {}, [", "]),
@@ -264,10 +264,12 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     return;
   }
 
+  const sourceTitle = displayTitle(article.title);
+  const sourceDocumentTitle = `${sourceTitle} – Almanpedia`;
   const fragment = sanitizeParsoidBody(article.html);
   rewriteArticleDom(fragment);
 
-  const heading = el("h1", { class: "article-title" }, [displayTitle(article.title)]);
+  const heading = el("h1", { class: "article-title", lang: "de" }, [sourceTitle]);
   const toggle = el(
     "button",
     { class: "toggle-original", type: "button", disabled: "", "aria-pressed": "false" },
@@ -278,7 +280,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     { class: "toggle-differences", type: "button", disabled: "", "aria-pressed": "false" },
     ["Änderungen anzeigen"],
   );
-  const actions = el("div", { class: "article-actions" }, [toggle, differenceToggle]);
+  const actions = el("div", { class: "article-actions", translate: "no", lang: "de" }, [toggle, differenceToggle]);
   const content = el("article", { class: "wiki-content", lang: "de" });
   content.append(fragment);
   const contents = createArticleContents(content, window.matchMedia?.("(max-width: 56rem)"));
@@ -307,9 +309,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     el("div", { class: "article-layout" }, [contents.element, articleColumn, el("aside", { class: "appearance-column" }, [settings.element])]),
   );
   scrollToArticleHash(hash);
-  if (document.title !== `${displayTitle(article.title)} – Almanpedia`) {
-    document.title = `${displayTitle(article.title)} – Almanpedia`;
-  }
+  if (document.title !== sourceDocumentTitle) document.title = sourceDocumentTitle;
 
   let showingOriginal = false;
   let showingDifferences = false;
@@ -320,6 +320,12 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   const syncContentLanguage = () => {
     const fullyRevealed = inferenceComplete && (revealController?.pendingCount() ?? 0) === 0;
     content.lang = !showingOriginal && fullyRevealed ? "de-AL" : "de";
+    if (!heading.isConnected) return;
+    const translatedTitleVisible = !showingOriginal && heading.dataset.almanState === "translated";
+    heading.lang = translatedTitleVisible ? "de-AL" : "de";
+    document.title = translatedTitleVisible
+      ? `${heading.textContent ?? sourceTitle} – Almanpedia`
+      : sourceDocumentTitle;
   };
 
   const hideDifferences = () => {
@@ -335,8 +341,9 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
 
   const showDifferences = () => {
     if (!activeController) return;
-    const clone = activeController.createDifferenceClone();
+    const clone = activeController.createDifferenceClone(content);
     clone.classList.add("wiki-difference");
+    clone.setAttribute("translate", "no");
     clone.prepend(el("p", { class: "difference-legend" }, [
       el("span", { class: "difference-legend-removed" }, ["Durchgestrichen: deutsches Original."]),
       " ",
@@ -430,7 +437,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   }
 
   const controller = createDomTranslator({
-    root: content,
+    root: articleColumn,
     engine: getEngine(),
     markChanges: true,
     deferApplication: true,
@@ -452,10 +459,13 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       }
       progress.set(done / stats.totalBlocks, `ARTIKEL WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
     },
-    onBlockState: (event) => revealController?.handleBlockState(event),
+    onBlockState: (event) => {
+      revealController?.handleBlockState(event);
+      if (event.element === heading) syncContentLanguage();
+    },
   });
   revealController = createTranslationRevealController({
-    root: content,
+    root: articleColumn,
     applyTranslation: (element) => controller.applyTranslation(element),
     onReveal: (element) => {
       revealTranslatedBlock(element);
