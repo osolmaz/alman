@@ -154,6 +154,25 @@ test("line breaks become model whitespace and remain live", async () => {
   expect(document.getElementById("break")).toBe(lineBreak);
 });
 
+test("a removed line break makes a pending projection stale", async () => {
+  document.body.innerHTML = `<p id="p">Der<br id="break">Mann kommt.</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText() {
+      document.getElementById("break")?.remove();
+      return "Die Mann kommt.";
+    },
+    async dispose() {},
+  };
+
+  const result = await translateBlockPlan(plan, engine);
+  expect(result.translated).toBe(false);
+  expect(result.failure).toBe("stale");
+  expect(paragraph.textContent).toBe("DerMann kommt.");
+});
+
 test("citation anchors stay out of model input and remain live", async () => {
   document.body.innerHTML = `<p id="p">Der Mann kommt.<sup id="cite_ref-1" class="mw-ref"><a href="#note-1">[1]</a></sup> Danach geht er.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;

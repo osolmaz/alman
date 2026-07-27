@@ -50,6 +50,7 @@ export interface BlockTextRun {
   ancestors: Element[];
   /** Live structural node represented as whitespace in model input. */
   structural?: Node;
+  structuralParent?: Node;
 }
 
 export interface BlockAnchor {
@@ -145,7 +146,15 @@ export function createBlockTranslationPlan(
       const synthetic = element.ownerDocument.createTextNode(separator);
       sourceParts.push(separator);
       offset += separator.length;
-      runs.push({ node: synthetic, original: separator, start, end: offset, ancestors, structural: child });
+      runs.push({
+        node: synthetic,
+        original: separator,
+        start,
+        end: offset,
+        ancestors,
+        structural: child,
+        structuralParent: child.parentNode ?? undefined,
+      });
       anchors.push({ node: child, offset: start });
       return;
     }
@@ -424,9 +433,10 @@ export async function translateBlockPlan(
 ): Promise<BlockTranslationResult> {
   const translatedText = await engine.translateText(plan.source);
   if (translatedText === plan.source) return unchangedResult(plan);
-  if (plan.runs.some((run) => !run.structural && (!run.node.isConnected || run.node.nodeValue !== run.original))) {
-    return unchangedResult(plan, "stale");
-  }
+  const stale = plan.runs.some((run) => run.structural
+    ? !run.structural.isConnected || run.structural.parentNode !== run.structuralParent
+    : !run.node.isConnected || run.node.nodeValue !== run.original);
+  if (stale) return unchangedResult(plan, "stale");
   const projection = projectTranslation(plan, translatedText, markChanges);
   if (!projection) return unchangedResult(plan, "ambiguous");
   const document = plan.element.ownerDocument;
