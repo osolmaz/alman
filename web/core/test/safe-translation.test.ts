@@ -11,6 +11,7 @@ import { createHash } from "node:crypto";
 import { expect, test } from "vitest";
 import {
   createSafeTranslator,
+  declaredTranslationLanguage,
   elementBlocksTranslation,
   sentenceSegments,
   translateVisibleTextNodes,
@@ -269,7 +270,6 @@ test("DOM traversal changes visible text nodes and skips protected subtrees", as
   const ariaHidden = text(german);
   const displayNone = text(german);
   const translateNo = text(german);
-  const foreignLanguage = text(german);
   const attribute = german;
   const root = element("MAIN", { attrs: { title: attribute } }).append(
     visible,
@@ -283,7 +283,6 @@ test("DOM traversal changes visible text nodes and skips protected subtrees", as
     element("DIV", { attrs: { "aria-hidden": "true" } }).append(ariaHidden),
     element("DIV", { style: { display: "none" } }).append(displayNone),
     element("DIV", { attrs: { translate: "no" } }).append(translateNo),
-    element("SPAN", { attrs: { lang: "grc-Latn" } }).append(foreignLanguage),
   );
   const { safeTranslator } = fixtureSafeTranslator();
   const count = await translateVisibleTextNodes(root, safeTranslator, {
@@ -291,10 +290,31 @@ test("DOM traversal changes visible text nodes and skips protected subtrees", as
   });
   expect(count).toBe(1);
   expect(visible.nodeValue).not.toBe(german);
-  for (const node of [code, pre, script, style, textarea, editable, hidden, ariaHidden, displayNone, translateNo, foreignLanguage]) {
+  for (const node of [code, pre, script, style, textarea, editable, hidden, ariaHidden, displayNone, translateNo]) {
     expect(node.nodeValue).toBe(german);
   }
   expect(root.attrs["title"]).toBe(attribute);
+});
+
+test("language metadata skips foreign text and permits nested German overrides", async () => {
+  const german = (rows.find(({ id }) => id === "german-basic") as CaseRow).text;
+  const foreign = text(german);
+  const nestedGerman = text(german);
+  const root = element("MAIN").append(
+    element("DIV", { attrs: { lang: "en" } }).append(
+      foreign,
+      element("SPAN", { attrs: { lang: "de" } }).append(nestedGerman),
+    ),
+  );
+
+  expect(declaredTranslationLanguage(element("SPAN", { attrs: { lang: "grc-Grek" } }))).toBe("foreign");
+  expect(declaredTranslationLanguage(element("SPAN", { attrs: { lang: "zxx" } }))).toBe("foreign");
+  expect(declaredTranslationLanguage(element("SPAN", { attrs: { lang: "de-AL" } }))).toBe("german");
+
+  const { safeTranslator } = fixtureSafeTranslator();
+  expect(await translateVisibleTextNodes(root, safeTranslator)).toBe(1);
+  expect(foreign.nodeValue).toBe(german);
+  expect(nestedGerman.nodeValue).not.toBe(german);
 });
 
 test("model markup is assigned as inert text without creating DOM children", async () => {
@@ -319,9 +339,6 @@ test("visibility and editability guards cover configured browser states", () => 
   expect(elementBlocksTranslation(element("CODE"))).toBe(true);
   expect(elementBlocksTranslation(element("DIV", { attrs: { translate: "NO" } }))).toBe(true);
   expect(elementBlocksTranslation(element("DIV", { attrs: { translate: "yes" } }))).toBe(false);
-  expect(elementBlocksTranslation(element("SPAN", { attrs: { lang: "grc-Grek" } }))).toBe(true);
-  expect(elementBlocksTranslation(element("SPAN", { attrs: { lang: "zxx" } }))).toBe(true);
-  expect(elementBlocksTranslation(element("SPAN", { attrs: { lang: "de-AL" } }))).toBe(false);
   expect(elementBlocksTranslation(element("DIV", { attrs: { contenteditable: "plaintext-only" } }))).toBe(true);
   expect(elementBlocksTranslation(element("DIV", { attrs: { contenteditable: "false" } }))).toBe(false);
   expect(

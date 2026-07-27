@@ -1,9 +1,11 @@
 import { diffArrays, diffWordsWithSpace } from "diff";
 import {
+  declaredTranslationLanguage,
   elementBlocksTranslation,
   sentenceSegments,
   type ComputedStyleGetter,
   type SafeTranslator,
+  type TranslationLanguage,
 } from "../engine/safe-translation";
 import { isBlockElement } from "./blocks";
 
@@ -144,10 +146,14 @@ export function createBlockTranslationPlan(
   const childSnapshots: BlockChildSnapshot[] = [{ parent: element, children: Array.from(element.childNodes) }];
   let offset = 0;
 
-  function append(node: Node, ancestors: Element[]): void {
+  function append(node: Node, ancestors: Element[], language: TranslationLanguage): void {
     if (node.nodeType === Node.TEXT_NODE) {
       const original = node.nodeValue ?? "";
       if (!original) return;
+      if (language === "foreign") {
+        anchors.push({ node, offset });
+        return;
+      }
       const start = offset;
       sourceParts.push(original);
       offset += original.length;
@@ -159,8 +165,13 @@ export function createBlockTranslationPlan(
       return;
     }
     const child = node as Element;
+    const childLanguage = declaredTranslationLanguage(child) ?? language;
     const separator = STRUCTURAL_SEPARATOR_TAGS.get(child.tagName);
     if (separator !== undefined) {
+      if (childLanguage === "foreign") {
+        anchors.push({ node: child, offset });
+        return;
+      }
       const start = offset;
       const synthetic = element.ownerDocument.createTextNode(separator);
       sourceParts.push(separator);
@@ -185,11 +196,18 @@ export function createBlockTranslationPlan(
     const nextAncestors = [...ancestors, child];
     const descendants = Array.from(child.childNodes);
     childSnapshots.push({ parent: child, children: descendants });
-    for (const descendant of descendants) append(descendant, nextAncestors);
+    for (const descendant of descendants) append(descendant, nextAncestors, childLanguage);
     elementRanges.push({ element: child, start, end: offset });
   }
 
-  for (const child of Array.from(element.childNodes)) append(child, []);
+  let rootLanguage: TranslationLanguage = "german";
+  for (let current: Element | null = element; current; current = current.parentElement) {
+    const declared = declaredTranslationLanguage(current);
+    if (!declared) continue;
+    rootLanguage = declared;
+    break;
+  }
+  for (const child of Array.from(element.childNodes)) append(child, [], rootLanguage);
   const source = sourceParts.join("");
   if (!source.trim()) return null;
   return { element, source, runs, anchors, elementRanges, childSnapshots };

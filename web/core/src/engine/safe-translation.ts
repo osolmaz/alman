@@ -200,12 +200,18 @@ function attributeValue(element: ElementLike | null | undefined, name: string): 
   return typeof element?.getAttribute === "function" ? element.getAttribute(name) : null;
 }
 
+export type TranslationLanguage = "german" | "foreign";
+
+export function declaredTranslationLanguage(element: ElementLike): TranslationLanguage | undefined {
+  const language = attributeValue(element, "lang")?.trim().toLowerCase();
+  if (!language) return undefined;
+  return language === "de" || language.startsWith("de-") ? "german" : "foreign";
+}
+
 export function elementBlocksTranslation(element: ElementLike, getComputedStyle?: ComputedStyleGetter): boolean {
   const tagName = String(element?.tagName ?? "").toUpperCase();
   if (DEFAULT_EXCLUDED_TAGS.has(tagName)) return true;
   if (attributeValue(element, "translate")?.trim().toLowerCase() === "no") return true;
-  const language = attributeValue(element, "lang")?.trim().toLowerCase();
-  if (language && language !== "de" && !language.startsWith("de-")) return true;
   if (element?.hidden || attributeValue(element, "aria-hidden") === "true") return true;
   const contentEditable = attributeValue(element, "contenteditable");
   if (element?.isContentEditable || (contentEditable !== null && contentEditable !== "false")) {
@@ -238,11 +244,17 @@ export async function translateVisibleTextNodes(
   }
 
   let translatedNodes = 0;
-  async function visit(node: NodeLike | null | undefined, blocked: boolean): Promise<void> {
+  async function visit(
+    node: NodeLike | null | undefined,
+    blocked: boolean,
+    language: TranslationLanguage,
+  ): Promise<void> {
     const isElement = node?.nodeType === 1;
-    const nextBlocked = blocked || (isElement && elementBlocksTranslation(node as ElementLike, getComputedStyle));
+    const element = isElement ? node as ElementLike : undefined;
+    const nextBlocked = blocked || Boolean(element && elementBlocksTranslation(element, getComputedStyle));
+    const nextLanguage = (element && declaredTranslationLanguage(element)) ?? language;
     if (node?.nodeType === 3) {
-      if (!nextBlocked && node.nodeValue) {
+      if (!nextBlocked && nextLanguage === "german" && node.nodeValue) {
         const translated = await safeTranslator.translateText(node.nodeValue);
         if (translated !== node.nodeValue) {
           node.nodeValue = translated;
@@ -252,10 +264,10 @@ export async function translateVisibleTextNodes(
       return;
     }
     for (const child of Array.from(node?.childNodes ?? [])) {
-      await visit(child, nextBlocked);
+      await visit(child, nextBlocked, nextLanguage);
     }
   }
 
-  await visit(root, false);
+  await visit(root, false, "german");
   return translatedNodes;
 }

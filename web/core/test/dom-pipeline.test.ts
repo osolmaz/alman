@@ -40,6 +40,29 @@ test("collectTextBlocks groups by block ancestor and skips blocked subtrees", ()
   expect(elements).not.toContain("code");
 });
 
+test("nested German language overrides remain translatable", async () => {
+  document.body.innerHTML = `
+    <main><p id="mixed" lang="en">English <span id="german" lang="de">Der Mann.</span></p></main>
+  `;
+  const inputs: string[] = [];
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText(text) {
+      inputs.push(text);
+      return text === "Der Mann." ? "Die Mann." : text;
+    },
+    async dispose() {},
+  };
+  const controller = createDomTranslator({ root: document.querySelector("main")!, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(inputs).toEqual(["Der Mann."]);
+  expect(document.getElementById("mixed")?.childNodes[0]?.nodeValue).toBe("English ");
+  expect(document.getElementById("german")?.textContent).toBe("Die Mann.");
+  controller.stop();
+});
+
 test("pipeline translates, toggles, and picks up dynamic content", async () => {
   setupPage();
   const controller = createDomTranslator({ root: document.body, engine: markerEngine() });
