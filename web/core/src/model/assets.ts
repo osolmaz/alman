@@ -3,6 +3,8 @@ import { MODEL_PACKAGE, assetUrl, type ModelPackageFile } from "./manifest";
 import type { AssetProgress } from "./protocol";
 
 const CACHE_PREFIX = "alman-model-";
+export const MODEL_ASSET_DB_NAME = "alman-model-assets";
+const MODEL_ASSET_STORE = "assets";
 
 /**
  * Cache keys use a synthetic origin so cached bytes stay valid when the
@@ -48,10 +50,123 @@ class MemoryAssetStore implements ModelAssetStore {
   }
 }
 
+class LayeredAssetStore implements ModelAssetStore {
+  constructor(private readonly stores: ModelAssetStore[]) {}
+
+  async match(key: string): Promise<Response | undefined> {
+    for (const store of this.stores) {
+      try {
+        const response = await store.match(key);
+        if (response) return response;
+      } catch {
+        // Try the next storage API when this one is blocked or unavailable.
+      }
+    }
+    return undefined;
+  }
+
+  async put(key: string, response: Response): Promise<void> {
+    let lastError: unknown;
+    for (const store of this.stores) {
+      try {
+        await store.put(key, response.clone());
+        return;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    throw lastError instanceof Error ? lastError : new Error("model asset storage failed");
+  }
+}
+
+interface IndexedDbAssetRow {
+  id: string;
+  revision: string;
+  body: Blob;
+}
+
+function idbRequest<T>(request: IDBRequest<T>): Promise<T> {
+  return new Promise((resolve, reject) => {
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error ?? new Error("IndexedDB request failed"));
+  });
+}
+
+function idbTransaction(transaction: IDBTransaction): Promise<void> {
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error ?? new Error("IndexedDB transaction failed"));
+    transaction.onabort = () => reject(transaction.error ?? new Error("IndexedDB transaction aborted"));
+  });
+}
+
+function openAssetDatabase(factory: IDBFactory, dbName: string): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const request = factory.open(dbName, 1);
+    request.onupgradeneeded = () => {
+      if (!request.result.objectStoreNames.contains(MODEL_ASSET_STORE)) {
+        request.result.createObjectStore(MODEL_ASSET_STORE, { keyPath: "id" });
+      }
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error ?? new Error("IndexedDB open failed"));
+  });
+}
+
+export interface IndexedDbModelAssetStore extends ModelAssetStore {
+  deleteStale(): Promise<void>;
+  close(): void;
+}
+
+/** Persistent fallback for HTTP previews and browsers without Cache Storage. */
+export async function openIndexedDbModelAssetStore({
+  factory,
+  revision = MODEL_PACKAGE.revision,
+  dbName = MODEL_ASSET_DB_NAME,
+}: {
+  factory: IDBFactory;
+  revision?: string;
+  dbName?: string;
+}): Promise<IndexedDbModelAssetStore> {
+  const database = await openAssetDatabase(factory, dbName);
+  const rowId = (key: string) => `${revision}\u0000${key}`;
+
+  return {
+    async match(key) {
+      const transaction = database.transaction(MODEL_ASSET_STORE, "readonly");
+      const row = await idbRequest(transaction.objectStore(MODEL_ASSET_STORE).get(rowId(key))) as IndexedDbAssetRow | undefined;
+      return row ? new Response(row.body, { headers: { "Content-Type": row.body.type } }) : undefined;
+    },
+    async put(key, response) {
+      const body = await response.blob();
+      const transaction = database.transaction(MODEL_ASSET_STORE, "readwrite");
+      const complete = idbTransaction(transaction);
+      transaction.objectStore(MODEL_ASSET_STORE).put({ id: rowId(key), revision, body } satisfies IndexedDbAssetRow);
+      await complete;
+    },
+    async deleteStale() {
+      const transaction = database.transaction(MODEL_ASSET_STORE, "readwrite");
+      const complete = idbTransaction(transaction);
+      const request = transaction.objectStore(MODEL_ASSET_STORE).openCursor();
+      request.onsuccess = () => {
+        const cursor = request.result;
+        if (!cursor) return;
+        const row = cursor.value as IndexedDbAssetRow;
+        if (row.revision !== revision) cursor.delete();
+        cursor.continue();
+      };
+      request.onerror = () => transaction.abort();
+      await complete;
+    },
+    close() {
+      database.close();
+    },
+  };
+}
+
 const memoryAssetStores = new Map<string, MemoryAssetStore>();
 
-async function openModelAssetStore(): Promise<ModelAssetStore> {
-  if (typeof caches !== "undefined") return caches.open(modelCacheName());
+function currentMemoryAssetStore(): MemoryAssetStore {
   let store = memoryAssetStores.get(modelCacheName());
   if (!store) {
     store = new MemoryAssetStore();
@@ -60,19 +175,51 @@ async function openModelAssetStore(): Promise<ModelAssetStore> {
   return store;
 }
 
-export async function deleteStaleModelCaches(): Promise<void> {
-  if (typeof caches === "undefined") {
-    for (const name of memoryAssetStores.keys()) {
-      if (name.startsWith(CACHE_PREFIX) && name !== modelCacheName()) memoryAssetStores.delete(name);
+async function openModelAssetStore(): Promise<ModelAssetStore> {
+  const stores: ModelAssetStore[] = [];
+  if (typeof caches !== "undefined") {
+    try {
+      stores.push(await caches.open(modelCacheName()));
+    } catch {
+      // IndexedDB remains available in many contexts where Cache Storage fails.
     }
-    return;
   }
-  const names = await caches.keys();
-  await Promise.all(
-    names
-      .filter((name) => name.startsWith(CACHE_PREFIX) && name !== modelCacheName())
-      .map((name) => caches.delete(name)),
-  );
+  if (typeof indexedDB !== "undefined") {
+    try {
+      stores.push(await openIndexedDbModelAssetStore({ factory: indexedDB }));
+    } catch {
+      // The memory store still lets the current page initialize.
+    }
+  }
+  stores.push(currentMemoryAssetStore());
+  return new LayeredAssetStore(stores);
+}
+
+export async function deleteStaleModelCaches(): Promise<void> {
+  if (typeof caches !== "undefined") {
+    try {
+      const names = await caches.keys();
+      await Promise.all(
+        names
+          .filter((name) => name.startsWith(CACHE_PREFIX) && name !== modelCacheName())
+          .map((name) => caches.delete(name)),
+      );
+    } catch {
+      // Continue with other stores.
+    }
+  }
+  if (typeof indexedDB !== "undefined") {
+    try {
+      const store = await openIndexedDbModelAssetStore({ factory: indexedDB });
+      await store.deleteStale();
+      store.close();
+    } catch {
+      // Stale cleanup is best effort.
+    }
+  }
+  for (const name of memoryAssetStores.keys()) {
+    if (name.startsWith(CACHE_PREFIX) && name !== modelCacheName()) memoryAssetStores.delete(name);
+  }
 }
 
 async function downloadVerified(
@@ -108,18 +255,27 @@ async function downloadVerified(
   return bytes;
 }
 
+async function cachedAssetIsValid(file: ModelPackageFile, response: Response): Promise<boolean> {
+  try {
+    const bytes = new Uint8Array(await response.arrayBuffer()) as Uint8Array<ArrayBuffer>;
+    return bytes.byteLength === file.bytes && await modelAssetSha256(bytes) === file.sha256;
+  } catch {
+    return false;
+  }
+}
+
 export interface EnsureModelAssetsOptions {
   baseUrl?: string;
   onProgress?: (progress: AssetProgress) => void;
 }
 
 /**
- * Ensures every manifest file is present and verified in the model cache.
- * Downloads are streamed with progress, hashed, and rejected on any mismatch.
+ * Ensures every manifest file is present and verified in persistent browser
+ * storage. Downloads are streamed with progress and rejected on any mismatch.
  */
 export async function ensureModelAssets({ baseUrl, onProgress }: EnsureModelAssetsOptions = {}): Promise<ModelAssetStore> {
   try {
-    await (navigator as { storage?: { persist?: () => Promise<boolean> } }).storage?.persist?.();
+    await globalThis.navigator?.storage?.persist?.();
   } catch {
     // Best effort only.
   }
@@ -128,7 +284,8 @@ export async function ensureModelAssets({ baseUrl, onProgress }: EnsureModelAsse
 
   const missing: ModelPackageFile[] = [];
   for (const file of MODEL_PACKAGE.files) {
-    if (!(await cache.match(modelCacheKey(file.path)))) missing.push(file);
+    const cached = await cache.match(modelCacheKey(file.path));
+    if (!cached || !await cachedAssetIsValid(file, cached)) missing.push(file);
   }
   const overallTotal = MODEL_PACKAGE.totalBytes;
   let overallLoaded = overallTotal - missing.reduce((sum, file) => sum + file.bytes, 0);
