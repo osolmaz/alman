@@ -14,6 +14,7 @@ import { el, namespaceIds } from "./dom";
 import {
   arrangeWikipediaMainPageSections,
   createLandingIntroduction,
+  createShortcutGuide,
   extractWikipediaMainPageSections,
   WIKIPEDIA_MAIN_PAGE_TITLE,
 } from "./homepage";
@@ -91,6 +92,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
     el("section", { class: "landing" }, [
       createLandingBrand(),
       createLandingIntroduction(),
+      createShortcutGuide(),
       el("div", { class: "landing-feed-heading" }, [
         el("h2", {}, ["Aktuell in die deutschsprachige Wikipedia"]),
         el("a", { href: articleUrl(WIKIPEDIA_MAIN_PAGE_TITLE), target: "_blank", rel: "noopener" }, ["Originale Hauptseite"]),

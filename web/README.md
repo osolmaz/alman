@@ -43,9 +43,9 @@ app assets is asserted hash-identical to the qualified package by
   hard-fails if unsupported) and rewrites them, then schedules the complete
   article for translation in the visitor's browser. The reader includes a
   Wikipedia-like responsive layout, persistent motion settings, source toggles,
-  and a word-level comparison. Deployed to Cloudflare Pages; `de.almanpedia.org`
-  is aliased so swapping `wikipedia` → `almanpedia` in any German Wikipedia URL
-  works.
+  and a word-level comparison. Deployed to Cloudflare Pages. A Cloudflare
+  Single Redirect sends `de.almanpedia.org` to the canonical host, so swapping
+  `wikipedia` → `almanpedia` in any German Wikipedia URL opens the same path.
 
 ## Commands
 
@@ -76,10 +76,17 @@ bump that dependency without re-running this gate.
 
 - **almanpedia.org**: `.github/workflows/deploy-almanpedia.yml` deploys
   `almanpedia/dist` to the Cloudflare Pages project `almanpedia` on pushes to
-  `main` touching `web/`. Required repo secrets: `CLOUDFLARE_API_TOKEN`
-  (Pages:Edit), `CLOUDFLARE_ACCOUNT_ID`. One-time dashboard setup: create the
-  Pages project and attach `almanpedia.org`, `www.almanpedia.org`, and
-  `de.almanpedia.org`.
+  `main` touching `web/`. It then runs
+  `scripts/configure-almanpedia-shortcut.ts`, which idempotently creates a
+  proxied `de.almanpedia.org` CNAME and a permanent Single Redirect to
+  `https://almanpedia.org`, preserving the path and query string. Single
+  Redirects are available on Cloudflare's Free plan and add no Worker runtime.
+  Required repo secrets are `CLOUDFLARE_API_TOKEN` and
+  `CLOUDFLARE_ACCOUNT_ID`. Scope the token to the `almanpedia.org` zone with
+  Cloudflare Pages Edit, Zone Read, DNS Edit, and Single Redirect Edit. The
+  one-time dashboard setup is to create the Pages project and attach
+  `almanpedia.org` and `www.almanpedia.org`; the deployment script owns the
+  `de.almanpedia.org` shortcut.
 - **Extension**: CI (`web-test` job) uploads Chrome/Firefox zips as build
   artifacts. Store submission is manual for now.
 - **CI secrets**: `HF_TOKEN` is only needed by the `web-model-parity` job

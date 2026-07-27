@@ -27,3 +27,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy web/almanpedia/dist --project-name=almanpedia
+      - name: Configure de.almanpedia.org shortcut
+        run: node --experimental-strip-types web/scripts/configure-almanpedia-shortcut.ts
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
