@@ -465,12 +465,14 @@ h1,
 }
 
 html[data-translation-wave="on"] [data-alman-state="queued"],
+html[data-translation-wave="on"] [data-alman-state="ready"],
 html[data-translation-wave="on"] [data-alman-state="translating"] {
   background-repeat: no-repeat;
   border-radius: 2px;
 }
 
-html[data-translation-wave="on"] [data-alman-state="queued"] {
+html[data-translation-wave="on"] [data-alman-state="queued"],
+html[data-translation-wave="on"] [data-alman-state="ready"] {
   background-image: linear-gradient(
     105deg,
     rgb(234 243 255 / 10%) 0%,
@@ -488,11 +490,13 @@ html[data-translation-wave="on"] [data-alman-state="queued"] {
   animation: alman-translation-wave 2.4s linear infinite;
 }
 
-html[data-translation-wave="on"] [data-alman-state="queued"]:nth-child(3n + 2) {
+html[data-translation-wave="on"] [data-alman-state="queued"]:nth-child(3n + 2),
+html[data-translation-wave="on"] [data-alman-state="ready"]:nth-child(3n + 2) {
   animation-delay: -0.8s;
 }
 
-html[data-translation-wave="on"] [data-alman-state="queued"]:nth-child(3n + 3) {
+html[data-translation-wave="on"] [data-alman-state="queued"]:nth-child(3n + 3),
+html[data-translation-wave="on"] [data-alman-state="ready"]:nth-child(3n + 3) {
   animation-delay: -1.6s;
 }
 

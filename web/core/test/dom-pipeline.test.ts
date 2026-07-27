@@ -205,29 +205,64 @@ test("pipeline reports block lifecycle and marks changed translated runs", async
   controller.stop();
 });
 
-test("pipeline can keep each block in the translating state for a visible minimum", async () => {
-  vi.useFakeTimers();
-  try {
-    document.body.innerHTML = `<main><p>${GERMAN_A}</p></main>`;
-    const states: string[] = [];
-    const controller = createDomTranslator({
-      root: document.querySelector("main")!,
-      engine: markerEngine(),
-      minimumTranslatingMs: 180,
-      observeMutations: false,
-      onBlockState: ({ state }) => states.push(state),
-    });
-    controller.start();
-    await vi.advanceTimersByTimeAsync(179);
-    expect(states).toEqual(["queued", "translating"]);
+test("pipeline can finish inference before applying a translated block", async () => {
+  document.body.innerHTML = `<main><p id="p">${GERMAN_A}</p></main>`;
+  const states: string[] = [];
+  const paragraph = document.getElementById("p")!;
+  const controller = createDomTranslator({
+    root: document.querySelector("main")!,
+    engine: markerEngine(),
+    deferApplication: true,
+    observeMutations: false,
+    onBlockState: ({ state }) => states.push(state),
+  });
+  controller.start();
+  await controller.whenIdle();
 
-    await vi.advanceTimersByTimeAsync(1);
-    await controller.whenIdle();
-    expect(states).toEqual(["queued", "translating", "translated"]);
-    controller.stop();
-  } finally {
-    vi.useRealTimers();
-  }
+  expect(states).toEqual(["queued", "translating", "translated"]);
+  expect(paragraph.textContent).toBe(GERMAN_A);
+  expect(controller.applyTranslation(paragraph)).toBe(true);
+  expect(paragraph.textContent).toBe(`⟦${GERMAN_A}⟧`);
+  expect(controller.applyTranslation(document.querySelector("main")!)).toBe(false);
+
+  controller.restoreOriginals();
+  expect(paragraph.textContent).toBe(GERMAN_A);
+  controller.reapplyTranslations();
+  expect(paragraph.textContent).toBe(`⟦${GERMAN_A}⟧`);
+  controller.stop();
+});
+
+test("deferred application preserves live inline placeholders", async () => {
+  const source = "Siehe <x0>dem Mann</x0>.";
+  document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;
+  const originalLink = document.getElementById("link");
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      return text === source ? "Siehe <x0>die Mann</x0>." : text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({
+    root: document.querySelector("main")!,
+    engine,
+    deferApplication: true,
+    markChanges: true,
+    observeMutations: false,
+  });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(document.getElementById("link")).toBe(originalLink);
+  expect(originalLink?.textContent).toBe("dem Mann");
+  expect(controller.applyTranslation(document.getElementById("p")!)).toBe(true);
+  expect(document.getElementById("link")).toBe(originalLink);
+  expect(originalLink?.textContent).toBe("die Mann");
+  expect(originalLink?.hasAttribute("data-alman-change")).toBe(true);
+  controller.stop();
 });
 
 test("pipeline isolates lifecycle callback failures", async () => {
@@ -428,6 +463,43 @@ test("pipeline preserves queued nested blocks", async () => {
   controller.restoreOriginals();
   expect(document.getElementById("parent")?.childNodes[0]?.nodeValue).toBe(parent);
   expect(document.getElementById("child")?.textContent).toBe(child);
+  controller.stop();
+});
+
+test("deferred application handles nested text blocks independently", async () => {
+  const parent = "Die Eltern lesen.";
+  const child = "Die Kinder schlafen.";
+  document.body.innerHTML = `<main><ul><li id="parent">${parent}<ul><li id="child">${child}</li></ul></li></ul></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) {
+      return segment;
+    },
+    async translateText(text) {
+      if (text === parent) return "Die Eltern lesen alman.";
+      if (text === child) return "Die Kinder schlafen alman.";
+      return text;
+    },
+    async dispose() {},
+  };
+
+  const controller = createDomTranslator({
+    root: document.querySelector("main")!,
+    engine,
+    deferApplication: true,
+    observeMutations: false,
+  });
+  controller.start();
+  await controller.whenIdle();
+
+  const parentElement = document.getElementById("parent")!;
+  const childElement = document.getElementById("child")!;
+  expect(parentElement.childNodes[0]?.nodeValue).toBe(parent);
+  expect(childElement.textContent).toBe(child);
+  expect(controller.applyTranslation(parentElement)).toBe(true);
+  expect(parentElement.childNodes[0]?.nodeValue).toBe("Die Eltern lesen alman.");
+  expect(childElement.textContent).toBe(child);
+  expect(controller.applyTranslation(childElement)).toBe(true);
+  expect(childElement.textContent).toBe("Die Kinder schlafen alman.");
   controller.stop();
 });
 
