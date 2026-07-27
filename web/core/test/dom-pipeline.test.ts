@@ -164,6 +164,62 @@ test("pipeline creates a detached difference layer without changing the live art
   controller.stop();
 });
 
+test("pipeline translates a title while scoped differences exclude protected controls", async () => {
+  const sourceTitle = "Der heimliche Aufmarsch";
+  const targetTitle = "Die heimliche Aufmarsch";
+  const inputs: string[] = [];
+  document.body.innerHTML = `
+    <main id="root">
+      <h1 id="title">${sourceTitle}</h1>
+      <div id="actions" translate="no"><button>Original anzeigen</button></div>
+      <article id="content"><p id="body">${GERMAN_A}</p></article>
+      <footer id="attribution" translate="no">Quelle: Wikipedia</footer>
+    </main>
+  `;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText(text) {
+      inputs.push(text);
+      if (text === sourceTitle) return targetTitle;
+      if (text === GERMAN_A) return `⟦${GERMAN_A}⟧`;
+      return text;
+    },
+    async dispose() {},
+  };
+  const root = document.getElementById("root")!;
+  const content = document.getElementById("content")!;
+  const controller = createDomTranslator({ root, engine });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(inputs).toEqual([sourceTitle, GERMAN_A]);
+  expect(document.getElementById("title")?.textContent).toBe(targetTitle);
+  expect(document.getElementById("body")?.textContent).toBe(`⟦${GERMAN_A}⟧`);
+  expect(document.getElementById("actions")?.textContent).toBe("Original anzeigen");
+  expect(document.getElementById("attribution")?.textContent).toBe("Quelle: Wikipedia");
+
+  const difference = controller.createDifferenceClone(content);
+  expect(difference.id).toBe("content");
+  expect(difference.querySelector("h1")).toBeNull();
+  expect(difference.querySelector("#actions")).toBeNull();
+  expect(difference.querySelector("#attribution")).toBeNull();
+  expect(difference.textContent).toBe(`⟦${GERMAN_A}⟧`);
+  expect(Array.from(difference.querySelectorAll("ins"), (node) => node.textContent)).toEqual(["⟦", "⟧"]);
+  expect(() => controller.createDifferenceClone(document.createElement("aside"))).toThrow(RangeError);
+
+  difference.setAttribute("translate", "no");
+  root.append(difference);
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  await controller.whenIdle();
+  expect(inputs).toEqual([sourceTitle, GERMAN_A]);
+
+  controller.restoreOriginals();
+  expect(document.getElementById("title")?.textContent).toBe(sourceTitle);
+  controller.reapplyTranslations();
+  expect(document.getElementById("title")?.textContent).toBe(targetTitle);
+  controller.stop();
+});
+
 test("pipeline reports block lifecycle and marks changed translated runs", async () => {
   const source = "Siehe dem Mann.";
   document.body.innerHTML = `<main><p id="p">Siehe <a id="link" href="/wiki/Mann">dem Mann</a>.</p></main>`;

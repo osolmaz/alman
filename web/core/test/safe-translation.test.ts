@@ -268,6 +268,7 @@ test("DOM traversal changes visible text nodes and skips protected subtrees", as
   const hidden = text(german);
   const ariaHidden = text(german);
   const displayNone = text(german);
+  const translateNo = text(german);
   const attribute = german;
   const root = element("MAIN", { attrs: { title: attribute } }).append(
     visible,
@@ -280,6 +281,7 @@ test("DOM traversal changes visible text nodes and skips protected subtrees", as
     element("DIV", { hidden: true }).append(hidden),
     element("DIV", { attrs: { "aria-hidden": "true" } }).append(ariaHidden),
     element("DIV", { style: { display: "none" } }).append(displayNone),
+    element("DIV", { attrs: { translate: "no" } }).append(translateNo),
   );
   const { safeTranslator } = fixtureSafeTranslator();
   const count = await translateVisibleTextNodes(root, safeTranslator, {
@@ -287,7 +289,7 @@ test("DOM traversal changes visible text nodes and skips protected subtrees", as
   });
   expect(count).toBe(1);
   expect(visible.nodeValue).not.toBe(german);
-  for (const node of [code, pre, script, style, textarea, editable, hidden, ariaHidden, displayNone]) {
+  for (const node of [code, pre, script, style, textarea, editable, hidden, ariaHidden, displayNone, translateNo]) {
     expect(node.nodeValue).toBe(german);
   }
   expect(root.attrs["title"]).toBe(attribute);
@@ -313,6 +315,8 @@ test("model markup is assigned as inert text without creating DOM children", asy
 
 test("visibility and editability guards cover configured browser states", () => {
   expect(elementBlocksTranslation(element("CODE"))).toBe(true);
+  expect(elementBlocksTranslation(element("DIV", { attrs: { translate: "NO" } }))).toBe(true);
+  expect(elementBlocksTranslation(element("DIV", { attrs: { translate: "yes" } }))).toBe(false);
   expect(elementBlocksTranslation(element("DIV", { attrs: { contenteditable: "plaintext-only" } }))).toBe(true);
   expect(elementBlocksTranslation(element("DIV", { attrs: { contenteditable: "false" } }))).toBe(false);
   expect(
