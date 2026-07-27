@@ -27,8 +27,10 @@ function post(message: WorkerResponse): void {
   scope.postMessage(message);
 }
 
+type RuntimeGenerationParams = Omit<typeof GENERATION_PARAMS, "max_new_tokens"> & { max_new_tokens: number };
+
 interface TranslatorPipeline {
-  (text: string, params: typeof GENERATION_PARAMS): Promise<Array<{ generated_text: string }>>;
+  (text: string, params: RuntimeGenerationParams): Promise<Array<{ generated_text: string }>>;
   tokenizer: (text: string) => { input_ids: { dims: number[] } };
   dispose(): Promise<void>;
 }
@@ -100,9 +102,13 @@ async function handle(message: WorkerRequest): Promise<void> {
     }
     case "translate": {
       if (!pipe) throw new Error("model runtime not initialized");
+      const requestedMax = Number.isInteger(message.maxNewTokens) && Number(message.maxNewTokens) > 0
+        ? Number(message.maxNewTokens)
+        : GENERATION_PARAMS.max_new_tokens;
+      const maxNewTokens = Math.min(GENERATION_PARAMS.max_new_tokens, requestedMax);
       const texts: string[] = [];
       for (const text of message.texts) {
-        const [output] = await pipe(text, GENERATION_PARAMS);
+        const [output] = await pipe(text, { ...GENERATION_PARAMS, max_new_tokens: maxNewTokens });
         texts.push(output?.generated_text ?? "");
       }
       post({ type: "translate-result", id: message.id, texts });

@@ -33,8 +33,8 @@ app assets is asserted hash-identical to the qualified package by
   (`@alman/core/worker`, transformers.js pinned to the ORT build the model
   qualified with), a plain-text DOM projection pipeline that preserves live
   inline nodes without exposing markup to the model, visible-first scheduling,
-  original/Alman toggles, a persistent model asset store, and an IndexedDB
-  segment cache.
+  original/Alman toggles, a persistent model asset store, and a validated
+  IndexedDB segment cache with bounded recovery for unsafe model output.
 - **`extension/`** — WXT MV3 extension for Chrome and Firefox. Default flow is
   on-demand via the popup (activeTab only); auto-translate is opt-in and
   requests `<all_urls>` at runtime. Inference host: offscreen document
@@ -113,9 +113,10 @@ bump that dependency without re-running this gate.
 - Model assets use Cache Storage when available, IndexedDB on restricted or
   insecure origins, and memory as the final fallback. Every cached file is
   checked against the pinned manifest before use.
-- DOM translation caches plain source-to-target text independently of page
-  markup. A deterministic projector applies that text to existing inline nodes
-  and leaves the whole block unchanged when alignment is ambiguous or stale.
+- DOM translation caches validated plain source-to-target text independently of
+  page markup. A deterministic projector first aligns words, then refines a
+  rejected cross-markup edit at Unicode grapheme boundaries. It leaves the whole
+  block unchanged when ownership remains ambiguous or the DOM has changed.
 - The translation worker for the extension is prebuilt to a stable path
   (`extension/public/ort/worker.js`) by `extension/scripts/build-worker.mjs`;
   Vite's worker pipeline would otherwise inline the 24MB WASM into the

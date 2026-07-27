@@ -246,6 +246,88 @@ test("nested link and emphasis text project without replacing elements", async (
   expect(emphasis?.textContent).toBe("Mann");
 });
 
+test("grapheme refinement edits a linked compound suffix without replacing the link", async () => {
+  document.body.innerHTML = `<p id="p">Eine Fernseh<a id="link" href="/wiki/Journalist">journalistin</a>.</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const link = document.getElementById("link") as HTMLAnchorElement;
+  let clicks = 0;
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    clicks += 1;
+  });
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const result = await translateBlockPlan(
+    plan,
+    translator({ [plan.source]: "Ein Fernsehjournalist." }),
+  );
+
+  applyResult(paragraph, result);
+  expect(result.translated).toBe(true);
+  expect(paragraph.textContent).toBe("Ein Fernsehjournalist.");
+  expect(document.getElementById("link")).toBe(link);
+  expect(link.textContent).toBe("journalist");
+  link.click();
+  expect(clicks).toBe(1);
+});
+
+test("whitespace affinity keeps an expanded contraction before an adjacent link", async () => {
+  document.body.innerHTML = `<li id="item"><span>Archiv 31/1980 vom 21. Juli 1980, im </span><a id="link" href="/wiki/Munzinger-Archiv">Munzinger-Archiv</a><span> abrufbar</span></li>`;
+  const item = document.getElementById("item") as HTMLLIElement;
+  const link = document.getElementById("link");
+  const plan = createBlockTranslationPlan(item)!;
+  const result = await translateBlockPlan(
+    plan,
+    translator({ [plan.source]: "Archiv 31/1980 von die 21. Juli 1980, in die Munzinger-Archiv abrufbar" }),
+  );
+
+  applyResult(item, result);
+  expect(result.translated).toBe(true);
+  expect(item.textContent).toBe("Archiv 31/1980 von die 21. Juli 1980, in die Munzinger-Archiv abrufbar");
+  expect(document.getElementById("link")).toBe(link);
+  expect(link?.textContent).toBe("Munzinger-Archiv");
+});
+
+test("grapheme refinement still rejects one lexical rewrite owned by multiple scopes", async () => {
+  document.body.innerHTML = `<p id="p"><span id="prefix">Fernseh</span><a id="link">journalistin</a></p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const original = paragraph.innerHTML;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: "TV-Reporter" }));
+
+  expect(result.translated).toBe(false);
+  expect(result.failure).toBe("ambiguous");
+  expect(paragraph.innerHTML).toBe(original);
+});
+
+test("arbitrary inline splits either project the exact target or leave the DOM untouched", async () => {
+  const source = "Fernsehjournalistin";
+  const target = "Fernsehjournalist";
+  let accepted = 0;
+  for (let split = 1; split < source.length; split += 1) {
+    document.body.innerHTML = `<p id="p"><span id="left"></span><a id="right"></a></p>`;
+    const paragraph = document.getElementById("p") as HTMLParagraphElement;
+    const left = document.getElementById("left")!;
+    const right = document.getElementById("right")!;
+    left.textContent = source.slice(0, split);
+    right.textContent = source.slice(split);
+    const original = paragraph.innerHTML;
+    const plan = createBlockTranslationPlan(paragraph)!;
+    const result = await translateBlockPlan(plan, translator({ [source]: target }));
+
+    if (result.translated) {
+      applyResult(paragraph, result);
+      accepted += 1;
+      expect(paragraph.textContent, `split ${split}`).toBe(target);
+      expect(document.getElementById("left"), `split ${split}`).toBe(left);
+      expect(document.getElementById("right"), `split ${split}`).toBe(right);
+    } else {
+      expect(paragraph.textContent, `split ${split}`).toBe(source);
+      expect(paragraph.innerHTML, `split ${split}`).toBe(original);
+    }
+  }
+  expect(accepted).toBeGreaterThan(0);
+});
+
 test("literal placeholder-like text is translated as text and never parsed", async () => {
   document.body.innerHTML = `<p id="p">Das &lt;x0&gt; bleibt Text.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;
@@ -268,6 +350,17 @@ test("ambiguous projection across sibling links falls back without mutation", as
   expect(result.translated).toBe(false);
   expect(result.failure).toBe("ambiguous");
   expect(result.translatedText).toBe(plan.source);
+  expect(paragraph.innerHTML).toBe(original);
+});
+
+test("a deletion spanning sibling inline scopes remains ambiguous", async () => {
+  document.body.innerHTML = `<p id="p"><span id="a">Fernseh</span><a id="b">journalistin</a></p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const original = paragraph.innerHTML;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: "" }));
+
+  expect(result.translated).toBe(false);
   expect(paragraph.innerHTML).toBe(original);
 });
 

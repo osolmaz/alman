@@ -11,6 +11,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
+import { outputTokenBudget } from "../src/engine/validation";
 import { GENERATION_PARAMS, MODEL_PACKAGE } from "../src/model/manifest";
 
 interface ModelCase {
@@ -51,7 +52,10 @@ describe.runIf(enabled)("model parity (onnxruntime-node)", () => {
       dtype: "q8",
       local_files_only: true,
     })) as unknown as {
-      (text: string, params: typeof GENERATION_PARAMS): Promise<Array<{ generated_text: string }>>;
+      (
+        text: string,
+        params: Omit<typeof GENERATION_PARAMS, "max_new_tokens"> & { max_new_tokens: number },
+      ): Promise<Array<{ generated_text: string }>>;
       tokenizer: (text: string) => { input_ids: { dims: number[] } };
       dispose(): Promise<void>;
     };
@@ -63,7 +67,11 @@ describe.runIf(enabled)("model parity (onnxruntime-node)", () => {
 
       expect(cases).toHaveLength(12);
       for (const item of cases) {
-        const [output] = await pipe(item.source, GENERATION_PARAMS);
+        const sourceTokens = Number(pipe.tokenizer(item.source).input_ids.dims.at(-1) ?? 0);
+        const [output] = await pipe(item.source, {
+          ...GENERATION_PARAMS,
+          max_new_tokens: outputTokenBudget(sourceTokens),
+        });
         expect(output?.generated_text, `${item.id} (${item.collection})`).toBe(item.expected);
       }
     } finally {

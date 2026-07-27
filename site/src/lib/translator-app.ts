@@ -5,6 +5,7 @@
  */
 import {
   MODEL_PACKAGE,
+  TRANSLATION_RUNTIME_POLICY_REVISION,
   createAlmanEngine,
   createSegmentCache,
   createWorkerClient,
@@ -89,7 +90,10 @@ export function initTranslator(root: HTMLElement): void {
       // The source pane is declared German, so per-sentence language
       // detection would only silently skip short or name-heavy sentences.
       detector: fixedDetector({ language: "de", confidence: 1 }),
-      cache: createSegmentCache({ modelRevision: MODEL_PACKAGE.revision }),
+      cache: createSegmentCache({
+        modelRevision: MODEL_PACKAGE.revision,
+        policyRevision: TRANSLATION_RUNTIME_POLICY_REVISION,
+      }),
       // More headroom than the 3s default of the DOM pipeline: on slow
       // hardware a long sentence would otherwise silently stay untranslated.
       timeoutMs: 15_000,
@@ -148,12 +152,6 @@ export function initTranslator(root: HTMLElement): void {
     }
   }
 
-  // The model's task is a near-copy of its input, so a translation that is
-  // much longer than its source is a decoder repetition loop. Treat the
-  // segment as unsafe and keep the original, like other guarded inputs.
-  const looksDegenerate = (segment: string, translated: string): boolean =>
-    translated.length > segment.length * 1.5 + 80;
-
   async function translateNow(): Promise<void> {
     runId += 1;
     const id = runId;
@@ -181,11 +179,8 @@ export function initTranslator(root: HTMLElement): void {
         target!.textContent = output;
         continue;
       }
-      let translated = await activeEngine.translateSegment(segment);
+      const translated = await activeEngine.translateSegment(segment);
       if (id !== runId) return;
-      if (translated !== segment && looksDegenerate(segment, translated)) {
-        translated = segment;
-      }
       output += translated;
       target!.textContent = output;
       copyButton!.disabled = output.trim() === "";

@@ -1,5 +1,6 @@
 import {
   MODEL_PACKAGE,
+  TRANSLATION_RUNTIME_POLICY_REVISION,
   createAlmanEngine,
   createSegmentCache,
   createWorkerClient,
@@ -34,7 +35,10 @@ export function getEngine(): SafeTranslator {
     // Per-sentence detection skips German prose containing many foreign names.
     // The browser extension still uses detection because it accepts arbitrary pages.
     detector: germanWikipediaDetector,
-    cache: createSegmentCache({ modelRevision: MODEL_PACKAGE.revision }),
+    cache: createSegmentCache({
+      modelRevision: MODEL_PACKAGE.revision,
+      policyRevision: TRANSLATION_RUNTIME_POLICY_REVISION,
+    }),
   });
   return engine;
 }

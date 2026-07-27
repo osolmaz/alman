@@ -11,7 +11,11 @@ import type { Detection, LanguageDetector } from "./detectors";
 const DEFAULT_EXCLUDED_TAGS = new Set(["CODE", "PRE", "SCRIPT", "STYLE", "TEXTAREA"]);
 
 export interface SegmentTranslator {
-  translate(texts: string[], opts?: { signal?: AbortSignal }): Promise<string[]> | string[];
+  translate(
+    texts: string[],
+    opts?: { signal?: AbortSignal; maxNewTokens?: number },
+  ): Promise<string[]> | string[];
+  diagnostics?(): { counts: Readonly<Record<string, number | undefined>> };
   dispose?(): Promise<void> | void;
 }
 
@@ -28,6 +32,7 @@ export interface SafeTranslatorOptions {
 export interface SafeTranslator {
   translateSegment(segment: string): Promise<string>;
   translateText(text: string): Promise<string>;
+  diagnostics?(): { counts: Readonly<Record<string, number | undefined>> };
   dispose(): Promise<void>;
 }
 
@@ -152,6 +157,7 @@ export function createSafeTranslator({
   return {
     translateSegment,
     translateText,
+    ...(translator.diagnostics ? { diagnostics: () => translator.diagnostics!() } : {}),
     async dispose() {
       if (typeof translator.dispose === "function") await translator.dispose();
     },

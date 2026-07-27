@@ -12,7 +12,7 @@ export interface AssetProgress {
 export type WorkerRequest =
   | { type: "init"; assetBaseUrl?: string; wasmBaseUrl: string }
   | { type: "count-tokens"; id: number; text: string }
-  | { type: "translate"; id: number; texts: string[] }
+  | { type: "translate"; id: number; texts: string[]; maxNewTokens?: number }
   | { type: "dispose" };
 
 export type WorkerResponse =

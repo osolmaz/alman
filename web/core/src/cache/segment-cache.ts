@@ -1,15 +1,17 @@
 /**
- * IndexedDB cache of segment translations keyed by model revision and the
- * SHA-256 of the NFC-normalized source. Failures degrade to cache misses;
- * callers must treat this layer as best effort.
+ * IndexedDB cache of validated segment translations keyed by model revision,
+ * runtime-policy revision, and the SHA-256 of the NFC-normalized source.
+ * Failures degrade to cache misses; callers must treat this layer as best effort.
  */
 export interface SegmentCache {
   get(source: string): Promise<string | undefined>;
   put(source: string, target: string): Promise<void>;
+  delete(source: string): Promise<void>;
 }
 
 export interface SegmentCacheOptions {
   modelRevision: string;
+  policyRevision: string;
   dbName?: string;
   maxEntries?: number;
 }
@@ -37,6 +39,7 @@ function requestToPromise<T>(request: IDBRequest<T>): Promise<T> {
 
 export function createSegmentCache({
   modelRevision,
+  policyRevision,
   dbName = "alman-segment-cache",
   maxEntries = 50_000,
 }: SegmentCacheOptions): SegmentCache {
@@ -57,7 +60,7 @@ export function createSegmentCache({
   }
 
   async function key(source: string): Promise<string> {
-    return `${modelRevision}:${await sha256Hex(source.normalize("NFC"))}`;
+    return `${modelRevision}:${policyRevision}:${await sha256Hex(source.normalize("NFC"))}`;
   }
 
   async function trimIfNeeded(db: IDBDatabase): Promise<void> {
@@ -88,10 +91,11 @@ export function createSegmentCache({
 
   return {
     async get(source) {
+      const cacheKey = await key(source);
       const db = await open();
       const tx = db.transaction(STORE, "readwrite");
       const store = tx.objectStore(STORE);
-      const row = (await requestToPromise(store.get(await key(source)))) as SegmentRow | undefined;
+      const row = (await requestToPromise(store.get(cacheKey))) as SegmentRow | undefined;
       if (!row) return undefined;
       store.put({ ...row, lastUsed: Date.now() });
       return row.target;
@@ -102,6 +106,12 @@ export function createSegmentCache({
       const tx = db.transaction(STORE, "readwrite");
       await requestToPromise(tx.objectStore(STORE).put(row));
       await trimIfNeeded(db);
+    },
+    async delete(source) {
+      const cacheKey = await key(source);
+      const db = await open();
+      const tx = db.transaction(STORE, "readwrite");
+      await requestToPromise(tx.objectStore(STORE).delete(cacheKey));
     },
   };
 }

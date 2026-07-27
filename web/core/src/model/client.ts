@@ -4,7 +4,7 @@ export interface TranslationClient {
   /** Resolves once the model runtime is downloaded, verified, and warm. */
   init(onProgress?: (progress: AssetProgress) => void): Promise<{ coldStartMs: number }>;
   countTokens(text: string): Promise<number>;
-  translate(texts: string[]): Promise<string[]>;
+  translate(texts: string[], options?: { signal?: AbortSignal; maxNewTokens?: number }): Promise<string[]>;
   dispose(): Promise<void>;
 }
 
@@ -207,8 +207,10 @@ export function createWorkerClient({
       if (response.type !== "count-tokens-result") throw new Error("unexpected runtime response");
       return response.tokens;
     },
-    async translate(texts) {
-      const response = await guarded({ type: "translate", texts });
+    async translate(texts, options = {}) {
+      if (options.signal?.aborted) throw options.signal.reason;
+      const response = await guarded({ type: "translate", texts, maxNewTokens: options.maxNewTokens });
+      if (options.signal?.aborted) throw options.signal.reason;
       if (response.type !== "translate-result") throw new Error("unexpected runtime response");
       return response.texts;
     },
@@ -245,8 +247,14 @@ export function createPortClient(transport: MessageTransport, options: { assetBa
       if (response.type !== "count-tokens-result") throw new Error("unexpected runtime response");
       return response.tokens;
     },
-    async translate(texts) {
-      const response = await correlator.request({ type: "translate", texts });
+    async translate(texts, options = {}) {
+      if (options.signal?.aborted) throw options.signal.reason;
+      const response = await correlator.request({
+        type: "translate",
+        texts,
+        maxNewTokens: options.maxNewTokens,
+      });
+      if (options.signal?.aborted) throw options.signal.reason;
       if (response.type !== "translate-result") throw new Error("unexpected runtime response");
       return response.texts;
     },
