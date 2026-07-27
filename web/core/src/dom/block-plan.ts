@@ -214,14 +214,32 @@ function materializePlaceholder(placeholder: BlockPlaceholder): Node {
   return placeholder.node;
 }
 
+const WORD_END_RE = /[\p{L}\p{N}]$/u;
+const WORD_START_RE = /^[\p{L}\p{N}]/u;
+
+function differenceSeparator(document: Document, removed: string, added: string): Node[] {
+  return WORD_END_RE.test(removed) && WORD_START_RE.test(added)
+    ? [document.createTextNode(" ")]
+    : [];
+}
+
 export function createTextDifferenceNodes(document: Document, original: string, translated: string): Node[] {
   if (original === translated) return original ? [document.createTextNode(original)] : [];
-  return diffWordsWithSpace(original, translated).map((change) => {
-    if (!change.added && !change.removed) return document.createTextNode(change.value);
+  const nodes: Node[] = [];
+  let removed = "";
+  for (const change of diffWordsWithSpace(original, translated)) {
+    if (change.added && removed) nodes.push(...differenceSeparator(document, removed, change.value));
+    if (!change.added && !change.removed) {
+      nodes.push(document.createTextNode(change.value));
+      removed = "";
+      continue;
+    }
     const element = document.createElement(change.added ? "ins" : "del");
     element.textContent = change.value;
-    return element;
-  });
+    nodes.push(element);
+    removed = change.removed ? change.value : "";
+  }
+  return nodes;
 }
 
 /** Render translated text while marking only inserted word runs for optional UI effects. */
@@ -262,7 +280,7 @@ function differencePlaceholderNodes(document: Document, placeholder: BlockPlaceh
   removed.append(placeholder.node.cloneNode(true));
   const added = document.createElement("ins");
   added.append(translatedPlaceholderClone(document, placeholder, translatedText));
-  return [removed, added];
+  return [removed, ...differenceSeparator(document, placeholder.text, decoded), added];
 }
 
 function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string, markChanges: boolean): {

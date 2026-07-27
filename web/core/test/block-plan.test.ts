@@ -1,11 +1,21 @@
 // @vitest-environment happy-dom
 import { expect, test } from "vitest";
-import { createBlockTranslationPlan, translateBlockPlan } from "../src/dom/block-plan";
+import { createBlockTranslationPlan, createTextDifferenceNodes, translateBlockPlan } from "../src/dom/block-plan";
 import type { SafeTranslator } from "../src/engine/safe-translation";
 
 function applyPlaceholderUpdates(updates: Array<{ node: Text; translated: string }>): void {
   for (const update of updates) update.node.nodeValue = update.translated;
 }
+
+test("difference nodes separate adjacent removed and inserted words", () => {
+  const paragraph = document.createElement("p");
+  paragraph.append(...createTextDifferenceNodes(document, "im Jahr", "in die Jahr"));
+
+  expect(paragraph.textContent).toBe("im in die Jahr");
+  expect(paragraph.querySelector("del")?.textContent).toBe("im");
+  expect(Array.from(paragraph.querySelectorAll("ins"), (node) => node.textContent)).toEqual(["in", "die "]);
+  expect(paragraph.querySelector("del")?.nextSibling?.nodeValue).toBe(" ");
+});
 
 function translator(map: Record<string, string>): SafeTranslator {
   return {
@@ -59,6 +69,7 @@ test("block plans build a semantic word diff while preserving inline links", asy
   expect(Array.from(difference.querySelectorAll("del"), (node) => node.textContent)).toEqual(["dem", "Trüffel"]);
   expect(Array.from(difference.querySelectorAll("ins"), (node) => node.textContent)).toEqual(["die", "Trüffelchen"]);
   expect(difference.querySelector('ins a[href="/wiki/Trüffel"]')?.textContent).toBe("Trüffelchen");
+  expect(difference.textContent).toBe("dem die Wort für Trüffel Trüffelchen.");
 
   const translated = document.createElement("p");
   translated.append(...result.translatedChildren.map((child) => child.cloneNode(true)));

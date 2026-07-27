@@ -4,11 +4,11 @@ Almanpedia is a client-side reader for articles from the German Wikipedia. It pr
 
 ## Article translation
 
-Almanpedia schedules the whole article as soon as the model is ready. Blocks still pass through the model one at a time because one active inference keeps memory use predictable. The browser extension uses the same DOM planner but retains its visible-first scheduling policy.
+Almanpedia schedules the whole article as soon as the model is ready. Blocks still pass through the model one at a time because one active inference keeps memory use predictable. Article and homepage prose is routed as German without per-sentence language detection because it comes from the German Wikipedia REST API. The browser extension uses the same DOM planner but retains its visible-first scheduling and language-detection policies for arbitrary pages.
 
 `createDomTranslator` reports each block through the `onBlockState` callback. The states are `queued`, `translating`, `translated`, `unchanged`, and `failed`. This callback contains no presentation code. Almanpedia maps the state to a data attribute and uses CSS for the visible effect. It also enables the `markChanges` option, which stays off for the browser extension so translated pages do not gain Almanpedia markup.
 
-The progress indicator measures model work across all article blocks. It disappears after the inference queue finishes, even when translated blocks below the viewport still wait for their visual reveal. A visitor may switch between the German source and the Alman rendering while work is pending. Stored translations are then applied in the selected layer without another model call.
+The progress indicator measures model work across all article blocks. It disappears after the inference queue finishes, even when translated blocks below the viewport still wait for their visual reveal. A visitor may switch between the German source and the Alman rendering while work is pending. Stored translations are then applied in the selected layer without another model call. The comparison layer labels deleted text as the German original and inserted text as Alman. Adjacent deleted and inserted words contain a real separator so the view and copied text never concatenate alternatives such as `im` and `in die`.
 
 ## Translation effects
 

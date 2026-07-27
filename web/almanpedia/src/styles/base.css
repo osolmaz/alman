@@ -1040,6 +1040,30 @@ html[data-change-effects="on"] [data-alman-reveal][data-alman-change] {
   margin-top: 0.5rem;
 }
 
+.difference-legend {
+  margin: 0 0 1rem;
+  padding: 0.55rem 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  color: var(--muted);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+}
+
+.difference-legend-removed {
+  text-decoration: line-through;
+  text-decoration-color: var(--destructive);
+  text-decoration-thickness: 1.5px;
+}
+
+.difference-legend-added {
+  color: var(--link);
+  font-weight: 600;
+}
+
 .wiki-difference del {
   color: var(--muted);
   text-decoration-color: var(--destructive);

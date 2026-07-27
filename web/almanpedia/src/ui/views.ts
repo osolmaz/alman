@@ -327,6 +327,11 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     if (!activeController) return;
     const clone = activeController.createDifferenceClone();
     clone.classList.add("wiki-difference");
+    clone.prepend(el("p", { class: "difference-legend" }, [
+      el("span", { class: "difference-legend-removed" }, ["Durchgestrichen: deutsches Original."]),
+      " ",
+      el("span", { class: "difference-legend-added" }, ["Blau: Alman-Fassung."]),
+    ]));
     clone.removeAttribute("hidden");
     clone.setAttribute("lang", inferenceComplete ? "de-AL" : "de");
     const namespacedIds = namespaceIds(clone, "diff-", { rewriteFragmentLinks: false });

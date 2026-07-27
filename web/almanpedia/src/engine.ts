@@ -3,7 +3,7 @@ import {
   createAlmanEngine,
   createSegmentCache,
   createWorkerClient,
-  tinyldDetector,
+  fixedDetector,
   type AssetProgress,
   type SafeTranslator,
   type TranslationClient,
@@ -11,6 +11,9 @@ import {
 
 let client: TranslationClient | null = null;
 let engine: SafeTranslator | null = null;
+
+/** Almanpedia content comes from the German Wikipedia REST API by construction. */
+export const germanWikipediaDetector = fixedDetector({ language: "de", confidence: 1 });
 
 export function getClient(): TranslationClient {
   client ??= createWorkerClient({
@@ -28,7 +31,9 @@ export function getClient(): TranslationClient {
 export function getEngine(): SafeTranslator {
   engine ??= createAlmanEngine({
     client: getClient(),
-    detector: tinyldDetector(),
+    // Per-sentence detection skips German prose containing many foreign names.
+    // The browser extension still uses detection because it accepts arbitrary pages.
+    detector: germanWikipediaDetector,
     cache: createSegmentCache({ modelRevision: MODEL_PACKAGE.revision }),
   });
   return engine;
