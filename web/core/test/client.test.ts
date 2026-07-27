@@ -29,15 +29,31 @@ test("port client correlates requests and resolves ready with progress", async (
   expect((await ready).coldStartMs).toBe(42);
   expect(progress).toEqual([1]);
 
-  const translate = client.translate(["Hallo."]);
+  const translate = client.translate(["Hallo."], { maxNewTokens: 80 });
   const count = client.countTokens("Hallo.");
   const translateId = (sent[1] as { id: number }).id;
   const countId = (sent[2] as { id: number }).id;
+  expect(sent[1]).toMatchObject({ type: "translate", maxNewTokens: 80 });
   // Answer out of order; correlation must hold.
   emit({ type: "count-tokens-result", id: countId, tokens: 3 });
   emit({ type: "translate-result", id: translateId, texts: ["Hallo."] });
   expect(await count).toBe(3);
   expect(await translate).toEqual(["Hallo."]);
+});
+
+test("port client rejects a completed request when its caller aborted", async () => {
+  const { transport, sent, emit } = fakeTransport();
+  const client = createPortClient(transport);
+  const ready = client.init();
+  emit({ type: "ready", coldStartMs: 0 });
+  await ready;
+
+  const controller = new AbortController();
+  const translate = client.translate(["Hallo."], { signal: controller.signal });
+  const id = (sent[1] as { id: number }).id;
+  controller.abort(new DOMException("translation timed out", "AbortError"));
+  emit({ type: "translate-result", id, texts: ["Hallo."] });
+  await expect(translate).rejects.toMatchObject({ name: "AbortError" });
 });
 
 test("port client rejects the matching request on runtime error", async () => {

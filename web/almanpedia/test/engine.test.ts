@@ -17,11 +17,11 @@ test("Almanpedia routes proper-name-heavy Wikipedia prose as German", async () =
     async countTokens() { return 32; },
     async translate(texts) {
       translatedInputs.push(...texts);
-      return ["übersetzt"];
+      return texts.map((text) => text.replaceAll("des", "von die"));
     },
     async dispose() {},
   };
   const engine = createAlmanEngine({ client, detector: germanWikipediaDetector });
-  expect(await engine.translateText(sentence)).toBe("übersetzt");
+  expect(await engine.translateText(sentence)).toBe(sentence.replaceAll("des", "von die"));
   expect(translatedInputs).toEqual([sentence]);
 });

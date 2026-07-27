@@ -8,6 +8,21 @@ export {
   type SafeTranslatorOptions,
   type SegmentTranslator,
 } from "./engine/safe-translation";
+export {
+  createValidatedSegmentService,
+  splitRejectedSegment,
+  type SegmentOutcomeReason,
+  type SegmentServiceDiagnostics,
+  type ValidatedSegmentService,
+  type ValidatedSegmentServiceOptions,
+} from "./engine/segment-service";
+export {
+  TRANSLATION_RUNTIME_POLICY_REVISION,
+  outputTokenBudget,
+  validateTranslationOutput,
+  type OutputValidationReason,
+  type OutputValidationResult,
+} from "./engine/validation";
 export { fixedDetector, tinyldDetector, type Detection, type LanguageDetector } from "./engine/detectors";
 export { GENERATION_PARAMS, MODEL_PACKAGE, assetUrl, type ModelPackageFile } from "./model/manifest";
 export {
@@ -48,6 +63,7 @@ export { createSegmentCache, type SegmentCache, type SegmentCacheOptions } from 
 
 import { createSafeTranslator, type SafeTranslator, type SegmentTranslator } from "./engine/safe-translation";
 import type { LanguageDetector } from "./engine/detectors";
+import { createValidatedSegmentService } from "./engine/segment-service";
 import type { TranslationClient } from "./model/client";
 import type { SegmentCache } from "./cache/segment-cache";
 
@@ -55,6 +71,8 @@ export interface AlmanEngineOptions {
   client: TranslationClient;
   detector: LanguageDetector;
   cache?: SegmentCache;
+  /** Use when the client endpoint already owns validation and persistent caching. */
+  segmentTranslator?: SegmentTranslator;
   sourceMaxTokens?: number;
   minimumGermanConfidence?: number;
   timeoutMs?: number;
@@ -65,37 +83,17 @@ export interface AlmanEngineOptions {
  * Composes the model runtime client, a language detector, and the optional
  * segment cache into the frozen safe-translation engine.
  */
-export function createAlmanEngine({ client, detector, cache, ...engineOptions }: AlmanEngineOptions): SafeTranslator {
-  const translator: SegmentTranslator = {
-    async translate(texts) {
-      const output: string[] = [];
-      for (const text of texts) {
-        let cached: string | undefined;
-        if (cache) {
-          try {
-            cached = await cache.get(text);
-          } catch {
-            cached = undefined;
-          }
-        }
-        if (cached !== undefined) {
-          output.push(cached);
-          continue;
-        }
-        const [translated] = await client.translate([text]);
-        if (typeof translated !== "string") throw new Error("empty translation result");
-        if (cache) {
-          try {
-            await cache.put(text, translated);
-          } catch {
-            // Cache failures must never fail translation.
-          }
-        }
-        output.push(translated);
-      }
-      return output;
-    },
-    dispose: () => client.dispose(),
-  };
-  return createSafeTranslator({ translator, detector, tokenCounter: (text) => client.countTokens(text), ...engineOptions });
+export function createAlmanEngine({
+  client,
+  detector,
+  cache,
+  segmentTranslator,
+  ...engineOptions
+}: AlmanEngineOptions): SafeTranslator {
+  const validatedService = segmentTranslator ? null : createValidatedSegmentService({ client, cache });
+  const translator = segmentTranslator ?? validatedService!;
+  const tokenCounter = validatedService
+    ? (text: string) => validatedService.countTokens(text)
+    : (text: string) => client.countTokens(text);
+  return createSafeTranslator({ translator, detector, tokenCounter, ...engineOptions });
 }

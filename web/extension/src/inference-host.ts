@@ -1,10 +1,13 @@
 import { browser } from "wxt/browser";
 import {
   MODEL_PACKAGE,
+  TRANSLATION_RUNTIME_POLICY_REVISION,
   createSegmentCache,
+  createValidatedSegmentService,
   createWorkerClient,
   type SegmentCache,
   type TranslationClient,
+  type ValidatedSegmentService,
 } from "@alman/core";
 import type { BroadcastEvent, HostRequest, ModelState } from "./messages";
 
@@ -17,6 +20,9 @@ import type { BroadcastEvent, HostRequest, ModelState } from "./messages";
 export function createInferenceHost(): void {
   let client: TranslationClient | null = null;
   let cache: SegmentCache | null = null;
+  let service: ValidatedSegmentService | null = null;
+  const requests = new Map<string, AbortController>();
+  const cancelledRequests = new Set<string>();
   let state: ModelState = { state: "empty" };
   let lastUsed = Date.now();
 
@@ -37,8 +43,17 @@ export function createInferenceHost(): void {
       createWorker: () => new Worker(publicUrl("/ort/worker.js"), { type: "module" }),
       wasmBaseUrl: publicUrl("/ort/"),
     });
-    cache ??= createSegmentCache({ modelRevision: MODEL_PACKAGE.revision });
+    cache ??= createSegmentCache({
+      modelRevision: MODEL_PACKAGE.revision,
+      policyRevision: TRANSLATION_RUNTIME_POLICY_REVISION,
+    });
     return client;
+  }
+
+  function ensureService(): ValidatedSegmentService {
+    const active = ensureClient();
+    service ??= createValidatedSegmentService({ client: active, cache: cache ?? undefined });
+    return service;
   }
 
   async function init(): Promise<void> {
@@ -47,32 +62,6 @@ export function createInferenceHost(): void {
       setState(progress.phase === "download" ? { state: "downloading", progress } : { state: "preparing" });
     });
     setState({ state: "ready" });
-  }
-
-  async function translate(texts: string[]): Promise<string[]> {
-    const active = ensureClient();
-    const output: string[] = [];
-    for (const text of texts) {
-      let cached: string | undefined;
-      try {
-        cached = await cache?.get(text);
-      } catch {
-        cached = undefined;
-      }
-      if (cached !== undefined) {
-        output.push(cached);
-        continue;
-      }
-      const [translated] = await active.translate([text]);
-      if (typeof translated !== "string") throw new Error("empty translation result");
-      try {
-        await cache?.put(text, translated);
-      } catch {
-        // Best effort.
-      }
-      output.push(translated);
-    }
-    return output;
   }
 
   browser.runtime.onMessage.addListener((message: unknown, _sender, sendResponse) => {
@@ -85,16 +74,49 @@ export function createInferenceHost(): void {
           if (state.state !== "ready") await init();
           return { ok: true };
         case "count-tokens":
-          return { tokens: await ensureClient().countTokens(request.text) };
-        case "translate":
-          return { texts: await translate(request.texts) };
+          return { tokens: await ensureService().countTokens(request.text) };
+        case "translate": {
+          const controller = new AbortController();
+          requests.set(request.requestId, controller);
+          const remaining = request.deadlineAt === undefined
+            ? undefined
+            : Math.max(0, request.deadlineAt - Date.now());
+          const deadlineTimer = remaining === undefined
+            ? undefined
+            : setTimeout(
+                () => controller.abort(new DOMException("translation timed out", "AbortError")),
+                remaining,
+              );
+          if (cancelledRequests.delete(request.requestId) || remaining === 0) {
+            controller.abort(new DOMException("translation timed out", "AbortError"));
+          }
+          try {
+            return {
+              texts: await ensureService().translate(request.texts, { signal: controller.signal }),
+            };
+          } finally {
+            clearTimeout(deadlineTimer);
+            requests.delete(request.requestId);
+          }
+        }
+        case "cancel": {
+          const controller = requests.get(request.requestId);
+          if (controller) controller.abort(new DOMException("translation timed out", "AbortError"));
+          else cancelledRequests.add(request.requestId);
+          return { ok: true };
+        }
         case "status":
           return state;
         case "idle-check": {
           const idleMs = Date.now() - lastUsed;
           if (idleMs > 5 * 60_000 && client) {
             // Free the ~300MB WASM heap; cached assets make re-init cheap.
-            await client.dispose();
+            for (const controller of requests.values()) controller.abort();
+            requests.clear();
+            cancelledRequests.clear();
+            if (service?.dispose) await service.dispose();
+            else await client.dispose();
+            service = null;
             client = null;
             setState({ state: "empty" });
             return { disposed: true, idleMs };

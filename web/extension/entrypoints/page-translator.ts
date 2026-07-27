@@ -44,11 +44,30 @@ export default defineUnlistedScript(() => {
       return { coldStartMs: 0 };
     },
     countTokens: (text) => hostRequest<{ tokens: number }>({ kind: "count-tokens", text }).then((r) => r.tokens),
-    translate: (texts) => hostRequest<{ texts: string[] }>({ kind: "translate", texts }).then((r) => r.texts),
+    async translate(texts, options = {}) {
+      const requestId = globalThis.crypto.randomUUID?.() ?? `${Date.now()}-${Math.random()}`;
+      if (options.signal?.aborted) throw options.signal.reason;
+      const cancel = () => {
+        void browser.runtime.sendMessage({ target: "alman-host", kind: "cancel", requestId }).catch(() => {});
+      };
+      options.signal?.addEventListener("abort", cancel, { once: true });
+      try {
+        const response = await hostRequest<{ texts: string[] }>({
+          kind: "translate",
+          requestId,
+          deadlineAt: options.deadlineAt,
+          texts,
+        });
+        if (options.signal?.aborted) throw options.signal.reason;
+        return response.texts;
+      } finally {
+        options.signal?.removeEventListener("abort", cancel);
+      }
+    },
     async dispose() {},
   };
 
-  const engine = createAlmanEngine({ client, detector: cldDetector() });
+  const engine = createAlmanEngine({ client, detector: cldDetector(), segmentTranslator: client });
 
   async function startTranslation(): Promise<void> {
     if (controller) {

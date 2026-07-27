@@ -1,4 +1,4 @@
-import { diffWordsWithSpace } from "diff";
+import { diffArrays, diffWordsWithSpace } from "diff";
 import { elementBlocksTranslation, type ComputedStyleGetter, type SafeTranslator } from "../engine/safe-translation";
 import { isBlockElement } from "./blocks";
 
@@ -89,10 +89,14 @@ export interface TextUpdate {
   applyDirectly: boolean;
 }
 
+export type ProjectionFailureDetail = "dom-stale" | "lexical-move" | "ambiguous-ownership";
+
 export interface BlockTranslationResult {
   translated: boolean;
-  /** Why a changed model result could not be applied safely. */
+  /** Stable high-level lifecycle category. */
   failure?: "stale" | "ambiguous";
+  /** Local diagnostic reason. Source text is never recorded. */
+  failureDetail?: ProjectionFailureDetail;
   translatedText: string;
   translatedChildren: Node[];
   differenceChildren: Node[];
@@ -312,52 +316,18 @@ interface Projection {
   changedElements: Element[];
 }
 
-function projectTranslation(plan: BlockTranslationPlan, translated: string, markChanges: boolean): Projection | null {
-  const firstAncestors = plan.runs[0]?.ancestors ?? [];
-  const crossesInlineScopes = plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
-  if (crossesInlineScopes && hasLexicalMoves(plan.source, translated)) return null;
-  const output = new Map<BlockTextRun, string>(plan.runs.map((run) => [run, ""]));
-  let sourceOffset = 0;
-  let removedRange: { start: number; end: number } | null = null;
+interface TextChange {
+  value: string;
+  added?: boolean;
+  removed?: boolean;
+}
 
-  function append(run: BlockTextRun, value: string): void {
-    output.set(run, `${output.get(run) ?? ""}${value}`);
-  }
-
-  function copySourceRange(start: number, value: string): boolean {
-    const end = start + value.length;
-    if (plan.source.slice(start, end) !== value) return false;
-    for (const run of runsOverlapping(plan.runs, start, end)) {
-      const overlapStart = Math.max(start, run.start);
-      const overlapEnd = Math.min(end, run.end);
-      append(run, plan.source.slice(overlapStart, overlapEnd));
-    }
-    return true;
-  }
-
-  for (const change of diffWordsWithSpace(plan.source, translated)) {
-    if (change.removed) {
-      const start = sourceOffset;
-      const end = start + change.value.length;
-      if (plan.source.slice(start, end) !== change.value) return null;
-      removedRange = removedRange ? { start: removedRange.start, end } : { start, end };
-      sourceOffset = end;
-      continue;
-    }
-    if (change.added) {
-      const owner = removedRange
-        ? ownerForReplacement(plan, removedRange.start, removedRange.end)
-        : ownerAtBoundary(plan, sourceOffset);
-      if (!owner) return null;
-      append(owner, change.value);
-      continue;
-    }
-    removedRange = null;
-    if (!copySourceRange(sourceOffset, change.value)) return null;
-    sourceOffset += change.value.length;
-  }
-
-  if (sourceOffset !== plan.source.length) return null;
+function finishProjection(
+  plan: BlockTranslationPlan,
+  translated: string,
+  markChanges: boolean,
+  output: Map<BlockTextRun, string>,
+): Projection | null {
   const projected = plan.runs.map((run) => output.get(run) ?? "").join("");
   if (projected !== translated) return null;
 
@@ -397,6 +367,186 @@ function projectTranslation(plan: BlockTranslationPlan, translated: string, mark
   return { targets, updates, changedElements: [...changedElements] };
 }
 
+function appendOutput(output: Map<BlockTextRun, string>, run: BlockTextRun, value: string): void {
+  output.set(run, `${output.get(run) ?? ""}${value}`);
+}
+
+function copySourceRange(
+  plan: BlockTranslationPlan,
+  output: Map<BlockTextRun, string>,
+  start: number,
+  value: string,
+): boolean {
+  const end = start + value.length;
+  if (plan.source.slice(start, end) !== value) return false;
+  for (const run of runsOverlapping(plan.runs, start, end)) {
+    const overlapStart = Math.max(start, run.start);
+    const overlapEnd = Math.min(end, run.end);
+    appendOutput(output, run, plan.source.slice(overlapStart, overlapEnd));
+  }
+  return true;
+}
+
+function projectWordChanges(plan: BlockTranslationPlan, translated: string, markChanges: boolean): Projection | null {
+  const output = new Map<BlockTextRun, string>(plan.runs.map((run) => [run, ""]));
+  let sourceOffset = 0;
+  let removedRange: { start: number; end: number } | null = null;
+
+  for (const change of diffWordsWithSpace(plan.source, translated)) {
+    if (change.removed) {
+      const start = sourceOffset;
+      const end = start + change.value.length;
+      if (plan.source.slice(start, end) !== change.value) return null;
+      removedRange = removedRange ? { start: removedRange.start, end } : { start, end };
+      sourceOffset = end;
+      continue;
+    }
+    if (change.added) {
+      const owner = removedRange
+        ? ownerForReplacement(plan, removedRange.start, removedRange.end)
+        : ownerAtBoundary(plan, sourceOffset);
+      if (!owner) return null;
+      appendOutput(output, owner, change.value);
+      continue;
+    }
+    if (removedRange && !ownerForReplacement(plan, removedRange.start, removedRange.end)) return null;
+    removedRange = null;
+    if (!copySourceRange(plan, output, sourceOffset, change.value)) return null;
+    sourceOffset += change.value.length;
+  }
+
+  if (removedRange && !ownerForReplacement(plan, removedRange.start, removedRange.end)) return null;
+  if (sourceOffset !== plan.source.length) return null;
+  return finishProjection(plan, translated, markChanges, output);
+}
+
+function graphemes(text: string): string[] {
+  if (typeof Intl?.Segmenter !== "function") return Array.from(text);
+  return Array.from(new Intl.Segmenter("de", { granularity: "grapheme" }).segment(text), ({ segment }) => segment);
+}
+
+function graphemeChanges(source: string, translated: string): TextChange[] {
+  return diffArrays(graphemes(source), graphemes(translated)).map((change) => ({
+    value: change.value.join(""),
+    ...(change.added ? { added: true } : {}),
+    ...(change.removed ? { removed: true } : {}),
+  }));
+}
+
+function sourceWordKey(source: string, start: number, end: number): string {
+  const left = source.slice(0, start).match(/[\p{L}\p{N}\p{M}]+$/u)?.[0] ?? "";
+  const right = source.slice(end).match(/^[\p{L}\p{N}\p{M}]+/u)?.[0] ?? "";
+  return `${start - left.length}:${end + right.length}`;
+}
+
+function nextRemovalOwner(
+  plan: BlockTranslationPlan,
+  changes: TextChange[],
+  index: number,
+  sourceOffset: number,
+): { owner: BlockTextRun; key: string } | null {
+  let offset = sourceOffset;
+  for (let nextIndex = index + 1; nextIndex < changes.length; nextIndex += 1) {
+    const next = changes[nextIndex]!;
+    if (next.removed) {
+      const end = offset + next.value.length;
+      const owner = ownerForReplacement(plan, offset, end);
+      return owner ? { owner, key: sourceWordKey(plan.source, offset, end) } : null;
+    }
+    if (next.added) continue;
+    if (/\S/u.test(next.value)) return null;
+    offset += next.value.length;
+  }
+  return null;
+}
+
+/** Refine a rejected word projection without allowing one source word to change in multiple DOM scopes. */
+function projectGraphemeChanges(plan: BlockTranslationPlan, translated: string, markChanges: boolean): Projection | null {
+  const changes = graphemeChanges(plan.source, translated);
+  const output = new Map<BlockTextRun, string>(plan.runs.map((run) => [run, ""]));
+  const wordOwners = new Map<string, BlockTextRun>();
+  const state: { affinity: { owner: BlockTextRun; key: string } | null } = { affinity: null };
+  let sourceOffset = 0;
+  let removedRange: { start: number; end: number } | null = null;
+
+  function register(owner: BlockTextRun, key: string): boolean {
+    const existing = wordOwners.get(key);
+    if (existing && existing !== owner) return false;
+    wordOwners.set(key, owner);
+    state.affinity = { owner, key };
+    return true;
+  }
+
+  function finishRemoval(): boolean {
+    if (!removedRange) return true;
+    const owner = ownerForReplacement(plan, removedRange.start, removedRange.end);
+    if (!owner || !register(owner, sourceWordKey(plan.source, removedRange.start, removedRange.end))) return false;
+    removedRange = null;
+    return true;
+  }
+
+  for (let index = 0; index < changes.length; index += 1) {
+    const change = changes[index]!;
+    if (change.removed) {
+      const start = sourceOffset;
+      const end = start + change.value.length;
+      if (plan.source.slice(start, end) !== change.value) return null;
+      removedRange = removedRange ? { start: removedRange.start, end } : { start, end };
+      sourceOffset = end;
+      continue;
+    }
+    if (change.added) {
+      if (removedRange) {
+        const owner = ownerForReplacement(plan, removedRange.start, removedRange.end);
+        const key = sourceWordKey(plan.source, removedRange.start, removedRange.end);
+        if (!owner || !register(owner, key)) return null;
+        appendOutput(output, owner, change.value);
+        removedRange = null;
+        continue;
+      }
+
+      let owner = ownerAtBoundary(plan, sourceOffset);
+      let key = sourceWordKey(plan.source, sourceOffset, sourceOffset);
+      if (!owner) {
+        const right = nextRemovalOwner(plan, changes, index, sourceOffset);
+        if (state.affinity && right && state.affinity.owner !== right.owner) return null;
+        const resolved = state.affinity ?? right;
+        if (!resolved) return null;
+        owner = resolved.owner;
+        key = resolved.key;
+      }
+      if (!register(owner, key)) return null;
+      appendOutput(output, owner, change.value);
+      continue;
+    }
+
+    if (!finishRemoval()) return null;
+    if (!copySourceRange(plan, output, sourceOffset, change.value)) return null;
+    sourceOffset += change.value.length;
+    if (/\S/u.test(change.value)) state.affinity = null;
+  }
+
+  if (!finishRemoval() || sourceOffset !== plan.source.length) return null;
+  return finishProjection(plan, translated, markChanges, output);
+}
+
+function projectTranslation(
+  plan: BlockTranslationPlan,
+  translated: string,
+  markChanges: boolean,
+): { projection: Projection | null; failureDetail?: ProjectionFailureDetail } {
+  const firstAncestors = plan.runs[0]?.ancestors ?? [];
+  const crossesInlineScopes = plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
+  if (crossesInlineScopes && hasLexicalMoves(plan.source, translated)) {
+    return { projection: null, failureDetail: "lexical-move" };
+  }
+  const projection = projectWordChanges(plan, translated, markChanges)
+    ?? projectGraphemeChanges(plan, translated, markChanges);
+  return projection
+    ? { projection }
+    : { projection: null, failureDetail: "ambiguous-ownership" };
+}
+
 function translatedChildren(plan: BlockTranslationPlan, projection: Projection, markChanges: boolean): Node[] {
   const document = plan.element.ownerDocument;
   return Array.from(plan.element.childNodes).flatMap((child): Node[] => {
@@ -426,10 +576,12 @@ function differenceNode(node: Node, document: Document, targets: Map<Text, strin
 function unchangedResult(
   plan: BlockTranslationPlan,
   failure?: BlockTranslationResult["failure"],
+  failureDetail?: ProjectionFailureDetail,
 ): BlockTranslationResult {
   return {
     translated: false,
     ...(failure ? { failure } : {}),
+    ...(failureDetail ? { failureDetail } : {}),
     translatedText: plan.source,
     translatedChildren: Array.from(plan.element.childNodes),
     differenceChildren: cloneChildren(plan.element),
@@ -476,17 +628,17 @@ export async function translateBlockPlan(
     !runOrderIsCurrent(plan) ||
     !childSnapshotsAreCurrent(plan)
   ) {
-    return unchangedResult(plan, "stale");
+    return unchangedResult(plan, "stale", "dom-stale");
   }
-  const projection = projectTranslation(plan, translatedText, markChanges);
-  if (!projection) return unchangedResult(plan, "ambiguous");
+  const attempt = projectTranslation(plan, translatedText, markChanges);
+  if (!attempt.projection) return unchangedResult(plan, "ambiguous", attempt.failureDetail);
   const document = plan.element.ownerDocument;
   return {
     translated: true,
     translatedText,
-    translatedChildren: translatedChildren(plan, projection, markChanges),
-    differenceChildren: Array.from(plan.element.childNodes).flatMap((child) => differenceNode(child, document, projection.targets)),
-    textUpdates: projection.updates,
-    changedElements: projection.changedElements,
+    translatedChildren: translatedChildren(plan, attempt.projection, markChanges),
+    differenceChildren: Array.from(plan.element.childNodes).flatMap((child) => differenceNode(child, document, attempt.projection!.targets)),
+    textUpdates: attempt.projection.updates,
+    changedElements: attempt.projection.changedElements,
   };
 }

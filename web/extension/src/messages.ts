@@ -4,7 +4,8 @@ import type { AssetProgress, DomTranslationStats } from "@alman/core";
 export type HostRequest =
   | { target: "alman-host"; kind: "init" }
   | { target: "alman-host"; kind: "count-tokens"; text: string }
-  | { target: "alman-host"; kind: "translate"; texts: string[] }
+  | { target: "alman-host"; kind: "translate"; requestId: string; deadlineAt?: number; texts: string[] }
+  | { target: "alman-host"; kind: "cancel"; requestId: string }
   | { target: "alman-host"; kind: "status" }
   | { target: "alman-host"; kind: "idle-check" };
 
