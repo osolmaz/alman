@@ -36,6 +36,7 @@ const INLINE_TRANSLATABLE_TAGS = new Set([
 ]);
 
 const NONEMPTY_LABEL_TAGS = new Set(["A", "LABEL"]);
+const STRUCTURAL_SEPARATOR_TAGS = new Map([["BR", " "]]);
 const CITATION_SELECTOR = 'sup.mw-ref, sup.reference, sup[id^="cite_ref"], [role="doc-noteref"]';
 const WORD_END_RE = /[\p{L}\p{N}]$/u;
 const WORD_START_RE = /^[\p{L}\p{N}]/u;
@@ -47,6 +48,8 @@ export interface BlockTextRun {
   end: number;
   /** Inline ancestors from the block child inward. */
   ancestors: Element[];
+  /** Live structural node represented as whitespace in model input. */
+  structural?: Node;
 }
 
 export interface BlockAnchor {
@@ -136,6 +139,16 @@ export function createBlockTranslationPlan(
       return;
     }
     const child = node as Element;
+    const separator = STRUCTURAL_SEPARATOR_TAGS.get(child.tagName);
+    if (separator !== undefined) {
+      const start = offset;
+      const synthetic = element.ownerDocument.createTextNode(separator);
+      sourceParts.push(separator);
+      offset += separator.length;
+      runs.push({ node: synthetic, original: separator, start, end: offset, ancestors, structural: child });
+      anchors.push({ node: child, offset: start });
+      return;
+    }
     if (elementIsOpaque(child, getComputedStyle)) {
       anchors.push({ node: child, offset });
       return;
@@ -170,6 +183,7 @@ export function createTextDifferenceNodes(document: Document, original: string, 
       continue;
     }
     const element = document.createElement(change.added ? "ins" : "del");
+    element.setAttribute("data-alman-generated-diff", "");
     element.textContent = change.value;
     nodes.push(element);
     removed = change.removed ? change.value : "";
@@ -189,6 +203,7 @@ export function createTranslatedTextNodes(document: Document, original: string, 
     }
     const span = document.createElement("span");
     span.setAttribute("data-alman-change", "");
+    span.setAttribute("data-alman-generated-change", "");
     span.textContent = change.value;
     nodes.push(span);
   }
@@ -210,18 +225,19 @@ function runsOverlapping(runs: BlockTextRun[], start: number, end: number): Bloc
 function ownerForReplacement(plan: BlockTranslationPlan, start: number, end: number): BlockTextRun | null {
   if (plan.anchors.some((anchor) => anchor.offset > start && anchor.offset < end)) return null;
   const affected = runsOverlapping(plan.runs, start, end);
-  if (affected.length === 0) return null;
-  if (affected.length === 1) return affected[0] ?? null;
-  const ancestors = affected[0]?.ancestors ?? [];
-  return affected.every((run) => sameAncestors(run.ancestors, ancestors)) ? (affected[0] ?? null) : null;
+  const editable = affected.filter((run) => !run.structural);
+  if (editable.length === 0) return null;
+  if (editable.length === 1) return editable[0] ?? null;
+  const ancestors = editable[0]?.ancestors ?? [];
+  return editable.every((run) => sameAncestors(run.ancestors, ancestors)) ? (editable[0] ?? null) : null;
 }
 
 function ownerAtBoundary(plan: BlockTranslationPlan, offset: number): BlockTextRun | null {
   const containing = plan.runs.find((run) => run.start < offset && run.end > offset);
-  if (containing) return containing;
+  if (containing) return containing.structural ? null : containing;
 
-  const left = [...plan.runs].reverse().find((run) => run.end === offset);
-  const right = plan.runs.find((run) => run.start === offset);
+  const left = [...plan.runs].reverse().find((run) => !run.structural && run.end === offset);
+  const right = plan.runs.find((run) => !run.structural && run.start === offset);
   if (left && right && plan.anchors.some((anchor) => anchor.offset === offset)) return null;
   if (!left) return right ?? null;
   if (!right) return left;
@@ -244,8 +260,8 @@ function setsOverlap(left: Set<string>, right: Set<string>): boolean {
   return [...left].some((word) => right.has(word));
 }
 
-/** Reject lexical swaps that a monotonic diff would otherwise disguise as substitutions. */
-function hasCrossedLexicalMoves(source: string, translated: string): boolean {
+/** Reject lexical moves that a monotonic diff would otherwise disguise as substitutions. */
+function hasLexicalMoves(source: string, translated: string): boolean {
   const hunks: EditHunk[] = [];
   let current: EditHunk | null = null;
   for (const change of diffWordsWithSpace(source, translated)) {
@@ -260,11 +276,10 @@ function hasCrossedLexicalMoves(source: string, translated: string): boolean {
     const words = normalizedWords(change.value);
     for (const word of words) (change.removed ? current.removed : current.added).add(word);
   }
-  for (let left = 0; left < hunks.length; left += 1) {
-    for (let right = left + 1; right < hunks.length; right += 1) {
-      const earlier = hunks[left]!;
-      const later = hunks[right]!;
-      if (setsOverlap(earlier.added, later.removed) && setsOverlap(later.added, earlier.removed)) return true;
+  for (let addedIndex = 0; addedIndex < hunks.length; addedIndex += 1) {
+    for (let removedIndex = 0; removedIndex < hunks.length; removedIndex += 1) {
+      if (addedIndex === removedIndex) continue;
+      if (setsOverlap(hunks[addedIndex]!.added, hunks[removedIndex]!.removed)) return true;
     }
   }
   return false;
@@ -279,7 +294,7 @@ interface Projection {
 function projectTranslation(plan: BlockTranslationPlan, translated: string, markChanges: boolean): Projection | null {
   const firstAncestors = plan.runs[0]?.ancestors ?? [];
   const crossesInlineScopes = plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
-  if (crossesInlineScopes && hasCrossedLexicalMoves(plan.source, translated)) return null;
+  if (crossesInlineScopes && hasLexicalMoves(plan.source, translated)) return null;
   const output = new Map<BlockTextRun, string>(plan.runs.map((run) => [run, ""]));
   let sourceOffset = 0;
   let removedRange: { start: number; end: number } | null = null;
@@ -330,6 +345,10 @@ function projectTranslation(plan: BlockTranslationPlan, translated: string, mark
   const changedElements = new Set<Element>();
   for (const run of plan.runs) {
     const target = output.get(run) ?? "";
+    if (run.structural) {
+      if (!/^\s*$/u.test(target)) return null;
+      continue;
+    }
     targets.set(run.node, target);
     if (target === run.original) continue;
     const directTextWithEffects = markChanges && run.node.parentNode === plan.element;
@@ -405,7 +424,7 @@ export async function translateBlockPlan(
 ): Promise<BlockTranslationResult> {
   const translatedText = await engine.translateText(plan.source);
   if (translatedText === plan.source) return unchangedResult(plan);
-  if (plan.runs.some((run) => !run.node.isConnected || run.node.nodeValue !== run.original)) {
+  if (plan.runs.some((run) => !run.structural && (!run.node.isConnected || run.node.nodeValue !== run.original))) {
     return unchangedResult(plan, "stale");
   }
   const projection = projectTranslation(plan, translatedText, markChanges);

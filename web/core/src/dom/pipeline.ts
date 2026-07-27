@@ -1,7 +1,6 @@
 import type { SafeTranslator } from "../engine/safe-translation";
 import {
   createBlockTranslationPlan,
-  createTextDifferenceNodes,
   translateBlockPlan,
   type TextUpdate,
 } from "./block-plan";
@@ -151,13 +150,13 @@ export function createDomTranslator({
     drain();
   }
 
-  function pathFromRoot(node: Node): number[] | null {
+  function elementPathFromRoot(element: Element): number[] | null {
     const path: number[] = [];
-    let current: Node | null = node;
+    let current: Element | null = element;
     while (current && current !== root) {
-      const parent: Node | null = current.parentNode;
+      const parent: Element | null = current.parentElement;
       if (!parent) return null;
-      const index = Array.prototype.indexOf.call(parent.childNodes, current) as number;
+      const index = Array.prototype.indexOf.call(parent.children, current) as number;
       if (index < 0) return null;
       path.unshift(index);
       current = parent;
@@ -165,9 +164,15 @@ export function createDomTranslator({
     return current === root ? path : null;
   }
 
-  function nodeAtPath(start: Node, path: number[]): Node | null {
-    let current: Node | null = start;
-    for (const index of path) current = current?.childNodes[index] ?? null;
+  function isGeneratedProjectionElement(element: Element): boolean {
+    return element.hasAttribute("data-alman-generated-diff") || element.hasAttribute("data-alman-generated-change");
+  }
+
+  function elementAtProjectionPath(start: Element, path: number[]): Element | null {
+    let current: Element | null = start;
+    for (const index of path) {
+      current = Array.from(current?.children ?? []).filter((child) => !isGeneratedProjectionElement(child))[index] ?? null;
+    }
     return current;
   }
 
@@ -387,25 +392,20 @@ export function createDomTranslator({
     },
     createDifferenceClone() {
       const clone = root.cloneNode(true) as Element;
-      for (const [element, record] of records) {
-        const path = pathFromRoot(element);
-        if (!path) continue;
-        const clonedElement = nodeAtPath(clone, path);
-        if (clonedElement?.nodeType !== Node.ELEMENT_NODE) continue;
-        (clonedElement as Element).replaceChildren(...record.differenceChildren.map((child) => child.cloneNode(true)));
+      const overlays = Array.from(records, ([element, record]) => ({
+        path: elementPathFromRoot(element),
+        record,
+      }))
+        .filter((entry): entry is { path: number[]; record: BlockRecord } => entry.path !== null)
+        .sort((left, right) => left.path.length - right.path.length);
+      for (const { path, record } of overlays) {
+        const clonedElement = elementAtProjectionPath(clone, path);
+        if (!clonedElement) continue;
+        clonedElement.replaceChildren(...record.differenceChildren.map((child) => child.cloneNode(true)));
       }
-      const recordedElements = Array.from(records.keys());
-      for (const [node, record] of textRecords) {
-        if (recordedElements.some((element) => element.contains(node))) continue;
-        const path = pathFromRoot(node);
-        if (!path) continue;
-        const clonedNode = nodeAtPath(clone, path);
-        const parent = clonedNode?.parentNode;
-        if (!clonedNode || !parent) continue;
-        for (const child of createTextDifferenceNodes(root.ownerDocument, record.original, record.translated)) {
-          parent.insertBefore(child, clonedNode);
-        }
-        parent.removeChild(clonedNode);
+      for (const generated of clone.querySelectorAll("[data-alman-generated-diff], [data-alman-generated-change]")) {
+        generated.removeAttribute("data-alman-generated-diff");
+        generated.removeAttribute("data-alman-generated-change");
       }
       return clone;
     },

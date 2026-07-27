@@ -140,6 +140,20 @@ test("comment anchors stay live while surrounding plain text translates", async 
   expect(paragraph.textContent).toBe("Hallo Welt alman.");
 });
 
+test("line breaks become model whitespace and remain live", async () => {
+  document.body.innerHTML = `<p id="p">Der<br id="break">Mann kommt.</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const lineBreak = document.getElementById("break");
+  const plan = createBlockTranslationPlan(paragraph)!;
+
+  expect(plan.source).toBe("Der Mann kommt.");
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: "Die Mann kommt." }));
+  applyResult(paragraph, result);
+  expect(result.translated).toBe(true);
+  expect(paragraph.innerHTML).toBe('Die<br id="break">Mann kommt.');
+  expect(document.getElementById("break")).toBe(lineBreak);
+});
+
 test("citation anchors stay out of model input and remain live", async () => {
   document.body.innerHTML = `<p id="p">Der Mann kommt.<sup id="cite_ref-1" class="mw-ref"><a href="#note-1">[1]</a></sup> Danach geht er.</p>`;
   const paragraph = document.getElementById("p") as HTMLParagraphElement;
@@ -247,6 +261,19 @@ test("plain text can reorder when no inline scope needs projection", async () =>
   applyResult(paragraph, result);
   expect(result.translated).toBe(true);
   expect(paragraph.textContent).toBe("Sie sieht er.");
+});
+
+test("one-way lexical moves cannot change a live link target", async () => {
+  document.body.innerHTML = `<p id="p"><a id="link" href="/wiki/Foo">foo</a> bar baz</p>`;
+  const paragraph = document.getElementById("p") as HTMLParagraphElement;
+  const original = paragraph.innerHTML;
+  const plan = createBlockTranslationPlan(paragraph)!;
+  const result = await translateBlockPlan(plan, translator({ [plan.source]: "baz foo bar" }));
+
+  expect(result.translated).toBe(false);
+  expect(result.failure).toBe("ambiguous");
+  expect(paragraph.innerHTML).toBe(original);
+  expect(document.getElementById("link")?.textContent).toBe("foo");
 });
 
 test("non-monotonic reordering across inline scopes falls back cleanly", async () => {

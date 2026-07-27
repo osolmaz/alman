@@ -466,6 +466,29 @@ test("pipeline preserves queued nested blocks", async () => {
   controller.stop();
 });
 
+test("comparison overlays nested translated blocks", async () => {
+  const parent = "Die Eltern lesen.";
+  const child = "Die Kinder schlafen.";
+  document.body.innerHTML = `<main><ul><li id="parent">${parent}<ul><li id="child">${child}</li></ul></li></ul></main>`;
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText(text) {
+      if (text === parent) return "Die Eltern lesen alman.";
+      if (text === child) return "Die Kinder schlafen alman.";
+      return text;
+    },
+    async dispose() {},
+  };
+  const controller = createDomTranslator({ root: document.querySelector("main")!, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  const difference = controller.createDifferenceClone();
+  expect(difference.querySelector("#parent > ins")?.textContent).toBe(" alman");
+  expect(difference.querySelector("#child ins")?.textContent).toBe(" alman");
+  controller.stop();
+});
+
 test("deferred application handles nested text blocks independently", async () => {
   const parent = "Die Eltern lesen.";
   const child = "Die Kinder schlafen.";
