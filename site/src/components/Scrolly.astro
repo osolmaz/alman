@@ -19,6 +19,15 @@ import ScrollyTransformTable from "./ScrollyTransformTable.astro";
     <p class="sub">{content.lead.subtitle}</p>
   </header>
 
+  <div class="scroll-cue-slot" aria-hidden="true">
+    <div class="scroll-cue">
+      <span class="scroll-cue-shell">
+        <span class="scroll-cue-wheel"></span>
+      </span>
+      <span class="scroll-cue-chevron"></span>
+    </div>
+  </div>
+
   <div class="scrolly-body">
     <!-- Group: the Twain case file, sheet 1 -->
     <div class="group">
@@ -439,6 +448,95 @@ import ScrollyTransformTable from "./ScrollyTransformTable.astro";
   .scrolly-lead .sub {
     margin: 0;
     color: var(--grey-1);
+  }
+
+  /* The zero-height slot keeps the existing lead-to-demo spacing unchanged. */
+  .scroll-cue-slot {
+    height: 0;
+    position: relative;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    top: clamp(1rem, 3vh, 2rem);
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-50%);
+    color: var(--grey-1);
+  }
+
+  .scroll-cue-shell {
+    width: 1.2rem;
+    height: 1.9rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    display: flex;
+    justify-content: center;
+    padding-top: 0.3rem;
+  }
+
+  .scroll-cue-wheel {
+    width: 2px;
+    height: 0.38rem;
+    border-radius: 999px;
+    background: currentColor;
+    animation: scroll-cue-wheel 1.8s ease-in-out infinite;
+  }
+
+  .scroll-cue-chevron {
+    width: 0.48rem;
+    height: 0.48rem;
+    margin-top: 0.35rem;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(45deg);
+    animation: scroll-cue-chevron 1.8s ease-in-out infinite;
+  }
+
+  @keyframes scroll-cue-wheel {
+    0% {
+      opacity: 0;
+      transform: translateY(0);
+    }
+    22% {
+      opacity: 0.9;
+    }
+    72% {
+      opacity: 0;
+      transform: translateY(0.62rem);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(0.62rem);
+    }
+  }
+
+  @keyframes scroll-cue-chevron {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: translateY(0) rotate(45deg);
+    }
+    45% {
+      opacity: 0.85;
+      transform: translateY(0.18rem) rotate(45deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue-wheel,
+    .scroll-cue-chevron {
+      animation: none;
+    }
+
+    .scroll-cue-wheel {
+      opacity: 0.75;
+      transform: translateY(0.28rem);
+    }
   }
 
   .scrolly-body {
@@ -1074,6 +1172,20 @@ import ScrollyTransformTable from "./ScrollyTransformTable.astro";
   /* ---------- Mobile: strictly linear, text then card ---------- */
 
   @media (max-width: 860px) {
+    .scroll-cue {
+      top: -0.6rem;
+    }
+
+    .scroll-cue-shell {
+      display: none;
+    }
+
+    .scroll-cue-chevron {
+      width: 0.42rem;
+      height: 0.42rem;
+      margin-top: 0;
+    }
+
     /*
      * Each group renders all of its step text first, then its card, so no
      * text is ever covered. Animated cards then pin near the top of the
