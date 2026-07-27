@@ -12,16 +12,20 @@ export interface ResponsiveContentsQuery {
   removeEventListener(type: "change", listener: (event: MediaQueryListEvent) => void): void;
 }
 
-function ensureHeadingId(heading: HTMLHeadingElement, index: number): string {
-  if (heading.id) return heading.id;
+function ensureHeadingId(heading: HTMLHeadingElement, index: number, reservedIds: Set<string>): string {
+  if (heading.id) {
+    reservedIds.add(heading.id);
+    return heading.id;
+  }
   const base = heading.textContent?.trim().replaceAll(/\s+/gu, "_") || `Abschnitt_${index + 1}`;
   let candidate = base;
   let suffix = 2;
-  while (heading.ownerDocument.getElementById(candidate)) {
+  while (reservedIds.has(candidate) || heading.ownerDocument.getElementById(candidate)) {
     candidate = `${base}_${suffix}`;
     suffix += 1;
   }
   heading.id = candidate;
+  reservedIds.add(candidate);
   return candidate;
 }
 
@@ -46,9 +50,12 @@ export function createArticleContents(article: Element, narrowQuery?: Responsive
 
   const refresh = () => {
     const headings = Array.from(article.querySelectorAll<HTMLHeadingElement>("h2, h3"));
+    const reservedIds = new Set(
+      Array.from(article.querySelectorAll<HTMLElement>("[id]"), (candidate) => candidate.id).filter(Boolean),
+    );
     list.replaceChildren(
       ...headings.map((heading, index) => {
-        const id = ensureHeadingId(heading, index);
+        const id = ensureHeadingId(heading, index, reservedIds);
         return el("li", { class: `contents-level-${heading.tagName === "H3" ? "3" : "2"}` }, [
           el("a", { href: `#${encodeURIComponent(id)}` }, [heading.textContent?.trim() || `Abschnitt ${index + 1}`]),
         ]);

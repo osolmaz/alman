@@ -46,9 +46,9 @@ test("article contents collapses on narrow screens and follows viewport changes"
   expect(listeners.size).toBe(0);
 });
 
-test("article contents creates unique ids when source headings lack them", () => {
-  document.body.innerHTML = `<article><h2>Eine Überschrift</h2><h2>Eine Überschrift</h2></article>`;
-  const article = document.querySelector("article")!;
+test("article contents creates unique ids before a source article is mounted", () => {
+  const article = document.createElement("article");
+  article.innerHTML = `<h2>Eine Überschrift</h2><h2>Eine Überschrift</h2>`;
   const contents = createArticleContents(article);
 
   expect(Array.from(article.querySelectorAll("h2"), (heading) => heading.id)).toEqual([
