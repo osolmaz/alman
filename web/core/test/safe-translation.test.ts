@@ -11,6 +11,7 @@ import { createHash } from "node:crypto";
 import { expect, test } from "vitest";
 import {
   createSafeTranslator,
+  declaredTranslationLanguage,
   elementBlocksTranslation,
   sentenceSegments,
   translateVisibleTextNodes,
@@ -293,6 +294,27 @@ test("DOM traversal changes visible text nodes and skips protected subtrees", as
     expect(node.nodeValue).toBe(german);
   }
   expect(root.attrs["title"]).toBe(attribute);
+});
+
+test("language metadata skips foreign text and permits nested German overrides", async () => {
+  const german = (rows.find(({ id }) => id === "german-basic") as CaseRow).text;
+  const foreign = text(german);
+  const nestedGerman = text(german);
+  const root = element("MAIN").append(
+    element("DIV", { attrs: { lang: "en" } }).append(
+      foreign,
+      element("SPAN", { attrs: { lang: "de" } }).append(nestedGerman),
+    ),
+  );
+
+  expect(declaredTranslationLanguage(element("SPAN", { attrs: { lang: "grc-Grek" } }))).toBe("foreign");
+  expect(declaredTranslationLanguage(element("SPAN", { attrs: { lang: "zxx" } }))).toBe("foreign");
+  expect(declaredTranslationLanguage(element("SPAN", { attrs: { lang: "de-AL" } }))).toBe("german");
+
+  const { safeTranslator } = fixtureSafeTranslator();
+  expect(await translateVisibleTextNodes(root, safeTranslator)).toBe(1);
+  expect(foreign.nodeValue).toBe(german);
+  expect(nestedGerman.nodeValue).not.toBe(german);
 });
 
 test("model markup is assigned as inert text without creating DOM children", async () => {

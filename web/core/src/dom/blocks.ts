@@ -1,4 +1,9 @@
-import { elementBlocksTranslation, type ComputedStyleGetter } from "../engine/safe-translation";
+import {
+  declaredTranslationLanguage,
+  elementBlocksTranslation,
+  type ComputedStyleGetter,
+  type TranslationLanguage,
+} from "../engine/safe-translation";
 
 /**
  * Fallback block classification for environments whose computed styles are
@@ -49,6 +54,7 @@ export function collectTextBlocks(
   const getStyle = resolveStyleGetter(root, getComputedStyle);
 
   const blockedCache = new WeakMap<Element, boolean>();
+  const languageCache = new WeakMap<Element, TranslationLanguage>();
   function isBlocked(element: Element): boolean {
     const cached = blockedCache.get(element);
     if (cached !== undefined) return cached;
@@ -57,6 +63,15 @@ export function collectTextBlocks(
     const blocked = own || (parent ? isBlocked(parent) : false);
     blockedCache.set(element, blocked);
     return blocked;
+  }
+
+  function languageFor(element: Element): TranslationLanguage {
+    const cached = languageCache.get(element);
+    if (cached) return cached;
+    const language = declaredTranslationLanguage(element)
+      ?? (element.parentElement ? languageFor(element.parentElement) : "german");
+    languageCache.set(element, language);
+    return language;
   }
 
   function blockAncestor(element: Element): Element {
@@ -74,7 +89,7 @@ export function collectTextBlocks(
     const text = node as Text;
     if (!text.nodeValue || !text.nodeValue.trim()) continue;
     const parent = text.parentElement;
-    if (!parent || isBlocked(parent)) continue;
+    if (!parent || isBlocked(parent) || languageFor(parent) === "foreign") continue;
     const block = blockAncestor(parent);
     const nodes = groups.get(block);
     if (nodes) nodes.push(text);

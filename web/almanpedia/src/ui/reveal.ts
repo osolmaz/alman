@@ -97,7 +97,9 @@ export function createTranslationRevealController({
     : defaultObserver(root, intersectionCallback);
 
   return {
-    handleBlockState({ element, state }) {
+    handleBlockState({ element, state, failureDetail }) {
+      if (failureDetail) element.setAttribute("data-alman-failure-detail", failureDetail);
+      else element.removeAttribute("data-alman-failure-detail");
       if (state === "queued") {
         element.setAttribute("data-alman-state", "queued");
         observer?.observe(element);

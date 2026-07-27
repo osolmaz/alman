@@ -40,6 +40,55 @@ test("collectTextBlocks groups by block ancestor and skips blocked subtrees", ()
   expect(elements).not.toContain("code");
 });
 
+test("nested German language overrides remain translatable", async () => {
+  document.body.innerHTML = `
+    <main><p id="mixed" lang="en">English <span id="german" lang="de">Der Mann.</span></p></main>
+  `;
+  const inputs: string[] = [];
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText(text) {
+      inputs.push(text);
+      return text === "Der Mann." ? "Die Mann." : text;
+    },
+    async dispose() {},
+  };
+  const controller = createDomTranslator({ root: document.querySelector("main")!, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(inputs).toEqual(["Der Mann."]);
+  expect(document.getElementById("mixed")?.childNodes[0]?.nodeValue).toBe("English ");
+  expect(document.getElementById("german")?.textContent).toBe("Die Mann.");
+  controller.stop();
+});
+
+test("pipeline translates German runs around foreign inline text", async () => {
+  document.body.innerHTML = `
+    <main><p id="mixed">Der <span id="foreign" lang="en">API</span> Mann kommt.</p></main>
+  `;
+  const inputs: string[] = [];
+  const foreign = document.getElementById("foreign");
+  const engine: SafeTranslator = {
+    async translateSegment(segment) { return segment; },
+    async translateText(text) {
+      inputs.push(text);
+      if (text === "Der Mann kommt.") return "Die Typ kommt.";
+      return text;
+    },
+    async dispose() {},
+  };
+  const controller = createDomTranslator({ root: document.querySelector("main")!, engine, observeMutations: false });
+  controller.start();
+  await controller.whenIdle();
+
+  expect(inputs).toEqual(["Der Mann kommt."]);
+  expect(document.getElementById("mixed")?.textContent).toBe("Die API Typ kommt.");
+  expect(document.getElementById("foreign")).toBe(foreign);
+  expect(foreign?.textContent).toBe("API");
+  controller.stop();
+});
+
 test("pipeline translates, toggles, and picks up dynamic content", async () => {
   setupPage();
   const controller = createDomTranslator({ root: document.body, engine: markerEngine() });
@@ -402,10 +451,22 @@ test("pipeline does not resurrect removed inline elements after rejected reorder
     },
     async dispose() {},
   };
+  const failures: Array<{ failure?: string; failureDetail?: string }> = [];
 
-  const controller = createDomTranslator({ root: document.body, engine, observeMutations: false });
+  const controller = createDomTranslator({
+    root: document.body,
+    engine,
+    observeMutations: false,
+    onBlockState: (event) => {
+      if (event.state === "failed") failures.push(event);
+    },
+  });
   controller.start();
   await controller.whenIdle();
+  expect(failures).toEqual([expect.objectContaining({
+    failure: "ambiguous",
+    failureDetail: "lexical-move",
+  })]);
 
   document.getElementById("link")?.remove();
   controller.restoreOriginals();

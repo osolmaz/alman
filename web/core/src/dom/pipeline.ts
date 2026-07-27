@@ -2,6 +2,8 @@ import type { SafeTranslator } from "../engine/safe-translation";
 import {
   createBlockTranslationPlan,
   translateBlockPlan,
+  type BlockTranslationResult,
+  type ProjectionFailureDetail,
   type TextUpdate,
 } from "./block-plan";
 import { collectTextBlocks, type TextBlock } from "./blocks";
@@ -20,6 +22,8 @@ export type DomTranslationBlockState = "queued" | "translating" | "translated" |
 export interface DomTranslationBlockEvent {
   element: Element;
   state: DomTranslationBlockState;
+  failure?: BlockTranslationResult["failure"];
+  failureDetail?: ProjectionFailureDetail;
 }
 
 export interface DomTranslatorOptions {
@@ -116,9 +120,13 @@ export function createDomTranslator({
     onStats?.(stats());
   }
 
-  function emitBlockState(element: Element, state: DomTranslationBlockState): void {
+  function emitBlockState(
+    element: Element,
+    state: DomTranslationBlockState,
+    details: Pick<DomTranslationBlockEvent, "failure" | "failureDetail"> = {},
+  ): void {
     try {
-      onBlockState?.({ element, state });
+      onBlockState?.({ element, state, ...details });
     } catch {
       // Presentation callbacks cannot interrupt translation.
     }
@@ -232,20 +240,24 @@ export function createDomTranslator({
     return true;
   }
 
-  async function translateItem(item: WorkItem): Promise<"translated" | "unchanged" | "failed"> {
+  async function translateItem(
+    item: WorkItem,
+  ): Promise<Omit<DomTranslationBlockEvent, "element">> {
     item.done = true;
-    if (!item.block.element.isConnected) return "unchanged";
-    if (records.has(item.block.element)) return "unchanged";
+    if (!item.block.element.isConnected) return { state: "unchanged" };
+    if (records.has(item.block.element)) return { state: "unchanged" };
     const plan = createBlockTranslationPlan(item.block.element, {
       getComputedStyle: (element) => item.block.element.ownerDocument.defaultView?.getComputedStyle(element as Element),
     });
-    if (!plan) return "unchanged";
+    if (!plan) return { state: "unchanged" };
     const originalChildren = Array.from(item.block.element.childNodes);
     const result = await translateBlockPlan(plan, engine, { markChanges });
-    if (!running || !item.block.element.isConnected) return "unchanged";
+    if (!running || !item.block.element.isConnected) return { state: "unchanged" };
     if (!result.translated) {
       intersection?.unobserve(item.block.element);
-      return result.failure ? "failed" : "unchanged";
+      return result.failure
+        ? { state: "failed", failure: result.failure, failureDetail: result.failureDetail }
+        : { state: "unchanged" };
     }
     recordTextUpdates(result.textUpdates, false);
     const record: BlockRecord = {
@@ -260,7 +272,7 @@ export function createDomTranslator({
     if (!deferApplication) applyStoredTranslation(item.block.element);
     translatedBlocks += 1;
     intersection?.unobserve(item.block.element);
-    return "translated";
+    return { state: "translated" };
   }
 
   function nextItem(): WorkItem | undefined {
@@ -289,7 +301,7 @@ export function createDomTranslator({
       const run = () => {
         emitBlockState(item.block.element, "translating");
         return translateItem(item)
-          .then((state) => emitBlockState(item.block.element, state))
+          .then(({ state, ...details }) => emitBlockState(item.block.element, state, details))
           .catch(() => emitBlockState(item.block.element, "failed"))
           .then(() => {
             if (charge) idleBudgetLeft -= item.block.nodes.length;

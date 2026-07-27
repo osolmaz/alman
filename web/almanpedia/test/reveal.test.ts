@@ -104,8 +104,16 @@ test("unchanged and failed blocks stop waiting for a reveal", () => {
   });
 
   controller.handleBlockState({ element: paragraph, state: "queued" });
+  controller.handleBlockState({
+    element: paragraph,
+    state: "failed",
+    failure: "ambiguous",
+    failureDetail: "ambiguous-ownership",
+  });
+  expect(paragraph.dataset.almanFailureDetail).toBe("ambiguous-ownership");
   controller.handleBlockState({ element: paragraph, state: "unchanged" });
   expect(paragraph.dataset.almanState).toBe("unchanged");
+  expect(paragraph.hasAttribute("data-alman-failure-detail")).toBe(false);
   expect(controller.pendingCount()).toBe(0);
   expect(holder.current?.unobserved.has(paragraph)).toBe(true);
   controller.destroy();

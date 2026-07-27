@@ -1,9 +1,11 @@
 import { diffArrays, diffWordsWithSpace } from "diff";
 import {
+  declaredTranslationLanguage,
   elementBlocksTranslation,
   sentenceSegments,
   type ComputedStyleGetter,
   type SafeTranslator,
+  type TranslationLanguage,
 } from "../engine/safe-translation";
 import { isBlockElement } from "./blocks";
 
@@ -54,6 +56,8 @@ export interface BlockTextRun {
   end: number;
   /** Inline ancestors from the block child inward. */
   ancestors: Element[];
+  /** Live prefix omitted from model input but retained in this text node. */
+  preservedPrefix?: string;
   /** Live structural node represented as whitespace in model input. */
   structural?: Node;
   structuralParent?: Node;
@@ -143,15 +147,55 @@ export function createBlockTranslationPlan(
   const elementRanges: BlockElementRange[] = [];
   const childSnapshots: BlockChildSnapshot[] = [{ parent: element, children: Array.from(element.childNodes) }];
   let offset = 0;
+  let pendingForeignBoundary: Node | null = null;
 
-  function append(node: Node, ancestors: Element[]): void {
+  function appendForeignBoundarySeparator(ancestors: Element[]): void {
+    if (!pendingForeignBoundary || offset === 0) return;
+    const previous = sourceParts.at(-1) ?? "";
+    if (/\s$/u.test(previous)) return;
+    const start = offset;
+    const synthetic = element.ownerDocument.createTextNode(" ");
+    sourceParts.push(" ");
+    offset += 1;
+    runs.push({
+      node: synthetic,
+      original: " ",
+      start,
+      end: offset,
+      ancestors,
+      structural: pendingForeignBoundary,
+      structuralParent: pendingForeignBoundary.parentNode ?? undefined,
+    });
+  }
+
+  function append(node: Node, ancestors: Element[], language: TranslationLanguage): void {
     if (node.nodeType === Node.TEXT_NODE) {
       const original = node.nodeValue ?? "";
       if (!original) return;
+      if (language === "foreign") {
+        anchors.push({ node, offset });
+        pendingForeignBoundary = node;
+        return;
+      }
+      appendForeignBoundarySeparator(ancestors);
+      let sourceOriginal = original;
+      let preservedPrefix = "";
+      if (pendingForeignBoundary && offset > 0 && /\s$/u.test(sourceParts.at(-1) ?? "")) {
+        preservedPrefix = sourceOriginal.match(/^\s+/u)?.[0] ?? "";
+        sourceOriginal = sourceOriginal.slice(preservedPrefix.length);
+      }
+      pendingForeignBoundary = null;
       const start = offset;
-      sourceParts.push(original);
-      offset += original.length;
-      runs.push({ node: node as Text, original, start, end: offset, ancestors });
+      sourceParts.push(sourceOriginal);
+      offset += sourceOriginal.length;
+      runs.push({
+        node: node as Text,
+        original,
+        start,
+        end: offset,
+        ancestors,
+        ...(preservedPrefix ? { preservedPrefix } : {}),
+      });
       return;
     }
     if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -159,8 +203,14 @@ export function createBlockTranslationPlan(
       return;
     }
     const child = node as Element;
+    const childLanguage = declaredTranslationLanguage(child) ?? language;
     const separator = STRUCTURAL_SEPARATOR_TAGS.get(child.tagName);
     if (separator !== undefined) {
+      if (childLanguage === "foreign") {
+        anchors.push({ node: child, offset });
+        pendingForeignBoundary = child;
+        return;
+      }
       const start = offset;
       const synthetic = element.ownerDocument.createTextNode(separator);
       sourceParts.push(separator);
@@ -185,11 +235,18 @@ export function createBlockTranslationPlan(
     const nextAncestors = [...ancestors, child];
     const descendants = Array.from(child.childNodes);
     childSnapshots.push({ parent: child, children: descendants });
-    for (const descendant of descendants) append(descendant, nextAncestors);
+    for (const descendant of descendants) append(descendant, nextAncestors, childLanguage);
     elementRanges.push({ element: child, start, end: offset });
   }
 
-  for (const child of Array.from(element.childNodes)) append(child, []);
+  let rootLanguage: TranslationLanguage = "german";
+  for (let current: Element | null = element; current; current = current.parentElement) {
+    const declared = declaredTranslationLanguage(current);
+    if (!declared) continue;
+    rootLanguage = declared;
+    break;
+  }
+  for (const child of Array.from(element.childNodes)) append(child, [], rootLanguage);
   const source = sourceParts.join("");
   if (!source.trim()) return null;
   return { element, source, runs, anchors, elementRanges, childSnapshots };
@@ -278,55 +335,109 @@ function ownerAtBoundary(plan: BlockTranslationPlan, offset: number): BlockTextR
 }
 
 interface EditHunk {
-  removed: Set<string>;
+  start: number;
+  end: number;
+  removedScopes: Map<string, Element[][]>;
   added: Set<string>;
 }
 
-function normalizedWords(text: string): Set<string> {
-  return new Set(Array.from(text.matchAll(/[\p{L}\p{N}]+/gu), (match) => match[0]!.toLocaleLowerCase("de")));
+function normalizedWordMatches(text: string): RegExpStringIterator<RegExpExecArray> {
+  return text.matchAll(/[\p{L}\p{N}]+/gu);
 }
 
-function setsOverlap(left: Set<string>, right: Set<string>): boolean {
-  return [...left].some((word) => right.has(word));
+function anchorSeparatesHunks(plan: BlockTranslationPlan, left: EditHunk, right: EditHunk): boolean {
+  if (left.end <= right.start) {
+    return plan.anchors.some((anchor) => anchor.offset >= left.end && anchor.offset <= right.start);
+  }
+  if (right.end <= left.start) {
+    return plan.anchors.some((anchor) => anchor.offset >= right.end && anchor.offset <= left.start);
+  }
+  return false;
 }
 
-/** Reject lexical moves that a monotonic diff would otherwise disguise as substitutions. */
-function segmentHasLexicalMoves(source: string, translated: string): boolean {
+/** Reject lexical moves when a word crosses live DOM ownership or anchor boundaries. */
+function segmentHasLexicalMoves(
+  plan: BlockTranslationPlan,
+  source: string,
+  translated: string,
+  segmentStart: number,
+): boolean {
   const hunks: EditHunk[] = [];
   let current: EditHunk | null = null;
+  let sourceOffset = segmentStart;
   for (const change of diffWordsWithSpace(source, translated)) {
     if (!change.added && !change.removed) {
       current = null;
+      sourceOffset += change.value.length;
       continue;
     }
     if (!current) {
-      current = { removed: new Set(), added: new Set() };
+      current = {
+        start: sourceOffset,
+        end: sourceOffset,
+        removedScopes: new Map(),
+        added: new Set(),
+      };
       hunks.push(current);
     }
-    const words = normalizedWords(change.value);
-    for (const word of words) (change.removed ? current.removed : current.added).add(word);
+    if (change.removed) {
+      for (const match of normalizedWordMatches(change.value)) {
+        const start = sourceOffset + (match.index ?? 0);
+        const end = start + match[0].length;
+        const word = match[0].toLocaleLowerCase("de");
+        const scopes = current.removedScopes.get(word) ?? [];
+        for (const run of runsOverlapping(plan.runs, start, end)) {
+          if (!run.structural) scopes.push(run.ancestors);
+        }
+        current.removedScopes.set(word, scopes);
+      }
+      sourceOffset += change.value.length;
+      current.end = sourceOffset;
+      continue;
+    }
+    for (const match of normalizedWordMatches(change.value)) {
+      current.added.add(match[0].toLocaleLowerCase("de"));
+    }
   }
-  for (let addedIndex = 0; addedIndex < hunks.length; addedIndex += 1) {
-    for (let removedIndex = 0; removedIndex < hunks.length; removedIndex += 1) {
+
+  for (const [addedIndex, addedHunk] of hunks.entries()) {
+    const additionOwner = addedHunk.end > addedHunk.start
+      ? ownerForReplacement(plan, addedHunk.start, addedHunk.end)
+      : ownerAtBoundary(plan, addedHunk.start);
+    for (const [removedIndex, removedHunk] of hunks.entries()) {
       if (addedIndex === removedIndex) continue;
-      if (setsOverlap(hunks[addedIndex]!.added, hunks[removedIndex]!.removed)) return true;
+      for (const word of addedHunk.added) {
+        const removedScopes = removedHunk.removedScopes.get(word);
+        if (!removedScopes) continue;
+        if (anchorSeparatesHunks(plan, addedHunk, removedHunk)) return true;
+        if (!additionOwner || removedScopes.length === 0) return true;
+        if (removedScopes.some((scope) => !sameAncestors(scope, additionOwner.ancestors))) return true;
+      }
     }
   }
   return false;
 }
 
-function hasLexicalMoves(source: string, translated: string): boolean {
-  const sourceSegments = sentenceSegments(source);
+function hasLexicalMoves(plan: BlockTranslationPlan, translated: string): boolean {
+  const sourceSegments = sentenceSegments(plan.source);
   const translatedSegments = sentenceSegments(translated);
   if (sourceSegments.length === translatedSegments.length && sourceSegments.length > 1) {
     // SafeTranslator translates source sentences independently. Words cannot
     // move between those model calls, so identical inflections in different
     // sentences must not trigger the cross-scope move guard.
-    return sourceSegments.some((segment, index) =>
-      segmentHasLexicalMoves(segment, translatedSegments[index] ?? ""),
-    );
+    let sourceOffset = 0;
+    return sourceSegments.some((segment, index) => {
+      const moved = segmentHasLexicalMoves(
+        plan,
+        segment,
+        translatedSegments[index] ?? "",
+        sourceOffset,
+      );
+      sourceOffset += segment.length;
+      return moved;
+    });
   }
-  return segmentHasLexicalMoves(source, translated);
+  return segmentHasLexicalMoves(plan, plan.source, translated, 0);
 }
 
 interface Projection {
@@ -354,11 +465,12 @@ function finishProjection(
   const updates: TextUpdate[] = [];
   const changedElements = new Set<Element>();
   for (const run of plan.runs) {
-    const target = output.get(run) ?? "";
+    const projectedTarget = output.get(run) ?? "";
     if (run.structural) {
-      if (!/^\s*$/u.test(target)) return null;
+      if (!/^\s*$/u.test(projectedTarget)) return null;
       continue;
     }
+    const target = `${run.preservedPrefix ?? ""}${projectedTarget}`;
     targets.set(run.node, target);
     if (target === run.original) continue;
     const directTextWithEffects = markChanges && run.node.parentNode === plan.element;
@@ -555,8 +667,9 @@ function projectTranslation(
   markChanges: boolean,
 ): { projection: Projection | null; failureDetail?: ProjectionFailureDetail } {
   const firstAncestors = plan.runs[0]?.ancestors ?? [];
-  const crossesInlineScopes = plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
-  if (crossesInlineScopes && hasLexicalMoves(plan.source, translated)) {
+  const crossesLiveBoundary = plan.anchors.length > 0
+    || plan.runs.some((run) => !sameAncestors(run.ancestors, firstAncestors));
+  if (crossesLiveBoundary && hasLexicalMoves(plan, translated)) {
     return { projection: null, failureDetail: "lexical-move" };
   }
   const projection = projectWordChanges(plan, translated, markChanges)
