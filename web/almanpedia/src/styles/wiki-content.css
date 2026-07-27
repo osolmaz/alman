@@ -1,14 +1,34 @@
-/* Restrained styling for stable Parsoid content classes. Almanpedia keeps the
-   alman.ai identity rather than imitating Wikipedia's trade dress. */
+/* Stable Parsoid classes rendered with Wikipedia-like reading styles. */
 
 .wiki-content {
+  min-width: 0;
   overflow-wrap: break-word;
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+.wiki-content p {
+  margin: 0.5rem 0 1rem;
 }
 
 .wiki-content h2 {
-  border-bottom: 1px solid var(--grey-2);
-  padding-bottom: 0.2rem;
-  margin-top: 2rem;
+  clear: both;
+  margin: 1.5rem 0 0.45rem;
+  padding-bottom: 0.15rem;
+  font-size: 1.55rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.wiki-content h3 {
+  clear: both;
+  margin: 1.25rem 0 0.35rem;
+  font-size: 1.18rem;
+}
+
+.wiki-content ul,
+.wiki-content ol {
+  margin-top: 0.3rem;
+  margin-bottom: 0.7rem;
 }
 
 .wiki-content img {
@@ -18,8 +38,8 @@
 
 .wiki-content figure,
 .wiki-content .thumb {
-  margin: 0.5rem 0 1rem;
   max-width: 100%;
+  margin: 0.5rem 0 1rem;
 }
 
 .wiki-content figure[typeof~="mw:File/Thumb"],
@@ -27,85 +47,87 @@
 .wiki-content .tright {
   float: right;
   clear: right;
-  margin: 0.25rem 0 0.75rem 1rem;
   max-width: min(45%, 22rem);
+  margin: 0.25rem 0 0.75rem 1.25rem;
 }
 
 .wiki-content figure.mw-halign-left,
 .wiki-content .tleft {
   float: left;
   clear: left;
-  margin: 0.25rem 1rem 0.75rem 0;
   max-width: min(45%, 22rem);
+  margin: 0.25rem 1.25rem 0.75rem 0;
 }
 
 .wiki-content figcaption {
-  font-size: 0.8rem;
-  color: var(--grey-1);
-  border: 1px solid var(--grey-2);
-  border-top: none;
-  padding: 0.3rem 0.5rem;
-  background: #fff;
+  padding: 0.35rem 0.5rem;
+  color: var(--ink);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-top: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
 
 .wiki-content figure > a > img,
 .wiki-content figure > img {
-  border: 1px solid var(--grey-2);
-  background: #fff;
   display: block;
+  background: #fff;
+  border: 1px solid var(--border-subtle);
 }
 
 .wiki-content table {
   display: block;
-  overflow-x: auto;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-  background: #fff;
-  margin: 1rem 0;
   max-width: 100%;
+  margin: 1rem 0;
+  overflow-x: auto;
+  background: #fff;
+  border-collapse: collapse;
+  font-size: 0.8rem;
 }
 
 .wiki-content table.wikitable td,
 .wiki-content table.wikitable th,
 .wiki-content table.infobox td,
 .wiki-content table.infobox th {
-  border: 1px solid var(--grey-2);
   padding: 0.25rem 0.5rem;
   vertical-align: top;
+  border: 1px solid var(--border);
 }
 
 .wiki-content table.wikitable th,
 .wiki-content table.infobox th {
-  font-family: var(--font-din);
-  letter-spacing: 0.03em;
+  background: var(--surface-subtle);
+  font-weight: 600;
   text-align: left;
-  background: var(--paper);
 }
 
 .wiki-content .infobox,
 .wiki-content table.float-right {
   float: right;
   clear: right;
-  margin: 0.25rem 0 1rem 1rem;
+  width: auto;
   max-width: min(50%, 24rem);
+  margin: 0.25rem 0 1rem 1.25rem;
+  background: var(--surface-subtle);
 }
 
 .wiki-content .hatnote,
 .wiki-content .noprint.sisterproject,
 .wiki-content .bausteinwrapper {
-  font-size: 0.85rem;
-  color: var(--grey-1);
-  border-left: 3px solid var(--grey-2);
-  padding-left: 0.75rem;
   margin: 0.75rem 0;
+  padding-left: 0.75rem;
+  color: var(--muted);
+  border-left: 3px solid var(--border-subtle);
+  font-size: 0.8rem;
 }
 
 .wiki-content .gallery {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  list-style: none;
   padding: 0;
+  list-style: none;
 }
 
 .wiki-content .gallerybox {
@@ -114,8 +136,8 @@
 
 .wiki-content ol.mw-references,
 .wiki-content .mw-references-wrap {
-  font-size: 0.8rem;
-  color: var(--grey-1);
+  color: var(--muted);
+  font-size: 0.75rem;
 }
 
 .wiki-content sup.mw-ref a {
@@ -138,9 +160,10 @@
   .wiki-content figure.mw-halign-left,
   .wiki-content .tright,
   .wiki-content .tleft {
-    float: none;
-    margin-left: 0;
-    margin-right: 0;
-    max-width: 100%;
+    float: none !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    margin-left: 0 !important;
   }
 }

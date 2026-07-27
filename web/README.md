@@ -3,7 +3,8 @@
 Two client-side consumers of the GoePT-1-20M German→Alman translation model:
 the **browser extension** (`extension/`) and **almanpedia.org** (`almanpedia/`),
 sharing one engine (`core/`). The model runs entirely in the visitor's browser
-(ONNX int8 + single-threaded WASM); there is no inference backend.
+(ONNX int8 + single-threaded WASM); there is no inference backend. Almanpedia's
+reader behavior is documented in [`../docs/almanpedia-interface.md`](../docs/almanpedia-interface.md).
 
 ## Model provenance and production sign-off
 
@@ -37,9 +38,12 @@ app assets is asserted hash-identical to the qualified package by
   disposed after 5 minutes idle.
 - **`almanpedia/`** — Vite SPA for almanpedia.org: fetches German Wikipedia
   articles (Parsoid HTML via the CORS-enabled REST API), sanitizes (DOMPurify,
-  hard-fails if unsupported) and rewrites them, translates in the visitor's
-  browser. Deployed to Cloudflare Pages; `de.almanpedia.org` is aliased so
-  swapping `wikipedia` → `almanpedia` in any German Wikipedia URL works.
+  hard-fails if unsupported) and rewrites them, then schedules the complete
+  article for translation in the visitor's browser. The reader includes a
+  Wikipedia-like responsive layout, persistent motion settings, source toggles,
+  and a word-level comparison. Deployed to Cloudflare Pages; `de.almanpedia.org`
+  is aliased so swapping `wikipedia` → `almanpedia` in any German Wikipedia URL
+  works.
 
 ## Commands
 

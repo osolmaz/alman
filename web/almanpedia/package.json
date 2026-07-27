@@ -11,9 +11,8 @@
   },
   "dependencies": {
     "@alman/core": "*",
-    "@fontsource/barlow-semi-condensed": "^5.2.7",
     "@fontsource/ibm-plex-mono": "^5.2.7",
-    "@fontsource/ibm-plex-sans": "^5.2.8",
+    "@fontsource/libertinus-serif": "^5.3.0",
     "dompurify": "^3.4.12"
   },
   "devDependencies": {

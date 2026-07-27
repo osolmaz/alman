@@ -65,6 +65,8 @@ export interface BlockTranslationResult {
   translatedChildren: Node[];
   differenceChildren: Node[];
   placeholderTextUpdates: PlaceholderTextUpdate[];
+  /** Existing inline elements whose text changed and can receive a UI effect. */
+  changedElements: Element[];
 }
 
 function cloneChildren(element: Element): Node[] {
@@ -222,6 +224,24 @@ export function createTextDifferenceNodes(document: Document, original: string, 
   });
 }
 
+/** Render translated text while marking only inserted word runs for optional UI effects. */
+export function createTranslatedTextNodes(document: Document, original: string, translated: string): Node[] {
+  if (original === translated) return translated ? [document.createTextNode(translated)] : [];
+  const nodes: Node[] = [];
+  for (const change of diffWordsWithSpace(original, translated)) {
+    if (change.removed) continue;
+    if (!change.added) {
+      nodes.push(document.createTextNode(change.value));
+      continue;
+    }
+    const span = document.createElement("span");
+    span.setAttribute("data-alman-change", "");
+    span.textContent = change.value;
+    nodes.push(span);
+  }
+  return nodes;
+}
+
 function translatedPlaceholderClone(document: Document, placeholder: BlockPlaceholder, translatedText: string): Node {
   const clone = placeholder.node.cloneNode(true);
   if (placeholder.opaque || !placeholder.element || clone.nodeType !== Node.ELEMENT_NODE) return clone;
@@ -245,7 +265,12 @@ function differencePlaceholderNodes(document: Document, placeholder: BlockPlaceh
   return [removed, added];
 }
 
-function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string): { children: Node[]; differenceChildren: Node[]; placeholderTextUpdates: PlaceholderTextUpdate[] } | null {
+function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string, markChanges: boolean): {
+  children: Node[];
+  differenceChildren: Node[];
+  placeholderTextUpdates: PlaceholderTextUpdate[];
+  changedElements: Element[];
+} | null {
   const document = plan.element.ownerDocument;
   const parts: Array<{ before: string; placeholder: BlockPlaceholder; translatedText: string }> = [];
   let cursor = 0;
@@ -268,27 +293,39 @@ function parseTranslatedPlan(plan: BlockTranslationPlan, translatedText: string)
   const children: Node[] = [];
   const differenceChildren: Node[] = [];
   const updates: PlaceholderTextUpdate[] = [];
+  const changedElements: Element[] = [];
   let sourceCursor = 0;
   for (const part of parts) {
     const sourceOpen = placeholderOpen(part.placeholder.id);
     const sourceIndex = plan.source.indexOf(sourceOpen, sourceCursor);
     if (sourceIndex < sourceCursor) return null;
-    differenceChildren.push(...createTextDifferenceNodes(document, plan.source.slice(sourceCursor, sourceIndex), part.before));
-    if (part.before) children.push(document.createTextNode(part.before));
+    const originalBefore = plan.source.slice(sourceCursor, sourceIndex);
+    differenceChildren.push(...createTextDifferenceNodes(document, originalBefore, part.before));
+    children.push(...(markChanges
+      ? createTranslatedTextNodes(document, originalBefore, part.before)
+      : part.before ? [document.createTextNode(part.before)] : []));
     children.push(materializePlaceholder(part.placeholder));
     differenceChildren.push(...differencePlaceholderNodes(document, part.placeholder, part.translatedText));
+    const decodedPlaceholder = decodePlaceholderText(document, part.translatedText);
+    if (markChanges && !part.placeholder.opaque && part.placeholder.element && decodedPlaceholder !== part.placeholder.text) {
+      changedElements.push(part.placeholder.element);
+    }
     updates.push(...placeholderTextUpdates(document, part.placeholder, part.translatedText));
     sourceCursor = sourceIndex + placeholderToken(part.placeholder.id, part.placeholder.text).length;
   }
   const after = translatedText.slice(cursor);
-  if (after) children.push(document.createTextNode(after));
-  differenceChildren.push(...createTextDifferenceNodes(document, plan.source.slice(sourceCursor), after));
-  return { children, differenceChildren, placeholderTextUpdates: updates };
+  const originalAfter = plan.source.slice(sourceCursor);
+  children.push(...(markChanges
+    ? createTranslatedTextNodes(document, originalAfter, after)
+    : after ? [document.createTextNode(after)] : []));
+  differenceChildren.push(...createTextDifferenceNodes(document, originalAfter, after));
+  return { children, differenceChildren, placeholderTextUpdates: updates, changedElements };
 }
 
 export async function translateBlockPlan(
   plan: BlockTranslationPlan,
   engine: SafeTranslator,
+  { markChanges = false }: { markChanges?: boolean } = {},
 ): Promise<BlockTranslationResult> {
   const translatedText = await engine.translateText(plan.source);
   if (translatedText === plan.source) {
@@ -299,9 +336,10 @@ export async function translateBlockPlan(
       translatedChildren: children,
       differenceChildren: cloneChildren(plan.element),
       placeholderTextUpdates: [],
+      changedElements: [],
     };
   }
-  const parsed = parseTranslatedPlan(plan, translatedText);
+  const parsed = parseTranslatedPlan(plan, translatedText, markChanges);
   if (!parsed) {
     return {
       translated: false,
@@ -309,6 +347,7 @@ export async function translateBlockPlan(
       translatedChildren: cloneChildren(plan.element),
       differenceChildren: cloneChildren(plan.element),
       placeholderTextUpdates: [],
+      changedElements: [],
     };
   }
   return {
@@ -317,5 +356,6 @@ export async function translateBlockPlan(
     translatedChildren: parsed.children,
     differenceChildren: parsed.differenceChildren,
     placeholderTextUpdates: parsed.placeholderTextUpdates,
+    changedElements: parsed.changedElements,
   };
 }

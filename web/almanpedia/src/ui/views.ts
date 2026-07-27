@@ -1,4 +1,5 @@
 import {
+  MODEL_PACKAGE,
   createDomTranslator,
   type AssetProgress,
   type DomTranslatorController,
@@ -7,9 +8,10 @@ import { getEngine, initModel } from "../engine";
 import { ArticleNotFoundError, articleUrl, displayTitle, fetchArticleHtml, historyUrl } from "../wiki/api";
 import { rewriteArticleDom } from "../wiki/rewrite";
 import { sanitizeParsoidBody } from "../wiki/sanitize";
+import { createArticleContents } from "./contents";
 import { el, namespaceIds } from "./dom";
 import { createSearchBox } from "./search";
-import { MODEL_PACKAGE } from "@alman/core";
+import { createReaderSettingsPanel } from "./settings";
 
 export interface AppShell {
   main: HTMLElement;
@@ -18,10 +20,13 @@ export interface AppShell {
 }
 
 let activeController: DomTranslatorController | null = null;
+let stopActiveContents: (() => void) | null = null;
 
 function stopActiveTranslation(): void {
   activeController?.stop();
   activeController = null;
+  stopActiveContents?.();
+  stopActiveContents = null;
 }
 
 export function renderShell(root: HTMLElement, navigate: (path: string) => void): AppShell {
@@ -54,6 +59,7 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
 export function renderLanding(shell: AppShell): void {
   stopActiveTranslation();
   document.title = "Almanpedia — Die freie Enzyklopädie, amtlich vereinfacht";
+  shell.main.className = "site-main";
   shell.status.replaceChildren();
   shell.main.replaceChildren(
     el("section", { class: "landing" }, [
@@ -119,6 +125,8 @@ function progressBar(): { element: HTMLElement; set: (fraction: number, label: s
     },
     done() {
       element.hidden = true;
+      fill.style.width = "100%";
+      label.textContent = "";
     },
   };
 }
@@ -162,10 +170,44 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   const actions = el("div", { class: "article-actions" }, [toggle, differenceToggle]);
   const content = el("article", { class: "wiki-content", lang: "de" });
   content.append(fragment);
-  shell.main.replaceChildren(
+  const contents = createArticleContents(content, window.matchMedia?.("(max-width: 56rem)"));
+  stopActiveContents = () => contents.destroy();
+  const storage = (() => {
+    try {
+      return window.localStorage;
+    } catch {
+      const values = new Map<string, string>();
+      return {
+        getItem: (key: string) => values.get(key) ?? null,
+        setItem: (key: string, value: string) => void values.set(key, value),
+      };
+    }
+  })();
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  const settings = createReaderSettingsPanel(document.documentElement, storage, reducedMotion);
+  const settingsToggle = el("button", {
+    class: "toggle-settings",
+    type: "button",
+    "aria-expanded": "false",
+  }, ["Darstellung"]);
+  settingsToggle.addEventListener("click", () => {
+    settings.element.open = !settings.element.open;
+    settingsToggle.setAttribute("aria-expanded", String(settings.element.open));
+    if (settings.element.open) settings.element.scrollIntoView({ block: "nearest" });
+  });
+  settings.element.addEventListener("toggle", () => {
+    settingsToggle.setAttribute("aria-expanded", String(settings.element.open));
+  });
+  actions.append(settingsToggle);
+  const articleColumn = el("div", { class: "article-column" }, [
+    el("p", { class: "article-kicker" }, ["Aus Almanpedia, die freie Enzyklopädie"]),
     el("div", { class: "article-head" }, [heading, actions]),
     content,
     attributionBlock(article.title),
+  ]);
+  shell.main.className = "site-main article-page";
+  shell.main.replaceChildren(
+    el("div", { class: "article-layout" }, [contents.element, articleColumn, el("aside", { class: "appearance-column" }, [settings.element])]),
   );
   scrollToArticleHash(hash);
   if (document.title !== `${displayTitle(article.title)} – Almanpedia`) {
@@ -231,6 +273,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       activeController.reapplyTranslations();
       content.lang = translationComplete ? "de-AL" : "de";
     }
+    contents.refresh();
     toggle.textContent = showingOriginal ? "Alman anzeigen" : "Original anzeigen";
     toggle.setAttribute("aria-pressed", String(showingOriginal));
   });
@@ -276,30 +319,40 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   const controller = createDomTranslator({
     root: content,
     engine: getEngine(),
+    markChanges: true,
     onStats: (stats) => {
-      if (stats.totalBlocks === 0) return;
+      if (stats.totalBlocks === 0) {
+        translationComplete = true;
+        progress.done();
+        return;
+      }
       const done = stats.totalBlocks - stats.pendingBlocks;
-      if (stats.pendingBlocks === 0) translationComplete = true;
-      if (stats.pendingBlocks === 0 && showingDifferences) showDifferences();
       if (stats.pendingBlocks === 0) {
+        translationComplete = true;
+        contents.refresh();
+        if (showingDifferences) showDifferences();
         if (!showingOriginal) content.lang = "de-AL";
         progress.done();
         return;
       }
-      if (stats.pendingVisibleBlocks === 0) {
-        progress.set(done / stats.totalBlocks, "SICHTBARER ABSCHNITT ÜBERSETZT. REST FOLGT BEIM SCROLLEN.");
-        return;
-      }
-      progress.set(done / stats.totalBlocks, `ÜBERSETZUNG: ${Math.round((done / stats.totalBlocks) * 100)} %`);
+      progress.set(done / stats.totalBlocks, `ARTIKEL WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
+    },
+    onBlockState: ({ element, state }) => {
+      element.setAttribute("data-alman-state", state);
+      if (state !== "translated") return;
+      element.setAttribute("data-alman-reveal", "");
+      window.setTimeout(() => element.removeAttribute("data-alman-reveal"), 500);
     },
   });
   activeController = controller;
   toggle.removeAttribute("disabled");
   differenceToggle.removeAttribute("disabled");
   controller.start();
+  controller.translateAll();
 }
 
 function renderArticleError(shell: AppShell, title: string, error: unknown): void {
+  shell.main.className = "site-main";
   shell.status.replaceChildren();
   if (error instanceof ArticleNotFoundError) {
     shell.main.replaceChildren(
