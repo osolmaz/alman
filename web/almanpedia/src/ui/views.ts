@@ -183,8 +183,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       };
     }
   })();
-  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
-  const settings = createReaderSettingsPanel(document.documentElement, storage, reducedMotion);
+  const settings = createReaderSettingsPanel(document.documentElement, storage);
   const settingsToggle = el("button", {
     class: "toggle-settings",
     type: "button",

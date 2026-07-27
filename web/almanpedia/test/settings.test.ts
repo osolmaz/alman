@@ -27,25 +27,24 @@ beforeEach(() => {
   document.documentElement.removeAttribute("data-change-effects");
 });
 
-test("reader settings default to the operating system motion preference", () => {
-  expect(defaultReaderSettings(false)).toEqual({ translationWave: true, changeEffects: true });
-  expect(defaultReaderSettings(true)).toEqual({ translationWave: false, changeEffects: false });
-  expect(loadReaderSettings(memoryStorage({ [READER_SETTINGS_STORAGE_KEY]: "invalid" }), true)).toEqual({
-    translationWave: false,
-    changeEffects: false,
+test("reader effects default to enabled", () => {
+  expect(defaultReaderSettings()).toEqual({ translationWave: true, changeEffects: true });
+  expect(loadReaderSettings(memoryStorage({ [READER_SETTINGS_STORAGE_KEY]: "invalid" }))).toEqual({
+    translationWave: true,
+    changeEffects: true,
   });
 });
 
-test("saved reader settings override reduced-motion defaults", () => {
+test("saved reader settings override enabled defaults", () => {
   const storage = memoryStorage();
-  saveReaderSettings(storage, { translationWave: true, changeEffects: false });
+  saveReaderSettings(storage, { translationWave: false, changeEffects: false });
 
-  expect(loadReaderSettings(storage, true)).toEqual({ translationWave: true, changeEffects: false });
+  expect(loadReaderSettings(storage)).toEqual({ translationWave: false, changeEffects: false });
 });
 
 test("settings panel applies and persists changes", () => {
   const storage = memoryStorage();
-  const panel = createReaderSettingsPanel(document.documentElement, storage, false);
+  const panel = createReaderSettingsPanel(document.documentElement, storage);
   document.body.append(panel.element);
   const inputs = panel.element.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
 

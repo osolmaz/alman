@@ -16,7 +16,7 @@ The block currently passing through inference can show a moving light band. When
 
 The light band never hides the source text or changes layout. The word effect ends after 420 milliseconds. Inline links whose text changes keep their live DOM element and receive the effect as one unit.
 
-Both effects are optional. The `Darstellung` panel stores this versioned record under `almanpedia:reader-settings:v1` in localStorage:
+Both effects are enabled by default. The `Darstellung` panel lets visitors disable either effect and stores this versioned record under `almanpedia:reader-settings:v1` in localStorage:
 
 ```json
 {
@@ -26,7 +26,7 @@ Both effects are optional. The `Darstellung` panel stores this versioned record 
 }
 ```
 
-New visitors inherit the operating system's reduced-motion preference. A saved selection takes precedence. Translation continues normally when storage is unavailable.
+The effects stay enabled even when the operating system requests reduced motion. A saved selection takes precedence, and translation continues normally when storage is unavailable.
 
 ## Page layout
 
