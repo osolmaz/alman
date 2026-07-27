@@ -25,6 +25,42 @@
   font-size: 1.18em;
 }
 
+.wiki-content .hauptseite-box-title {
+  clear: none;
+  margin: 0;
+  padding: 0.35rem 0.7rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--surface-featured);
+  border-bottom: 1px solid var(--border-featured);
+}
+
+.wiki-content :is(#nachrichten, #verstorbene) .hauptseite-box-title {
+  background: var(--surface-current);
+  border-color: var(--border-current);
+}
+
+.wiki-content .hauptseite-box-content > :first-child {
+  margin-top: 0;
+}
+
+.wiki-content .hauptseite-box-content > :last-child {
+  margin-bottom: 0;
+}
+
+.wiki-content .hauptseite-box .breadcrumb-nav-container {
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.45rem 1rem;
+  list-style: none;
+}
+
+.wiki-content .hauptseite-box .hauptseite-item {
+  margin: 0;
+}
+
 .wiki-content ul,
 .wiki-content ol {
   margin-top: 0.3rem;

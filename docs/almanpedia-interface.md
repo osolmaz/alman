@@ -38,7 +38,9 @@ The effects stay enabled even when the operating system requests reduced motion.
 
 ## Page layout
 
-The article page follows the reading structure familiar from Wikipedia. It has a compact wordmark and search header, a serif article title, a sticky contents column on wide screens, a central article column, and a small appearance column. At intermediate widths the appearance column moves behind the `Erscheinungsbild` button. At narrow widths the contents become a collapsed in-flow panel and media or infobox floats return to the article column.
+The article page follows the reading structure familiar from Wikipedia. It has a compact wordmark and search header, a serif article title, a sticky contents column on wide screens, a central article column, and a small appearance column. The title begins the article column without a source kicker above it. At intermediate widths the appearance column moves behind the `Erscheinungsbild` button. At narrow widths the contents become a collapsed in-flow panel and media or infobox floats return to the article column.
+
+The landing page introduces Almanpedia as Alman AI's self-study reader for people learning German without memorizing noun genders. Below that introduction, it fetches the current German Wikipedia homepage and presents its daily article, current events, news, recent deaths, facts, and sister projects in a responsive two-column layout. These sections use the same local model, full-speed queue, and viewport reveal behavior as articles. The German Wikipedia welcome box is omitted because the Almanpedia introduction replaces it.
 
 The CSS is maintained in `web/almanpedia/src/styles/base.css` and `web/almanpedia/src/styles/wiki-content.css`. It is an independent implementation using Wikipedia-like proportions and colors. The bundle excludes Vector stylesheets and inactive Wikimedia controls. Almanpedia's name, model status, source links, and license notice remain visible.
 
