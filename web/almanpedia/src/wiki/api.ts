@@ -21,6 +21,44 @@ export function displayTitle(title: string): string {
   return title.replaceAll("_", " ");
 }
 
+function decodedTitle(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  try {
+    const decoded = decodeURIComponent(value).trim();
+    return decoded ? normalizeTitle(decoded) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function titleFromWikipediaUrl(value: string): string | undefined {
+  let url: URL;
+  try {
+    url = new URL(value, WIKI_ORIGIN);
+  } catch {
+    return undefined;
+  }
+  if (url.origin !== WIKI_ORIGIN) return undefined;
+  if (url.pathname.startsWith("/wiki/")) {
+    return decodedTitle(url.pathname.slice("/wiki/".length));
+  }
+  const legacy = url.pathname.match(/^\/api\/rest_v1\/page\/html\/(.+)$/u)?.[1];
+  if (legacy) return decodedTitle(legacy);
+  const current = url.pathname.match(/^\/w\/rest\.php\/v1\/page\/(.+)\/html$/u)?.[1];
+  return decodedTitle(current);
+}
+
+/** Resolve page identity from Parsoid metadata, with explicit REST URL fallbacks. */
+export function canonicalArticleTitle(html: string, responseUrl: string, requestedTitle: string): string {
+  const document = new DOMParser().parseFromString(html, "text/html");
+  const versionHref = document.querySelector('link[rel="dc:isVersionOf"]')?.getAttribute("href");
+  const metadataTitle = versionHref ? titleFromWikipediaUrl(versionHref) : undefined;
+  if (metadataTitle) return metadataTitle;
+  const documentTitle = document.querySelector("title")?.textContent?.trim();
+  if (documentTitle) return normalizeTitle(documentTitle);
+  return titleFromWikipediaUrl(responseUrl) ?? normalizeTitle(requestedTitle);
+}
+
 export async function fetchArticleHtml(title: string): Promise<WikiArticleHtml> {
   const normalized = normalizeTitle(title);
   const response = await fetch(`${WIKI_ORIGIN}/api/rest_v1/page/html/${encodeURIComponent(normalized)}`, {
@@ -30,8 +68,7 @@ export async function fetchArticleHtml(title: string): Promise<WikiArticleHtml> 
   if (response.status === 404) throw new ArticleNotFoundError(displayTitle(title));
   if (!response.ok) throw new Error(`Wikipedia request failed (HTTP ${response.status})`);
   const html = await response.text();
-  const finalSegment = new URL(response.url).pathname.split("/").pop() ?? normalized;
-  return { title: decodeURIComponent(finalSegment), html };
+  return { title: canonicalArticleTitle(html, response.url, normalized), html };
 }
 
 export async function searchSuggestions(query: string, limit = 8): Promise<string[]> {
