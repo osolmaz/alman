@@ -65,7 +65,7 @@ code {
   min-height: 4.75rem;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(16rem, auto) minmax(18rem, 31.25rem) minmax(10rem, 1fr);
+  grid-template-columns: minmax(17rem, auto) minmax(18rem, 31.25rem) minmax(10rem, 1fr);
   gap: 1.5rem;
   align-items: center;
 }
@@ -83,7 +83,7 @@ code {
 .brand-horizontal {
   width: max-content;
   display: grid;
-  grid-template-columns: 3.75rem 10.75rem;
+  grid-template-columns: 3.75rem 12.25rem;
   grid-template-rows: auto auto;
   column-gap: 0.65rem;
   align-items: center;
@@ -118,8 +118,12 @@ code {
 }
 
 .brand-horizontal .brand-sub {
+  width: 100%;
   margin-top: 0.18rem;
   align-self: start;
+  font-size: 0.6rem;
+  letter-spacing: 0.01em;
+  text-align: center;
   white-space: nowrap;
 }
 

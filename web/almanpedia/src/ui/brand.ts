@@ -27,8 +27,8 @@ function wordmarkImage(): HTMLImageElement {
   return el("img", {
     class: "brand-wordmark",
     src: WORDMARK_SRC,
-    alt: "Almanpedia",
-    width: "5244",
+    alt: "ALMANPEDIA",
+    width: "6291",
     height: "940",
   });
 }
