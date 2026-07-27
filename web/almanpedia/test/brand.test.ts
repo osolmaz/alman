@@ -13,7 +13,8 @@ test("header brand combines the raster mark with the vector wordmark", () => {
   expect(potato.getAttribute("srcset")).toContain("almanpedia-potato.png 973w");
   expect(potato.getAttribute("sizes")).toBe("60px");
   expect(wordmark.getAttribute("src")).toBe("/brand/almanpedia-wordmark.svg");
-  expect(wordmark.alt).toBe("Almanpedia");
+  expect(wordmark.alt).toBe("ALMANPEDIA");
+  expect(wordmark.width).toBe(6291);
   expect(brand.textContent).toContain("Die freie Enzyklopädie, amtlich vereinfacht");
 });
 
@@ -23,5 +24,5 @@ test("landing brand uses the same assets in a vertical heading", () => {
 
   expect(brand.matches("h1.brand-vertical")).toBe(true);
   expect(potato.getAttribute("sizes")).toBe("(max-width: 40rem) 160px, 220px");
-  expect(brand.querySelector<HTMLImageElement>(".brand-wordmark")?.alt).toBe("Almanpedia");
+  expect(brand.querySelector<HTMLImageElement>(".brand-wordmark")?.alt).toBe("ALMANPEDIA");
 });
