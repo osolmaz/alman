@@ -11,34 +11,31 @@ interface StoredReaderSettings extends ReaderSettings {
   version: 1;
 }
 
-export function defaultReaderSettings(reducedMotion: boolean): ReaderSettings {
+export function defaultReaderSettings(): ReaderSettings {
   return {
-    translationWave: !reducedMotion,
-    changeEffects: !reducedMotion,
+    translationWave: true,
+    changeEffects: true,
   };
 }
 
-export function loadReaderSettings(
-  storage: Pick<Storage, "getItem">,
-  reducedMotion: boolean,
-): ReaderSettings {
+export function loadReaderSettings(storage: Pick<Storage, "getItem">): ReaderSettings {
   try {
     const value = storage.getItem(READER_SETTINGS_STORAGE_KEY);
-    if (!value) return defaultReaderSettings(reducedMotion);
+    if (!value) return defaultReaderSettings();
     const parsed = JSON.parse(value) as Partial<StoredReaderSettings>;
     if (
       parsed.version !== 1 ||
       typeof parsed.translationWave !== "boolean" ||
       typeof parsed.changeEffects !== "boolean"
     ) {
-      return defaultReaderSettings(reducedMotion);
+      return defaultReaderSettings();
     }
     return {
       translationWave: parsed.translationWave,
       changeEffects: parsed.changeEffects,
     };
   } catch {
-    return defaultReaderSettings(reducedMotion);
+    return defaultReaderSettings();
   }
 }
 
@@ -63,9 +60,8 @@ function settingRow(label: string, input: HTMLInputElement): HTMLLabelElement {
 export function createReaderSettingsPanel(
   root: HTMLElement,
   storage: Pick<Storage, "getItem" | "setItem">,
-  reducedMotion: boolean,
 ): { element: HTMLDetailsElement; settings: () => ReaderSettings } {
-  let settings = loadReaderSettings(storage, reducedMotion);
+  let settings = loadReaderSettings(storage);
   applyReaderSettings(root, settings);
 
   const wave = el("input", { type: "checkbox" });
