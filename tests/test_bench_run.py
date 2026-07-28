@@ -175,6 +175,15 @@ class TestRegistry:
         assert inkling.requested_model == "thinkingmachines/Inkling:together"
         assert inkling.generate["reasoning_effort"] == "max"
         assert inkling.max_connections == 64
+        kimi_k3 = load_profile("kimi-k3-max")
+        assert kimi_k3.requested_model == "moonshotai/Kimi-K3:together"
+        assert kimi_k3.generate["reasoning_effort"] == "max"
+        assert kimi_k3.generate["max_tokens"] == 16384
+        assert kimi_k3.generate["temperature"] == 1.0
+        assert kimi_k3.generate["top_p"] == 0.95
+        assert kimi_k3.runtime["hub_weights_quantization"] == "MXFP4"
+        assert kimi_k3.runtime["activation_quantization"] == "MXFP8"
+        assert kimi_k3.max_connections == 64
         assert load_profile("glm-5.2").model_args == {"stream": True}
         gpt_oss = load_profile("gpt-oss-120b-high")
         assert gpt_oss.requested_model == "openai/gpt-oss-120b:cerebras"
