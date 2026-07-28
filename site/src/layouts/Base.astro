@@ -87,6 +87,7 @@ const translatorPath = `${localePrefix(locale)}/translate/`;
 const navItems = [
   { href: `${homePath}#spec`, label: t["nav.spec"], match: homePath },
   { href: translatorPath, label: t["nav.translator"], match: translatorPath },
+  { href: "https://almanpedia.org", label: t["nav.almanpedia"], match: undefined },
   { href: benchmarkPath, label: t["nav.benchmark"], match: benchmarkPath },
   { href: blogPath, label: t["nav.blog"], match: blogPath },
   { href: aboutPath, label: t["nav.about"], match: aboutPath },
@@ -182,6 +183,7 @@ const switcherTarget = (loc: Locale): string =>
               <a
                 href={item.href}
                 aria-current={
+                  item.match &&
                   (item.match === homePath
                     ? currentPath === homePath
                     : currentPath.startsWith(item.match))
