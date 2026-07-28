@@ -46,6 +46,7 @@ export const ui: Record<Locale, Record<string, string>> = {
   en: {
     "nav.spec": "Specification",
     "nav.translator": "Translate",
+    "nav.almanpedia": "Almanpedia",
     "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "About",
@@ -62,6 +63,7 @@ export const ui: Record<Locale, Record<string, string>> = {
   de: {
     "nav.spec": "Spezifikation",
     "nav.translator": "Translate",
+    "nav.almanpedia": "Almanpedia",
     "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "Über uns",
@@ -79,6 +81,7 @@ export const ui: Record<Locale, Record<string, string>> = {
   al: {
     "nav.spec": "Spezifikation",
     "nav.translator": "Translate",
+    "nav.almanpedia": "Almanpedia",
     "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "Über uns",
