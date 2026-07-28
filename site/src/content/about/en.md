@@ -32,6 +32,10 @@ We are developing under the following constraints:
 
 The specification and related documentation are primarily written in English, because the target audience is non-native speakers of German. The specification is also available in German and in Alman itself, through the language switcher.
 
+## Acknowledgements
+
+Alman was developed with [Hugging Face](https://huggingface.co/). The project uses [Hugging Face compute](https://huggingface.co/docs/hub/jobs) to train and evaluate its language models. The resulting [models and datasets](https://huggingface.co/osolmaz) are published on the Hugging Face Hub, including [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M) and [AlmanBench](https://huggingface.co/datasets/osolmaz/almanbench).
+
 ---
 
 The Alman specification is open source and can be edited on [GitHub](https://github.com/osolmaz/alman).

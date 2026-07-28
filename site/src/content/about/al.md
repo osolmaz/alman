@@ -32,6 +32,10 @@ Wir entwickeln unter die folgende Vorgaben:
 
 Die Spezifikation und die zugehörige Dokumentation sind überwiegend auf Englisch verfasst, weil die Zielgruppe aus Nicht-Muttersprachler der Deutsche besteht. Die Spezifikation ist über die Sprachauswahl auch auf Deutsch und auf Alman selbst verfügbar.
 
+## Danksagung
+
+Alman wurde mit [Hugging Face](https://huggingface.co/) entwickelt. Die Projekt nutzt [Hugging Face Compute](https://huggingface.co/docs/hub/jobs), um sein Sprachmodelle zu trainieren und zu evaluieren. Die daraus entstandene [Modelle und Datasets](https://huggingface.co/osolmaz) sind auf die Hugging Face Hub veröffentlicht, darunter [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M) und [AlmanBench](https://huggingface.co/datasets/osolmaz/almanbench).
+
 ---
 
 Die Alman-Spezifikation ist Open Source und kann auf [GitHub](https://github.com/osolmaz/alman) bearbeitet werden.
