@@ -759,6 +759,17 @@ h1,
   font-size: 0.82rem;
 }
 
+.article-loading .article-loading-notice:not([hidden]) {
+  position: fixed;
+  z-index: 40;
+  bottom: 1rem;
+  left: 50%;
+  width: min(calc(100% - 2rem), 36rem);
+  margin: 0;
+  transform: translateX(-50%);
+  box-shadow: 0 0.2rem 1rem var(--shadow);
+}
+
 .article-loading-notice p,
 .article-loading-error p {
   margin: 0;
