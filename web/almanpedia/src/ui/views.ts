@@ -36,6 +36,7 @@ let activeRevealController: TranslationRevealController | null = null;
 let stopActiveContents: (() => void) | null = null;
 let articleRenderSequence = 0;
 let activeArticleRender: { id: number; controller: AbortController } | null = null;
+const articleRuntimeByLayout = new WeakMap<HTMLElement, { status: HTMLElement }>();
 
 function cancelActiveArticleRender(): void {
   activeArticleRender?.controller.abort();
@@ -319,6 +320,7 @@ function beginArticleLoading(
     ? shell.main.querySelector<HTMLElement>('.article-layout:not([data-article-loading-skeleton])')
     : null;
   const previousDocumentTitle = retainedLayout?.dataset.articleDocumentTitle ?? document.title;
+  const retainedStatus = retainedLayout ? articleRuntimeByLayout.get(retainedLayout)?.status : undefined;
   const progress = progressBar();
   progress.indeterminate(`„${displayTitle(title)}“ WIRD GELADEN …`);
   shell.status.replaceChildren(progress.element);
@@ -361,7 +363,7 @@ function beginArticleLoading(
     restore() {
       clearLoadingState();
       progress.done();
-      shell.status.replaceChildren();
+      shell.status.replaceChildren(...(retainedStatus ? [retainedStatus] : []));
       document.title = previousDocumentTitle;
       activeRevealController?.setPaused(false);
     },
@@ -486,6 +488,9 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     "data-article-enter": "",
     "data-article-document-title": sourceDocumentTitle,
   }, [contents.element, articleColumn, el("aside", { class: "appearance-column" }, [settings.element])]);
+  const articleStatus = el("div", { class: "article-status" }, [progress.element]);
+  articleRuntimeByLayout.set(articleLayout, { status: articleStatus });
+  shell.status.replaceChildren(articleStatus);
   shell.main.className = "site-main article-page";
   shell.main.replaceChildren(articleLayout);
   scrollToArticlePosition(hash);
@@ -604,7 +609,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
 
   try {
     await initModel((assetProgress: AssetProgress) => {
-      if (!isActiveArticleRender(render)) return;
+      if (!articleColumn.isConnected) return;
       if (assetProgress.phase === "download") {
         progress.set(
           assetProgress.overallLoaded / assetProgress.overallTotal,
@@ -615,14 +620,14 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       }
     });
   } catch (error) {
-    if (!isActiveArticleRender(render)) return;
+    if (!articleColumn.isConnected) return;
     finishArticleRender(render);
     progress.done();
-    shell.status.append(el("span", { class: "status-error" }, ["Übersetzung nicht verfügbar — Original wird angezeigt."]));
+    articleStatus.append(el("span", { class: "status-error" }, ["Übersetzung nicht verfügbar — Original wird angezeigt."]));
     console.error("model init failed", error);
     return;
   }
-  if (!isActiveArticleRender(render)) return;
+  if (!articleColumn.isConnected) return;
 
   const controller = createDomTranslator({
     root: articleColumn,
@@ -664,6 +669,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   });
   activeController = controller;
   activeRevealController = revealController;
+  if (shell.main.classList.contains("article-loading")) revealController.setPaused(true);
   toggle.removeAttribute("disabled");
   differenceToggle.removeAttribute("disabled");
   controller.start();

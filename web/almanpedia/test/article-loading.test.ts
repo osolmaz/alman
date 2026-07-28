@@ -5,8 +5,23 @@ const engine = vi.hoisted(() => ({
   getEngine: vi.fn(),
   initModel: vi.fn(),
 }));
+const domTranslator = vi.hoisted(() => {
+  const controller = {
+    start: vi.fn(),
+    stop: vi.fn(),
+    restoreOriginals: vi.fn(),
+    reapplyTranslations: vi.fn(),
+    applyTranslation: vi.fn(() => false),
+    translateAll: vi.fn(),
+    createDifferenceClone: vi.fn(() => document.createElement("article")),
+    stats: vi.fn(() => ({ totalBlocks: 1, translatedBlocks: 0, pendingBlocks: 1, pendingVisibleBlocks: 1, translatedNodes: 0 })),
+    whenIdle: vi.fn(async () => {}),
+  };
+  return { controller, create: vi.fn(() => controller) };
+});
 
 vi.mock("../src/engine", () => engine);
+vi.mock("@alman/core", () => ({ createDomTranslator: domTranslator.create }));
 
 import { renderArticle, renderShell } from "../src/ui/views";
 
@@ -48,6 +63,11 @@ beforeEach(() => {
   engine.initModel.mockReset();
   engine.initModel.mockRejectedValue(new Error("model unavailable in loading tests"));
   engine.getEngine.mockReset();
+  engine.getEngine.mockReturnValue({});
+  domTranslator.create.mockClear();
+  for (const value of Object.values(domTranslator.controller)) {
+    if (typeof value === "function" && "mockClear" in value) value.mockClear();
+  }
   vi.spyOn(console, "error").mockImplementation(() => {});
   vi.stubGlobal("scrollTo", vi.fn());
   vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
@@ -162,6 +182,34 @@ test("fetched German content replaces the skeleton before model initialization f
 
   model.reject(new Error("model unavailable"));
   await rendering;
+});
+
+test("retained article initialization resumes when its replacement fails", async () => {
+  const model = deferred<void>();
+  const replacement = deferred<Response>();
+  engine.initModel.mockReturnValue(model.promise);
+  vi.stubGlobal("fetch", vi.fn()
+    .mockResolvedValueOnce(articleResponse("Erster", "Der erste Artikel bleibt."))
+    .mockImplementationOnce(() => replacement.promise));
+  history.replaceState(null, "", "/wiki/Erster");
+  const shell = createShell();
+
+  const firstRendering = renderArticle(shell, "Erster");
+  await vi.waitFor(() => expect(shell.main.querySelector(".wiki-content")?.textContent).toContain("Der erste Artikel bleibt."));
+  expect(shell.main.querySelector(".toggle-original")?.hasAttribute("disabled")).toBe(true);
+
+  history.pushState(null, "", "/wiki/Zweiter");
+  const replacementRendering = renderArticle(shell, "Zweiter");
+  await vi.waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+  replacement.reject(new Error("offline"));
+  await replacementRendering;
+
+  model.resolve();
+  await firstRendering;
+  expect(domTranslator.create).toHaveBeenCalledOnce();
+  expect(domTranslator.controller.start).toHaveBeenCalledOnce();
+  expect(shell.main.querySelector(".toggle-original")?.hasAttribute("disabled")).toBe(false);
+  expect(shell.status.querySelector(".article-status .progress")).not.toBeNull();
 });
 
 test("a newer navigation wins when an aborted request resolves late", async () => {

@@ -175,8 +175,16 @@ code {
 }
 
 .header-status:empty,
-.header-status:has(> [hidden]:only-child) {
+.header-status:has(> [hidden]:only-child),
+.header-status:has(> .article-status > [hidden]:only-child) {
   display: none;
+}
+
+.article-status {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .status-error {
@@ -1272,6 +1280,10 @@ html[data-change-effects="on"] [data-alman-reveal][data-alman-change] {
 
   .header-status {
     grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .article-status {
     justify-content: flex-start;
   }
 
