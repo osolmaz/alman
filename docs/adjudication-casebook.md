@@ -131,6 +131,13 @@ makes the plain form canonical (*ein alte Bekannte*) and accepts marking
 that matches the head's rendering (*von ein alte Bekannte* after a
 von-genitive head) as a variant.
 
+The marking must follow the head. A retained outer genitive accepts a plain
+apposition or retained genitive marking, while an outer *von die* construction
+accepts a plain apposition or matching *von die* marking. Mixing retained
+marking with an outer *von die*, or the reverse, invents agreement that the
+source and §1e do not license. The packager records these dependencies as
+literal-fragment exclusions after expanding the independent choices.
+
 ## Standalone demonstratives: das canonical, die accepted, symmetric (§1c)
 
 Standard German uses stressed articles as standalone demonstratives: *Der
@@ -239,7 +246,10 @@ the noun is plural, through a dative -n form or a determiner that cannot
 precede a singular. Round three extended the proof patterns (plural
 possessives, *die*/*den* before zero-plural nouns in unambiguous contexts)
 after models produced correct -s renderings the references missed, such as
-*die Kuchens*. Guessing plurality without proof stays out of the
+*die Kuchens*. A coordinated relative can also prove number when its bare
+object has a strong adjective in *-e*, as in *und die junge Mädchen ... trieb*:
+singular neuter would require *junges Mädchen*. Guessing plurality without
+proof stays out of the
 generator because a false positive would license a wrong rendering.
 
 ## Surface fidelity: no modernization, no paraphrase, case-sensitive
@@ -247,6 +257,8 @@ generator because a false positive would license a wrong rendering.
 A recurring family of near-miss rejections comes from models improving the
 text: modernizing *Thür* to *Tür*, *daß* to *dass*, or *grade* to *gerade*,
 expanding *bzw.*, or fixing archaic word order. All of it stays rejected.
+The same rule preserves abbreviations such as *d. h.*; expanding them to
+*das heißt* changes the source surface.
 Alman is defined as a set of grammatical transformations over a Standard
 German source, and everything the spec does not transform must be
 reproduced exactly, or scores stop measuring rule application and start

@@ -478,6 +478,18 @@ class TestLint:
         assert lint("Das ärgert einen.") == []
         assert lint("Das hilft einem sehr.") == []
 
+    def test_nominalized_possessive_retained_plural_is_not_flagged(self):
+        assert lint("Sie konnten die Stock der Ihren finden.") == []
+        assert lint("Sie konnten die Stock der Ihre finden.") == []
+
+    def test_attributive_polite_possessive_is_still_flagged(self):
+        assert lint("Sie halfen mit Ihren Büchern.") == [
+            "'Ihren': inflected possessive determiner"
+        ]
+        assert lint("Viel Dank für Ihre schnelle Antwort.") == [
+            "'Ihre': inflected possessive determiner"
+        ]
+
     def test_all_spec_targets_pass_lint(self, items):
         """Self-consistency: no accepted spec rendering violates the linter."""
         failures = [

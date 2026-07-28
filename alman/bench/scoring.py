@@ -144,5 +144,18 @@ def lint(text: str) -> list[str]:
             and tokens[i - 1].group(0).lower() in _ARTICLES_BEFORE_EINE
         ):
             continue
+        if (
+            token in {"Ihre", "Ihren"}
+            and i > 0
+            and tokens[i - 1].group(0).lower() in {"die", "der"}
+            and (
+                i + 1 == len(tokens)
+                or not tokens[i + 1].group(0)[0].isupper()
+            )
+        ):
+            # Capitalized standalone "Ihre(n)" is a nominalized possessive.
+            # Retained plural -en and the leveled form are both licensed;
+            # capitalized attributive "Ihren Büchern" remains a violation.
+            continue
         violations.append(f"'{token}': {reason}")
     return violations
