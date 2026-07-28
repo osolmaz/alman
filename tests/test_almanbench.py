@@ -37,5 +37,5 @@ def test_fixed_expressions_drop_archaic_dative_e() -> None:
     assert all("zu Pferd" in rendering for rendering in horse.accepted)
     assert all("zu Pferde" not in rendering for rendering in horse.accepted)
     assert house.accepted == ["Gestern war ich bei ihm zu Haus."]
-    assert "fixed expressions are not exempt" in (horse.note or "")
+    assert "Fixed expressions are not exempt" in (horse.note or "")
     assert "drops under §3a" in (house.note or "")
