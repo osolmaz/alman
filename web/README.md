@@ -76,19 +76,19 @@ bump that dependency without re-running this gate.
 
 ## Deployment
 
-- **almanpedia.org**: `.github/workflows/deploy-almanpedia.yml` deploys
-  `almanpedia/dist` to the Cloudflare Pages project `almanpedia` on pushes to
-  `main` touching `web/`. It then runs
-  `scripts/configure-almanpedia-shortcut.ts`, which idempotently creates a
-  proxied `de.almanpedia.org` CNAME and a permanent Single Redirect to
-  `https://almanpedia.org`, preserving the path and query string. Single
-  Redirects are available on Cloudflare's Free plan and add no Worker runtime.
-  Required repo secrets are `CLOUDFLARE_API_TOKEN` and
-  `CLOUDFLARE_ACCOUNT_ID`. Scope the token to the `almanpedia.org` zone with
-  Cloudflare Pages Edit, Zone Read, DNS Edit, and Single Redirect Edit. The
-  one-time dashboard setup is to create the Pages project and attach
-  `almanpedia.org` and `www.almanpedia.org`; the deployment script owns the
-  `de.almanpedia.org` shortcut.
+- **almanpedia.org**: Cloudflare Pages deploys directly from the GitHub repository on pushes
+  to `main`. The Pages project uses `web` as its root directory,
+  `npm run build --workspace almanpedia` as its build command, and
+  `almanpedia/dist` as its output directory, with `NODE_VERSION=22` in the
+  build environment. The Pages custom domains are `almanpedia.org` and
+  `www.almanpedia.org`. A proxied `de.almanpedia.org` CNAME and a Cloudflare
+  Single Redirect send the German shortcut to `https://almanpedia.org` while
+  preserving the path and query string. The manual
+  `.github/workflows/deploy-almanpedia.yml` workflow is retained for recovery
+  and is not triggered by pushes. It requires `CLOUDFLARE_API_TOKEN` and
+  `CLOUDFLARE_ACCOUNT_ID`. The idempotent
+  `scripts/configure-almanpedia-shortcut.ts` utility can reconcile the DNS
+  record and redirect when run with `CLOUDFLARE_API_TOKEN`.
 - **Extension**: CI (`web-test` job) uploads Chrome/Firefox zips as build
   artifacts. Store submission is manual for now.
 - **CI secrets**: `HF_TOKEN` is only needed by the `web-model-parity` job
@@ -103,7 +103,7 @@ bump that dependency without re-running this gate.
 2. Pin the mirror's commit hash as `revision` in
    `core/src/model/manifest.ts` (replaces `"main"`) and re-run
    `npm test && npm run test:model`.
-3. Cloudflare Pages project + domains + repo secrets (above).
+3. Cloudflare Pages Git deployment, custom domains, and the `de.almanpedia.org` redirect (above).
 4. Manual extension matrix: Chrome + Firefox, a German news site, a
    strict-CSP site, a non-German page (must stay untouched), auto-translate
    permission flow.
