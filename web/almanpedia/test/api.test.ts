@@ -60,12 +60,13 @@ test("fetchArticleHtml resolves redirected aliases without returning html as the
   });
   vi.stubGlobal("fetch", fetch);
 
-  const article = await fetchArticleHtml("Physiokrat");
+  const controller = new AbortController();
+  const article = await fetchArticleHtml("Physiokrat", controller.signal);
 
   expect(article.title).toBe("Physiokratie");
   expect(article.html).toBe(redirectHtml);
   expect(fetch).toHaveBeenCalledWith(
     "https://de.wikipedia.org/api/rest_v1/page/html/Physiokrat",
-    expect.objectContaining({ redirect: "follow" }),
+    expect.objectContaining({ redirect: "follow", signal: controller.signal }),
   );
 });

@@ -59,11 +59,12 @@ export function canonicalArticleTitle(html: string, responseUrl: string, request
   return titleFromWikipediaUrl(responseUrl) ?? normalizeTitle(requestedTitle);
 }
 
-export async function fetchArticleHtml(title: string): Promise<WikiArticleHtml> {
+export async function fetchArticleHtml(title: string, signal?: AbortSignal): Promise<WikiArticleHtml> {
   const normalized = normalizeTitle(title);
   const response = await fetch(`${WIKI_ORIGIN}/api/rest_v1/page/html/${encodeURIComponent(normalized)}`, {
     headers: { "Api-User-Agent": API_USER_AGENT },
     redirect: "follow",
+    signal,
   });
   if (response.status === 404) throw new ArticleNotFoundError(displayTitle(title));
   if (!response.ok) throw new Error(`Wikipedia request failed (HTTP ${response.status})`);

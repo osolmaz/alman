@@ -12,8 +12,11 @@ let navigateFn: (path: string) => void = () => {};
 const shell = renderShell(root, (path) => navigateFn(path));
 
 const { navigate } = startRouter((route) => {
-  window.scrollTo(0, 0);
-  if (route.kind === "article") void renderArticle(shell, route.title, route.hash);
-  else void renderLanding(shell);
+  if (route.kind === "article") {
+    void renderArticle(shell, route.title, route.hash);
+  } else {
+    window.scrollTo(0, 0);
+    void renderLanding(shell);
+  }
 });
 navigateFn = navigate;
