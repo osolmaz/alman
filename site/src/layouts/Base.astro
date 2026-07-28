@@ -182,6 +182,8 @@ const switcherTarget = (loc: Locale): string =>
             navItems.map((item) => (
               <a
                 href={item.href}
+                target={item.match ? undefined : "_blank"}
+                rel={item.match ? undefined : "noopener"}
                 aria-current={
                   item.match &&
                   (item.match === homePath
