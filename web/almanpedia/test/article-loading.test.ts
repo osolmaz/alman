@@ -50,6 +50,10 @@ beforeEach(() => {
   engine.getEngine.mockReset();
   vi.spyOn(console, "error").mockImplementation(() => {});
   vi.stubGlobal("scrollTo", vi.fn());
+  vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+    callback(0);
+    return 1;
+  });
   history.replaceState(null, "", "/");
 });
 
