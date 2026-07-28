@@ -92,12 +92,53 @@ const copyByLocale = {
 
 const copy = copyByLocale[locale];
 
-// Standard German inputs showing the core transformations: relativizer,
-// dative articles, adnominal genitive, adjective endings.
+// Familiar public-domain passages provide enough context to exercise prose
+// and verse while keeping every example quick to translate locally.
 const samples = [
-  "Der Hund, der neben dem alten Baum wartet, gehört dem Nachbarn.",
-  "Die Farbe des Autos gefällt dem kleinen Kind.",
-  "Wegen des schlechten Wetters bleiben wir heute zu Hause.",
+  {
+    author: "Franz Kafka",
+    work: "Die Verwandlung",
+    text: `Als Gregor Samsa eines Morgens aus unruhigen Träumen erwachte, fand er sich in seinem Bett zu einem ungeheueren Ungeziefer verwandelt. Er lag auf seinem panzerartig harten Rücken und sah, wenn er den Kopf ein wenig hob, seinen gewölbten, braunen, von bogenförmigen Versteifungen geteilten Bauch, auf dessen Höhe sich die Bettdecke, zum gänzlichen Niedergleiten bereit, kaum noch erhalten konnte. Seine vielen, im Vergleich zu seinem sonstigen Umfang kläglich dünnen Beine flimmerten ihm hilflos vor den Augen.`,
+  },
+  {
+    author: "Johann Wolfgang von Goethe",
+    work: "Faust I",
+    text: `Habe nun, ach! Philosophie,
+Juristerei und Medizin,
+Und leider auch Theologie
+Durchaus studiert, mit heißem Bemühn.
+Da steh ich nun, ich armer Tor!
+Und bin so klug als wie zuvor;
+Heiße Magister, heiße Doktor gar
+Und ziehe schon an die zehen Jahr
+Herauf, herab und quer und krumm
+Meine Schüler an der Nase herum –
+Und sehe, daß wir nichts wissen können!
+Das will mir schier das Herz verbrennen.`,
+  },
+  {
+    author: "Brüder Grimm",
+    work: "Rothkäppchen",
+    text: `Es war einmal eine kleine süße Dirne, die hatte jedermann lieb, der sie nur ansah, am allerliebsten aber ihre Großmutter, die wußte gar nicht was sie alles dem Kinde geben sollte. Einmal schenkte sie ihm ein Käppchen von rothem Sammet, und weil ihm das so wohl stand, und es nichts anders mehr tragen wollte, hieß es nur das Rothkäppchen.`,
+  },
+  {
+    author: "Heinrich Heine",
+    work: "Die Lore-Ley",
+    text: `Ich weiß nicht, was soll es bedeuten,
+Daß ich so traurig bin;
+Ein Mährchen aus alten Zeiten,
+Das kommt mir nicht aus dem Sinn.
+
+Die Luft ist kühl und es dunkelt,
+Und ruhig fließt der Rhein;
+Der Gipfel des Berges funkelt
+Im Abendsonnenschein.
+
+Die schönste Jungfrau sitzet
+Dort oben wunderbar,
+Ihr gold’nes Geschmeide blitzet,
+Sie kämmt ihr gold’nes Haar.`,
+  },
 ];
 
 // Dynamic strings needed by the client script.
@@ -178,7 +219,16 @@ const strings = {
 
     <div class="xl-samples">
       <span class="xl-samples-label">{copy.samplesLabel}</span>
-      {samples.map((sample) => <button type="button" class="xl-sample" data-sample lang="de">{sample}</button>)}
+      {
+        samples.map((sample) => (
+          <button type="button" class="xl-sample" data-sample value={sample.text} lang="de">
+            <span class="xl-sample-source">
+              {sample.author} <span aria-hidden="true">·</span> <cite>{sample.work}</cite>
+            </span>
+            <span class="xl-sample-excerpt">{sample.text}</span>
+          </button>
+        ))
+      }
     </div>
 
     <script type="application/json" data-translator-strings set:html={JSON.stringify(strings)} />
@@ -423,40 +473,75 @@ const strings = {
   }
 
   .xl-samples {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5rem 0.6rem;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
     margin-top: 1rem;
   }
 
   .xl-samples-label {
+    grid-column: 1 / -1;
     font-family: var(--font-din);
     font-weight: 600;
     font-size: 0.75rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--grey-1);
-    margin-right: 0.3rem;
+    margin-bottom: 0.05rem;
   }
 
   .xl-sample {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    min-width: 0;
     font: inherit;
-    font-size: 0.82rem;
     color: var(--ink);
     background: #ffffff;
     border: 1px solid var(--grey-2);
-    padding: 0.3rem 0.7rem;
+    padding: 0.65rem 0.75rem 0.7rem;
     cursor: pointer;
     text-align: left;
   }
 
-  .xl-sample:hover {
+  .xl-sample:hover,
+  .xl-sample:focus-visible {
     color: var(--form-blue);
     border-color: var(--form-blue);
   }
 
+  .xl-sample-source {
+    font-family: var(--font-din);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.035em;
+  }
+
+  .xl-sample-source cite {
+    font-style: normal;
+  }
+
+  .xl-sample-excerpt {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    color: var(--grey-1);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    white-space: pre-line;
+  }
+
+  .xl-sample:hover .xl-sample-excerpt,
+  .xl-sample:focus-visible .xl-sample-excerpt {
+    color: var(--ink);
+  }
+
   @media (max-width: 640px) {
+    .xl-samples {
+      grid-template-columns: 1fr;
+    }
+
     .xl-panes {
       grid-template-columns: 1fr;
     }

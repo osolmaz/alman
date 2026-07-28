@@ -244,7 +244,7 @@ export function initTranslator(root: HTMLElement): void {
   for (const sample of root.querySelectorAll<HTMLButtonElement>("[data-sample]")) {
     sample.addEventListener("click", () => {
       window.clearTimeout(debounceTimer);
-      source!.value = sample.textContent?.trim() ?? "";
+      source!.value = sample.value;
       refreshSource();
       void translateNow();
     });
