@@ -49,6 +49,9 @@ export const ui: Record<Locale, Record<string, string>> = {
     "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "About",
+    "footer.openSource": "Open source under the",
+    "footer.license": "MIT License",
+    "footer.repository": "Alman repository on GitHub",
     "spec.title": "Specification",
     "spec.description": "The Alman specification: a simplified German dialect.",
     "spec.edit":
@@ -62,6 +65,9 @@ export const ui: Record<Locale, Record<string, string>> = {
     "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "Über uns",
+    "footer.openSource": "Open Source unter der",
+    "footer.license": "MIT-Lizenz",
+    "footer.repository": "Alman-Repository auf GitHub",
     "spec.title": "Spezifikation",
     "spec.description":
       "Die Alman-Spezifikation: ein vereinfachter deutscher Dialekt.",
@@ -76,6 +82,9 @@ export const ui: Record<Locale, Record<string, string>> = {
     "nav.benchmark": "Benchmark",
     "nav.blog": "Blog",
     "nav.about": "Über uns",
+    "footer.openSource": "Open Source unter die",
+    "footer.license": "MIT-Lizenz",
+    "footer.repository": "Alman-Repository auf GitHub",
     "spec.title": "Spezifikation",
     "spec.description":
       "Die Alman-Spezifikation: ein vereinfachte deutsche Dialekt.",
