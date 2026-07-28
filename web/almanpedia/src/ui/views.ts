@@ -319,7 +319,6 @@ function beginArticleLoading(
     ? shell.main.querySelector<HTMLElement>('.article-layout:not([data-article-loading-skeleton])')
     : null;
   const previousDocumentTitle = retainedLayout?.dataset.articleDocumentTitle ?? document.title;
-  const previousRoute = retainedLayout?.dataset.articleRoute;
   const progress = progressBar();
   progress.indeterminate(`„${displayTitle(title)}“ WIRD GELADEN …`);
   shell.status.replaceChildren(progress.element);
@@ -364,7 +363,6 @@ function beginArticleLoading(
       progress.done();
       shell.status.replaceChildren();
       document.title = previousDocumentTitle;
-      if (previousRoute) history.replaceState(null, "", previousRoute);
       activeRevealController?.setPaused(false);
     },
   };
@@ -413,7 +411,6 @@ function revealTranslatedBlock(element: Element): void {
 
 export async function renderArticle(shell: AppShell, title: string, hash?: string): Promise<void> {
   const render = beginArticleRender();
-  const requestedRoute = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   const loading = beginArticleLoading(shell, title, render.controller.signal, () => void renderArticle(shell, title, hash));
   const progress = loading.progress;
 
@@ -487,7 +484,6 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   const articleLayout = el("div", {
     class: "article-layout",
     "data-article-enter": "",
-    "data-article-route": requestedRoute,
     "data-article-document-title": sourceDocumentTitle,
   }, [contents.element, articleColumn, el("aside", { class: "appearance-column" }, [settings.element])]);
   shell.main.className = "site-main article-page";

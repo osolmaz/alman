@@ -90,7 +90,6 @@ test("internal navigation retains and disables the current article until loading
   const shell = createShell();
   const retained = document.createElement("div");
   retained.className = "article-layout";
-  retained.dataset.articleRoute = "/wiki/Alter_Artikel";
   retained.append(document.createElement("article"));
   shell.main.className = "site-main article-page";
   shell.main.replaceChildren(retained);
@@ -112,7 +111,7 @@ test("internal navigation retains and disables the current article until loading
   expect(retained.hasAttribute("inert")).toBe(false);
   expect(shell.main.querySelector(".article-loading-error")?.textContent).toContain("Der vorige Artikel bleibt geöffnet");
   expect(document.title).toBe("Alter Artikel – Almanpedia");
-  expect(location.pathname).toBe("/wiki/Alter_Artikel");
+  expect(location.pathname).toBe("/wiki/Neuer_Artikel");
 });
 
 test("slow loads reveal retry and original-source actions after eight seconds", async () => {
