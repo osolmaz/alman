@@ -15,6 +15,7 @@ dist/
 # ORT WASM runtime copied from node_modules by site/scripts/copy-ort.mjs
 site/public/ort/
 .DS_Store
+Icon?
 local-benchmark-artifacts/
 
 # Inspect AI eval logs
