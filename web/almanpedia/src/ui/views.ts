@@ -34,6 +34,29 @@ const MODEL_REPOSITORY_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
 let activeController: DomTranslatorController | null = null;
 let activeRevealController: TranslationRevealController | null = null;
 let stopActiveContents: (() => void) | null = null;
+let articleRenderSequence = 0;
+let activeArticleRender: { id: number; controller: AbortController } | null = null;
+const articleRuntimeByLayout = new WeakMap<HTMLElement, { status: HTMLElement }>();
+
+function cancelActiveArticleRender(): void {
+  activeArticleRender?.controller.abort();
+  activeArticleRender = null;
+}
+
+function beginArticleRender(): { id: number; controller: AbortController } {
+  cancelActiveArticleRender();
+  const render = { id: ++articleRenderSequence, controller: new AbortController() };
+  activeArticleRender = render;
+  return render;
+}
+
+function isActiveArticleRender(render: { id: number; controller: AbortController }): boolean {
+  return activeArticleRender?.id === render.id && !render.controller.signal.aborted;
+}
+
+function finishArticleRender(render: { id: number }): void {
+  if (activeArticleRender?.id === render.id) activeArticleRender = null;
+}
 
 function stopActiveTranslation(): void {
   activeController?.stop();
@@ -84,8 +107,10 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
 }
 
 export async function renderLanding(shell: AppShell): Promise<void> {
+  cancelActiveArticleRender();
   stopActiveTranslation();
   shell.footer.hidden = false;
+  shell.main.removeAttribute("aria-busy");
   document.title = "Almanpedia — Die freie Enzyklopädie, vereinfacht";
   const progress = progressBar();
   const feed = el("div", { class: "landing-feed wiki-content", lang: "de" }, [
@@ -201,30 +226,168 @@ export function createArticleAttribution(title: string): HTMLElement {
   ]);
 }
 
-function progressBar(): { element: HTMLElement; set: (fraction: number, label: string) => void; done: () => void } {
+interface ProgressBar {
+  element: HTMLElement;
+  indeterminate: (label: string) => void;
+  set: (fraction: number, label: string) => void;
+  done: () => void;
+}
+
+function progressBar(): ProgressBar {
   const fill = el("div", { class: "progress-fill" });
   const label = el("span", { class: "progress-label" });
   const element = el("div", { class: "progress", hidden: "" }, [el("div", { class: "progress-track" }, [fill]), label]);
   return {
     element,
+    indeterminate(text) {
+      element.hidden = false;
+      element.setAttribute("data-indeterminate", "");
+      fill.style.width = "36%";
+      label.textContent = text;
+    },
     set(fraction, text) {
       element.hidden = false;
+      element.removeAttribute("data-indeterminate");
       fill.style.width = `${Math.round(fraction * 100)}%`;
       label.textContent = text;
     },
     done() {
       element.hidden = true;
+      element.removeAttribute("data-indeterminate");
       fill.style.width = "100%";
       label.textContent = "";
     },
   };
 }
 
-function scrollToArticleHash(hash: string | undefined): void {
-  if (!hash) return;
+function scrollToArticlePosition(hash: string | undefined): void {
   requestAnimationFrame(() => {
-    document.getElementById(hash)?.scrollIntoView();
+    if (hash) document.getElementById(hash)?.scrollIntoView();
+    else window.scrollTo(0, 0);
   });
+}
+
+const SLOW_ARTICLE_LOAD_MS = 8_000;
+
+interface ArticleLoadingPresentation {
+  progress: ProgressBar;
+  retainedLayout: HTMLElement | null;
+  commit: () => void;
+  restore: () => void;
+}
+
+function createArticleLoadingSkeleton(title: string): HTMLElement {
+  const lines = ["long", "medium", "long", "short", "medium", "long", "short"]
+    .map((width) => el("span", { class: `article-loading-line article-loading-line-${width}` }));
+  const contents = el("aside", { class: "article-loading-rail", "aria-hidden": "true" }, [
+    el("span", { class: "article-loading-rail-heading" }),
+    el("span"),
+    el("span"),
+    el("span"),
+    el("span"),
+  ]);
+  const column = el("div", { class: "article-column article-loading-column" }, [
+    el("div", { class: "article-head" }, [el("h1", { class: "article-title", lang: "de" }, [displayTitle(title)])]),
+    el("div", { class: "article-loading-copy", "aria-hidden": "true" }, lines),
+  ]);
+  const appearance = el("aside", { class: "article-loading-rail article-loading-appearance", "aria-hidden": "true" }, [
+    el("span", { class: "article-loading-rail-heading" }),
+    el("span"),
+    el("span"),
+  ]);
+  return el("div", { class: "article-layout", "data-article-loading-skeleton": "" }, [contents, column, appearance]);
+}
+
+function createSlowArticleNotice(title: string, onRetry: () => void): HTMLElement {
+  const retry = el("button", { type: "button", class: "retry" }, ["Erneut versuchen"]);
+  retry.addEventListener("click", onRetry);
+  return el("section", { class: "article-loading-notice", hidden: "", "aria-live": "polite" }, [
+    el("p", {}, ["Das Laden dauert länger als üblich."]),
+    el("div", { class: "article-loading-notice-actions" }, [
+      retry,
+      el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, ["Original bei Wikipedia öffnen"]),
+    ]),
+  ]);
+}
+
+function beginArticleLoading(
+  shell: AppShell,
+  title: string,
+  signal: AbortSignal,
+  onRetry: () => void,
+): ArticleLoadingPresentation {
+  const retainedLayout = shell.main.classList.contains("article-page")
+    ? shell.main.querySelector<HTMLElement>('.article-layout:not([data-article-loading-skeleton])')
+    : null;
+  const previousDocumentTitle = retainedLayout?.dataset.articleDocumentTitle ?? document.title;
+  const retainedStatus = retainedLayout ? articleRuntimeByLayout.get(retainedLayout)?.status : undefined;
+  const progress = progressBar();
+  progress.indeterminate(`„${displayTitle(title)}“ WIRD GELADEN …`);
+  shell.status.replaceChildren(progress.element);
+  shell.footer.hidden = true;
+  shell.main.className = "site-main article-page article-loading";
+  shell.main.setAttribute("aria-busy", "true");
+  document.title = `${displayTitle(title)} – Almanpedia`;
+
+  const notice = createSlowArticleNotice(title, onRetry);
+  if (retainedLayout) {
+    activeRevealController?.setPaused(true);
+    retainedLayout.setAttribute("inert", "");
+    retainedLayout.setAttribute("data-article-retained", "");
+    shell.main.replaceChildren(notice, retainedLayout);
+  } else {
+    stopActiveTranslation();
+    shell.main.replaceChildren(notice, createArticleLoadingSkeleton(title));
+  }
+
+  const slowTimer = window.setTimeout(() => {
+    if (notice.isConnected) notice.hidden = false;
+  }, SLOW_ARTICLE_LOAD_MS);
+  signal.addEventListener("abort", () => window.clearTimeout(slowTimer), { once: true });
+  const clearLoadingState = () => {
+    window.clearTimeout(slowTimer);
+    notice.remove();
+    shell.main.classList.remove("article-loading");
+    shell.main.removeAttribute("aria-busy");
+    retainedLayout?.removeAttribute("inert");
+    retainedLayout?.removeAttribute("data-article-retained");
+  };
+
+  return {
+    progress,
+    retainedLayout,
+    commit() {
+      clearLoadingState();
+      progress.indeterminate("ÜBERSETZUNG WIRD VORBEREITET …");
+    },
+    restore() {
+      clearLoadingState();
+      progress.done();
+      shell.status.replaceChildren(...(retainedStatus ? [retainedStatus] : []));
+      document.title = previousDocumentTitle;
+      activeRevealController?.setPaused(false);
+    },
+  };
+}
+
+function showRetainedArticleError(
+  shell: AppShell,
+  title: string,
+  hash: string | undefined,
+  error: unknown,
+): void {
+  const retry = el("button", { type: "button", class: "retry" }, ["Erneut versuchen"]);
+  retry.addEventListener("click", () => void renderArticle(shell, title, hash));
+  const message = error instanceof ArticleNotFoundError
+    ? `„${displayTitle(title)}“ wurde nicht gefunden. Der vorige Artikel bleibt geöffnet.`
+    : `„${displayTitle(title)}“ konnte nicht geladen werden. Der vorige Artikel bleibt geöffnet.`;
+  shell.main.prepend(el("section", { class: "article-loading-error", role: "alert" }, [
+    el("p", {}, [message]),
+    el("div", { class: "article-loading-notice-actions" }, [
+      retry,
+      el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, ["Original bei Wikipedia öffnen"]),
+    ]),
+  ]));
 }
 
 const CHANGE_REVEAL_DURATION_MS = 1_500;
@@ -249,25 +412,41 @@ function revealTranslatedBlock(element: Element): void {
 }
 
 export async function renderArticle(shell: AppShell, title: string, hash?: string): Promise<void> {
-  stopActiveTranslation();
-  shell.footer.hidden = true;
-  document.title = `${displayTitle(title)} – Almanpedia`;
-  const progress = progressBar();
-  shell.status.replaceChildren(progress.element);
-  shell.main.replaceChildren(el("p", { class: "loading" }, ["Artikel wird geladen …"]));
+  const render = beginArticleRender();
+  const loading = beginArticleLoading(shell, title, render.controller.signal, () => void renderArticle(shell, title, hash));
+  const progress = loading.progress;
 
   let article;
   try {
-    article = await fetchArticleHtml(title);
+    article = await fetchArticleHtml(title, render.controller.signal);
   } catch (error) {
-    renderArticleError(shell, title, error);
+    if (!isActiveArticleRender(render)) return;
+    finishArticleRender(render);
+    loading.restore();
+    if (loading.retainedLayout) showRetainedArticleError(shell, title, hash, error);
+    else renderArticleError(shell, title, error, hash);
     return;
   }
+  if (!isActiveArticleRender(render)) return;
 
   const sourceTitle = displayTitle(article.title);
   const sourceDocumentTitle = `${sourceTitle} – Almanpedia`;
-  const fragment = sanitizeParsoidBody(article.html);
-  rewriteArticleDom(fragment);
+  let fragment: DocumentFragment;
+  try {
+    fragment = sanitizeParsoidBody(article.html);
+    rewriteArticleDom(fragment);
+  } catch (error) {
+    if (!isActiveArticleRender(render)) return;
+    finishArticleRender(render);
+    loading.restore();
+    if (loading.retainedLayout) showRetainedArticleError(shell, title, hash, error);
+    else renderArticleError(shell, title, error, hash);
+    console.error("Wikipedia article preparation failed", error);
+    return;
+  }
+
+  loading.commit();
+  stopActiveTranslation();
 
   const heading = el("h1", { class: "article-title", lang: "de" }, [sourceTitle]);
   const toggle = el(
@@ -304,11 +483,17 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     content,
     createArticleAttribution(article.title),
   ]);
+  const articleLayout = el("div", {
+    class: "article-layout",
+    "data-article-enter": "",
+    "data-article-document-title": sourceDocumentTitle,
+  }, [contents.element, articleColumn, el("aside", { class: "appearance-column" }, [settings.element])]);
+  const articleStatus = el("div", { class: "article-status" }, [progress.element]);
+  articleRuntimeByLayout.set(articleLayout, { status: articleStatus });
+  shell.status.replaceChildren(articleStatus);
   shell.main.className = "site-main article-page";
-  shell.main.replaceChildren(
-    el("div", { class: "article-layout" }, [contents.element, articleColumn, el("aside", { class: "appearance-column" }, [settings.element])]),
-  );
-  scrollToArticleHash(hash);
+  shell.main.replaceChildren(articleLayout);
+  scrollToArticlePosition(hash);
   if (document.title !== sourceDocumentTitle) document.title = sourceDocumentTitle;
 
   let showingOriginal = false;
@@ -323,9 +508,13 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     if (!heading.isConnected) return;
     const translatedTitleVisible = !showingOriginal && heading.dataset.almanState === "translated";
     heading.lang = translatedTitleVisible ? "de-AL" : "de";
-    document.title = translatedTitleVisible
-      ? `${heading.textContent ?? sourceTitle} – Almanpedia`
-      : sourceDocumentTitle;
+    if (!shell.main.classList.contains("article-loading")) {
+      const visibleDocumentTitle = translatedTitleVisible
+        ? `${heading.textContent ?? sourceTitle} – Almanpedia`
+        : sourceDocumentTitle;
+      articleLayout.dataset.articleDocumentTitle = visibleDocumentTitle;
+      document.title = visibleDocumentTitle;
+    }
   };
 
   const hideDifferences = () => {
@@ -420,6 +609,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
 
   try {
     await initModel((assetProgress: AssetProgress) => {
+      if (!articleColumn.isConnected) return;
       if (assetProgress.phase === "download") {
         progress.set(
           assetProgress.overallLoaded / assetProgress.overallTotal,
@@ -430,11 +620,14 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       }
     });
   } catch (error) {
+    if (!articleColumn.isConnected) return;
+    finishArticleRender(render);
     progress.done();
-    shell.status.append(el("span", { class: "status-error" }, ["Übersetzung nicht verfügbar — Original wird angezeigt."]));
+    articleStatus.append(el("span", { class: "status-error" }, ["Übersetzung nicht verfügbar — Original wird angezeigt."]));
     console.error("model init failed", error);
     return;
   }
+  if (!articleColumn.isConnected) return;
 
   const controller = createDomTranslator({
     root: articleColumn,
@@ -476,15 +669,19 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   });
   activeController = controller;
   activeRevealController = revealController;
+  if (shell.main.classList.contains("article-loading")) revealController.setPaused(true);
   toggle.removeAttribute("disabled");
   differenceToggle.removeAttribute("disabled");
   controller.start();
   controller.translateAll();
+  finishArticleRender(render);
 }
 
-function renderArticleError(shell: AppShell, title: string, error: unknown): void {
+function renderArticleError(shell: AppShell, title: string, error: unknown, hash?: string): void {
   shell.main.className = "site-main";
+  shell.main.removeAttribute("aria-busy");
   shell.status.replaceChildren();
+  document.title = `${displayTitle(title)} – Almanpedia`;
   if (error instanceof ArticleNotFoundError) {
     shell.main.replaceChildren(
       el("section", { class: "error-view" }, [
@@ -509,7 +706,7 @@ function renderArticleError(shell: AppShell, title: string, error: unknown): voi
       el("p", {}, [
         (() => {
           const retry = el("button", { type: "button", class: "retry" }, ["Erneut versuchen"]);
-          retry.addEventListener("click", () => void renderArticle(shell, title));
+          retry.addEventListener("click", () => void renderArticle(shell, title, hash));
           return retry;
         })(),
       ]),
