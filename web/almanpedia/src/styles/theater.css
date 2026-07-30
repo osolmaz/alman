@@ -134,19 +134,17 @@ html[data-color-mode="dark"] .th-theater {
 
 /* ---------- Act 2: the address, and the page that opens ---------- */
 
+/* One width for every act: the article act sets it, and it must not change when
+   the act does, or the window appears to resize mid-scene. */
 .th-browser {
   gap: 0 !important;
-  width: min(100%, 46rem);
+  width: min(100%, 50rem);
   align-items: stretch !important;
   overflow: hidden;
   background: var(--surface-raised);
   border: 1px solid var(--border);
   border-radius: 0.6rem;
   box-shadow: 0 0.9rem 2.2rem var(--shadow);
-}
-
-.th-stage[data-act="3"] .th-browser {
-  width: min(100%, 50rem);
 }
 
 .th-chrome {
@@ -407,18 +405,22 @@ html[data-color-mode="dark"] .th-theater {
 /* ---------- The word that changes ---------- */
 
 /*
- * Both spellings live in the same box. The one that is not showing is taken out
- * of flow, so the settled text has the spacing it would have if it had been
- * written that way; only during the turnover does the box hold both, which is
- * what lets a word visibly contract as the sentence simplifies.
+ * Both spellings occupy one cell, so the box is always as wide as the longer of
+ * the two and nothing in the sentence moves when the word turns over. Sizing the
+ * box to whichever spelling is showing would be tighter to read, but every
+ * turnover would then shift the words after it and re-wrap the line, which reads
+ * as the whole paragraph twitching. The two spellings differ by at most two
+ * characters here, and the slack is centred, so it costs a little tracking.
  */
 .th-swap {
-  display: inline-block;
+  display: inline-grid;
   position: relative;
+  text-align: center;
   white-space: pre;
 }
 
 .th-swap > span {
+  grid-area: 1 / 1;
   transition:
     opacity calc(220ms / var(--rate)) ease,
     filter calc(220ms / var(--rate)) ease;
@@ -431,26 +433,11 @@ html[data-color-mode="dark"] .th-theater {
 
 .th-swap[data-state="de"] .th-swap-al,
 .th-swap[data-state="hum"] .th-swap-al {
-  position: absolute;
-  top: 0;
-  left: 0;
   opacity: 0;
 }
 
 .th-swap[data-state="al"] .th-swap-de {
-  position: absolute;
-  top: 0;
-  left: 0;
   opacity: 0;
-}
-
-.th-swap[data-state="poof"] {
-  display: inline-grid;
-  text-align: center;
-}
-
-.th-swap[data-state="poof"] > span {
-  grid-area: 1 / 1;
 }
 
 /* Waiting to change: a shake that grows with the stage's hum level. */
@@ -740,38 +727,41 @@ html[data-color-mode="dark"] .th-theater {
   white-space: pre;
 }
 
+/* The ending's own cell: one width for either spelling, in every state. */
+.th-ending {
+  display: inline-grid;
+  text-align: left;
+  white-space: pre;
+}
+
+.th-ending > span {
+  grid-area: 1 / 1;
+}
+
 /*
- * An ending that falls away or arrives. The letters stay inline while they are
- * readable, because an inline-block with clipped overflow puts its baseline at
- * the bottom margin edge and would print the ending as a superscript. Only the
- * collapsing side takes inline-block, where its width can animate to nothing.
+ * An ending that falls away or arrives. Only opacity and transform move: a
+ * collapsing width would re-wrap the phrase, and an inline-block with clipped
+ * overflow both takes its baseline from the bottom margin edge — printing the
+ * ending as a superscript — and inflates the line box, which grew the card by a
+ * line and shifted its whole row.
  */
 .th-drop,
 .th-add {
-  max-width: 3em;
   transition:
-    max-width calc(560ms / var(--rate)) ease,
     opacity calc(420ms / var(--rate)) ease,
     transform calc(560ms / var(--rate)) cubic-bezier(0.4, 0, 0.6, 1);
 }
 
 .th-drop {
-  display: inline;
   color: var(--th-warm);
 }
 
 .th-card[data-state="al"] .th-drop {
-  display: inline-block;
-  max-width: 0;
-  overflow: hidden;
   opacity: 0;
   transform: translateY(0.7em) rotate(9deg);
 }
 
 .th-add {
-  display: inline-block;
-  max-width: 0;
-  overflow: hidden;
   color: var(--th-accent);
   font-weight: 600;
   opacity: 0;
@@ -779,8 +769,6 @@ html[data-color-mode="dark"] .th-theater {
 }
 
 .th-card[data-state="al"] .th-add {
-  display: inline;
-  overflow: visible;
   opacity: 1;
   transform: none;
 }
