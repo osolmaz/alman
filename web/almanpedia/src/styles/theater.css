@@ -575,11 +575,18 @@ html[data-color-mode="dark"] .th-theater {
   place-items: center;
 }
 
+/*
+ * Chip geometry is in em, so the five of them keep the same gaps at every size
+ * and the row is always 19.6em wide. The font size is what adapts, at 4vw, which
+ * is the largest that keeps 19.6em inside the page's own width on a phone.
+ */
 .th-chip {
   grid-area: 1 / 1;
-  padding: 0.45rem 0.95rem;
+  width: 3.7em;
+  padding: 0.45rem 0;
   font-family: var(--font-serif);
-  font-size: clamp(1.5rem, 3.8vw, 2.4rem);
+  font-size: clamp(0.8rem, 4vw, 2.4rem);
+  text-align: center;
   background: var(--paper);
   border: 1px solid var(--border);
   border-radius: 0.4rem;
@@ -591,11 +598,11 @@ html[data-color-mode="dark"] .th-theater {
 }
 
 .th-panel-unify[data-state="spread"] .th-chip[data-form] {
-  transform: translateX(calc(var(--chip-index) * clamp(4rem, 10vw, 6.4rem)));
+  transform: translateX(calc(var(--chip-index) * 4.1em));
 }
 
 .th-panel-unify[data-state="gather"] .th-chip[data-form] {
-  transform: translateX(calc(var(--chip-index) * 1.15rem)) scale(0.97);
+  transform: translateX(calc(var(--chip-index) * 0.85em)) scale(0.97);
 }
 
 .th-panel-unify[data-state="merge"] .th-chip[data-form] {
@@ -626,14 +633,14 @@ html[data-color-mode="dark"] .th-theater {
 }
 
 .th-panel-unify[data-state="genitive"] .th-chip-result {
-  transform: translateX(clamp(-4.6rem, -11vw, -3rem)) scale(0.94);
+  transform: translateX(-2.7em) scale(0.94);
 }
 
 .th-panel-unify[data-state="genitive"] .th-chip-genitive {
   opacity: 1;
   color: var(--th-warm);
   border-color: var(--th-warm);
-  transform: translateX(clamp(3rem, 11vw, 4.6rem)) scale(0.94);
+  transform: translateX(2.7em) scale(0.94);
 }
 
 .th-chips-legend {
@@ -857,13 +864,15 @@ html[data-color-mode="dark"] .th-theater {
   transform: translateX(0.08rem);
 }
 
+/* The bar is drawn as a centred background, so the box can be tall enough to hit
+   with a thumb without the track itself getting fat. */
 .th-seek {
   flex: 1 1 auto;
-  height: 0.4rem;
+  height: 1.5rem;
   appearance: none;
   background:
-    linear-gradient(to right, var(--th-accent) calc(var(--played) * 100%), var(--border-subtle) calc(var(--played) * 100%));
-  border-radius: 999px;
+    linear-gradient(to right, var(--th-accent) calc(var(--played) * 100%), var(--border-subtle) calc(var(--played) * 100%))
+    no-repeat center / 100% 0.4rem;
   cursor: pointer;
 }
 
@@ -925,15 +934,40 @@ html[data-color-mode="dark"] .th-theater {
 }
 
 @media (max-width: 40rem) {
-  /* The article is the tallest act; at this width its four sentences wrap into
-     about thirteen lines, so the stage has to be deeper than it is wide. */
+  /*
+   * One height for every phone, set by the narrowest one. The article act is the
+   * tallest, and it grows as the viewport narrows: measured at 446px tall at a
+   * 320px viewport, 427px at 360px and 390px, 388px at 430px. A height that
+   * scaled with the viewport would therefore give the least room exactly where
+   * the most is needed, so this is flat and sized for 320px.
+   */
   .th-stage {
-    height: clamp(30rem, 122vw, 38rem);
-    grid-template-rows: minmax(0, 1fr) 3.75rem;
+    height: 34rem;
+    grid-template-rows: minmax(0, 1fr) 4.25rem;
   }
 
   .th-stagewrap {
-    padding: 1rem 0.6rem 0.4rem;
+    padding: 0.5rem 0 0.25rem;
+  }
+
+  /* Touch targets: a thumb needs more than the pointer-sized controls above. */
+  .th-play {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .th-seek {
+    height: 2.25rem;
+  }
+
+  .th-rate {
+    min-width: 3.25rem;
+    padding: 0.55rem 0.5rem;
+  }
+
+  .th-chapter {
+    padding: 0.45rem 0.7rem;
+    font-size: 0.78rem;
   }
 
   .th-panel-cards {
