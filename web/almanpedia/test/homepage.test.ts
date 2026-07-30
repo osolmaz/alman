@@ -16,25 +16,36 @@ test("landing introduction explains Alman AI and the self-study audience", () =>
   expect(introduction.textContent).toContain("ein vereinfachte deutsche Dialekt");
   expect(introduction.querySelectorAll('a[href="https://alman.ai/"]')).toHaveLength(2);
   expect(introduction.textContent).toContain("Die interaktive Einführung auf alman.ai");
-  expect(introduction.querySelector('a[href="/wiki/Kartoffel"][data-route]')?.textContent).toBe("Beispielartikel lesen");
+  expect(introduction.querySelector('a[href="/wiki/Sapir-Whorf-Hypothese"][data-route]')?.textContent)
+    .toBe("Beispielartikel lesen");
   expect(introduction.querySelector('a[href="https://alman.ai/al/"]')?.textContent).toBe("Alman-Spezifikation");
 });
 
-test("shortcut guide demonstrates the address replacement and links the local model", () => {
+test("shortcut guide explains the address replacement and links the local model", () => {
   const guide = createShortcutGuide();
 
-  expect(guide.querySelector(".browser-demo")?.getAttribute("aria-hidden")).toBe("true");
-  expect(guide.querySelector(".demo-site-control")).toBeNull();
-  expect(guide.textContent).not.toContain("⌁");
-  expect(guide.querySelector(".demo-address-start")?.textContent).toBe("de.wikipedia.org/wiki/Kartoffel");
-  expect(guide.querySelector(".demo-address-select .demo-selection")?.textContent).toBe("wiki");
-  expect(guide.querySelector(".demo-address-type .demo-typed-word")?.textContent).toBe("alman");
-  expect(guide.querySelector(".demo-address-alias")?.textContent).toBe("de.almanpedia.org/wiki/Kartoffel");
-  expect(guide.querySelector(".demo-address-final")?.textContent).toBe("almanpedia.org/wiki/Kartoffel");
-  expect(guide.querySelector<HTMLAnchorElement>(".shortcut-url")?.href).toBe("https://de.almanpedia.org/wiki/Kartoffel");
+  // The animated mockup moved into the staged figure; this section is prose only.
+  expect(guide.querySelector(".browser-demo")).toBeNull();
+  expect(guide.querySelector<HTMLAnchorElement>(".shortcut-url")?.href)
+    .toBe("https://de.almanpedia.org/wiki/Sapir-Whorf-Hypothese");
   expect(guide.querySelector<HTMLAnchorElement>('a[href="https://huggingface.co/osolmaz/GoePT-1-20M"]')?.textContent).toBe("GoePT-1-20M");
   expect(guide.textContent).toContain("rund 34 MB");
   expect(guide.textContent).toContain("20 Millionen Parameter");
+});
+
+test("shortcut guide states the rules the figure animates, so the page reads without it", () => {
+  const rules = createShortcutGuide().querySelector(".shortcut-rules")!;
+
+  expect(rules.querySelectorAll("dt")).toHaveLength(6);
+  expect(rules.querySelectorAll("dd")).toHaveLength(6);
+  expect(rules.textContent).toContain("§1a");
+  expect(rules.textContent).toContain("§1b");
+  expect(rules.textContent).toContain("§2a");
+  expect(rules.textContent).toContain("§4a");
+  expect(rules.textContent).toContain("§10");
+  expect(rules.textContent).toContain("§1f");
+  expect(rules.querySelector<HTMLAnchorElement>('a[href="https://alman.ai/al/"]')?.textContent)
+    .toBe("Die vollständige Spezifikation");
 });
 
 test("German Wikipedia main page sections omit its welcome box and upward links", () => {

@@ -18,6 +18,7 @@ import {
   WIKIPEDIA_MAIN_PAGE_TITLE,
 } from "./homepage";
 import { createSearchBox } from "./search";
+import { createTheater, type Theater } from "./theater";
 import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
 import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } from "./settings";
 
@@ -33,6 +34,7 @@ const MODEL_REPOSITORY_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
 
 let activeController: DomTranslatorController | null = null;
 let activeRevealController: TranslationRevealController | null = null;
+let activeTheater: Theater | null = null;
 let stopActiveContents: (() => void) | null = null;
 let articleRenderSequence = 0;
 let activeArticleRender: { id: number; controller: AbortController } | null = null;
@@ -59,6 +61,8 @@ function finishArticleRender(render: { id: number }): void {
 }
 
 function stopActiveTranslation(): void {
+  activeTheater?.stop();
+  activeTheater = null;
   activeController?.stop();
   activeController = null;
   activeRevealController?.destroy();
@@ -118,10 +122,13 @@ export async function renderLanding(shell: AppShell): Promise<void> {
   ]);
   shell.main.className = "site-main landing-page";
   shell.status.replaceChildren(progress.element);
+  const theater = createTheater();
+  activeTheater = theater;
   shell.main.replaceChildren(
     el("section", { class: "landing" }, [
       createLandingBrand(),
       createLandingIntroduction(),
+      theater.element,
       createShortcutGuide(),
       el("div", { class: "landing-feed-heading" }, [
         el("h2", {}, ["Aktuell in die deutschsprachige Wikipedia"]),
@@ -130,6 +137,8 @@ export async function renderLanding(shell: AppShell): Promise<void> {
       feed,
     ]),
   );
+  // The autoplay observer needs the stage in the document to measure it.
+  theater.start();
 
   try {
     const page = await fetchArticleHtml(WIKIPEDIA_MAIN_PAGE_TITLE);

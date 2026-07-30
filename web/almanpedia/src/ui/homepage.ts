@@ -1,4 +1,5 @@
 import { el } from "./dom";
+import { DEMO_ARTICLE_PATH, DEMO_ARTICLE_TITLE } from "./theater";
 
 export const WIKIPEDIA_MAIN_PAGE_TITLE = "Wikipedia:Hauptseite";
 
@@ -19,61 +20,19 @@ export function createLandingIntroduction(): HTMLElement {
       "Die aktuelle Inhalte der deutschsprachige Wikipedia erscheinen unten. Almanpedia übersetzt sie lokal in diese Browser.",
     ]),
     el("nav", { class: "landing-links", "aria-label": "Almanpedia entdecken" }, [
-      el("a", { href: "/wiki/Kartoffel", "data-route": "" }, ["Beispielartikel lesen"]),
+      el("a", { href: DEMO_ARTICLE_PATH, "data-route": "" }, ["Beispielartikel lesen"]),
       el("a", { href: "https://alman.ai/al/", target: "_blank", rel: "noopener" }, ["Alman-Spezifikation"]),
     ]),
   ]);
 }
 
+/**
+ * The prose beside the staged figure. The figure demonstrates the address swap
+ * and the Alman rules; this section states them, so the page still explains
+ * itself with the animation paused or unread by assistive technology.
+ */
 export function createShortcutGuide(): HTMLElement {
-  const addressFrames = el("div", { class: "demo-address-text" }, [
-    el("span", { class: "demo-address-frame demo-address-start" }, ["de.wikipedia.org/wiki/Kartoffel"]),
-    el("span", { class: "demo-address-frame demo-address-select" }, [
-      "de.",
-      el("span", { class: "demo-selection" }, ["wiki"]),
-      "pedia.org/wiki/Kartoffel",
-    ]),
-    el("span", { class: "demo-address-frame demo-address-type" }, [
-      "de.",
-      el("span", { class: "demo-typed-word" }, ["alman"]),
-      el("span", { class: "demo-caret" }),
-      "pedia.org/wiki/Kartoffel",
-    ]),
-    el("span", { class: "demo-address-frame demo-address-alias" }, ["de.almanpedia.org/wiki/Kartoffel"]),
-    el("span", { class: "demo-address-frame demo-address-final" }, ["almanpedia.org/wiki/Kartoffel"]),
-  ]);
-  const browserDemo = el("div", { class: "browser-demo", "aria-hidden": "true" }, [
-    el("div", { class: "browser-demo-toolbar" }, [
-      el("div", { class: "browser-demo-tab" }, [
-        el("span", { class: "browser-demo-controls" }, [el("i"), el("i"), el("i")]),
-        el("span", { class: "browser-demo-tab-title" }, ["Kartoffel"]),
-      ]),
-      el("div", { class: "browser-demo-address" }, [
-        addressFrames,
-        el("kbd", { class: "demo-enter" }, ["↵"]),
-      ]),
-      el("div", { class: "browser-demo-progress" }),
-    ]),
-    el("div", { class: "browser-demo-page" }, [
-      el("div", { class: "demo-source-page" }, [
-        el("span", { class: "demo-site-name" }, ["Wikipedia"]),
-        el("h3", {}, ["Kartoffel"]),
-        el("div", { class: "demo-copy-line demo-copy-line-long" }),
-        el("div", { class: "demo-copy-line" }),
-        el("div", { class: "demo-copy-line demo-copy-line-short" }),
-      ]),
-      el("div", { class: "demo-target-page" }, [
-        el("img", { src: "/brand/almanpedia-wordmark.svg", alt: "" }),
-        el("h3", {}, ["Kartoffel"]),
-        el("div", { class: "demo-copy-line demo-copy-line-long" }),
-        el("div", { class: "demo-copy-line" }),
-        el("div", { class: "demo-copy-line demo-copy-line-short" }),
-      ]),
-    ]),
-  ]);
-
   return el("section", { class: "shortcut-guide", "aria-labelledby": "shortcut-title" }, [
-    browserDemo,
     el("div", { class: "shortcut-copy" }, [
       el("h2", { id: "shortcut-title" }, ["Ein Wort in die Adresse ändern"]),
       el("p", {}, [
@@ -87,10 +46,10 @@ export function createShortcutGuide(): HTMLElement {
       ]),
       el("a", {
         class: "shortcut-url",
-        href: "https://de.almanpedia.org/wiki/Kartoffel",
+        href: `https://de.almanpedia.org/wiki/${DEMO_ARTICLE_TITLE}`,
         target: "_blank",
         rel: "noopener",
-      }, ["de.almanpedia.org/wiki/Kartoffel"]),
+      }, [`de.almanpedia.org/wiki/${DEMO_ARTICLE_TITLE}`]),
       el("p", {}, ["Sie können auch die Suche oben benutzen."]),
       el("h3", {}, ["Übersetzung in die Browser"]),
       el("p", {}, [
@@ -98,6 +57,24 @@ export function createShortcutGuide(): HTMLElement {
         el("a", { href: "https://huggingface.co/osolmaz/GoePT-1-20M", target: "_blank", rel: "noopener" }, ["GoePT-1-20M"]),
         ", ein Modell mit 20 Millionen Parameter. Bei die erste Besuch lädt die Browser rund 34 MB herunter und speichert die Modell lokal. Artikeltexte werden an kein Almanpedia-Inferenzserver übertragen.",
       ]),
+    ]),
+    el("div", { class: "shortcut-rules" }, [
+      el("h3", {}, ["Die Regeln in die Animation"]),
+      el("dl", {}, [
+        el("dt", {}, ["Alle Artikel werden die"]),
+        el("dd", {}, ["„der“, „die“, „das“, „den“ und „dem“ fallen zu ein Form zusammen (§1a)."]),
+        el("dt", {}, ["In die Genitiv bleibt der"]),
+        el("dd", {}, ["Die Endung fällt weg: „des Hundes“ wird der Hund (§1b, §3a)."]),
+        el("dt", {}, ["Ein für alle unbestimmte Artikel"]),
+        el("dd", {}, ["„ein“, „eine“, „einen“ und „einem“ werden ein (§2a)."]),
+        el("dt", {}, ["Jede Adjektivendung wird -e"]),
+        el("dd", {}, ["„ein guter Mann“ wird ein gute Mann (§4a)."]),
+        el("dt", {}, ["Kein Suffix -in"]),
+        el("dd", {}, ["„die Lehrerin“ und „die Lehrer“ werden ein Wort (§10)."]),
+        el("dt", {}, ["Verschmelzungen werden aufgelöst"]),
+        el("dd", {}, ["„ins Kino“ wird in die Kino (§1f)."]),
+      ]),
+      el("a", { href: "https://alman.ai/al/", target: "_blank", rel: "noopener" }, ["Die vollständige Spezifikation"]),
     ]),
   ]);
 }
