@@ -19,20 +19,38 @@ import { createScene, createTransport, type Chapter, type Cue } from "./scene";
 
 export const DEMO_ARTICLE_TITLE = "Sapir-Whorf-Hypothese";
 export const DEMO_ARTICLE_PATH = `/wiki/${DEMO_ARTICLE_TITLE}`;
-export const SCENE_DURATION_MS = 82_000;
+/**
+ * Long, deliberately. Every caption is a sentence a visitor has to be able to
+ * finish reading before the next one replaces it, and the article act has to
+ * read four sentences at a pace a learner can follow. The speed control goes to
+ * 2× and the chapter markers skip, for anyone who would rather not wait.
+ */
+export const SCENE_DURATION_MS = 116_000;
 
 const WORDMARK_SRC = "/brand/almanpedia-wordmark.svg";
 const EMBLEM_SRC = "/brand/almanpedia-potato-192.png";
 
-/** A word that differs between Standard German and Alman. */
+/**
+ * A word that differs between Standard German and Alman.
+ *
+ * The two kinds turn over at different times in the article act. An `article`
+ * changes under the reading head, as soon as the line is read, because that is
+ * the rule a visitor can follow at a glance. A `form` — an ending, a possessive,
+ * the relativizer — waits until the whole page has been read, then shakes and
+ * turns over with the rest, which keeps the subtler changes together.
+ */
 interface Swap {
   de: string;
   al: string;
+  kind: "article" | "form";
 }
 
 type Piece = string | Swap;
 
-const swap = (de: string, al: string): Swap => ({ de, al });
+const article = (de: string, al: string): Swap => ({ de, al, kind: "article" });
+const form = (de: string, al: string): Swap => ({ de, al, kind: "form" });
+/** Acts 5 and 6 have one turnover, so their swaps take the article timing. */
+const swap = article;
 
 /**
  * The lede of https://de.wikipedia.org/wiki/Sapir-Whorf-Hypothese, shortened to
@@ -43,39 +61,39 @@ const swap = (de: string, al: string): Swap => ({ de, al });
 const ARTICLE_LINES: Piece[][] = [
   [
     "Die Sapir-Whorf-Hypothese ist ",
-    swap("eine", "ein"),
+    article("eine", "ein"),
     " Annahme aus ",
-    swap("der", "die"),
+    article("der", "die"),
     " Sprachwissenschaft, ",
-    swap("der", "das"),
+    form("der", "das"),
     " zufolge die Sprache ",
-    swap("das", "die"),
+    article("das", "die"),
     " Denken beeinflusst.",
   ],
   [
     "Sie wurde posthum abgeleitet aus Schriften von Benjamin Lee Whorf, ",
-    swap("der", "das"),
+    form("der", "das"),
     " sich wiederum auf ",
-    swap("seinen", "sein"),
+    form("seinen", "sein"),
     " Lehrer Edward Sapir berief.",
   ],
   [
-    swap("Unsere", "Unser"),
+    form("Unsere", "Unser"),
     " Eindrücke und Erfahrungen mit ",
-    swap("der", "die"),
+    article("der", "die"),
     " Umwelt lassen sich unterschiedlich ausdrücken.",
   ],
   [
     "Die Hypothese versucht ",
-    swap("eine", "ein"),
+    article("eine", "ein"),
     " Antwort auf die Frage zu finden, ob und wie ",
-    swap("eine", "ein"),
+    article("eine", "ein"),
     " bestimmte Sprache mit ",
-    swap("ihren", "ihr"),
+    form("ihren", "ihr"),
     " ",
-    swap("grammatikalischen", "grammatikalische"),
+    form("grammatikalischen", "grammatikalische"),
     " Strukturen die Welterfahrung der ",
-    swap("betreffenden", "betreffende"),
+    form("betreffenden", "betreffende"),
     " Sprachgemeinschaft beeinflusst.",
   ],
 ];
@@ -140,41 +158,59 @@ const RULE_CARDS: RuleCard[] = [
 
 const CHAPTERS: Chapter[] = [
   { t: 0, label: "Start" },
-  { t: 5_000, label: "Adresse" },
-  { t: 17_000, label: "Artikel" },
-  { t: 45_000, label: "Ein Artikel" },
-  { t: 55_000, label: "Beispiele" },
-  { t: 65_000, label: "Endungen" },
+  { t: 7_000, label: "Adresse" },
+  { t: 23_000, label: "Artikel" },
+  { t: 63_000, label: "Ein Artikel" },
+  { t: 76_500, label: "Beispiele" },
+  { t: 89_000, label: "Endungen" },
 ];
 
+interface Counter {
+  count: number;
+}
+
+/** One counter per set of words that turns over together. */
+type Orders = Record<Swap["kind"], Counter>;
+
+const orders = (): Orders => ({ article: { count: 0 }, form: { count: 0 } });
+
 /**
- * Swaps carry their position within their own group, so each turnover reads as
- * a wave across that group rather than one flash, and a later group does not
+ * Swaps carry their position within their own turnover, so each one reads as a
+ * wave across those words rather than one flash, and a later turnover does not
  * inherit the delay of an earlier one.
  */
-function swapElement(value: Swap, order: { count: number }): HTMLElement {
-  const element = el("span", { class: "th-swap", "data-swap": "", "data-state": "de" }, [
+function swapElement(value: Swap, order: Orders): HTMLElement {
+  const element = el("span", {
+    class: "th-swap",
+    "data-swap": "",
+    "data-kind": value.kind,
+    "data-state": "de",
+  }, [
     el("span", { class: "th-swap-de" }, [value.de]),
     el("span", { class: "th-swap-al" }, [value.al]),
   ]);
-  element.style.setProperty("--swap-index", String(order.count++));
+  element.style.setProperty("--swap-index", String(order[value.kind].count++));
   if (value.de === value.al) element.dataset.same = "";
   return element;
 }
 
-function renderPieces(pieces: Piece[], order: { count: number }): Node[] {
+function renderPieces(pieces: Piece[], order: Orders): Node[] {
   return pieces.map((piece) => (typeof piece === "string" ? document.createTextNode(piece) : swapElement(piece, order)));
 }
 
 function endingElement(ending: Ending): HTMLElement {
-  return el("span", { class: "th-word" }, [
-    ending.stem,
+  const parts = [
     ...(ending.drop ? [el("span", { class: "th-drop" }, [ending.drop])] : []),
     ...(ending.add ? [el("span", { class: "th-add" }, [ending.add])] : []),
-  ]);
+  ];
+  // The ending gets a cell of its own, wide enough for either spelling and never
+  // resized, so nothing in the phrase moves when the letters fall away or arrive.
+  // Where an ending only falls away, the reserved space ends up as trailing
+  // whitespace in a left-aligned phrase, which is invisible.
+  return el("span", { class: "th-word" }, [ending.stem, el("span", { class: "th-ending" }, parts)]);
 }
 
-function ruleCard(card: RuleCard, order: { count: number }): HTMLElement {
+function ruleCard(card: RuleCard, order: Orders): HTMLElement {
   const phrase = el("p", { class: "th-card-phrase" }, card.pieces.map((piece) => {
     if (typeof piece === "string") return document.createTextNode(piece);
     return "stem" in piece ? endingElement(piece) : swapElement(piece, order);
@@ -202,9 +238,11 @@ function wordmark(className: string): HTMLImageElement {
 }
 
 function buildStage(): HTMLElement {
-  const articleOrder = { count: 0 };
-  const rowOrder = { count: 0 };
-  const cardOrder = { count: 0 };
+  // Each set of words that turns over together counts from zero: one counter per
+  // article line, one shared counter for the forms that all turn over at the end.
+  const pageOrder = orders();
+  const lineOrder = () => ({ article: { count: 0 }, form: pageOrder.form });
+  const rowOrder = orders();
 
   const logo = el("div", { class: "th-logo", "data-logo": "" }, [
     brandEmblem("th-logo-emblem"),
@@ -246,7 +284,7 @@ function buildStage(): HTMLElement {
         el("h3", { class: "th-page-title" }, [DEMO_ARTICLE_TITLE]),
         ...ARTICLE_LINES.map((line, index) =>
           el("p", { class: "th-line", "data-line": String(index), "data-scan": "none" },
-            renderPieces(line, articleOrder)),
+            renderPieces(line, lineOrder())),
         ),
       ]),
     ]),
@@ -254,8 +292,8 @@ function buildStage(): HTMLElement {
 
   const unify = el("div", { class: "th-panel th-panel-unify", "data-unify": "", "data-state": "spread" }, [
     el("div", { class: "th-chips" }, [
-      ...ARTICLE_FORMS.map((form, index) => {
-        const chip = el("span", { class: "th-chip", "data-form": "" }, [form]);
+      ...ARTICLE_FORMS.map((value, index) => {
+        const chip = el("span", { class: "th-chip", "data-form": "" }, [value]);
         chip.style.setProperty("--chip-index", String(index - (ARTICLE_FORMS.length - 1) / 2));
         return chip;
       }),
@@ -271,7 +309,7 @@ function buildStage(): HTMLElement {
     ));
 
   const cards = el("div", { class: "th-panel th-panel-cards", "data-cards": "" },
-    RULE_CARDS.map((card) => ruleCard(card, cardOrder)));
+    RULE_CARDS.map((card) => ruleCard(card, orders())));
 
   // Not a control: a focusable link inside an aria-hidden stage would be a trap,
   // and the real links to the article sit in the copy beside the figure.
@@ -331,7 +369,11 @@ export function createTheater(): Theater {
   const lines = [...stage.querySelectorAll<HTMLElement>("[data-line]")];
   const rowElements = [...stage.querySelectorAll<HTMLElement>("[data-row]")];
   const cardElements = [...stage.querySelectorAll<HTMLElement>("[data-card]")];
-  const articleSwaps = lines.map((line) => [...line.querySelectorAll<HTMLElement>("[data-swap]")]);
+  const pick = (scope: Element, kind: Swap["kind"]) =>
+    [...scope.querySelectorAll<HTMLElement>(`[data-swap][data-kind="${kind}"]`)];
+  /** Articles turn over line by line under the head; forms wait for the end. */
+  const lineArticles = lines.map((line) => pick(line, "article"));
+  const pageForms = pick(page, "form");
 
   const act = (value: string) => (stage.dataset.act = value);
   const hum = (level: string) => (stage.dataset.hum = level);
@@ -356,6 +398,11 @@ export function createTheater(): Theater {
     }
   };
 
+  /**
+   * Cue times leave room to read. No caption is replaced inside 2.4 seconds, the
+   * reading head spends four seconds on a line, and the shaking runs long enough
+   * to be understood as waiting rather than as an error.
+   */
   const cues: Cue[] = [
     // Act 1 — the brand, and the one-time model download. This one sits at zero
     // so the first frame is a finished picture: the figure holds it until the
@@ -369,24 +416,24 @@ export function createTheater(): Theater {
       },
     },
     {
-      t: 1_000,
+      t: 1_200,
       fn: () => {
         boot.dataset.state = "loading";
         say("Die Modell lädt ein Mal in die Browser: rund 34 MB.");
       },
     },
     {
-      t: 3_300,
+      t: 4_600,
       fn: () => {
         boot.dataset.state = "ready";
         say("Bereit. Kein Artikeltext verlässt diese Browser.");
       },
     },
-    { t: 4_400, fn: () => { hide(logo); boot.dataset.state = "ready"; } },
+    { t: 6_400, fn: () => { hide(logo); boot.dataset.state = "ready"; } },
 
     // Act 2 — four letters in the address.
     {
-      t: 5_000,
+      t: 7_000,
       fn: () => {
         act("2");
         show(browser);
@@ -395,22 +442,22 @@ export function createTheater(): Theater {
       },
     },
     {
-      t: 6_600,
+      t: 9_200,
       fn: () => {
         omnibox.dataset.stage = "select";
         say("Vier Buchstaben markieren: „wiki“.");
       },
     },
     {
-      t: 8_000,
+      t: 11_000,
       fn: () => {
         omnibox.dataset.stage = "type";
         say("„alman“ tippen.");
       },
     },
-    { t: 10_400, fn: () => show(enter) },
+    { t: 13_600, fn: () => show(enter) },
     {
-      t: 11_000,
+      t: 14_300,
       fn: () => {
         hide(enter);
         omnibox.dataset.stage = "alias";
@@ -419,7 +466,7 @@ export function createTheater(): Theater {
       },
     },
     {
-      t: 12_400,
+      t: 16_000,
       fn: () => {
         omnibox.dataset.stage = "final";
         load.dataset.state = "done";
@@ -427,54 +474,69 @@ export function createTheater(): Theater {
         say("Die gleiche Artikel, jetzt in Almanpedia.");
       },
     },
-    { t: 13_400, fn: () => show(lines[0]!) },
-    { t: 14_200, fn: () => show(lines[1]!) },
-    { t: 15_000, fn: () => show(lines[2]!) },
-    { t: 15_800, fn: () => show(lines[3]!) },
-    { t: 16_600, fn: () => say("Die Text steht noch in Standarddeutsch.") },
+    { t: 17_000, fn: () => show(lines[0]!) },
+    { t: 17_800, fn: () => show(lines[1]!) },
+    { t: 18_600, fn: () => show(lines[2]!) },
+    { t: 19_400, fn: () => show(lines[3]!) },
+    { t: 20_200, fn: () => say("Die Text steht noch in Standarddeutsch.") },
 
-    // Act 3 — the scan, the shaking, and the turnover.
+    // Act 3, first half — the head reads a line and its articles turn over.
     {
-      t: 17_000,
+      t: 23_000,
       fn: () => {
         act("3");
         say("Die Übersetzung liest die Artikel Zeile für Zeile.");
       },
     },
-    { t: 17_800, fn: () => { scanTo(0); hum("1"); setSwaps(articleSwaps[0]!, "hum"); } },
-    { t: 20_800, fn: () => { scanTo(1); hum("1"); setSwaps(articleSwaps[1]!, "hum"); } },
-    { t: 23_800, fn: () => { scanTo(2); hum("1"); setSwaps(articleSwaps[2]!, "hum"); } },
+    ...lines.flatMap((_, index): Cue[] => {
+      const at = 24_000 + index * 4_000;
+      return [
+        { t: at, fn: () => scanTo(index) },
+        { t: at + 1_500, fn: () => setSwaps(lineArticles[index]!, "poof") },
+        { t: at + 2_400, fn: () => setSwaps(lineArticles[index]!, "al") },
+      ];
+    }),
+    { t: 26_600, fn: () => say("Jede Artikelform wechselt sofort auf die.") },
+    { t: 30_600, fn: () => say("Manche Zeile hat kein Artikel, nur Endungen.") },
     {
-      t: 26_800,
+      t: 40_000,
       fn: () => {
-        scanTo(3);
-        hum("1");
-        setSwaps(articleSwaps[3]!, "hum");
-        say("Die Stellen, das sich ändern, fangen an zu zittern.");
+        scanTo(lines.length);
+        say("Alles gelesen. Jede Artikelform steht jetzt in Alman.");
       },
     },
-    { t: 29_800, fn: () => { scanTo(lines.length); hum("2"); } },
-    { t: 32_800, fn: () => { hum("3"); say("Je länger ein Stelle wartet, desto stärker."); } },
+
+    // Act 3, second half — what is left shakes, then turns over together.
     {
-      t: 35_300,
+      t: 44_000,
+      fn: () => {
+        hum("1");
+        setSwaps(pageForms, "hum");
+        say("Es bleiben die Endungen und die Pronomen.");
+      },
+    },
+    { t: 47_600, fn: () => { hum("2"); say("Je länger ein Stelle wartet, desto stärker."); } },
+    { t: 51_000, fn: () => hum("3") },
+    {
+      t: 53_000,
       fn: () => {
         hum("3");
-        setSwaps(page, "poof");
+        setSwaps(pageForms, "poof");
         say("Poof.");
       },
     },
     {
-      t: 37_600,
+      t: 55_000,
       fn: () => {
         hum("0");
-        setSwaps(page, "al");
+        setSwaps(pageForms, "al");
         page.dataset.lang = "al";
         pageLang.textContent = "de-AL";
-        say("Alle Artikel sind jetzt die. Nur die Genitiv behält der.");
+        say("Fertig. Nur die Genitiv behält der.");
       },
     },
     {
-      t: 41_200,
+      t: 59_000,
       fn: () => {
         scanTo(-1);
         say("Kein Wort ist verschwunden. Nur die Endungen sind weg.");
@@ -483,7 +545,7 @@ export function createTheater(): Theater {
 
     // Act 4 — five forms, one article.
     {
-      t: 45_000,
+      t: 63_000,
       fn: () => {
         act("4");
         hide(browser);
@@ -492,50 +554,50 @@ export function createTheater(): Theater {
         say("Standarddeutsch hat fünf Formen für ein Artikel.");
       },
     },
-    { t: 46_600, fn: () => (unify.dataset.state = "gather") },
-    { t: 48_400, fn: () => (unify.dataset.state = "merge") },
+    { t: 65_000, fn: () => (unify.dataset.state = "gather") },
+    { t: 67_000, fn: () => (unify.dataset.state = "merge") },
     {
-      t: 49_600,
+      t: 68_400,
       fn: () => {
         unify.dataset.state = "merged";
         say("In Alman bleibt ein Form übrig.");
       },
     },
     {
-      t: 52_400,
+      t: 72_000,
       fn: () => {
         unify.dataset.state = "genitive";
         say("Ein Ausnahme: in die Genitiv steht der, wie in „die Haus der Mann“.");
       },
     },
-    { t: 54_400, fn: () => { hide(unify); unify.dataset.state = "genitive"; } },
+    { t: 76_000, fn: () => { hide(unify); unify.dataset.state = "genitive"; } },
 
     // Act 5 — the same article in front of three nouns.
     {
-      t: 55_000,
+      t: 76_500,
       fn: () => {
         act("5");
         show(rows);
         say("Drei Substantive, drei Genus in Standarddeutsch.");
       },
     },
-    { t: 56_400, fn: () => show(rowElements[0]!) },
-    { t: 57_200, fn: () => show(rowElements[1]!) },
-    { t: 58_000, fn: () => show(rowElements[2]!) },
-    { t: 59_200, fn: () => setSwaps(rows, "poof") },
+    { t: 78_200, fn: () => show(rowElements[0]!) },
+    { t: 79_200, fn: () => show(rowElements[1]!) },
+    { t: 80_200, fn: () => show(rowElements[2]!) },
+    { t: 81_800, fn: () => setSwaps(rows, "poof") },
     {
-      t: 60_600,
+      t: 83_200,
       fn: () => {
         setSwaps(rows, "al");
         say("die Mann, die Frau, die Kind.");
       },
     },
-    { t: 62_600, fn: () => say("Die Substantiv bleibt, wie es war.") },
-    { t: 64_400, fn: () => hide(rows) },
+    { t: 86_200, fn: () => say("Die Substantiv bleibt, wie es war.") },
+    { t: 88_800, fn: () => hide(rows) },
 
-    // Act 6 — the ending rules.
+    // Act 6 — the ending rules, one card at a time.
     {
-      t: 65_000,
+      t: 89_000,
       fn: () => {
         act("6");
         show(cards);
@@ -543,11 +605,11 @@ export function createTheater(): Theater {
       },
     },
     ...cardElements.flatMap((card, index): Cue[] => {
-      const at = 66_200 + index * 2_100;
+      const at = 90_500 + index * 3_000;
       return [
         { t: at, fn: () => show(card) },
         {
-          t: at + 900,
+          t: at + 1_100,
           fn: () => {
             card.dataset.state = "al";
             setSwaps(card, "al");
@@ -556,11 +618,11 @@ export function createTheater(): Theater {
       ];
     }),
     {
-      t: 79_000,
+      t: 108_500,
       fn: () => say("Ein Artikel, ein Adjektivendung, kein Genusregeln."),
     },
     {
-      t: 80_200,
+      t: 111_500,
       fn: () => {
         hide(cards);
         show(outro);
