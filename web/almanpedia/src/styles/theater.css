@@ -8,6 +8,8 @@
   --rate: 1;
   --amp: 1;
   --hum-speed: 300ms;
+  /* One sweep across one line. The turnover delays below divide it. */
+  --scan-duration: 2800ms;
   --th-accent: #36c;
   --th-accent-soft: rgb(51 102 204 / 12%);
   --th-accent-line: rgb(51 102 204 / 45%);
@@ -381,24 +383,31 @@ html[data-color-mode="dark"] .th-theater {
 
 /* The reading head is a sweep inside the active line, so it needs no measured
    pixel offsets and survives any reflow the article text takes. */
+/*
+ * The band is 30% of the line wide, and the keyframe is written so its centre
+ * travels from 0% to 100% of the line: with `background-size: S`, a position P
+ * puts the left edge at P(100-S)/100, so a centre at 0% needs P = -S/2/(1-S/100)
+ * = -21.4% and a centre at 100% needs P = 121.4%. That linearity is what lets a
+ * word compute when the band reaches it as a plain fraction of the duration.
+ */
 .th-line[data-scan="active"]::before {
   position: absolute;
   inset: -0.1rem -0.45rem;
   content: "";
   background:
-    linear-gradient(90deg, transparent 0%, var(--th-accent-soft) 42%, var(--th-accent-line) 50%, var(--th-accent-soft) 58%, transparent 100%)
+    linear-gradient(90deg, transparent 0%, var(--th-accent-soft) 34%, var(--th-accent-line) 50%, var(--th-accent-soft) 66%, transparent 100%)
     no-repeat;
-  background-size: 55% 100%;
-  animation: th-scan calc(2800ms / var(--rate)) linear both;
+  background-size: 30% 100%;
+  animation: th-scan calc(var(--scan-duration) / var(--rate)) linear both;
 }
 
 @keyframes th-scan {
   from {
-    background-position: -60% 0;
+    background-position: -21.4% 0;
   }
 
   to {
-    background-position: 160% 0;
+    background-position: 121.4% 0;
   }
 }
 
@@ -505,6 +514,17 @@ html[data-color-mode="dark"] .th-theater {
   border-radius: 50%;
   animation: th-burst calc(640ms / var(--rate)) ease-out both;
   animation-delay: calc(var(--swap-index, 0) * 80ms / var(--rate));
+}
+
+/*
+ * An article waits for the sweep to reach its own column, so the words turn over
+ * behind the band instead of together when it leaves the line. --sweep-at is the
+ * word's centre as a fraction of its line, measured once by the figure.
+ */
+.th-swap[data-kind="article"][data-state="poof"] .th-swap-de,
+.th-swap[data-kind="article"][data-state="poof"] .th-swap-al,
+.th-swap[data-kind="article"][data-state="poof"]:not([data-same])::after {
+  animation-delay: calc((var(--sweep-at, 0) * var(--scan-duration) + 140ms) / var(--rate));
 }
 
 @keyframes th-poof-out {

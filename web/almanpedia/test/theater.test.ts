@@ -49,16 +49,23 @@ test("the demo article is the German Wikipedia lede on the Sapir-Whorf hypothesi
   ]);
 });
 
-test("the Alman layer of the article is the German layer under the article and ending rules", () => {
+/**
+ * Recorded from GoePT-1-20M itself, through the pinned transformers adapter over
+ * the digest-verified local package, with MODEL_PACKAGE's generation parameters.
+ * If the production model changes, this is expected to fail: re-record it rather
+ * than hand-editing the expectation, because the figure claims to show what the
+ * shipped translator does with this article.
+ */
+test("the Alman layer of the article is what the shipped model returns", () => {
   const { stage } = mount();
   const lines = [...stage.querySelectorAll<HTMLElement>("[data-line]")];
 
   expect(lines.map((line) => layerText(line, "al"))).toEqual([
-    "Die Sapir-Whorf-Hypothese ist ein Annahme aus die Sprachwissenschaft, das zufolge die Sprache die Denken beeinflusst.",
-    "Sie wurde posthum abgeleitet aus Schriften von Benjamin Lee Whorf, das sich wiederum auf sein Lehrer Edward Sapir berief.",
+    "Die Sapir-Whorf-Hypothese ist ein Annahme aus die Sprachwissenschaft, die zufolge die Sprache die Denken beeinflusst.",
+    "Es wurde posthum abgeleitet aus Schriften von Benjamin Lee Whorf, die sich wiederum auf sein Lehrer Edward Sapir berief.",
     "Unser Eindrücke und Erfahrungen mit die Umwelt lassen sich unterschiedlich ausdrücken.",
-    "Die Hypothese versucht ein Antwort auf die Frage zu finden, ob und wie ein bestimmte Sprache mit ihr"
-      + " grammatikalische Strukturen die Welterfahrung der betreffende Sprachgemeinschaft beeinflusst.",
+    "Die Hypothese versucht ein Antwort auf die Frage zu finden, ob und wie ein bestimmte Sprache mit sein"
+      + " grammatikalische Strukturen die Welterfahrung von die betreffende Sprachgemeinschaft beeinflusst.",
   ]);
 });
 
@@ -72,11 +79,13 @@ test("each changed word carries the Alman form the specification requires", () =
   // §1a articles, §2a indefinite, §6f relativizer, §7c possessive, §4a endings.
   expect(pairs).toContainEqual(["eine", "ein"]);
   expect(pairs).toContainEqual(["der", "die"]);
-  expect(pairs).toContainEqual(["der", "das"]);
+  expect(pairs).toContainEqual(["der", "die"]);
   expect(pairs).toContainEqual(["das", "die"]);
   expect(pairs).toContainEqual(["seinen", "sein"]);
   expect(pairs).toContainEqual(["Unsere", "Unser"]);
-  expect(pairs).toContainEqual(["ihren", "ihr"]);
+  expect(pairs).toContainEqual(["Sie", "Es"]);
+  expect(pairs).toContainEqual(["ihren", "sein"]);
+  expect(pairs).toContainEqual(["der", "von die"]);
   expect(pairs).toContainEqual(["grammatikalischen", "grammatikalische"]);
   expect(pairs).toContainEqual(["betreffenden", "betreffende"]);
 });
@@ -92,7 +101,7 @@ test("each turnover counts its own wave, so a later one is not held back", () =>
   expect(indexes('[data-line="2"] [data-kind="article"]')).toEqual([0]);
   expect(indexes('[data-line="3"] [data-kind="article"]')).toEqual([0, 1]);
   // The forms all turn over together, so they run as one sequence down the page.
-  expect(indexes('[data-page] [data-kind="form"]')).toEqual([0, 1, 2, 3, 4, 5, 6]);
+  expect(indexes('[data-page] [data-kind="form"]')).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8]);
   expect(indexes("[data-rows] [data-swap]")).toEqual([0, 1, 2]);
   expect(indexes("[data-cards] [data-swap]")[0]).toBe(0);
 });
@@ -119,12 +128,13 @@ test("articles turn over under the reading head, one line at a time", () => {
     [...stage.querySelectorAll<HTMLElement>(`[data-line="${line}"] [data-kind="${kind}"]`)]
       .map((swap) => swap.dataset.state);
 
-  theater.seekTo(27_000);
+  theater.seekTo(28_000);
   expect(lineKinds(0, "article")).toEqual(["al", "al", "al"]);
   // The head has not reached the last line, so its articles are untouched.
   expect(lineKinds(3, "article")).toEqual(["de", "de"]);
 
-  theater.seekTo(39_000);
+  // The last line starts at 36s and its articles have settled by 39.7s.
+  theater.seekTo(40_500);
   expect(new Set(kinds("article"))).toEqual(new Set(["al"]));
 });
 
