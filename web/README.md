@@ -45,7 +45,10 @@ app assets is asserted hash-identical to the qualified package by
   hard-fails if unsupported) and rewrites them, then schedules the complete
   article for translation in the visitor's browser. The reader includes a
   Wikipedia-like responsive layout, persistent motion settings, source toggles,
-  and a word-level comparison. Deployed to Cloudflare Pages. A Cloudflare
+  and a word-level comparison. The landing page carries a six-act seekable
+  figure (`src/ui/theater.ts` on the cue clock in `src/ui/scene.ts`) that walks
+  through the address swap, an article simplifying line by line, and the Alman
+  article and ending rules. Deployed to Cloudflare Pages. A Cloudflare
   Single Redirect sends `de.almanpedia.org` to the canonical host, so swapping
   `wikipedia` → `almanpedia` in any German Wikipedia URL opens the same path.
 

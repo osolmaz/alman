@@ -1,0 +1,958 @@
+/*
+ * The landing page figure. Every duration is divided by --rate, which the scene
+ * clock writes to the stage, so the speed control slows the motion and the cues
+ * together instead of leaving snappy transitions under a slow timeline.
+ */
+
+.th-theater {
+  --rate: 1;
+  --amp: 1;
+  --hum-speed: 300ms;
+  --th-accent: #36c;
+  --th-accent-soft: rgb(51 102 204 / 12%);
+  --th-accent-line: rgb(51 102 204 / 45%);
+  --th-warm: #a8600b;
+  --th-warm-soft: rgb(168 96 11 / 14%);
+  margin: 0 0 2.75rem;
+}
+
+html[data-color-mode="dark"] .th-theater {
+  --th-accent: #88a3e8;
+  --th-accent-soft: rgb(136 163 232 / 16%);
+  --th-accent-line: rgb(136 163 232 / 50%);
+  --th-warm: #e3a857;
+  --th-warm-soft: rgb(227 168 87 / 18%);
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-color-mode="auto"] .th-theater {
+    --th-accent: #88a3e8;
+    --th-accent-soft: rgb(136 163 232 / 16%);
+    --th-accent-line: rgb(136 163 232 / 50%);
+    --th-warm: #e3a857;
+    --th-warm-soft: rgb(227 168 87 / 18%);
+  }
+}
+
+.th-stagewrap {
+  padding: 1.25rem 1rem 0.5rem;
+  overflow: hidden;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+.th-stage {
+  height: clamp(24rem, 44vw, 31rem);
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) 3.25rem;
+  place-items: center;
+}
+
+/* Every act occupies the same cell, so switching acts never moves the page. */
+.th-stage > :not(.th-caption) {
+  grid-area: 1 / 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(0.7rem) scale(0.985);
+  transition:
+    opacity calc(560ms / var(--rate)) ease,
+    transform calc(560ms / var(--rate)) ease;
+  pointer-events: none;
+}
+
+.th-stage > .is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* A seek replays a prefix of the cue list; nothing may animate while it does. */
+.th-stage.is-seeking,
+.th-stage.is-seeking * {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ---------- Act 1: brand and the one-time download ---------- */
+
+.th-logo {
+  gap: 1.1rem !important;
+}
+
+.th-logo-emblem {
+  width: clamp(4.5rem, 10vw, 6.5rem);
+  height: auto;
+  filter: var(--brand-filter);
+  transform: scale(0.9);
+  transition: transform calc(1400ms / var(--rate)) cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.th-logo.is-in .th-logo-emblem {
+  transform: scale(1);
+}
+
+.th-logo-wordmark {
+  width: min(19rem, 62%);
+  height: auto;
+  filter: var(--brand-filter);
+}
+
+.th-boot {
+  width: min(18rem, 60%);
+  height: 0.4rem;
+  overflow: hidden;
+  background: var(--border-subtle);
+  border-radius: 999px;
+}
+
+.th-boot i {
+  height: 100%;
+  display: block;
+  background: var(--th-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform calc(2200ms / var(--rate)) linear;
+}
+
+.th-boot[data-state="loading"] i {
+  transform: scaleX(0.88);
+}
+
+.th-boot[data-state="ready"] i {
+  transform: scaleX(1);
+  transition-duration: calc(320ms / var(--rate));
+}
+
+/* ---------- Act 2: the address, and the page that opens ---------- */
+
+.th-browser {
+  gap: 0 !important;
+  width: min(100%, 46rem);
+  align-items: stretch !important;
+  overflow: hidden;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  box-shadow: 0 0.9rem 2.2rem var(--shadow);
+}
+
+.th-stage[data-act="3"] .th-browser {
+  width: min(100%, 50rem);
+}
+
+.th-chrome {
+  position: relative;
+  padding: 0.6rem 0.7rem 0.7rem;
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.th-lights {
+  flex: none;
+  display: flex;
+  gap: 0.3rem;
+}
+
+.th-lights i {
+  width: 0.55rem;
+  height: 0.55rem;
+  display: block;
+  background: #ff5f57;
+  border-radius: 50%;
+}
+
+.th-lights i:nth-child(2) {
+  background: #febc2e;
+}
+
+.th-lights i:nth-child(3) {
+  background: #28c840;
+}
+
+.th-omnibox {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.4rem 0.7rem;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: clamp(0.72rem, 1.5vw, 0.95rem);
+  white-space: nowrap;
+  background: var(--paper);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+}
+
+.th-url {
+  display: none;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.th-omnibox[data-stage="start"] .th-url[data-url-stage="start"],
+.th-omnibox[data-stage="select"] .th-url[data-url-stage="select"],
+.th-omnibox[data-stage="type"] .th-url[data-url-stage="type"],
+.th-omnibox[data-stage="alias"] .th-url[data-url-stage="alias"],
+.th-omnibox[data-stage="final"] .th-url[data-url-stage="final"] {
+  display: block;
+}
+
+.th-url-select {
+  padding: 0.05em 0;
+  color: var(--paper);
+  background: var(--th-accent);
+  animation: th-select calc(420ms / var(--rate)) ease-out both;
+}
+
+@keyframes th-select {
+  from {
+    color: var(--ink);
+    background: transparent;
+  }
+}
+
+.th-url-typed {
+  display: inline-block;
+  overflow: hidden;
+  color: var(--th-accent);
+  font-weight: 600;
+  vertical-align: bottom;
+  animation: th-type calc(1500ms / var(--rate)) steps(5, end) both;
+}
+
+@keyframes th-type {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 5ch;
+  }
+}
+
+.th-url-caret {
+  width: 1px;
+  height: 1.05em;
+  display: inline-block;
+  background: var(--ink);
+  vertical-align: text-bottom;
+  animation: th-caret calc(900ms / var(--rate)) steps(1) infinite;
+}
+
+@keyframes th-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+.th-enter {
+  flex: none;
+  padding: 0.1rem 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 0.25rem;
+  opacity: 0;
+  transform: translateY(-0.15rem);
+  transition:
+    opacity calc(140ms / var(--rate)) ease,
+    transform calc(140ms / var(--rate)) ease;
+}
+
+.th-enter.is-in {
+  opacity: 1;
+  transform: translateY(0.1rem);
+}
+
+.th-load {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--th-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform calc(1200ms / var(--rate)) ease-out;
+}
+
+.th-load[data-state="loading"] {
+  transform: scaleX(0.75);
+}
+
+.th-load[data-state="done"] {
+  transform: scaleX(1);
+  opacity: 0;
+  transition:
+    transform calc(260ms / var(--rate)) ease-out,
+    opacity calc(260ms / var(--rate)) ease-out calc(200ms / var(--rate));
+}
+
+.th-viewport {
+  min-height: 0;
+  padding: 0.9rem clamp(0.9rem, 2.5vw, 1.6rem) 1.1rem;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.th-page {
+  opacity: 0;
+  transition: opacity calc(420ms / var(--rate)) ease;
+}
+
+.th-page.is-in {
+  opacity: 1;
+}
+
+.th-page-head {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.th-page-wordmark {
+  width: 7.5rem;
+  height: auto;
+  filter: var(--brand-filter);
+}
+
+.th-page-lang {
+  padding: 0.05rem 0.4rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.25rem;
+  transition:
+    color calc(400ms / var(--rate)) ease,
+    border-color calc(400ms / var(--rate)) ease;
+}
+
+.th-page[data-lang="al"] .th-page-lang {
+  color: var(--th-accent);
+  border-color: var(--th-accent-line);
+}
+
+.th-page-title {
+  margin: 0.5rem 0 0.6rem;
+  padding-bottom: 0.3rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+  font-weight: 400;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.th-line {
+  position: relative;
+  margin: 0.4rem 0;
+  font-size: clamp(0.74rem, 1.55vw, 0.95rem);
+  line-height: 1.62;
+  opacity: 0;
+  transform: translateY(0.25rem);
+  transition:
+    opacity calc(440ms / var(--rate)) ease,
+    transform calc(440ms / var(--rate)) ease,
+    background-color calc(700ms / var(--rate)) ease;
+}
+
+.th-line.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.th-line[data-scan="read"] {
+  background-color: var(--th-accent-soft);
+}
+
+/* The reading head is a sweep inside the active line, so it needs no measured
+   pixel offsets and survives any reflow the article text takes. */
+.th-line[data-scan="active"]::before {
+  position: absolute;
+  inset: -0.1rem -0.45rem;
+  content: "";
+  background:
+    linear-gradient(90deg, transparent 0%, var(--th-accent-soft) 42%, var(--th-accent-line) 50%, var(--th-accent-soft) 58%, transparent 100%)
+    no-repeat;
+  background-size: 55% 100%;
+  animation: th-scan calc(2800ms / var(--rate)) linear both;
+}
+
+@keyframes th-scan {
+  from {
+    background-position: -60% 0;
+  }
+
+  to {
+    background-position: 160% 0;
+  }
+}
+
+/* ---------- The word that changes ---------- */
+
+/*
+ * Both spellings live in the same box. The one that is not showing is taken out
+ * of flow, so the settled text has the spacing it would have if it had been
+ * written that way; only during the turnover does the box hold both, which is
+ * what lets a word visibly contract as the sentence simplifies.
+ */
+.th-swap {
+  display: inline-block;
+  position: relative;
+  white-space: pre;
+}
+
+.th-swap > span {
+  transition:
+    opacity calc(220ms / var(--rate)) ease,
+    filter calc(220ms / var(--rate)) ease;
+}
+
+.th-swap-al {
+  color: var(--th-accent);
+  font-weight: 600;
+}
+
+.th-swap[data-state="de"] .th-swap-al,
+.th-swap[data-state="hum"] .th-swap-al {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.th-swap[data-state="al"] .th-swap-de {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.th-swap[data-state="poof"] {
+  display: inline-grid;
+  text-align: center;
+}
+
+.th-swap[data-state="poof"] > span {
+  grid-area: 1 / 1;
+}
+
+/* Waiting to change: a shake that grows with the stage's hum level. */
+.th-swap[data-state="hum"] .th-swap-de {
+  display: inline-block;
+  color: var(--th-warm);
+  background: var(--th-warm-soft);
+  animation: th-hum calc(var(--hum-speed) / var(--rate)) linear infinite;
+}
+
+.th-stage[data-hum="1"] {
+  --amp: 1;
+  --hum-speed: 340ms;
+}
+
+.th-stage[data-hum="2"] {
+  --amp: 2.1;
+  --hum-speed: 250ms;
+}
+
+.th-stage[data-hum="3"] {
+  --amp: 3.4;
+  --hum-speed: 170ms;
+}
+
+@keyframes th-hum {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(calc(-0.022em * var(--amp)), calc(0.014em * var(--amp))) rotate(calc(-0.28deg * var(--amp)));
+  }
+
+  50% {
+    transform: translate(calc(0.018em * var(--amp)), calc(-0.018em * var(--amp))) rotate(calc(0.24deg * var(--amp)));
+  }
+
+  75% {
+    transform: translate(calc(0.02em * var(--amp)), calc(0.012em * var(--amp))) rotate(calc(0.3deg * var(--amp)));
+  }
+}
+
+/* The turnover. --swap-index staggers each group into a wave. */
+.th-swap[data-state="poof"] .th-swap-de {
+  animation: th-poof-out calc(520ms / var(--rate)) ease-out both;
+  animation-delay: calc(var(--swap-index, 0) * 80ms / var(--rate));
+}
+
+.th-swap[data-state="poof"] .th-swap-al {
+  animation: th-poof-in calc(620ms / var(--rate)) cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  animation-delay: calc(var(--swap-index, 0) * 80ms / var(--rate));
+}
+
+.th-swap[data-state="poof"]:not([data-same])::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: -0.25rem 0 0 -0.25rem;
+  content: "";
+  background: radial-gradient(circle, var(--th-warm) 0%, transparent 68%);
+  border-radius: 50%;
+  animation: th-burst calc(640ms / var(--rate)) ease-out both;
+  animation-delay: calc(var(--swap-index, 0) * 80ms / var(--rate));
+}
+
+@keyframes th-poof-out {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    filter: blur(3px);
+    transform: scale(1.22);
+  }
+}
+
+@keyframes th-poof-in {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+    transform: scale(0.86);
+  }
+
+  55% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+@keyframes th-burst {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.4);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(7);
+  }
+}
+
+/* A form that Standard German and Alman spell the same way: no burst, one nod. */
+.th-swap[data-same][data-state="poof"] .th-swap-de {
+  animation: th-nod calc(620ms / var(--rate)) ease-out both;
+}
+
+@keyframes th-nod {
+  40% {
+    color: var(--th-accent);
+    transform: translateY(-0.12em);
+  }
+
+  100% {
+    color: inherit;
+    transform: none;
+  }
+}
+
+/* ---------- Act 4: five forms, one article ---------- */
+
+.th-chips {
+  display: grid;
+  place-items: center;
+}
+
+.th-chip {
+  grid-area: 1 / 1;
+  padding: 0.45rem 0.95rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3.8vw, 2.4rem);
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  box-shadow: 0 0.3rem 0.9rem var(--shadow);
+  transition:
+    transform calc(1000ms / var(--rate)) cubic-bezier(0.3, 0.85, 0.2, 1),
+    opacity calc(600ms / var(--rate)) ease,
+    filter calc(600ms / var(--rate)) ease;
+}
+
+.th-panel-unify[data-state="spread"] .th-chip[data-form] {
+  transform: translateX(calc(var(--chip-index) * clamp(4rem, 10vw, 6.4rem)));
+}
+
+.th-panel-unify[data-state="gather"] .th-chip[data-form] {
+  transform: translateX(calc(var(--chip-index) * 1.15rem)) scale(0.97);
+}
+
+.th-panel-unify[data-state="merge"] .th-chip[data-form] {
+  opacity: 0.28;
+  filter: blur(2px);
+  transform: none;
+}
+
+.th-panel-unify[data-state="merged"] .th-chip[data-form],
+.th-panel-unify[data-state="genitive"] .th-chip[data-form] {
+  opacity: 0;
+  filter: blur(7px);
+  transform: none;
+}
+
+.th-chip-result,
+.th-chip-genitive {
+  opacity: 0;
+  color: var(--th-accent);
+  border-color: var(--th-accent-line);
+  transform: scale(0.55);
+}
+
+.th-panel-unify[data-state="merged"] .th-chip-result,
+.th-panel-unify[data-state="genitive"] .th-chip-result {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.th-panel-unify[data-state="genitive"] .th-chip-result {
+  transform: translateX(clamp(-4.6rem, -11vw, -3rem)) scale(0.94);
+}
+
+.th-panel-unify[data-state="genitive"] .th-chip-genitive {
+  opacity: 1;
+  color: var(--th-warm);
+  border-color: var(--th-warm);
+  transform: translateX(clamp(3rem, 11vw, 4.6rem)) scale(0.94);
+}
+
+.th-chips-legend {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.th-panel-unify[data-state="genitive"] .th-chips-legend {
+  opacity: 0.35;
+}
+
+/* ---------- Act 5: three nouns, one article ---------- */
+
+.th-panel-rows {
+  gap: 0.35rem !important;
+}
+
+.th-row {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.3rem, 3.4vw, 2.1rem);
+  opacity: 0;
+  transform: translateX(-0.6rem);
+  transition:
+    opacity calc(420ms / var(--rate)) ease,
+    transform calc(420ms / var(--rate)) ease;
+}
+
+.th-row.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Act 6: the ending rules ---------- */
+
+.th-panel-cards {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* The stage centres its acts; cards in one row have to share a top edge. */
+  align-items: stretch !important;
+  gap: 0.7rem;
+  width: min(100%, 50rem);
+}
+
+.th-card {
+  padding: 0.7rem 0.85rem;
+  background: var(--paper);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity calc(420ms / var(--rate)) ease,
+    transform calc(420ms / var(--rate)) ease,
+    border-color calc(420ms / var(--rate)) ease;
+}
+
+.th-card.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.th-card[data-state="al"] {
+  border-color: var(--th-accent-line);
+}
+
+.th-card-rule {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+}
+
+.th-card-phrase {
+  margin: 0.2rem 0 0.35rem;
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 2.2vw, 1.35rem);
+}
+
+.th-card-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.th-word {
+  white-space: pre;
+}
+
+/*
+ * An ending that falls away or arrives. The letters stay inline while they are
+ * readable, because an inline-block with clipped overflow puts its baseline at
+ * the bottom margin edge and would print the ending as a superscript. Only the
+ * collapsing side takes inline-block, where its width can animate to nothing.
+ */
+.th-drop,
+.th-add {
+  max-width: 3em;
+  transition:
+    max-width calc(560ms / var(--rate)) ease,
+    opacity calc(420ms / var(--rate)) ease,
+    transform calc(560ms / var(--rate)) cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.th-drop {
+  display: inline;
+  color: var(--th-warm);
+}
+
+.th-card[data-state="al"] .th-drop {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(0.7em) rotate(9deg);
+}
+
+.th-add {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  color: var(--th-accent);
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(-0.7em);
+}
+
+.th-card[data-state="al"] .th-add {
+  display: inline;
+  overflow: visible;
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Outro and caption ---------- */
+
+.th-outro-wordmark {
+  width: min(22rem, 70%);
+  height: auto;
+  filter: var(--brand-filter);
+}
+
+.th-outro-cta {
+  padding: 0.35rem 0.8rem;
+  color: var(--th-accent);
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.7vw, 0.95rem);
+  border: 1px solid var(--th-accent-line);
+  border-radius: 999px;
+}
+
+.th-caption {
+  grid-row: 2;
+  align-self: center;
+  margin: 0;
+  padding: 0 0.5rem;
+  min-height: 1.2rem;
+  color: var(--muted);
+  font-size: clamp(0.78rem, 1.7vw, 0.92rem);
+  text-align: center;
+  text-wrap: balance;
+  opacity: 0;
+  transition: opacity calc(360ms / var(--rate)) ease;
+}
+
+.th-caption.is-in {
+  opacity: 1;
+}
+
+/* ---------- Transport ---------- */
+
+.th-transport {
+  --played: 0;
+  padding: 0.6rem 0.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.th-bar {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.th-play {
+  flex: none;
+  width: 1.9rem;
+  height: 1.9rem;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.th-play::before {
+  content: "";
+  width: 0.3rem;
+  height: 0.7rem;
+  background: currentcolor;
+  box-shadow: 0.42rem 0 0 currentcolor;
+  transform: translateX(-0.21rem);
+}
+
+.th-theater[data-paused="true"] .th-play::before {
+  width: 0;
+  height: 0;
+  background: none;
+  border-top: 0.36rem solid transparent;
+  border-bottom: 0.36rem solid transparent;
+  border-left: 0.58rem solid currentcolor;
+  box-shadow: none;
+  transform: translateX(0.08rem);
+}
+
+.th-seek {
+  flex: 1 1 auto;
+  height: 0.4rem;
+  appearance: none;
+  background:
+    linear-gradient(to right, var(--th-accent) calc(var(--played) * 100%), var(--border-subtle) calc(var(--played) * 100%));
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.th-seek::-webkit-slider-thumb {
+  width: 0.85rem;
+  height: 0.85rem;
+  appearance: none;
+  background: var(--th-accent);
+  border: 2px solid var(--paper);
+  border-radius: 50%;
+}
+
+.th-seek::-moz-range-thumb {
+  width: 0.85rem;
+  height: 0.85rem;
+  background: var(--th-accent);
+  border: 2px solid var(--paper);
+  border-radius: 50%;
+}
+
+.th-rate {
+  flex: none;
+  min-width: 2.6rem;
+  padding: 0.2rem 0.45rem;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.th-chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.th-chapter {
+  padding: 0.15rem 0.5rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.th-chapter[data-current="true"] {
+  color: var(--th-accent);
+  border-color: var(--th-accent-line);
+}
+
+@media (max-width: 56rem) {
+  .th-panel-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  /* The article is the tallest act; at this width its four sentences wrap into
+     about thirteen lines, so the stage has to be deeper than it is wide. */
+  .th-stage {
+    height: clamp(30rem, 122vw, 38rem);
+    grid-template-rows: minmax(0, 1fr) 3.75rem;
+  }
+
+  .th-stagewrap {
+    padding: 1rem 0.6rem 0.4rem;
+  }
+
+  .th-panel-cards {
+    gap: 0.4rem;
+  }
+
+  .th-card {
+    padding: 0.5rem 0.6rem;
+  }
+
+  .th-card-note {
+    font-size: 0.66rem;
+  }
+}

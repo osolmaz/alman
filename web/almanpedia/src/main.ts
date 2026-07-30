@@ -1,6 +1,7 @@
 import "@fontsource/libertinus-serif/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-400.css";
 import "./styles/base.css";
+import "./styles/theater.css";
 import "./styles/wiki-content.css";
 import { startRouter } from "./router";
 import { renderArticle, renderLanding, renderShell } from "./ui/views";

@@ -44,7 +44,22 @@ The article page follows the reading structure familiar from Wikipedia. It has a
 
 The landing page introduces Almanpedia as Alman AI's self-study reader for people learning German without memorizing noun genders. It links directly to the interactive introduction at `alman.ai`.
 
-A browser mockup demonstrates changing `wiki` to `alman` in `de.wikipedia.org`. The animation selects the four letters, types the replacement, opens `de.almanpedia.org`, and ends at the canonical Almanpedia URL before repeating. Adjacent copy restores the address-replacement instructions, search option, model size, first-download size, and local-inference explanation from the original landing page. GoePT-1-20M links to its public Hugging Face repository.
+## The staged figure
+
+Below the introduction, a single seekable figure replaces the earlier looping browser mockup. It runs 82 seconds in six acts, with a play button, a scrubber, chapter markers, and a speed control that cycles 1×, 1.5×, 2×, and 0.5×. It holds its first frame until the stage is a third on screen, then plays by itself. The example article throughout is `Sapir-Whorf-Hypothese`, and its text is the real lede of that German Wikipedia article shortened to four sentences.
+
+1. The brand appears while a progress bar fills for the one-time 34 MB model download.
+2. A browser address bar changes the four letters `wiki` to `alman` in `de.wikipedia.org/wiki/Sapir-Whorf-Hypothese`, presses Enter, and opens the article in German.
+3. A reading head sweeps one line at a time. Every word that Alman changes shakes, harder the longer it waits, and then all of them turn over in a staggered burst. The page's language badge changes from `de` to `de-AL`.
+4. The five definite article forms of Standard German converge and collapse into `die`, followed by the genitive `der` that Alman keeps.
+5. `der Mann`, `die Frau`, and `das Kind` take the same article. A form that Standard German and Alman spell alike gets no burst, only a nod.
+6. Six cards show the ending rules, each dropping or adding its ending: §10, §4a, §1b, §3a, §1f, and §3f.
+
+The timeline is a list of cues on a clock rather than a sequential script, so every point in it is reachable. Seeking resets the stage and replays every cue up to the target with transitions and keyframes suppressed. Two rules hold this together and neither is enforced by the engine: every cue sets its state outright, and the reset clears everything any cue can set. A one-shot effect is therefore a state that carries a keyframe animation followed by a settled state that carries none. The engine writes the playback rate to a `--rate` custom property on the stage, and every duration in the stylesheet divides by it, so slowing the scene slows the motion with it.
+
+The stage is hidden from assistive technology, contains no focusable element, and never carries the meaning alone: the prose beside it states the address replacement, the model size, and the six ending rules with their specification references. Its transport controls stay outside the hidden subtree with their own labels.
+
+Adjacent copy carries the address-replacement instructions, search option, model size, first-download size, and local-inference explanation. GoePT-1-20M links to its public Hugging Face repository.
 
 Below that guide, the landing page fetches the current German Wikipedia homepage and presents its daily article, current events, news, recent deaths, facts, and sister projects in a responsive two-column layout. These sections use the same local model, full-speed queue, and viewport reveal behavior as articles. The German Wikipedia welcome box is omitted because the Almanpedia introduction replaces it.
 
