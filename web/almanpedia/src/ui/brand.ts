@@ -33,21 +33,19 @@ function wordmarkImage(): HTMLImageElement {
   });
 }
 
-function brandContents(orientation: "horizontal" | "vertical"): Node[] {
-  return [
-    potatoImage(orientation === "horizontal" ? "60px" : "(max-width: 40rem) 160px, 220px"),
-    wordmarkImage(),
-  ];
-}
-
 export function createHeaderBrand(): HTMLAnchorElement {
   return el(
     "a",
     { href: "/", "data-route": "", class: "brand brand-horizontal" },
-    brandContents("horizontal"),
+    [potatoImage("60px"), wordmarkImage()],
   );
 }
 
-export function createLandingBrand(): HTMLHeadingElement {
-  return el("h1", { class: "brand brand-vertical landing-brand" }, brandContents("vertical"));
+/**
+ * The landing page's heading. The brand at full size is the opening act of the
+ * staged figure, which is hidden from assistive technology, so the page states
+ * its title here instead of repeating the mark above the figure.
+ */
+export function createLandingHeading(): HTMLHeadingElement {
+  return el("h1", { class: "sr-only" }, [WORDMARK_ALT.replace(" – ", " — ")]);
 }

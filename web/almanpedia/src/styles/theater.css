@@ -13,7 +13,7 @@
   --th-accent-line: rgb(51 102 204 / 45%);
   --th-warm: #a8600b;
   --th-warm-soft: rgb(168 96 11 / 14%);
-  margin: 0 0 2.75rem;
+  margin: 0.5rem 0 2.5rem;
 }
 
 html[data-color-mode="dark"] .th-theater {
@@ -34,18 +34,21 @@ html[data-color-mode="dark"] .th-theater {
   }
 }
 
+/* No frame and no fill: the figure stands on the page, where the heading was. */
 .th-stagewrap {
-  padding: 1.25rem 1rem 0.5rem;
+  padding: 0.5rem 0 0.25rem;
   overflow: hidden;
-  background: var(--surface-subtle);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
 }
 
+/*
+ * One fixed height for every act, so changing act never moves the page. The
+ * article is the tallest of them and sets the floor; without a frame around the
+ * stage, any slack beyond it reads as stray whitespace above the brand.
+ */
 .th-stage {
-  height: clamp(24rem, 44vw, 31rem);
+  height: clamp(25rem, 40vw, 28rem);
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 3.25rem;
+  grid-template-rows: minmax(0, 1fr) 3rem;
   place-items: center;
 }
 
@@ -84,8 +87,9 @@ html[data-color-mode="dark"] .th-theater {
   gap: 1.1rem !important;
 }
 
+/* Full landing-heading size: this act is the page's masthead. */
 .th-logo-emblem {
-  width: clamp(4.5rem, 10vw, 6.5rem);
+  width: min(13.75rem, 55vw);
   height: auto;
   filter: var(--brand-filter);
   transform: scale(0.9);
@@ -97,7 +101,7 @@ html[data-color-mode="dark"] .th-theater {
 }
 
 .th-logo-wordmark {
-  width: min(19rem, 62%);
+  width: min(29rem, 90vw);
   height: auto;
   filter: var(--brand-filter);
 }
