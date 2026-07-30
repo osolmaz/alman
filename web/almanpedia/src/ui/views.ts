@@ -7,7 +7,7 @@ import { getEngine, initModel } from "../engine";
 import { ArticleNotFoundError, articleUrl, displayTitle, fetchArticleHtml, historyUrl } from "../wiki/api";
 import { rewriteArticleDom } from "../wiki/rewrite";
 import { sanitizeParsoidBody } from "../wiki/sanitize";
-import { createHeaderBrand, createLandingBrand } from "./brand";
+import { createHeaderBrand, createLandingHeading } from "./brand";
 import { createArticleContents } from "./contents";
 import { el, namespaceIds } from "./dom";
 import {
@@ -126,9 +126,11 @@ export async function renderLanding(shell: AppShell): Promise<void> {
   activeTheater = theater;
   shell.main.replaceChildren(
     el("section", { class: "landing" }, [
-      createLandingBrand(),
-      createLandingIntroduction(),
+      // The figure opens on the brand at full size, so it stands where the
+      // landing heading used to and the page is not headed by two of them.
+      createLandingHeading(),
       theater.element,
+      createLandingIntroduction(),
       createShortcutGuide(),
       el("div", { class: "landing-feed-heading" }, [
         el("h2", {}, ["Aktuell in die deutschsprachige Wikipedia"]),

@@ -39,3 +39,21 @@ test("article pages use their specific attribution instead of the general footer
   await renderLanding(shell);
   expect(shell.footer.hidden).toBe(false);
 });
+
+test("the landing page opens on the figure under one text heading", async () => {
+  vi.spyOn(console, "error").mockImplementation(() => {});
+  vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
+  const root = document.createElement("div");
+  document.body.append(root);
+  const shell = renderShell(root, () => {});
+
+  await renderLanding(shell);
+  const landing = shell.main.querySelector(".landing")!;
+
+  expect(shell.main.querySelectorAll("h1")).toHaveLength(1);
+  expect(shell.main.querySelector("h1")?.className).toBe("sr-only");
+  // The figure stands first, where the large brand used to.
+  expect([...landing.children].map((child) => child.className))
+    .toEqual(["sr-only", "th-theater", "landing-intro", "shortcut-guide", "landing-feed-heading", "landing-feed wiki-content"]);
+  expect(landing.querySelector(".landing-brand")).toBeNull();
+});

@@ -2,7 +2,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "vitest";
-import { createHeaderBrand, createLandingBrand } from "../src/ui/brand";
+import { createHeaderBrand, createLandingHeading } from "../src/ui/brand";
 
 test("header brand combines the raster mark with the vector wordmark", () => {
   const brand = createHeaderBrand();
@@ -40,14 +40,12 @@ test("wordmark uses official Linux Libertine small caps and outlined paths", () 
   expect(svg.match(/scale\(0\.38104 -0\.38104\)/gu)).toHaveLength(32);
 });
 
-test("landing brand uses the same assets in a vertical heading", () => {
-  const brand = createLandingBrand();
-  const potato = brand.querySelector<HTMLImageElement>(".brand-potato")!;
+test("the landing heading names the site in text, since the figure carries the mark", () => {
+  const heading = createLandingHeading();
 
-  expect(brand.matches("h1.brand-vertical")).toBe(true);
-  expect(potato.getAttribute("sizes")).toBe("(max-width: 40rem) 160px, 220px");
-  expect(brand.querySelector<HTMLImageElement>(".brand-wordmark")?.alt).toContain(
-    "Die freie Enzyklopädie, vereinfacht",
-  );
-  expect(brand.querySelector(".brand-sub")).toBeNull();
+  expect(heading.matches("h1.sr-only")).toBe(true);
+  expect(heading.textContent).toBe("ALMANPEDIA — Die freie Enzyklopädie, vereinfacht");
+  // The brand at full size belongs to the figure's first act, not to a second
+  // masthead stacked above it.
+  expect(heading.querySelector("img")).toBeNull();
 });
