@@ -357,8 +357,17 @@ export function createTheater(): Theater {
   };
 
   const cues: Cue[] = [
-    // Act 1 — the brand, and the one-time model download.
-    { t: 200, fn: () => { act("1"); show(logo); } },
+    // Act 1 — the brand, and the one-time model download. This one sits at zero
+    // so the first frame is a finished picture: the figure holds it until the
+    // stage is on screen, and a viewer who scrubs back to the start sees it too.
+    {
+      t: 0,
+      fn: () => {
+        act("1");
+        show(logo);
+        say("Almanpedia liest die deutschsprachige Wikipedia in Alman.");
+      },
+    },
     {
       t: 1_000,
       fn: () => {
