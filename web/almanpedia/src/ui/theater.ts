@@ -3,16 +3,16 @@
  *
  * Act 1  the brand appears while the model loads, then clears the stage
  * Act 2  four letters of a real Wikipedia address change, and the page opens
- * Act 3  a scanner reads the article, the parts that change start to shake,
- *        and they all turn over at once
+ * Act 3  a reading head sweeps the article; each article form turns over as the
+ *        head passes it, then what is left shakes and turns over together
  * Act 4  the five definite article forms of Standard German converge on die
  * Act 5  three noun phrases take the same article
  * Act 6  the ending rules, one card at a time
  *
  * The timeline lives in `./scene`; see its header for the two rules every cue
  * here has to obey. The article text is the real lede of the German Wikipedia
- * article on the Sapir-Whorf hypothesis, with the Alman form of every word that
- * changes recorded beside it.
+ * article on the Sapir-Whorf hypothesis, and its Alman side is recorded from the
+ * shipped model rather than written by hand — see ARTICLE_LINES.
  */
 import { el } from "./dom";
 import { createScene, createTransport, type Chapter, type Cue } from "./scene";
@@ -54,9 +54,18 @@ const swap = article;
 
 /**
  * The lede of https://de.wikipedia.org/wiki/Sapir-Whorf-Hypothese, shortened to
- * four sentences. Every Swap is the Alman form required by the specification:
- * §1a for the definite articles, §2a for eine, §6f for the relativizer, §7c for
- * the possessive determiners, §4a for the adjective endings.
+ * four sentences.
+ *
+ * The Alman side is not hand-written: it is what GoePT-1-20M actually returns for
+ * these four sentences, recorded from the pinned `@huggingface/transformers`
+ * adapter over the digest-verified local package, with the generation parameters
+ * from `MODEL_PACKAGE` — the same path as the parity gate in
+ * `core/test/model-node.test.ts`. The safe translator passes model output through
+ * verbatim, so this is what a visitor reading the real article sees.
+ *
+ * Where the model picks one of two forms the specification allows, that is noted
+ * below; the figure follows the model rather than the preferred variant, because
+ * it is showing what this product does, not what the specification prefers.
  */
 const ARTICLE_LINES: Piece[][] = [
   [
@@ -65,14 +74,18 @@ const ARTICLE_LINES: Piece[][] = [
     " Annahme aus ",
     article("der", "die"),
     " Sprachwissenschaft, ",
-    form("der", "das"),
+    // §6f allows die beside the preferred das as the invariant relativizer.
+    form("der", "die"),
     " zufolge die Sprache ",
     article("das", "die"),
     " Denken beeinflusst.",
   ],
   [
-    "Sie wurde posthum abgeleitet aus Schriften von Benjamin Lee Whorf, ",
-    form("der", "das"),
+    // §6a: personal pronouns follow natural gender, so an inanimate referent
+    // takes es rather than the grammatical sie of "die Hypothese".
+    form("Sie", "Es"),
+    " wurde posthum abgeleitet aus Schriften von Benjamin Lee Whorf, ",
+    form("der", "die"),
     " sich wiederum auf ",
     form("seinen", "sein"),
     " Lehrer Edward Sapir berief.",
@@ -89,10 +102,16 @@ const ARTICLE_LINES: Piece[][] = [
     " Antwort auf die Frage zu finden, ob und wie ",
     article("eine", "ein"),
     " bestimmte Sprache mit ",
-    form("ihren", "ihr"),
+    // §7c: the possessive follows the natural gender of its possessor, which
+    // here is an inanimate "Sprache".
+    form("ihren", "sein"),
     " ",
     form("grammatikalischen", "grammatikalische"),
-    " Strukturen die Welterfahrung der ",
+    " Strukturen die Welterfahrung ",
+    // §1d: possession may take the periphrastic von die instead of the genitive
+    // der that §1b retains. The model chose the periphrasis here.
+    form("der", "von die"),
+    " ",
     form("betreffenden", "betreffende"),
     " Sprachgemeinschaft beeinflusst.",
   ],
@@ -390,13 +409,36 @@ export function createTheater(): Theater {
   /**
    * Move the reading head to one line. Lines above it stay marked as read, which
    * is what makes a seek land on a believable frame: the state of every line
-   * follows from the target line alone, with no pixel measurement anywhere.
+   * follows from the target line alone.
    */
   const scanTo = (index: number) => {
     for (const [position, line] of lines.entries()) {
       line.dataset.scan = position < index ? "read" : position === index ? "active" : "none";
     }
   };
+
+  /**
+   * Record where each article sits across its line, as a fraction, so its
+   * turnover can wait until the sweep has actually reached it. The sweep is one
+   * band travelling left to right across the whole line box, so the fraction is
+   * horizontal position only — a word on a wrapped second row changes when the
+   * band passes its column, not when reading order gets to it.
+   *
+   * This is the one measurement in the figure. It is safe because the boxes never
+   * resize: both spellings of a word share one cell. It runs again once the
+   * webfonts are in and whenever the page changes width.
+   */
+  function measureSweepPositions(): void {
+    for (const line of lines) {
+      const box = line.getBoundingClientRect();
+      if (box.width <= 0) continue;
+      for (const swap of pick(line, "article")) {
+        const rect = swap.getBoundingClientRect();
+        const at = (rect.left + rect.width / 2 - box.left) / box.width;
+        swap.style.setProperty("--sweep-at", Math.min(Math.max(at, 0), 1).toFixed(3));
+      }
+    }
+  }
 
   /**
    * Cue times leave room to read. No caption is replaced inside 2.4 seconds, the
@@ -488,12 +530,13 @@ export function createTheater(): Theater {
         say("Die Übersetzung liest die Artikel Zeile für Zeile.");
       },
     },
+    // Each line's articles enter the turnover as the head starts the line; the
+    // stylesheet holds each one until the band reaches its own column.
     ...lines.flatMap((_, index): Cue[] => {
       const at = 24_000 + index * 4_000;
       return [
-        { t: at, fn: () => scanTo(index) },
-        { t: at + 1_500, fn: () => setSwaps(lineArticles[index]!, "poof") },
-        { t: at + 2_400, fn: () => setSwaps(lineArticles[index]!, "al") },
+        { t: at, fn: () => { scanTo(index); setSwaps(lineArticles[index]!, "poof"); } },
+        { t: at + 3_700, fn: () => setSwaps(lineArticles[index]!, "al") },
       ];
     }),
     { t: 26_600, fn: () => say("Jede Artikelform wechselt sofort auf die.") },
@@ -532,7 +575,7 @@ export function createTheater(): Theater {
         setSwaps(pageForms, "al");
         page.dataset.lang = "al";
         pageLang.textContent = "de-AL";
-        say("Fertig. Nur die Genitiv behält der.");
+        say("Fertig. Diese Absatz steht jetzt in Alman.");
       },
     },
     {
@@ -655,6 +698,7 @@ export function createTheater(): Theater {
   ]);
 
   let scene: ReturnType<typeof createScene> | null = null;
+  let resize: ResizeObserver | null = null;
   let running = false;
 
   return {
@@ -662,6 +706,12 @@ export function createTheater(): Theater {
     start() {
       if (scene) return;
       running = true;
+      measureSweepPositions();
+      void document.fonts?.ready.then(measureSweepPositions);
+      if (typeof ResizeObserver === "function") {
+        resize = new ResizeObserver(() => measureSweepPositions());
+        resize.observe(page);
+      }
       scene = createScene({
         root: element,
         stage,
@@ -679,6 +729,8 @@ export function createTheater(): Theater {
     },
     stop() {
       running = false;
+      resize?.disconnect();
+      resize = null;
       scene?.setPlaying(false);
       scene = null;
     },
