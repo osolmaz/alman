@@ -17,6 +17,9 @@
   --hum-speed: 190ms;
   /* One sweep across one line. The turnover delays below divide it. */
   --scan-duration: 2800ms;
+  /* How long a word shakes once the band has reached it, before it turns over.
+     Fixed, so every word gets the same shake wherever it sits in the line. */
+  --scan-lead: 400ms;
   --th-accent: #36c;
   --th-accent-soft: rgb(51 102 204 / 12%);
   --th-accent-line: rgb(51 102 204 / 45%);
@@ -482,11 +485,16 @@ html[data-color-mode="dark"] .th-theater {
 }
 
 /*
- * A word waiting for the reading head. --wait is how long that is: the band's
+ * A word the band has not reached yet. --wait is how long that is: the band's
  * centre crosses the line linearly, so a word at fraction f of the line is
- * reached at f of the sweep. The shake runs for exactly that long with its
- * amplitude ramping from nothing, so it tightens as the band closes in, and the
- * burst is delayed to the moment the band arrives.
+ * reached at f of the sweep. Nothing happens until then, because --amp holds at
+ * its initial 0 and the shake keyframe produces no movement at that amplitude.
+ *
+ * When the band arrives the word shakes for --scan-lead, its amplitude ramping
+ * up, and then turns over. That window is fixed rather than the length of the
+ * wait: tying it to the wait gave a word at the left edge of a line 140ms to
+ * shake in and one near the right edge 2.5 seconds, so some words exploded with
+ * no vibration at all while others rattled for ages.
  */
 .th-page .th-swap[data-state="poof"] {
   --wait: calc(var(--sweep-at, 0) * var(--scan-duration));
@@ -495,15 +503,18 @@ html[data-color-mode="dark"] .th-theater {
 .th-page .th-swap[data-state="poof"] .th-swap-de {
   display: inline-block;
   animation:
-    th-amp calc(var(--wait) / var(--rate)) linear both,
+    th-amp calc(var(--scan-lead) / var(--rate)) linear both,
     th-hum calc(var(--hum-speed) / var(--rate)) linear infinite,
     th-poof-out calc(520ms / var(--rate)) ease-out forwards;
-  animation-delay: 0ms, 0ms, calc((var(--wait) + 140ms) / var(--rate));
+  animation-delay:
+    calc(var(--wait) / var(--rate)),
+    calc(var(--wait) / var(--rate)),
+    calc((var(--wait) + var(--scan-lead)) / var(--rate));
 }
 
 .th-page .th-swap[data-state="poof"] .th-swap-al,
 .th-page .th-swap[data-state="poof"]:not([data-same])::after {
-  animation-delay: calc((var(--wait) + 140ms) / var(--rate));
+  animation-delay: calc((var(--wait) + var(--scan-lead)) / var(--rate));
 }
 
 @keyframes th-amp {

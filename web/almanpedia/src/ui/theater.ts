@@ -28,7 +28,18 @@ export const DEMO_ARTICLE_PATH = `/wiki/${DEMO_ARTICLE_TITLE}`;
 export const SCENE_DURATION_MS = 101_000;
 
 const WORDMARK_SRC = "/brand/almanpedia-wordmark.svg";
-const EMBLEM_SRC = "/brand/almanpedia-potato-192.png";
+/**
+ * The emblem at every size we ship. Act one draws it at up to 220 CSS pixels, so
+ * a 2× screen wants 440 and the 192 file was being upscaled; the candidates let
+ * the browser take the sharpest one it needs and nothing more.
+ */
+const EMBLEM_SRC = "/brand/almanpedia-potato-384.png";
+const EMBLEM_SRCSET = [
+  "/brand/almanpedia-potato-96.png 96w",
+  "/brand/almanpedia-potato-192.png 192w",
+  "/brand/almanpedia-potato-384.png 384w",
+  "/brand/almanpedia-potato.png 973w",
+].join(", ");
 
 /**
  * A word that differs between Standard German and Alman.
@@ -235,6 +246,8 @@ function brandEmblem(className: string): HTMLImageElement {
   return el("img", {
     class: className,
     src: EMBLEM_SRC,
+    srcset: EMBLEM_SRCSET,
+    sizes: "(max-width: 40rem) 55vw, 220px",
     width: "973",
     height: "717",
     alt: "",
