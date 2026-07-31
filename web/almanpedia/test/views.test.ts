@@ -5,6 +5,7 @@ import { createArticleAttribution, renderArticle, renderLanding, renderShell } f
 const MODEL_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
 
 afterEach(() => {
+  localStorage.clear();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
   document.body.replaceChildren();
@@ -43,25 +44,46 @@ test("article pages use their specific attribution instead of the general footer
 const PARSOID_STUB = `<html><head><title>Sapir-Whorf-Hypothese</title></head>`
   + `<body><section><p>Die Sapir-Whorf-Hypothese ist eine Annahme aus der Sprachwissenschaft.</p></section></body></html>`;
 
-test("a browser the model has killed reads in German and is not asked to try again", async () => {
-  vi.spyOn(console, "error").mockImplementation(() => {});
+test("an article refuses on a browser the model has killed, and fetches nothing", async () => {
   const fetchMock = vi.fn().mockResolvedValue(
     new Response(PARSOID_STUB, { status: 200, headers: { "content-type": "text/html" } }),
   );
   vi.stubGlobal("fetch", fetchMock);
   const root = document.createElement("div");
   document.body.append(root);
-  const shell = renderShell(root, () => {});
   // What a memory kill leaves behind: an attempt that pagehide never cleared.
-  shell.storage.setItem("almanpedia:model-attempt:v1", String(Date.now()));
+  localStorage.setItem("almanpedia:model-attempt:v1", String(Date.now()));
+  const shell = renderShell(root, () => {});
 
   await renderArticle(shell, "Sapir-Whorf-Hypothese");
 
-  expect(shell.status.textContent).toContain("Diese Browser hat kein Speicher für die Modell");
-  expect(shell.main.textContent).toContain("Die Sapir-Whorf-Hypothese ist eine Annahme");
-  // Nothing to press, and nothing model-shaped requested.
-  expect(shell.status.querySelector("button")).toBeNull();
-  expect(fetchMock.mock.calls.every(([url]) => !String(url).includes("huggingface"))).toBe(true);
+  expect(shell.main.querySelector(".unsupported h1")?.textContent)
+    .toBe("Diese Browser hat kein Speicher für die Übersetzung");
+  expect(shell.main.textContent).toContain("auf ein Computer");
+  // It does not serve the Standard German article as if that were the product.
+  expect(shell.main.querySelector(".wiki-content")).toBeNull();
+  expect(fetchMock).not.toHaveBeenCalled();
+  expect(shell.main.querySelector<HTMLAnchorElement>(".unsupported-links a")?.href)
+    .toBe("https://de.wikipedia.org/wiki/Sapir-Whorf-Hypothese");
+});
+
+test("the landing page keeps the figure but refuses the feed on such a browser", async () => {
+  const fetchMock = vi.fn().mockResolvedValue(
+    new Response(PARSOID_STUB, { status: 200, headers: { "content-type": "text/html" } }),
+  );
+  vi.stubGlobal("fetch", fetchMock);
+  const root = document.createElement("div");
+  document.body.append(root);
+  localStorage.setItem("almanpedia:model-attempt:v1", String(Date.now()));
+  const shell = renderShell(root, () => {});
+
+  await renderLanding(shell);
+
+  // The figure explains Alman without a model, so it stays.
+  expect(shell.main.querySelector("[data-theater]")).not.toBeNull();
+  expect(shell.main.querySelector(".unsupported")).not.toBeNull();
+  expect(shell.main.querySelector(".landing-feed")).toBeNull();
+  expect(fetchMock).not.toHaveBeenCalled();
 });
 
 test("the landing page opens on the figure under one text heading", async () => {

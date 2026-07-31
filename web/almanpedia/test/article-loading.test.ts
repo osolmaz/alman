@@ -60,6 +60,8 @@ function createShell() {
 }
 
 beforeEach(() => {
+  // Each test is a fresh browser, so no memory-kill record carries over.
+  localStorage.clear();
   engine.initModel.mockReset();
   engine.initModel.mockRejectedValue(new Error("model unavailable in loading tests"));
   engine.getEngine.mockReset();

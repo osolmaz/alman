@@ -18,7 +18,7 @@ import {
   WIKIPEDIA_MAIN_PAGE_TITLE,
 } from "./homepage";
 import { createSearchBox } from "./search";
-import { markModelSettled, markModelStarted, modelKilledThisBrowser, type AttemptStore } from "./model-gate";
+import { markModelSettled, markModelStarted, modelKilledThisBrowser } from "./model-gate";
 import { createTheater, type Theater } from "./theater";
 import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
 import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } from "./settings";
@@ -29,32 +29,47 @@ export interface AppShell {
   footer: HTMLElement;
   navigate: (path: string) => void;
   storage: Pick<Storage, "getItem" | "setItem">;
+  /**
+   * Whether a previous document of this browser was killed by the model. Decided
+   * once, when the document starts, because the record is about documents: a
+   * navigation inside this one is proof we are alive, so consulting the store per
+   * render would refuse the next article whenever someone navigated away from a
+   * translation in progress — that fires no `pagehide` and leaves the marker set.
+   */
+  modelUnsupported: boolean;
 }
 
 const MODEL_REPOSITORY_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
 
 /**
- * Start the translation unless this browser has already been killed by it, in
- * which case say so where progress would have been reported and leave the text in
- * Standard German. See `./model-gate`.
+ * What a browser that cannot run the model gets instead of a reader.
+ *
+ * Not the untranslated article: Almanpedia exists to translate, and serving the
+ * Standard German text would be this site pretending to work while doing nothing
+ * the German Wikipedia does not already do. It refuses, says why, and points at
+ * the two things that do work — a desktop browser, and the original article.
  */
-async function translateUnlessKilled(options: {
-  storage: AttemptStore;
-  status: HTMLElement;
-  progress: ProgressBar;
-  subject: string;
-  start: () => Promise<void>;
-}): Promise<void> {
-  const { storage, status, progress, subject, start } = options;
-  if (modelKilledThisBrowser(storage)) {
-    progress.done();
-    status.replaceChildren(el("span", { class: "status-error" }, [
-      `Diese Browser hat kein Speicher für die Modell. ${subject} bleibt in Standarddeutsch.`,
-    ]));
-    return;
-  }
-  markModelStarted(storage);
-  await start();
+function createUnsupportedNotice(title?: string): HTMLElement {
+  return el("section", { class: "unsupported", lang: "de" }, [
+    el("p", { class: "form-tag" }, ["BESCHEID AP-507"]),
+    el("h1", {}, ["Diese Browser hat kein Speicher für die Übersetzung"]),
+    el("p", {}, [
+      "Almanpedia übersetzt jede Artikel lokal in die Browser. Die Modell braucht mehr Speicher, "
+        + "als diese Browser ein Seite gibt, und die Browser hat die Seite deshalb neu geladen.",
+    ]),
+    el("p", {}, ["Bitte öffnen Sie almanpedia.org auf ein Computer. Auf diese Telefon läuft die Übersetzung nicht."]),
+    el("p", { class: "unsupported-note" }, [
+      "Almanpedia zeigt kein unübersetzte Artikel: dafür gibt es die deutschsprachige Wikipedia selbst.",
+    ]),
+    el("nav", { class: "unsupported-links" }, [
+      ...(title
+        ? [el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, [
+            `„${displayTitle(title)}“ bei die deutschsprachige Wikipedia lesen`,
+          ])]
+        : []),
+      el("a", { href: "https://alman.ai/", target: "_blank", rel: "noopener" }, ["Was ist Alman?"]),
+    ]),
+  ]);
 }
 
 let activeController: DomTranslatorController | null = null;
@@ -132,15 +147,20 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
     ]),
   ]);
   root.replaceChildren(header, main, footer);
-  // A normal departure clears the attempt marker; a browser killing the tab for
+  // Read the record before anything can clear it, then clear it: this document is
+  // running, whatever happened to the last one.
+  const modelUnsupported = modelKilledThisBrowser(storage);
+  markModelSettled(storage);
+  // A normal departure clears a fresh attempt; a browser killing the tab for
   // memory does not fire this, which is how the two are told apart.
   window.addEventListener("pagehide", () => markModelSettled(storage));
-  return { main, status, footer, navigate, storage };
+  return { main, status, footer, navigate, storage, modelUnsupported };
 }
 
 export async function renderLanding(shell: AppShell): Promise<void> {
   cancelActiveArticleRender();
   stopActiveTranslation();
+  const unsupported = shell.modelUnsupported;
   shell.footer.hidden = false;
   shell.main.removeAttribute("aria-busy");
   document.title = "Almanpedia — Die freie Enzyklopädie, vereinfacht";
@@ -160,15 +180,24 @@ export async function renderLanding(shell: AppShell): Promise<void> {
       theater.element,
       createLandingIntroduction(),
       createShortcutGuide(),
-      el("div", { class: "landing-feed-heading" }, [
-        el("h2", {}, ["Aktuell in die deutschsprachige Wikipedia"]),
-        el("a", { href: articleUrl(WIKIPEDIA_MAIN_PAGE_TITLE), target: "_blank", rel: "noopener" }, ["Originale Hauptseite"]),
+      // The figure needs no model, so the explanation of Alman survives even where
+      // the reader cannot run; the feed does not, and is not offered untranslated.
+      ...(unsupported ? [createUnsupportedNotice()] : [
+        el("div", { class: "landing-feed-heading" }, [
+          el("h2", {}, ["Aktuell in die deutschsprachige Wikipedia"]),
+          el("a", { href: articleUrl(WIKIPEDIA_MAIN_PAGE_TITLE), target: "_blank", rel: "noopener" }, ["Originale Hauptseite"]),
+        ]),
+        feed,
       ]),
-      feed,
     ]),
   );
   // The autoplay observer needs the stage in the document to measure it.
   theater.start();
+  if (unsupported) {
+    progress.done();
+    shell.status.replaceChildren();
+    return;
+  }
 
   try {
     const page = await fetchArticleHtml(WIKIPEDIA_MAIN_PAGE_TITLE);
@@ -252,13 +281,8 @@ export async function renderLanding(shell: AppShell): Promise<void> {
     controller.translateAll();
   }
 
-  await translateUnlessKilled({
-    storage: shell.storage,
-    status: shell.status,
-    progress,
-    subject: "Die Hauptseite",
-    start: startTranslation,
-  });
+  markModelStarted(shell.storage);
+  await startTranslation();
 }
 
 export function createArticleAttribution(title: string): HTMLElement {
@@ -464,6 +488,17 @@ function revealTranslatedBlock(element: Element): void {
 }
 
 export async function renderArticle(shell: AppShell, title: string, hash?: string): Promise<void> {
+  if (shell.modelUnsupported) {
+    cancelActiveArticleRender();
+    stopActiveTranslation();
+    shell.main.className = "site-main";
+    shell.main.removeAttribute("aria-busy");
+    shell.status.replaceChildren();
+    shell.footer.hidden = false;
+    document.title = `${displayTitle(title)} – Almanpedia`;
+    shell.main.replaceChildren(createUnsupportedNotice(title));
+    return;
+  }
   const render = beginArticleRender();
   const loading = beginArticleLoading(shell, title, render.controller.signal, () => void renderArticle(shell, title, hash));
   const progress = loading.progress;
@@ -730,13 +765,8 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     controller.translateAll();
   }
 
-  await translateUnlessKilled({
-    storage: shell.storage,
-    status: articleStatus,
-    progress,
-    subject: "Die Artikel",
-    start: startTranslation,
-  });
+  markModelStarted(shell.storage);
+  await startTranslation();
   finishArticleRender(render);
 }
 

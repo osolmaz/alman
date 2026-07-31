@@ -309,6 +309,34 @@ h1,
   font-weight: 400;
 }
 
+/* The view a browser gets when it cannot run the model at all. */
+.unsupported {
+  max-width: 40rem;
+  margin: 2rem auto 3rem;
+}
+
+.unsupported h1 {
+  margin: 0.35rem 0 0.75rem;
+  font-size: 1.9rem;
+}
+
+.unsupported p {
+  margin: 0.6rem 0;
+}
+
+.unsupported-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.unsupported-links {
+  margin-top: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
