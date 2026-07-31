@@ -398,22 +398,14 @@ html[data-color-mode="dark"] .th-theater {
   border-bottom: 1px solid var(--border-subtle);
 }
 
+/* The article arrives whole, with the page. A paragraph-by-paragraph reveal made
+   a page load look like a slow drip; the page's own fade is the whole effect. */
 .th-line {
   position: relative;
   margin: 0.4rem 0;
   font-size: clamp(0.74rem, 1.55vw, 0.95rem);
   line-height: 1.62;
-  opacity: 0;
-  transform: translateY(0.25rem);
-  transition:
-    opacity calc(440ms / var(--rate)) ease,
-    transform calc(440ms / var(--rate)) ease,
-    background-color calc(700ms / var(--rate)) ease;
-}
-
-.th-line.is-in {
-  opacity: 1;
-  transform: none;
+  transition: background-color calc(700ms / var(--rate)) ease;
 }
 
 .th-line[data-scan="read"] {

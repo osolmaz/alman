@@ -109,11 +109,12 @@ test("the address act shows the article the whole way, on Wikipedia then here", 
   const page = () => stage.querySelector<HTMLElement>("[data-page]")!;
   const shown = () => page().classList.contains("is-in");
 
-  // The caption at this point is about an article, so one has to be on screen.
+  // The caption at this point is about an article, so one has to be on screen —
+  // all of it, arriving with the page rather than a paragraph at a time.
   theater.seekTo(8_500);
   expect(shown()).toBe(true);
   expect(page().dataset.site).toBe("wikipedia");
-  expect([...stage.querySelectorAll<HTMLElement>("[data-line]")].every((l) => l.classList.contains("is-in")))
+  expect([...stage.querySelectorAll<HTMLElement>("[data-line]")].every((line) => !line.className.includes("is-in")))
     .toBe(true);
 
   // The one moment an empty browser is truthful: the page is loading.

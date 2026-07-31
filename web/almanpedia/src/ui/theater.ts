@@ -478,10 +478,6 @@ export function createTheater(): Theater {
         say("Ein Artikel der deutschsprachige Wikipedia.");
       },
     },
-    { t: 7_400, fn: () => show(lines[0]!) },
-    { t: 7_700, fn: () => show(lines[1]!) },
-    { t: 8_000, fn: () => show(lines[2]!) },
-    { t: 8_300, fn: () => show(lines[3]!) },
     {
       t: 9_200,
       fn: () => {
@@ -647,7 +643,7 @@ export function createTheater(): Theater {
   function reset(): void {
     act("0");
     for (const element of [logo, browser, page, unify, rows, cards, outro, enter, caption]) hide(element);
-    for (const element of [...lines, ...rowElements, ...cardElements]) hide(element);
+    for (const element of [...rowElements, ...cardElements]) hide(element);
     for (const element of cardElements) element.dataset.state = "de";
     setSwaps(stage, "de");
     boot.dataset.state = "idle";
