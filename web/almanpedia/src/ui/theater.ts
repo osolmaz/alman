@@ -189,7 +189,7 @@ interface Counter {
  * each one reads as a wave rather than one flash. In the article act the sweep
  * does the timing instead; see `measureSweepPositions`.
  */
-function swapElement(value: Swap, order: Counter): HTMLElement {
+function swapElement(value: Swap, order?: Counter): HTMLElement {
   const element = el("span", {
     class: "th-swap",
     "data-swap": "",
@@ -198,12 +198,13 @@ function swapElement(value: Swap, order: Counter): HTMLElement {
     el("span", { class: "th-swap-de" }, [value.de]),
     el("span", { class: "th-swap-al" }, [value.al]),
   ]);
-  element.style.setProperty("--swap-index", String(order.count++));
+  // The article act takes its timing from the scanner instead; see measureScan.
+  if (order) element.style.setProperty("--swap-index", String(order.count++));
   if (value.de === value.al) element.dataset.same = "";
   return element;
 }
 
-function renderPieces(pieces: Piece[], order: Counter): Node[] {
+function renderPieces(pieces: Piece[], order?: Counter): Node[] {
   return pieces.map((piece) => (typeof piece === "string" ? document.createTextNode(piece) : swapElement(piece, order)));
 }
 
@@ -247,7 +248,6 @@ function wordmark(className: string): HTMLImageElement {
 }
 
 function buildStage(): HTMLElement {
-  const pageOrder = { count: 0 };
   const rowOrder = { count: 0 };
 
   const logo = el("div", { class: "th-logo", "data-logo": "" }, [
@@ -289,9 +289,10 @@ function buildStage(): HTMLElement {
         ]),
         el("h3", { class: "th-page-title" }, [DEMO_ARTICLE_TITLE]),
         ...ARTICLE_LINES.map((line, index) =>
-          el("p", { class: "th-line", "data-line": String(index), "data-scan": "none" },
-            renderPieces(line, pageOrder)),
+          el("p", { class: "th-line", "data-line": String(index) }, renderPieces(line)),
         ),
+        el("span", { class: "th-scanned", "data-scanned": "" }),
+        el("span", { class: "th-scanline", "data-scanline": "" }),
       ]),
     ]),
   ]);
@@ -390,35 +391,36 @@ export function createTheater(): Theater {
     for (const element of elements) element.dataset.state = state;
   };
   /**
-   * Move the reading head to one line. Lines above it stay marked as read, which
-   * is what makes a seek land on a believable frame: the state of every line
-   * follows from the target line alone.
-   */
-  const scanTo = (index: number) => {
-    for (const [position, line] of lines.entries()) {
-      line.dataset.scan = position < index ? "read" : position === index ? "active" : "none";
-    }
-  };
-
-  /**
-   * Record where each article sits across its line, as a fraction, so its
-   * turnover can wait until the sweep has actually reached it. The sweep is one
-   * band travelling left to right across the whole line box, so the fraction is
-   * horizontal position only — a word on a wrapped second row changes when the
-   * band passes its column, not when reading order gets to it.
+   * Record how far down the article each changed word sits, as a fraction of the
+   * scanner's travel, so its turnover can wait until the bar reaches it.
    *
-   * This is the one measurement in the figure. It is safe because the boxes never
-   * resize: both spellings of a word share one cell. It runs again once the
+   * Vertical position, deliberately. An earlier version swept a band left to
+   * right across each paragraph box and timed words by their column, which put
+   * two orders on screen at once: on a sentence that wraps, a word at the start
+   * of the second row was passed early while a word at the end of the first row
+   * was passed last. One bar moving down the page gives one order, and it is
+   * reading order. Words sharing a row share a fraction and turn over together.
+   *
+   * Offsets rather than client rects, because a hidden act carries a transform
+   * and client rects would be scaled by it.
+   *
+   * This is the one measurement in the figure, and it is safe because no box ever
+   * resizes: both spellings of a word share one cell. It runs again once the
    * webfonts are in and whenever the page changes width.
    */
-  function measureSweepPositions(): void {
+  function measureScan(): void {
+    const first = lines[0];
+    const last = lines.at(-1);
+    if (!first || !last || last.offsetHeight <= 0) return;
+    const from = first.offsetTop;
+    const travel = Math.max(1, last.offsetTop + last.offsetHeight - from);
+    page.style.setProperty("--scan-from", String(from));
+    page.style.setProperty("--scan-travel", String(travel));
     for (const line of lines) {
-      const box = line.getBoundingClientRect();
-      if (box.width <= 0) continue;
       for (const swap of swapsIn(line)) {
-        const rect = swap.getBoundingClientRect();
-        const at = (rect.left + rect.width / 2 - box.left) / box.width;
-        swap.style.setProperty("--sweep-at", Math.min(Math.max(at, 0), 1).toFixed(3));
+        const centre = line.offsetTop + swap.offsetTop + swap.offsetHeight / 2;
+        const at = (centre - from) / travel;
+        swap.style.setProperty("--scan-at", Math.min(Math.max(at, 0), 1).toFixed(3));
       }
     }
   }
@@ -505,37 +507,37 @@ export function createTheater(): Theater {
     { t: 19_400, fn: () => show(lines[3]!) },
     { t: 20_200, fn: () => say("Die Text steht noch in Standarddeutsch.") },
 
-    // Act 3 — the head reads a line, and each word turns over as it is passed.
+    // Act 3 — one bar down the page; a word shakes as it is passed, then turns.
     {
       t: 23_000,
       fn: () => {
         act("3");
-        say("Die Übersetzung liest die Artikel Zeile für Zeile.");
+        say("Die Übersetzung liest die Artikel von oben nach unten.");
       },
     },
-    ...lines.flatMap((_, index): Cue[] => {
-      const at = 24_000 + index * 4_000;
-      return [
-        { t: at, fn: () => { scanTo(index); setSwaps(lineSwaps[index]!, "poof"); } },
-        { t: at + 3_700, fn: () => setSwaps(lineSwaps[index]!, "al") },
-      ];
-    }),
-    { t: 26_600, fn: () => say("Jede Stelle zittert kurz und wechselt dann.") },
-    { t: 31_000, fn: () => say("Artikel, Endungen und Pronomen in ein Durchgang.") },
-    { t: 35_500, fn: () => say("Die Substantive bleiben unverändert.") },
     {
-      t: 40_000,
+      t: 24_000,
       fn: () => {
-        scanTo(lines.length);
+        page.dataset.scanning = "true";
+        setSwaps(page, "poof");
+      },
+    },
+    { t: 27_000, fn: () => say("Jede Stelle zittert kurz und wechselt dann.") },
+    { t: 32_000, fn: () => say("Artikel, Endungen und Pronomen in ein Durchgang.") },
+    { t: 36_000, fn: () => say("Die Substantive bleiben unverändert.") },
+    {
+      t: 39_000,
+      fn: () => {
+        setSwaps(page, "al");
         page.dataset.lang = "al";
         pageLang.textContent = "de-AL";
         say("Fertig. Diese Absatz steht jetzt in Alman.");
       },
     },
     {
-      t: 44_000,
+      t: 43_500,
       fn: () => {
-        scanTo(-1);
+        page.dataset.scanning = "false";
         say("Kein Wort ist verschwunden. Nur die Endungen sind weg.");
       },
     },
@@ -638,9 +640,9 @@ export function createTheater(): Theater {
     omnibox.dataset.stage = "start";
     load.dataset.state = "idle";
     page.dataset.lang = "de";
+    page.dataset.scanning = "false";
     pageLang.textContent = "de";
     unify.dataset.state = "spread";
-    scanTo(-1);
     caption.textContent = "";
   }
 
@@ -659,10 +661,10 @@ export function createTheater(): Theater {
     start() {
       if (scene) return;
       running = true;
-      measureSweepPositions();
-      void document.fonts?.ready.then(measureSweepPositions);
+      measureScan();
+      void document.fonts?.ready.then(measureScan);
       if (typeof ResizeObserver === "function") {
-        resize = new ResizeObserver(() => measureSweepPositions());
+        resize = new ResizeObserver(() => measureScan());
         resize.observe(page);
       }
       scene = createScene({

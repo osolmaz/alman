@@ -15,8 +15,10 @@
   --rate: 1;
   --amp: 1;
   --hum-speed: 190ms;
-  /* One sweep across one line. The turnover delays below divide it. */
-  --scan-duration: 2800ms;
+  /* One pass of the scanner down the whole article. */
+  --scan-duration: 14000ms;
+  /* How long a word shakes once the bar has reached it, before it turns over. */
+  --scan-lead: 500ms;
   --th-accent: #36c;
   --th-accent-soft: rgb(51 102 204 / 12%);
   --th-accent-line: rgb(51 102 204 / 45%);
@@ -375,8 +377,7 @@ html[data-color-mode="dark"] .th-theater {
   transform: translateY(0.25rem);
   transition:
     opacity calc(440ms / var(--rate)) ease,
-    transform calc(440ms / var(--rate)) ease,
-    background-color calc(700ms / var(--rate)) ease;
+    transform calc(440ms / var(--rate)) ease;
 }
 
 .th-line.is-in {
@@ -384,37 +385,51 @@ html[data-color-mode="dark"] .th-theater {
   transform: none;
 }
 
-.th-line[data-scan="read"] {
-  background-color: var(--th-accent-soft);
-}
-
-/* The reading head is a sweep inside the active line, so it needs no measured
-   pixel offsets and survives any reflow the article text takes. */
 /*
- * The band is 30% of the line wide, and the keyframe is written so its centre
- * travels from 0% to 100% of the line: with `background-size: S`, a position P
- * puts the left edge at P(100-S)/100, so a centre at 0% needs P = -S/2/(1-S/100)
- * = -21.4% and a centre at 100% needs P = 121.4%. That linearity is what lets a
- * word compute when the band reaches it as a plain fraction of the duration.
+ * The scanner: one bar down the page, and a tint over what it has passed. Both
+ * take their geometry from --scan-from and --scan-travel, which the figure
+ * measures in layout pixels.
  */
-.th-line[data-scan="active"]::before {
+.th-scanline,
+.th-scanned {
   position: absolute;
-  inset: -0.1rem -0.45rem;
-  content: "";
-  background:
-    linear-gradient(90deg, transparent 0%, var(--th-accent-soft) 34%, var(--th-accent-line) 50%, var(--th-accent-soft) 66%, transparent 100%)
-    no-repeat;
-  background-size: 30% 100%;
-  animation: th-scan calc(var(--scan-duration) / var(--rate)) linear both;
+  left: -0.45rem;
+  right: -0.45rem;
+  opacity: 0;
+  pointer-events: none;
 }
 
-@keyframes th-scan {
-  from {
-    background-position: -21.4% 0;
-  }
+.th-scanline {
+  top: calc(var(--scan-from, 0) * 1px);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--th-accent-line) 12%, var(--th-accent) 50%, var(--th-accent-line) 88%, transparent);
+}
 
+.th-scanned {
+  top: calc(var(--scan-from, 0) * 1px);
+  height: 0;
+  background: var(--th-accent-soft);
+}
+
+.th-page[data-scanning="true"] .th-scanline {
+  opacity: 1;
+  animation: th-scanline calc(var(--scan-duration) / var(--rate)) linear both;
+}
+
+.th-page[data-scanning="true"] .th-scanned {
+  opacity: 1;
+  animation: th-scanned calc(var(--scan-duration) / var(--rate)) linear both;
+}
+
+@keyframes th-scanline {
   to {
-    background-position: 121.4% 0;
+    transform: translateY(calc(var(--scan-travel, 0) * 1px));
+  }
+}
+
+@keyframes th-scanned {
+  to {
+    height: calc(var(--scan-travel, 0) * 1px);
   }
 }
 
@@ -458,28 +473,31 @@ html[data-color-mode="dark"] .th-theater {
 }
 
 /*
- * A word waiting for the reading head. --wait is how long that is: the band's
- * centre crosses the line linearly, so a word at fraction f of the line is
- * reached at f of the sweep. The shake runs for exactly that long with its
- * amplitude ramping from nothing, so it tightens as the band closes in, and the
- * burst is delayed to the moment the band arrives.
+ * A word the bar has not reached yet. --wait is how long that is: the bar travels
+ * linearly, so a word at fraction f down the article is reached at f of the pass.
+ * Nothing happens until then — --amp holds at its initial 0, so the shake keyframe
+ * produces no movement. When the bar arrives the word shakes for --scan-lead with
+ * its amplitude ramping up, and then turns over.
  */
 .th-page .th-swap[data-state="poof"] {
-  --wait: calc(var(--sweep-at, 0) * var(--scan-duration));
+  --wait: calc(var(--scan-at, 0) * var(--scan-duration));
 }
 
 .th-page .th-swap[data-state="poof"] .th-swap-de {
   display: inline-block;
   animation:
-    th-amp calc(var(--wait) / var(--rate)) linear both,
+    th-amp calc(var(--scan-lead) / var(--rate)) linear both,
     th-hum calc(var(--hum-speed) / var(--rate)) linear infinite,
-    th-poof-out calc(520ms / var(--rate)) ease-out forwards;
-  animation-delay: 0ms, 0ms, calc((var(--wait) + 140ms) / var(--rate));
+    th-poof-out calc(460ms / var(--rate)) ease-out forwards;
+  animation-delay:
+    calc(var(--wait) / var(--rate)),
+    calc(var(--wait) / var(--rate)),
+    calc((var(--wait) + var(--scan-lead)) / var(--rate));
 }
 
 .th-page .th-swap[data-state="poof"] .th-swap-al,
 .th-page .th-swap[data-state="poof"]:not([data-same])::after {
-  animation-delay: calc((var(--wait) + 140ms) / var(--rate));
+  animation-delay: calc((var(--wait) + var(--scan-lead)) / var(--rate));
 }
 
 @keyframes th-amp {
