@@ -90,20 +90,18 @@ test("each changed word carries the Alman form the specification requires", () =
   expect(pairs).toContainEqual(["betreffenden", "betreffende"]);
 });
 
-test("each turnover counts its own wave, so a later one is not held back", () => {
+test("the acts without a reading head stagger their turnover by position", () => {
   const { stage } = mount();
   const indexes = (selector: string) =>
     [...stage.querySelectorAll<HTMLElement>(selector)]
       .map((swap) => Number(swap.style.getPropertyValue("--swap-index")));
 
-  // Articles turn over line by line, so each line counts from zero.
-  expect(indexes('[data-line="0"] [data-kind="article"]')).toEqual([0, 1, 2]);
-  expect(indexes('[data-line="2"] [data-kind="article"]')).toEqual([0]);
-  expect(indexes('[data-line="3"] [data-kind="article"]')).toEqual([0, 1]);
-  // The forms all turn over together, so they run as one sequence down the page.
-  expect(indexes('[data-page] [data-kind="form"]')).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8]);
   expect(indexes("[data-rows] [data-swap]")).toEqual([0, 1, 2]);
   expect(indexes("[data-cards] [data-swap]")[0]).toBe(0);
+  // In the article act the sweep does the timing, from a measured position.
+  for (const swap of stage.querySelectorAll<HTMLElement>("[data-page] [data-swap]")) {
+    expect(swap.dataset.kind).toBeUndefined();
+  }
 });
 
 test("the reading head marks the lines it has passed and leaves the rest alone", () => {
@@ -120,58 +118,37 @@ test("the reading head marks the lines it has passed and leaves the rest alone",
   expect(scans()).toEqual(["read", "read", "read", "read"]);
 });
 
-test("articles turn over under the reading head, one line at a time", () => {
+test("every word in a line turns over as the head crosses it, none before", () => {
   const { theater, stage } = mount();
-  const kinds = (kind: string) =>
-    [...stage.querySelectorAll<HTMLElement>(`[data-page] [data-kind="${kind}"]`)].map((swap) => swap.dataset.state);
-  const lineKinds = (line: number, kind: string) =>
-    [...stage.querySelectorAll<HTMLElement>(`[data-line="${line}"] [data-kind="${kind}"]`)]
-      .map((swap) => swap.dataset.state);
+  const line = (index: number) =>
+    [...stage.querySelectorAll<HTMLElement>(`[data-line="${index}"] [data-swap]`)].map((swap) => swap.dataset.state);
 
-  theater.seekTo(28_000);
-  expect(lineKinds(0, "article")).toEqual(["al", "al", "al"]);
-  // The head has not reached the last line, so its articles are untouched.
-  expect(lineKinds(3, "article")).toEqual(["de", "de"]);
+  // The head starts line 0 at 24s and settles it at 27.7s; line 1 starts at 28s.
+  theater.seekTo(28_500);
+  expect(new Set(line(0))).toEqual(new Set(["al"]));
+  expect(new Set(line(1))).toEqual(new Set(["poof"]));
+  // Nothing further down has been touched: no line waits for a later phase.
+  expect(new Set(line(2))).toEqual(new Set(["de"]));
+  expect(new Set(line(3))).toEqual(new Set(["de"]));
 
-  // The last line starts at 36s and its articles have settled by 39.7s.
   theater.seekTo(40_500);
-  expect(new Set(kinds("article"))).toEqual(new Set(["al"]));
+  for (const index of [0, 1, 2, 3]) expect(new Set(line(index))).toEqual(new Set(["al"]));
 });
 
-test("nothing shakes until the whole page has been read", () => {
+test("the page reaches de-AL only once the last word has settled", () => {
   const { theater, stage } = mount();
-  const forms = () =>
-    [...stage.querySelectorAll<HTMLElement>('[data-page] [data-kind="form"]')].map((swap) => swap.dataset.state);
+  const lang = () => stage.querySelector<HTMLElement>("[data-page]")?.dataset.lang;
 
-  // Mid-scan: articles are already turning over, the rest is still plain German.
-  theater.seekTo(35_000);
-  expect(stage.dataset.hum).toBe("0");
-  expect(new Set(forms())).toEqual(new Set(["de"]));
+  // Mid-sweep the page is part German, so the badge still says de.
+  theater.seekTo(33_000);
+  expect(lang()).toBe("de");
 
-  theater.seekTo(42_000);
-  expect(stage.dataset.hum).toBe("0");
-  expect(new Set(forms())).toEqual(new Set(["de"]));
+  theater.seekTo(39_000);
+  expect(lang()).toBe("de");
 
-  theater.seekTo(46_000);
-  expect(stage.dataset.hum).toBe("1");
-  expect(new Set(forms())).toEqual(new Set(["hum"]));
-});
-
-test("the endings shake harder, turn over, and take the page to de-AL", () => {
-  const { theater, stage } = mount();
-
-  theater.seekTo(52_000);
-  expect(stage.dataset.hum).toBe("3");
-
-  theater.seekTo(54_000);
-  expect(new Set(swapStates(stage, '[data-page] [data-kind="form"]'))).toEqual(new Set(["poof"]));
-  // The language badge waits for the last word, not the first.
-  expect(stage.querySelector<HTMLElement>("[data-page]")?.dataset.lang).toBe("de");
-
-  theater.seekTo(57_000);
+  theater.seekTo(41_000);
   expect(new Set(swapStates(stage, "[data-page]"))).toEqual(new Set(["al"]));
-  expect(stage.dataset.hum).toBe("0");
-  expect(stage.querySelector<HTMLElement>("[data-page]")?.dataset.lang).toBe("al");
+  expect(lang()).toBe("al");
   expect(stage.querySelector("[data-page-lang]")?.textContent).toBe("de-AL");
 });
 
