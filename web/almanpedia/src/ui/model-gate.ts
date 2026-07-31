@@ -39,3 +39,37 @@ export function autoloadsModel(hints: DeviceHints = browserHints()): boolean {
     && !hints.matchMedia("(any-pointer: fine)").matches;
   return !touchOnly;
 }
+
+/**
+ * Whether the model has already killed this browser once.
+ *
+ * The device test above is a guess about memory; this is a record of what
+ * actually happened. Before the model loads, `markModelStarted` writes a marker.
+ * A normal departure — navigating away, backgrounding the app, closing the tab —
+ * fires `pagehide`, which clears it. A browser terminating the tab for memory
+ * does not fire `pagehide`, so the marker is still there on the next load, and
+ * that is the difference between someone who left and someone who was killed.
+ *
+ * On an iPhone 14 Pro the model loaded and then took the tab down about twenty
+ * seconds into inference, even when asked for explicitly, so a device that can be
+ * asked can still turn out to be a device that cannot run it. After that happens
+ * once the page stops offering, and says why, with a way to insist.
+ */
+const ATTEMPT_KEY = "almanpedia:model-attempt:v1";
+
+export interface AttemptStore {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+}
+
+export function modelKilledThisBrowser(store: AttemptStore): boolean {
+  return store.getItem(ATTEMPT_KEY) === "started";
+}
+
+export function markModelStarted(store: AttemptStore): void {
+  store.setItem(ATTEMPT_KEY, "started");
+}
+
+export function markModelSettled(store: AttemptStore): void {
+  store.setItem(ATTEMPT_KEY, "");
+}

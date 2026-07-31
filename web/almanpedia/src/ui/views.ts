@@ -18,7 +18,13 @@ import {
   WIKIPEDIA_MAIN_PAGE_TITLE,
 } from "./homepage";
 import { createSearchBox } from "./search";
-import { autoloadsModel } from "./model-gate";
+import {
+  autoloadsModel,
+  markModelSettled,
+  markModelStarted,
+  modelKilledThisBrowser,
+  type AttemptStore,
+} from "./model-gate";
 import { createTheater, type Theater } from "./theater";
 import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
 import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } from "./settings";
@@ -34,21 +40,59 @@ export interface AppShell {
 const MODEL_REPOSITORY_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
 
 /**
- * Offer the translation instead of starting it. Used where `autoloadsModel` says
- * this device should be asked first; see `./model-gate` for why. Returns the
- * element to place, and calls `start` once, on the first press.
+ * Offer the translation instead of starting it, or explain that this browser has
+ * already been killed by it. See `./model-gate` for both decisions. Calls `start`
+ * once, on the first press.
  */
-function createTranslationStart(start: () => void): HTMLElement {
-  const button = el("button", { class: "start-translation", type: "button" }, ["Übersetzung starten"]);
-  const note = el("span", { class: "start-translation-note" }, [
-    "Die Modell braucht rund 34 MB und läuft lokal. Auf ein Telefon reicht die Speicher manchmal nicht.",
+function createTranslationStart(label: string, note: string, start: () => void): HTMLElement {
+  const button = el("button", { class: "start-translation", type: "button" }, [label]);
+  const host = el("div", { class: "start-translation-host" }, [
+    button,
+    el("span", { class: "start-translation-note" }, [note]),
   ]);
-  const host = el("div", { class: "start-translation-host" }, [button, note]);
   button.addEventListener("click", () => {
     host.remove();
     start();
   }, { once: true });
   return host;
+}
+
+/**
+ * Decide between loading the model, offering it, and declining to offer it, and
+ * place the offer where translation progress is reported.
+ */
+async function offerTranslation(options: {
+  storage: AttemptStore;
+  status: HTMLElement;
+  progress: ProgressBar;
+  subject: string;
+  start: () => Promise<void>;
+}): Promise<void> {
+  const { storage, status, progress, subject, start } = options;
+  const run = async () => {
+    markModelStarted(storage);
+    await start();
+  };
+
+  if (modelKilledThisBrowser(storage)) {
+    progress.done();
+    status.replaceChildren(createTranslationStart(
+      "Trotzdem versuchen",
+      `Die letzte Versuch hat die Speicher von diese Browser überschritten und die Seite neu geladen. ${subject} bleibt in Standarddeutsch.`,
+      () => void run(),
+    ));
+    return;
+  }
+  if (autoloadsModel()) {
+    await run();
+    return;
+  }
+  progress.done();
+  status.replaceChildren(createTranslationStart(
+    "Übersetzung starten",
+    "Die Modell braucht rund 34 MB und läuft lokal. Auf ein Telefon reicht die Speicher manchmal nicht.",
+    () => void run(),
+  ));
 }
 
 let activeController: DomTranslatorController | null = null;
@@ -126,6 +170,9 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
     ]),
   ]);
   root.replaceChildren(header, main, footer);
+  // A normal departure clears the attempt marker; a browser killing the tab for
+  // memory does not fire this, which is how the two are told apart.
+  window.addEventListener("pagehide", () => markModelSettled(storage));
   return { main, status, footer, navigate, storage };
 }
 
@@ -194,6 +241,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
         }
       });
     } catch (error) {
+      markModelSettled(shell.storage);
       if (!feed.isConnected) return;
       progress.done();
       shell.status.append(el("span", { class: "status-error" }, [
@@ -242,12 +290,13 @@ export async function renderLanding(shell: AppShell): Promise<void> {
     controller.translateAll();
   }
 
-  if (autoloadsModel()) {
-    await startTranslation();
-    return;
-  }
-  progress.done();
-  shell.status.replaceChildren(createTranslationStart(() => void startTranslation()));
+  await offerTranslation({
+    storage: shell.storage,
+    status: shell.status,
+    progress,
+    subject: "Die Hauptseite",
+    start: startTranslation,
+  });
 }
 
 export function createArticleAttribution(title: string): HTMLElement {
@@ -662,6 +711,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
         }
       });
     } catch (error) {
+      markModelSettled(shell.storage);
       if (!articleColumn.isConnected) return;
       finishArticleRender(render);
       progress.done();
@@ -718,13 +768,13 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     controller.translateAll();
   }
 
-  if (autoloadsModel()) {
-    await startTranslation();
-    finishArticleRender(render);
-    return;
-  }
-  progress.done();
-  articleStatus.replaceChildren(createTranslationStart(() => void startTranslation()));
+  await offerTranslation({
+    storage: shell.storage,
+    status: articleStatus,
+    progress,
+    subject: "Die Artikel",
+    start: startTranslation,
+  });
   finishArticleRender(render);
 }
 
