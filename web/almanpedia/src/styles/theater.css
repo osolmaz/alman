@@ -335,10 +335,42 @@ html[data-color-mode="dark"] .th-theater {
   justify-content: space-between;
 }
 
+/* One cell for both mastheads: the site changes, the text below must not move. */
+.th-page-site {
+  display: inline-grid;
+  align-items: center;
+  justify-items: start;
+}
+
+.th-page-site > * {
+  grid-area: 1 / 1;
+}
+
+.th-page-site-name {
+  display: block;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+
+.th-page-site-name i {
+  display: block;
+  color: var(--muted);
+  font-size: 0.52rem;
+  font-style: normal;
+  letter-spacing: 0.01em;
+}
+
 .th-page-wordmark {
   width: 7.5rem;
   height: auto;
   filter: var(--brand-filter);
+}
+
+.th-page[data-site="wikipedia"] .th-page-wordmark,
+.th-page[data-site="almanpedia"] .th-page-site-name {
+  opacity: 0;
 }
 
 .th-page-lang {

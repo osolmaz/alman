@@ -282,9 +282,17 @@ function buildStage(): HTMLElement {
       el("span", { class: "th-load", "data-load": "", "data-state": "idle" }),
     ]),
     el("div", { class: "th-viewport" }, [
-      el("div", { class: "th-page", "data-page": "", "data-lang": "de" }, [
+      el("div", { class: "th-page", "data-page": "", "data-lang": "de", "data-site": "wikipedia" }, [
         el("div", { class: "th-page-head" }, [
-          wordmark("th-page-wordmark"),
+          // Both mastheads share one cell, so swapping sites cannot move the
+          // article text under them.
+          el("span", { class: "th-page-site" }, [
+            el("span", { class: "th-page-site-name" }, [
+              "Wikipedia",
+              el("i", {}, ["Die freie Enzyklopädie"]),
+            ]),
+            wordmark("th-page-wordmark"),
+          ]),
           el("span", { class: "th-page-lang", "data-page-lang": "" }, ["de"]),
         ]),
         el("h3", { class: "th-page-title" }, [DEMO_ARTICLE_TITLE]),
@@ -458,16 +466,24 @@ export function createTheater(): Theater {
     },
     { t: 6_400, fn: () => { hide(logo); boot.dataset.state = "ready"; } },
 
-    // Act 2 — four letters in the address.
+    // Act 2 — four letters in the address. The article is on screen the whole
+    // time: this act is about the address, so an empty browser under a caption
+    // about an article was the wrong picture.
     {
       t: 7_000,
       fn: () => {
         act("2");
         show(browser);
         omnibox.dataset.stage = "start";
+        page.dataset.site = "wikipedia";
+        show(page);
         say("Ein Artikel der deutschsprachige Wikipedia.");
       },
     },
+    { t: 7_400, fn: () => show(lines[0]!) },
+    { t: 7_700, fn: () => show(lines[1]!) },
+    { t: 8_000, fn: () => show(lines[2]!) },
+    { t: 8_300, fn: () => show(lines[3]!) },
     {
       t: 9_200,
       fn: () => {
@@ -487,6 +503,9 @@ export function createTheater(): Theater {
       t: 14_300,
       fn: () => {
         hide(enter);
+        // The page goes away because it is loading, which is the one moment in
+        // the act where an empty browser is the truthful picture.
+        hide(page);
         omnibox.dataset.stage = "alias";
         load.dataset.state = "loading";
         say("de.almanpedia.org führt auf die gleiche Pfad.");
@@ -497,14 +516,11 @@ export function createTheater(): Theater {
       fn: () => {
         omnibox.dataset.stage = "final";
         load.dataset.state = "done";
+        page.dataset.site = "almanpedia";
         show(page);
         say("Die gleiche Artikel, jetzt in Almanpedia.");
       },
     },
-    { t: 17_000, fn: () => show(lines[0]!) },
-    { t: 17_800, fn: () => show(lines[1]!) },
-    { t: 18_600, fn: () => show(lines[2]!) },
-    { t: 19_400, fn: () => show(lines[3]!) },
     { t: 20_200, fn: () => say("Die Text steht noch in Standarddeutsch.") },
 
     // Act 3 — one bar down the page; a word shakes as it is passed, then turns.
@@ -640,6 +656,7 @@ export function createTheater(): Theater {
     omnibox.dataset.stage = "start";
     load.dataset.state = "idle";
     page.dataset.lang = "de";
+    page.dataset.site = "wikipedia";
     page.dataset.scanning = "false";
     pageLang.textContent = "de";
     unify.dataset.state = "spread";
