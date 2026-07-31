@@ -40,38 +40,27 @@ test("article pages use their specific attribution instead of the general footer
   expect(shell.footer.hidden).toBe(false);
 });
 
-/** Touch-only, which is what the gate asks about; see src/ui/model-gate.ts. */
-function stubPhone(): void {
-  vi.stubGlobal("matchMedia", (query: string) => ({
-    matches: query.includes("coarse"),
-    media: query,
-    addEventListener: () => {},
-    removeEventListener: () => {},
-  }));
-}
-
 const PARSOID_STUB = `<html><head><title>Sapir-Whorf-Hypothese</title></head>`
   + `<body><section><p>Die Sapir-Whorf-Hypothese ist eine Annahme aus der Sprachwissenschaft.</p></section></body></html>`;
 
-test("a phone is offered the translation instead of having the model loaded", async () => {
+test("a browser the model has killed reads in German and is not asked to try again", async () => {
   vi.spyOn(console, "error").mockImplementation(() => {});
   const fetchMock = vi.fn().mockResolvedValue(
     new Response(PARSOID_STUB, { status: 200, headers: { "content-type": "text/html" } }),
   );
   vi.stubGlobal("fetch", fetchMock);
-  stubPhone();
   const root = document.createElement("div");
   document.body.append(root);
   const shell = renderShell(root, () => {});
+  // What a memory kill leaves behind: an attempt that pagehide never cleared.
+  shell.storage.setItem("almanpedia:model-attempt:v1", String(Date.now()));
 
   await renderArticle(shell, "Sapir-Whorf-Hypothese");
-  // The offer stands where translation progress would have been reported.
-  const start = shell.status.querySelector<HTMLButtonElement>(".start-translation");
 
-  expect(start?.textContent).toBe("Übersetzung starten");
-  expect(shell.status.textContent).toContain("rund 34 MB");
-  // The article itself is up, in German, and nothing model-shaped was requested.
+  expect(shell.status.textContent).toContain("Diese Browser hat kein Speicher für die Modell");
   expect(shell.main.textContent).toContain("Die Sapir-Whorf-Hypothese ist eine Annahme");
+  // Nothing to press, and nothing model-shaped requested.
+  expect(shell.status.querySelector("button")).toBeNull();
   expect(fetchMock.mock.calls.every(([url]) => !String(url).includes("huggingface"))).toBe(true);
 });
 

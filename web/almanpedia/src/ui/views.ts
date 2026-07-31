@@ -18,13 +18,7 @@ import {
   WIKIPEDIA_MAIN_PAGE_TITLE,
 } from "./homepage";
 import { createSearchBox } from "./search";
-import {
-  autoloadsModel,
-  markModelSettled,
-  markModelStarted,
-  modelKilledThisBrowser,
-  type AttemptStore,
-} from "./model-gate";
+import { markModelSettled, markModelStarted, modelKilledThisBrowser, type AttemptStore } from "./model-gate";
 import { createTheater, type Theater } from "./theater";
 import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
 import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } from "./settings";
@@ -40,28 +34,11 @@ export interface AppShell {
 const MODEL_REPOSITORY_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
 
 /**
- * Offer the translation instead of starting it, or explain that this browser has
- * already been killed by it. See `./model-gate` for both decisions. Calls `start`
- * once, on the first press.
+ * Start the translation unless this browser has already been killed by it, in
+ * which case say so where progress would have been reported and leave the text in
+ * Standard German. See `./model-gate`.
  */
-function createTranslationStart(label: string, note: string, start: () => void): HTMLElement {
-  const button = el("button", { class: "start-translation", type: "button" }, [label]);
-  const host = el("div", { class: "start-translation-host" }, [
-    button,
-    el("span", { class: "start-translation-note" }, [note]),
-  ]);
-  button.addEventListener("click", () => {
-    host.remove();
-    start();
-  }, { once: true });
-  return host;
-}
-
-/**
- * Decide between loading the model, offering it, and declining to offer it, and
- * place the offer where translation progress is reported.
- */
-async function offerTranslation(options: {
+async function translateUnlessKilled(options: {
   storage: AttemptStore;
   status: HTMLElement;
   progress: ProgressBar;
@@ -69,30 +46,15 @@ async function offerTranslation(options: {
   start: () => Promise<void>;
 }): Promise<void> {
   const { storage, status, progress, subject, start } = options;
-  const run = async () => {
-    markModelStarted(storage);
-    await start();
-  };
-
   if (modelKilledThisBrowser(storage)) {
     progress.done();
-    status.replaceChildren(createTranslationStart(
-      "Trotzdem versuchen",
-      `Die letzte Versuch hat die Speicher von diese Browser überschritten und die Seite neu geladen. ${subject} bleibt in Standarddeutsch.`,
-      () => void run(),
-    ));
+    status.replaceChildren(el("span", { class: "status-error" }, [
+      `Diese Browser hat kein Speicher für die Modell. ${subject} bleibt in Standarddeutsch.`,
+    ]));
     return;
   }
-  if (autoloadsModel()) {
-    await run();
-    return;
-  }
-  progress.done();
-  status.replaceChildren(createTranslationStart(
-    "Übersetzung starten",
-    "Die Modell braucht rund 34 MB und läuft lokal. Auf ein Telefon reicht die Speicher manchmal nicht.",
-    () => void run(),
-  ));
+  markModelStarted(storage);
+  await start();
 }
 
 let activeController: DomTranslatorController | null = null;
@@ -290,7 +252,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
     controller.translateAll();
   }
 
-  await offerTranslation({
+  await translateUnlessKilled({
     storage: shell.storage,
     status: shell.status,
     progress,
@@ -768,7 +730,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     controller.translateAll();
   }
 
-  await offerTranslation({
+  await translateUnlessKilled({
     storage: shell.storage,
     status: articleStatus,
     progress,

@@ -309,33 +309,6 @@ h1,
   font-weight: 400;
 }
 
-/* Shown instead of the progress bar where the model is offered, not autoloaded. */
-.start-translation-host {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 0.6rem;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.start-translation {
-  padding: 0.45rem 0.9rem;
-  color: var(--on-progressive);
-  font: inherit;
-  font-weight: 600;
-  background: var(--link);
-  border: 1px solid var(--link);
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-
-.start-translation-note {
-  max-width: 22rem;
-  color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.35;
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
