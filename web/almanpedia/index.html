@@ -10,19 +10,7 @@
     />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-    <script>
-      try {
-        const settings = JSON.parse(localStorage.getItem("almanpedia:reader-settings:v1"));
-        if (settings?.version === 1) {
-          if (["small", "standard", "large"].includes(settings.textSize)) {
-            document.documentElement.dataset.textSize = settings.textSize;
-          }
-          if (["auto", "light", "dark"].includes(settings.colorMode)) {
-            document.documentElement.dataset.colorMode = settings.colorMode;
-          }
-        }
-      } catch {}
-    </script>
+    <script src="/reader-settings.js"></script>
   </head>
   <body>
     <div id="app"></div>

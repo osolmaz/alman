@@ -87,6 +87,15 @@ bump that dependency without re-running this gate.
   `www.almanpedia.org`. A proxied `de.almanpedia.org` CNAME and a Cloudflare
   Single Redirect send the German shortcut to `https://almanpedia.org` while
   preserving the path and query string. The manual
+  The Vite build strips Vite's own `crossorigin` from the emitted script and
+  stylesheet tags and disables the module-preload polyfill: everything is
+  same-origin, the polyfill is inline and the CSP forbids inline scripts, and the
+  attribute made browsers fetch assets in CORS mode. Pages answers a missing file
+  with `index.html` and a 200 rather than a 404, caches CORS and non-CORS
+  responses separately, and `_headers` marks `/assets/*` immutable for a year —
+  which pinned `text/html` into the CORS variant of a stylesheet URL and served
+  the whole site unstyled while `curl` of the same URL returned correct CSS. Keep
+  browser-loaded assets out of CORS mode. The
   `.github/workflows/deploy-almanpedia.yml` workflow is retained for recovery
   and is not triggered by pushes. It requires `CLOUDFLARE_API_TOKEN` and
   `CLOUDFLARE_ACCOUNT_ID`. The idempotent
