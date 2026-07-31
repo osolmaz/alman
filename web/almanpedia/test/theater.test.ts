@@ -127,62 +127,49 @@ test("the address act shows the article the whole way, on Wikipedia then here", 
   expect(page().dataset.lang).toBe("de");
 });
 
-test("the scanner runs once over the whole article, not per line", () => {
+test("the reading head marks the lines it has passed and leaves the rest alone", () => {
   const { theater, stage } = mount();
-  const page = () => stage.querySelector<HTMLElement>("[data-page]")!;
+  const scans = () => [...stage.querySelectorAll<HTMLElement>("[data-line]")].map((line) => line.dataset.scan);
 
-  expect(stage.querySelectorAll("[data-scanline]")).toHaveLength(1);
-  expect(page().dataset.scanning).toBe("false");
+  theater.seekTo(25_000);
+  expect(scans()).toEqual(["active", "none", "none", "none"]);
 
-  theater.seekTo(30_000);
-  expect(page().dataset.scanning).toBe("true");
-  // One pass, so there are no per-line phases to be in.
-  expect(stage.querySelector("[data-line][data-scan]")).toBeNull();
+  theater.seekTo(33_000);
+  expect(scans()).toEqual(["read", "read", "active", "none"]);
 
-  theater.seekTo(45_000);
-  expect(page().dataset.scanning).toBe("false");
+  theater.seekTo(41_000);
+  expect(scans()).toEqual(["read", "read", "read", "read"]);
 });
 
-test("every changed word waits for the bar, and none is left for a later phase", () => {
+test("every word in a line turns over as the head crosses it, none before", () => {
   const { theater, stage } = mount();
-  const swaps = () => [...stage.querySelectorAll<HTMLElement>("[data-page] [data-swap]")];
+  const line = (index: number) =>
+    [...stage.querySelectorAll<HTMLElement>(`[data-line="${index}"] [data-swap]`)].map((swap) => swap.dataset.state);
 
-  theater.seekTo(23_500);
-  expect(new Set(swaps().map((swap) => swap.dataset.state))).toEqual(new Set(["de"]));
+  // The head starts line 0 at 24s and settles it at 27.7s; line 1 starts at 28s.
+  theater.seekTo(28_500);
+  expect(new Set(line(0))).toEqual(new Set(["al"]));
+  expect(new Set(line(1))).toEqual(new Set(["poof"]));
+  // Nothing further down has been touched: no line waits for a later phase.
+  expect(new Set(line(2))).toEqual(new Set(["de"]));
+  expect(new Set(line(3))).toEqual(new Set(["de"]));
 
-  // During the pass every word is in the turnover; the stylesheet holds each one
-  // until the bar reaches its own row.
-  theater.seekTo(30_000);
-  expect(new Set(swaps().map((swap) => swap.dataset.state))).toEqual(new Set(["poof"]));
-
-  theater.seekTo(40_000);
-  expect(new Set(swaps().map((swap) => swap.dataset.state))).toEqual(new Set(["al"]));
-});
-
-test("a word's wait is how far down the article it sits, so changes follow reading order", () => {
-  const { stage } = mount();
-  // happy-dom reports no layout, so the figure leaves --scan-at unset there; the
-  // contract under test is that one number per word drives the whole act.
-  const swaps = [...stage.querySelectorAll<HTMLElement>("[data-page] [data-swap]")];
-
-  expect(swaps.length).toBeGreaterThan(8);
-  for (const swap of swaps) {
-    expect(swap.style.getPropertyValue("--swap-index"), "the page act must not use the index wave").toBe("");
-  }
+  theater.seekTo(40_500);
+  for (const index of [0, 1, 2, 3]) expect(new Set(line(index))).toEqual(new Set(["al"]));
 });
 
 test("the page reaches de-AL only once the last word has settled", () => {
   const { theater, stage } = mount();
   const lang = () => stage.querySelector<HTMLElement>("[data-page]")?.dataset.lang;
 
-  // Mid-pass the page is part German, so the badge still says de.
+  // Mid-sweep the page is part German, so the badge still says de.
   theater.seekTo(33_000);
   expect(lang()).toBe("de");
 
-  theater.seekTo(38_500);
+  theater.seekTo(39_000);
   expect(lang()).toBe("de");
 
-  theater.seekTo(40_000);
+  theater.seekTo(41_000);
   expect(new Set(swapStates(stage, "[data-page]"))).toEqual(new Set(["al"]));
   expect(lang()).toBe("al");
   expect(stage.querySelector("[data-page-lang]")?.textContent).toBe("de-AL");
