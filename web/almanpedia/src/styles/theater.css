@@ -1,3 +1,10 @@
+/* The shake amplitude ramps per word while it waits for the reading head. */
+@property --amp {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 /*
  * The landing page figure. Every duration is divided by --rate, which the scene
  * clock writes to the stage, so the speed control slows the motion and the cues
@@ -7,7 +14,7 @@
 .th-theater {
   --rate: 1;
   --amp: 1;
-  --hum-speed: 300ms;
+  --hum-speed: 190ms;
   /* One sweep across one line. The turnover delays below divide it. */
   --scan-duration: 2800ms;
   --th-accent: #36c;
@@ -424,7 +431,9 @@ html[data-color-mode="dark"] .th-theater {
 .th-swap {
   display: inline-grid;
   position: relative;
-  text-align: center;
+  /* Slack from the longer spelling lands after the word, where it merges with
+     the following space instead of leaving the shorter one adrift. */
+  text-align: left;
   white-space: pre;
 }
 
@@ -440,8 +449,7 @@ html[data-color-mode="dark"] .th-theater {
   font-weight: 600;
 }
 
-.th-swap[data-state="de"] .th-swap-al,
-.th-swap[data-state="hum"] .th-swap-al {
+.th-swap[data-state="de"] .th-swap-al {
   opacity: 0;
 }
 
@@ -449,27 +457,39 @@ html[data-color-mode="dark"] .th-theater {
   opacity: 0;
 }
 
-/* Waiting to change: a shake that grows with the stage's hum level. */
-.th-swap[data-state="hum"] .th-swap-de {
+/*
+ * A word waiting for the reading head. --wait is how long that is: the band's
+ * centre crosses the line linearly, so a word at fraction f of the line is
+ * reached at f of the sweep. The shake runs for exactly that long with its
+ * amplitude ramping from nothing, so it tightens as the band closes in, and the
+ * burst is delayed to the moment the band arrives.
+ */
+.th-page .th-swap[data-state="poof"] {
+  --wait: calc(var(--sweep-at, 0) * var(--scan-duration));
+}
+
+.th-page .th-swap[data-state="poof"] .th-swap-de {
   display: inline-block;
-  color: var(--th-warm);
-  background: var(--th-warm-soft);
-  animation: th-hum calc(var(--hum-speed) / var(--rate)) linear infinite;
+  animation:
+    th-amp calc(var(--wait) / var(--rate)) linear both,
+    th-hum calc(var(--hum-speed) / var(--rate)) linear infinite,
+    th-poof-out calc(520ms / var(--rate)) ease-out forwards;
+  animation-delay: 0ms, 0ms, calc((var(--wait) + 140ms) / var(--rate));
 }
 
-.th-stage[data-hum="1"] {
-  --amp: 1;
-  --hum-speed: 340ms;
+.th-page .th-swap[data-state="poof"] .th-swap-al,
+.th-page .th-swap[data-state="poof"]:not([data-same])::after {
+  animation-delay: calc((var(--wait) + 140ms) / var(--rate));
 }
 
-.th-stage[data-hum="2"] {
-  --amp: 2.1;
-  --hum-speed: 250ms;
-}
+@keyframes th-amp {
+  from {
+    --amp: 0;
+  }
 
-.th-stage[data-hum="3"] {
-  --amp: 3.4;
-  --hum-speed: 170ms;
+  to {
+    --amp: 3.2;
+  }
 }
 
 @keyframes th-hum {
@@ -479,15 +499,15 @@ html[data-color-mode="dark"] .th-theater {
   }
 
   25% {
-    transform: translate(calc(-0.022em * var(--amp)), calc(0.014em * var(--amp))) rotate(calc(-0.28deg * var(--amp)));
+    transform: translate(calc(-0.022em * var(--amp, 0)), calc(0.014em * var(--amp, 0))) rotate(calc(-0.28deg * var(--amp, 0)));
   }
 
   50% {
-    transform: translate(calc(0.018em * var(--amp)), calc(-0.018em * var(--amp))) rotate(calc(0.24deg * var(--amp)));
+    transform: translate(calc(0.018em * var(--amp, 0)), calc(-0.018em * var(--amp, 0))) rotate(calc(0.24deg * var(--amp, 0)));
   }
 
   75% {
-    transform: translate(calc(0.02em * var(--amp)), calc(0.012em * var(--amp))) rotate(calc(0.3deg * var(--amp)));
+    transform: translate(calc(0.02em * var(--amp, 0)), calc(0.012em * var(--amp, 0))) rotate(calc(0.3deg * var(--amp, 0)));
   }
 }
 
@@ -514,17 +534,6 @@ html[data-color-mode="dark"] .th-theater {
   border-radius: 50%;
   animation: th-burst calc(640ms / var(--rate)) ease-out both;
   animation-delay: calc(var(--swap-index, 0) * 80ms / var(--rate));
-}
-
-/*
- * An article waits for the sweep to reach its own column, so the words turn over
- * behind the band instead of together when it leaves the line. --sweep-at is the
- * word's centre as a fraction of its line, measured once by the figure.
- */
-.th-swap[data-kind="article"][data-state="poof"] .th-swap-de,
-.th-swap[data-kind="article"][data-state="poof"] .th-swap-al,
-.th-swap[data-kind="article"][data-state="poof"]:not([data-same])::after {
-  animation-delay: calc((var(--sweep-at, 0) * var(--scan-duration) + 140ms) / var(--rate));
 }
 
 @keyframes th-poof-out {
