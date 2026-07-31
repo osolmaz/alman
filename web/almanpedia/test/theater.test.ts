@@ -104,6 +104,29 @@ test("the acts without a reading head stagger their turnover by position", () =>
   }
 });
 
+test("the address act shows the article the whole way, on Wikipedia then here", () => {
+  const { theater, stage } = mount();
+  const page = () => stage.querySelector<HTMLElement>("[data-page]")!;
+  const shown = () => page().classList.contains("is-in");
+
+  // The caption at this point is about an article, so one has to be on screen.
+  theater.seekTo(8_500);
+  expect(shown()).toBe(true);
+  expect(page().dataset.site).toBe("wikipedia");
+  expect([...stage.querySelectorAll<HTMLElement>("[data-line]")].every((l) => l.classList.contains("is-in")))
+    .toBe(true);
+
+  // The one moment an empty browser is truthful: the page is loading.
+  theater.seekTo(15_000);
+  expect(shown()).toBe(false);
+
+  theater.seekTo(17_000);
+  expect(shown()).toBe(true);
+  expect(page().dataset.site).toBe("almanpedia");
+  // Same article, same text: only the masthead and the address changed.
+  expect(page().dataset.lang).toBe("de");
+});
+
 test("the scanner runs once over the whole article, not per line", () => {
   const { theater, stage } = mount();
   const page = () => stage.querySelector<HTMLElement>("[data-page]")!;
