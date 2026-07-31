@@ -18,6 +18,7 @@ import {
   WIKIPEDIA_MAIN_PAGE_TITLE,
 } from "./homepage";
 import { createSearchBox } from "./search";
+import { autoloadsModel } from "./model-gate";
 import { createTheater, type Theater } from "./theater";
 import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
 import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } from "./settings";
@@ -31,6 +32,24 @@ export interface AppShell {
 }
 
 const MODEL_REPOSITORY_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
+
+/**
+ * Offer the translation instead of starting it. Used where `autoloadsModel` says
+ * this device should be asked first; see `./model-gate` for why. Returns the
+ * element to place, and calls `start` once, on the first press.
+ */
+function createTranslationStart(start: () => void): HTMLElement {
+  const button = el("button", { class: "start-translation", type: "button" }, ["Übersetzung starten"]);
+  const note = el("span", { class: "start-translation-note" }, [
+    "Die Modell braucht rund 34 MB und läuft lokal. Auf ein Telefon reicht die Speicher manchmal nicht.",
+  ]);
+  const host = el("div", { class: "start-translation-host" }, [button, note]);
+  button.addEventListener("click", () => {
+    host.remove();
+    start();
+  }, { once: true });
+  return host;
+}
 
 let activeController: DomTranslatorController | null = null;
 let activeRevealController: TranslationRevealController | null = null;
@@ -159,65 +178,76 @@ export async function renderLanding(shell: AppShell): Promise<void> {
     return;
   }
 
-  try {
-    await initModel((assetProgress: AssetProgress) => {
+  // Loading the model is what kills a phone tab, so on a device that should be
+  // asked first this waits for a press instead. See ./model-gate.
+  async function startTranslation(): Promise<void> {
+    try {
+      await initModel((assetProgress: AssetProgress) => {
+        if (!feed.isConnected) return;
+        if (assetProgress.phase === "download") {
+          progress.set(
+            assetProgress.overallLoaded / assetProgress.overallTotal,
+            `MODELL WIRD GELADEN: ${Math.round((assetProgress.overallLoaded / assetProgress.overallTotal) * 100)} %`,
+          );
+        } else {
+          progress.set(1, "MODELL WIRD VORBEREITET …");
+        }
+      });
+    } catch (error) {
       if (!feed.isConnected) return;
-      if (assetProgress.phase === "download") {
-        progress.set(
-          assetProgress.overallLoaded / assetProgress.overallTotal,
-          `MODELL WIRD GELADEN: ${Math.round((assetProgress.overallLoaded / assetProgress.overallTotal) * 100)} %`,
-        );
-      } else {
-        progress.set(1, "MODELL WIRD VORBEREITET …");
-      }
-    });
-  } catch (error) {
+      progress.done();
+      shell.status.append(el("span", { class: "status-error" }, [
+        "Übersetzung nicht verfügbar. Die deutschsprachige Hauptseite bleibt sichtbar.",
+      ]));
+      console.error("model init failed", error);
+      return;
+    }
     if (!feed.isConnected) return;
-    progress.done();
-    shell.status.append(el("span", { class: "status-error" }, [
-      "Übersetzung nicht verfügbar. Die deutschsprachige Hauptseite bleibt sichtbar.",
-    ]));
-    console.error("model init failed", error);
+
+    let inferenceComplete = false;
+    let revealController: TranslationRevealController | null = null;
+    const syncFeedLanguage = () => {
+      const fullyRevealed = inferenceComplete && (revealController?.pendingCount() ?? 0) === 0;
+      feed.lang = fullyRevealed ? "de-AL" : "de";
+    };
+    const controller = createDomTranslator({
+      root: feed,
+      engine: getEngine(),
+      markChanges: true,
+      deferApplication: true,
+      onStats: (stats) => {
+        if (stats.totalBlocks === 0 || stats.pendingBlocks === 0) {
+          inferenceComplete = true;
+          syncFeedLanguage();
+          progress.done();
+          return;
+        }
+        const done = stats.totalBlocks - stats.pendingBlocks;
+        progress.set(done / stats.totalBlocks, `HAUPTSEITE WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
+      },
+      onBlockState: (event) => revealController?.handleBlockState(event),
+    });
+    revealController = createTranslationRevealController({
+      root: feed,
+      applyTranslation: (element) => controller.applyTranslation(element),
+      onReveal: (element) => {
+        revealTranslatedBlock(element);
+        syncFeedLanguage();
+      },
+      onPendingChange: () => syncFeedLanguage(),
+    });
+    activeController = controller;
+    activeRevealController = revealController;
+    controller.start();
+    controller.translateAll();
+  }
+
+  if (autoloadsModel()) {
+    await startTranslation();
     return;
   }
-  if (!feed.isConnected) return;
-
-  let inferenceComplete = false;
-  let revealController: TranslationRevealController | null = null;
-  const syncFeedLanguage = () => {
-    const fullyRevealed = inferenceComplete && (revealController?.pendingCount() ?? 0) === 0;
-    feed.lang = fullyRevealed ? "de-AL" : "de";
-  };
-  const controller = createDomTranslator({
-    root: feed,
-    engine: getEngine(),
-    markChanges: true,
-    deferApplication: true,
-    onStats: (stats) => {
-      if (stats.totalBlocks === 0 || stats.pendingBlocks === 0) {
-        inferenceComplete = true;
-        syncFeedLanguage();
-        progress.done();
-        return;
-      }
-      const done = stats.totalBlocks - stats.pendingBlocks;
-      progress.set(done / stats.totalBlocks, `HAUPTSEITE WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
-    },
-    onBlockState: (event) => revealController?.handleBlockState(event),
-  });
-  revealController = createTranslationRevealController({
-    root: feed,
-    applyTranslation: (element) => controller.applyTranslation(element),
-    onReveal: (element) => {
-      revealTranslatedBlock(element);
-      syncFeedLanguage();
-    },
-    onPendingChange: () => syncFeedLanguage(),
-  });
-  activeController = controller;
-  activeRevealController = revealController;
-  controller.start();
-  controller.translateAll();
+  progress.done();
+  shell.status.replaceChildren(createTranslationStart(() => void startTranslation()));
 }
 
 export function createArticleAttribution(title: string): HTMLElement {
@@ -618,73 +648,83 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     differenceToggle.setAttribute("aria-pressed", "true");
   });
 
-  try {
-    await initModel((assetProgress: AssetProgress) => {
+  async function startTranslation(): Promise<void> {
+    try {
+      await initModel((assetProgress: AssetProgress) => {
+        if (!articleColumn.isConnected) return;
+        if (assetProgress.phase === "download") {
+          progress.set(
+            assetProgress.overallLoaded / assetProgress.overallTotal,
+            `MODELL WIRD GELADEN: ${Math.round((assetProgress.overallLoaded / assetProgress.overallTotal) * 100)} %`,
+          );
+        } else {
+          progress.set(1, "MODELL WIRD VORBEREITET …");
+        }
+      });
+    } catch (error) {
       if (!articleColumn.isConnected) return;
-      if (assetProgress.phase === "download") {
-        progress.set(
-          assetProgress.overallLoaded / assetProgress.overallTotal,
-          `MODELL WIRD GELADEN: ${Math.round((assetProgress.overallLoaded / assetProgress.overallTotal) * 100)} %`,
-        );
-      } else {
-        progress.set(1, "MODELL WIRD VORBEREITET …");
-      }
-    });
-  } catch (error) {
+      finishArticleRender(render);
+      progress.done();
+      articleStatus.append(el("span", { class: "status-error" }, ["Übersetzung nicht verfügbar — Original wird angezeigt."]));
+      console.error("model init failed", error);
+      return;
+    }
     if (!articleColumn.isConnected) return;
+
+    const controller = createDomTranslator({
+      root: articleColumn,
+      engine: getEngine(),
+      markChanges: true,
+      deferApplication: true,
+      onStats: (stats) => {
+        if (stats.totalBlocks === 0) {
+          inferenceComplete = true;
+          syncContentLanguage();
+          progress.done();
+          return;
+        }
+        const done = stats.totalBlocks - stats.pendingBlocks;
+        if (stats.pendingBlocks === 0) {
+          inferenceComplete = true;
+          contents.refresh();
+          if (showingDifferences) showDifferences();
+          syncContentLanguage();
+          progress.done();
+          return;
+        }
+        progress.set(done / stats.totalBlocks, `ARTIKEL WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
+      },
+      onBlockState: (event) => {
+        revealController?.handleBlockState(event);
+        if (event.element === heading) syncContentLanguage();
+      },
+    });
+    revealController = createTranslationRevealController({
+      root: articleColumn,
+      applyTranslation: (element) => controller.applyTranslation(element),
+      onReveal: (element) => {
+        revealTranslatedBlock(element);
+        contents.refresh();
+        syncContentLanguage();
+      },
+      onPendingChange: () => syncContentLanguage(),
+    });
+    activeController = controller;
+    activeRevealController = revealController;
+    if (shell.main.classList.contains("article-loading")) revealController.setPaused(true);
+    toggle.removeAttribute("disabled");
+    differenceToggle.removeAttribute("disabled");
+    controller.start();
+    controller.translateAll();
+  }
+
+  if (autoloadsModel()) {
+    await startTranslation();
     finishArticleRender(render);
-    progress.done();
-    articleStatus.append(el("span", { class: "status-error" }, ["Übersetzung nicht verfügbar — Original wird angezeigt."]));
-    console.error("model init failed", error);
     return;
   }
-  if (!articleColumn.isConnected) return;
-
-  const controller = createDomTranslator({
-    root: articleColumn,
-    engine: getEngine(),
-    markChanges: true,
-    deferApplication: true,
-    onStats: (stats) => {
-      if (stats.totalBlocks === 0) {
-        inferenceComplete = true;
-        syncContentLanguage();
-        progress.done();
-        return;
-      }
-      const done = stats.totalBlocks - stats.pendingBlocks;
-      if (stats.pendingBlocks === 0) {
-        inferenceComplete = true;
-        contents.refresh();
-        if (showingDifferences) showDifferences();
-        syncContentLanguage();
-        progress.done();
-        return;
-      }
-      progress.set(done / stats.totalBlocks, `ARTIKEL WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
-    },
-    onBlockState: (event) => {
-      revealController?.handleBlockState(event);
-      if (event.element === heading) syncContentLanguage();
-    },
-  });
-  revealController = createTranslationRevealController({
-    root: articleColumn,
-    applyTranslation: (element) => controller.applyTranslation(element),
-    onReveal: (element) => {
-      revealTranslatedBlock(element);
-      contents.refresh();
-      syncContentLanguage();
-    },
-    onPendingChange: () => syncContentLanguage(),
-  });
-  activeController = controller;
-  activeRevealController = revealController;
-  if (shell.main.classList.contains("article-loading")) revealController.setPaused(true);
-  toggle.removeAttribute("disabled");
-  differenceToggle.removeAttribute("disabled");
-  controller.start();
-  controller.translateAll();
+  progress.done();
+  articleStatus.replaceChildren(createTranslationStart(() => void startTranslation()));
   finishArticleRender(render);
 }
 

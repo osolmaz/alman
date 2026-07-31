@@ -44,6 +44,14 @@ The article page follows the reading structure familiar from Wikipedia. It has a
 
 The landing page introduces Almanpedia as Alman AI's self-study reader for people learning German without memorizing noun genders. It links directly to the interactive introduction at `alman.ai`.
 
+## Loading the model
+
+The model is not merely a 34 MB download; it is a large resident cost, because the ORT WASM runtime instantiates alongside the int8 weights in one heap. On an iPhone 14 Pro this exceeded the memory a third-party WebKit host is allowed: the browser terminated and reloaded the document about nine seconds after the runtime arrived, repeatedly, so the page never finished loading. Server logs recorded three full document loads in twenty-eight seconds, each re-fetching every asset.
+
+Almanpedia therefore offers the translation on devices that are likely to be killed for it instead of starting it. `src/ui/model-gate.ts` decides: a device reporting touch and no fine pointer — a phone or a tablet — is asked, as is one reporting 4 GiB of memory or less. Anything with a fine pointer, including a laptop with a touchscreen, loads the model as before. No browser exposes a memory budget, so the test is device class, and it is deliberately coarse: a desktop visitor who is asked presses a button, while a phone visitor who is not asked gets a page that reloads forever.
+
+Where the visitor is asked, the article or the German Wikipedia feed stands in Standard German and a `Übersetzung starten` button appears in the status region, with the download size and a note that a phone's memory is sometimes not enough. Pressing it runs exactly the path that would otherwise have run automatically. The staged figure below needs no model at all, so a phone still gets the whole explanation of Alman either way.
+
 ## The staged figure
 
 The figure stands at the top of the landing page, in place of the large brand heading that used to open it: its first act is that brand at the same size, which then clears the stage for the rest. It carries no frame and no fill of its own, so it reads as the page's masthead rather than an embedded player, and one fixed stage height keeps every act from moving the page. Because the stage is hidden from assistive technology, the page's `h1` is text that names the site and is not shown. The figure runs 101 seconds in six acts, with a play button, a scrubber, chapter markers, and a speed control that cycles 1×, 1.5×, 2×, and 0.5×. It holds its first frame until the stage is a third on screen, then plays by itself. It is deliberately slow: every caption is a sentence that has to be readable before the next one replaces it, no caption is replaced inside 2.4 seconds, and the reading head spends four seconds on a line. Anyone who would rather not wait has 2× and the chapter markers. The example article throughout is `Sapir-Whorf-Hypothese`, and its text is the real lede of that German Wikipedia article shortened to four sentences.
