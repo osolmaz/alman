@@ -27,6 +27,12 @@ const ARTICLE = `
       </figure>
       <p>${"An ordinary aligned figure follows the same bounded layout contract. ".repeat(12)}</p>
     </section>
+    <section class="legacy-figure-section">
+      <div class="legacy-thumb" data-wiki-component="thumbnail" data-wiki-float="right">
+        <div class="media"></div><div>A legacy thumbnail container</div>
+      </div>
+      <p>${"Legacy thumbnail containers use the same responsive layout contract. ".repeat(10)}</p>
+    </section>
     <section class="table-section">
       <div data-wiki-layout="table-scroll">
         <table data-wiki-component="data-table" style="width:900px">
@@ -53,8 +59,8 @@ const FRAME_CSS = `
 body { margin: 0; font-family: var(--font-body); }
 .frame { width: min(858px, calc(100vw - 24px)); margin: 12px auto; }
 .media { width: 400px; height: 200px; max-width: 100%; background: #ccc; }
-.figure-section, .left-figure-section { min-height: 20rem; }
-.left-figure-section, .table-section { clear: both; }
+.figure-section, .left-figure-section, .legacy-figure-section { min-height: 20rem; }
+.left-figure-section, .legacy-figure-section, .table-section { clear: both; }
 `;
 
 async function mount(page: Page, width: number): Promise<void> {
@@ -80,17 +86,18 @@ test("wide articles preserve float stacks, thumbnail placement, and table contai
   const stack = await box(page, '[data-wiki-layout="float-stack"]');
   const infobox = await box(page, '[data-wiki-component="infobox"]');
   const linkbox = await box(page, '[data-wiki-component="linkbox"]');
-  const thumbnail = await box(page, '[data-wiki-component="thumbnail"]');
+  const thumbnail = await box(page, 'figure[data-wiki-component="thumbnail"]');
   const leftFigure = await box(page, '[data-wiki-component="figure"]');
 
   expect(infobox.width).toBeCloseTo(316, 0);
   expect(linkbox.y).toBeGreaterThanOrEqual(infobox.y + infobox.height - 1);
   expect(stack.x + stack.width).toBeLessThanOrEqual(article.x + article.width + 1);
   expect(await page.locator('[data-wiki-layout="float-stack"]').evaluate((element) => getComputedStyle(element).float)).toBe("right");
-  expect(await page.locator('[data-wiki-component="thumbnail"]').evaluate((element) => getComputedStyle(element).float)).toBe("right");
+  expect(await page.locator('figure[data-wiki-component="thumbnail"]').evaluate((element) => getComputedStyle(element).float)).toBe("right");
   expect(thumbnail.x).toBeGreaterThan(article.x + article.width / 2);
   expect(await page.locator('[data-wiki-component="figure"]').evaluate((element) => getComputedStyle(element).float)).toBe("left");
   expect(leftFigure.x).toBeLessThan(article.x + article.width / 2);
+  expect(await page.locator(".legacy-thumb").evaluate((element) => getComputedStyle(element).float)).toBe("right");
 
   const scroller = page.locator('[data-wiki-layout="table-scroll"]');
   const tableWidths = await scroller.evaluate((element) => ({ client: element.clientWidth, scroll: element.scrollWidth }));
@@ -118,17 +125,18 @@ test("phone columns stack components in order and contain wide content", async (
   const stack = await box(page, '[data-wiki-layout="float-stack"]');
   const infobox = await box(page, '[data-wiki-component="infobox"]');
   const linkbox = await box(page, '[data-wiki-component="linkbox"]');
-  const thumbnail = await box(page, '[data-wiki-component="thumbnail"]');
+  const thumbnail = await box(page, 'figure[data-wiki-component="thumbnail"]');
   const leftFigure = await box(page, '[data-wiki-component="figure"]');
 
   expect(await page.locator('[data-wiki-layout="float-stack"]').evaluate((element) => getComputedStyle(element).float)).toBe("none");
-  expect(await page.locator('[data-wiki-component="thumbnail"]').evaluate((element) => getComputedStyle(element).float)).toBe("none");
+  expect(await page.locator('figure[data-wiki-component="thumbnail"]').evaluate((element) => getComputedStyle(element).float)).toBe("none");
   expect(await page.locator('[data-wiki-component="figure"]').evaluate((element) => getComputedStyle(element).float)).toBe("none");
   expect(stack.width).toBeCloseTo(article.width, 0);
   expect(infobox.width).toBeLessThanOrEqual(article.width + 1);
   expect(linkbox.y).toBeGreaterThanOrEqual(infobox.y + infobox.height - 1);
   expect(thumbnail.width).toBeLessThanOrEqual(article.width + 1);
   expect(leftFigure.width).toBeLessThanOrEqual(article.width + 1);
+  expect(await page.locator(".legacy-thumb").evaluate((element) => getComputedStyle(element).float)).toBe("none");
 
   const scroller = page.locator('[data-wiki-layout="table-scroll"]');
   const tableWidths = await scroller.evaluate((element) => ({ client: element.clientWidth, scroll: element.scrollWidth }));
