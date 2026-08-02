@@ -85,24 +85,22 @@ bump that dependency without re-running this gate.
   `almanpedia/dist` as its output directory, with `NODE_VERSION=22` in the
   build environment. The Pages custom domains are `almanpedia.org` and
   `www.almanpedia.org`. A proxied `de.almanpedia.org` CNAME and a Cloudflare
-  Single Redirect send the German shortcut to `https://almanpedia.org` while
-  preserving the path and query string. Direct `/wiki/*` requests are proxied
-  to the SPA shell by `almanpedia/public/_redirects`. Keep the build free of a
-  top-level `404.html`, because its presence disables Cloudflare Pages' automatic
-  SPA fallback. The Vite build strips Vite's own `crossorigin` from the emitted script and
-  stylesheet tags and disables the module-preload polyfill: everything is
-  same-origin, the polyfill is inline and the CSP forbids inline scripts, and the
-  attribute made browsers fetch assets in CORS mode. Pages answers a missing file
-  with `index.html` and a 200 rather than a 404, caches CORS and non-CORS
-  responses separately, and `_headers` marks `/assets/*` immutable for a year —
-  which pinned `text/html` into the CORS variant of a stylesheet URL and served
-  the whole site unstyled while `curl` of the same URL returned correct CSS. Keep
-  browser-loaded assets out of CORS mode. The
-  `.github/workflows/deploy-almanpedia.yml` workflow is retained for recovery
-  and is not triggered by pushes. It requires `CLOUDFLARE_API_TOKEN` and
-  `CLOUDFLARE_ACCOUNT_ID`. The idempotent
-  `scripts/configure-almanpedia-shortcut.ts` utility can reconcile the DNS
-  record and redirect when run with `CLOUDFLARE_API_TOKEN`.
+  Single Redirect preserve the path and query string when sending the German
+  shortcut to `https://almanpedia.org`. The explicit rule in
+  `almanpedia/public/_redirects` proxies `/wiki/*` to the SPA shell. Keep the
+  top-level `404.html`: it makes missing assets return 404 instead of caching the
+  app HTML under a CSS, JavaScript, or WASM URL. Asset responses use Cloudflare
+  Pages' default ETag revalidation rather than a custom immutable browser cache.
+  Run `npm run verify:deploy:pedia` after Cloudflare finishes deploying. The
+  verifier uses cache-busted probes until every asset has the correct MIME type,
+  then checks canonical assets, the direct article route, and missing-asset 404s.
+  The Vite build removes the unnecessary `crossorigin` attribute from same-origin
+  stylesheet loading and disables the inline module-preload polyfill blocked by
+  the CSP. The `.github/workflows/deploy-almanpedia.yml` workflow is retained for
+  recovery and is not triggered by pushes. It requires `CLOUDFLARE_API_TOKEN`
+  and `CLOUDFLARE_ACCOUNT_ID`. The idempotent
+  `scripts/configure-almanpedia-shortcut.ts` utility can reconcile the DNS record
+  and redirect when run with `CLOUDFLARE_API_TOKEN`.
 - **Extension**: CI (`web-test` job) uploads Chrome/Firefox zips as build
   artifacts. Store submission is manual for now.
 - **CI secrets**: `HF_TOKEN` is only needed by the `web-model-parity` job
