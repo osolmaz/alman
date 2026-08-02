@@ -103,7 +103,6 @@ html[data-color-mode="dark"] .th-theater {
 .th-logo-emblem {
   width: min(13.75rem, 55vw);
   height: auto;
-  filter: var(--brand-filter);
   transform: scale(0.9);
   transition: transform calc(1400ms / var(--rate)) cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -115,7 +114,6 @@ html[data-color-mode="dark"] .th-theater {
 .th-logo-wordmark {
   width: min(29rem, 90vw);
   height: auto;
-  filter: var(--brand-filter);
 }
 
 .th-boot {
@@ -366,7 +364,6 @@ html[data-color-mode="dark"] .th-theater {
 .th-page-wordmark {
   width: 7.5rem;
   height: auto;
-  filter: var(--brand-filter);
 }
 
 .th-page[data-site="wikipedia"] .th-page-wordmark,
@@ -849,7 +846,6 @@ html[data-color-mode="dark"] .th-theater {
 .th-outro-wordmark {
   width: min(22rem, 70%);
   height: auto;
-  filter: var(--brand-filter);
 }
 
 .th-outro-cta {

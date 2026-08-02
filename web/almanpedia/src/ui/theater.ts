@@ -244,7 +244,7 @@ function ruleCard(card: RuleCard, order: Counter): HTMLElement {
 
 function brandEmblem(className: string): HTMLImageElement {
   return el("img", {
-    class: className,
+    class: `${className} brand-art--color`,
     src: EMBLEM_SRC,
     srcset: EMBLEM_SRCSET,
     sizes: "(max-width: 40rem) 55vw, 220px",
@@ -256,7 +256,13 @@ function brandEmblem(className: string): HTMLImageElement {
 }
 
 function wordmark(className: string): HTMLImageElement {
-  return el("img", { class: className, src: WORDMARK_SRC, width: "5477", height: "1305", alt: "" });
+  return el("img", {
+    class: `${className} brand-art--monochrome`,
+    src: WORDMARK_SRC,
+    width: "5477",
+    height: "1305",
+    alt: "",
+  });
 }
 
 function buildStage(): HTMLElement {
