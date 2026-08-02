@@ -35,7 +35,13 @@ function sameOriginAssets(): Plugin {
  * `_headers` marks `/assets/*` immutable for a year, so the URL is burnt while its
  * content is fine and rebuilding produces the same name. Changing this changes
  * every asset name, which is the only way to walk away from the entry without a
- * cache purge. `_redirects` and `404.html` now stop it happening again.
+ * cache purge.
+ *
+ * Serving a real 404 for a missing asset would prevent it, but the `_redirects`
+ * rewrite that would have kept `/wiki/*` working alongside a `404.html` was
+ * ignored by Pages and every article URL returned the 404 page, so that approach
+ * is out. `CDN-Cache-Control` in `public/_headers` bounds the damage instead: a
+ * wrong edge entry ages out in ten minutes rather than a year.
  */
 const CACHE_GENERATION = "g2";
 

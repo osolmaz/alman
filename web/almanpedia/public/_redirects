@@ -1,9 +1,0 @@
-# The app owns /wiki/<title>; everything else must resolve to a real file.
-#
-# Cloudflare Pages otherwise answers any unmatched path with index.html and a 200,
-# including a missing /assets/… file. Combined with the year-long immutable cache
-# in _headers, one request during a deploy window pinned index.html into the cache
-# entry for a stylesheet URL and served the whole site unstyled — twice, once per
-# cache variant. With this rewrite plus 404.html, a missing asset is a 404 that
-# nothing will mistake for CSS, and deep links still open the reader.
-/wiki/* /index.html 200

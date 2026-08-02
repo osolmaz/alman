@@ -3,8 +3,16 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://upload.wikimedia.org https://maps.wikimedia.org https://commons.wikimedia.org; connect-src 'self' https://de.wikipedia.org https://huggingface.co https://*.huggingface.co https://*.hf.co https://cloudflareinsights.com; font-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'
 
+# Browsers may keep a content-hashed asset forever. Cloudflare may not: it answers
+# an unmatched path with index.html and a 200, so one request during a deploy can
+# pin an HTML document into the cache entry for a stylesheet and, at a year, keep
+# it there. CDN-Cache-Control bounds the edge copy so that mistake ages out in ten
+# minutes instead. CACHE_GENERATION in vite.config.ts is the escape hatch if one
+# is pinned anyway.
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
+  CDN-Cache-Control: public, max-age=600
 
 /ort/*
   Cache-Control: public, max-age=31536000, immutable
+  CDN-Cache-Control: public, max-age=600
