@@ -92,7 +92,7 @@ async function deploymentRound(
 export async function verifyAlmanpediaDeployment(options: DeploymentVerificationOptions = {}): Promise<void> {
   const baseUrl = new URL(options.baseUrl ?? process.env.ALMANPEDIA_URL ?? "https://almanpedia.org/");
   const articlePath = options.articlePath ?? DEFAULT_ARTICLE_PATH;
-  const attempts = options.attempts ?? 30;
+  const attempts = options.attempts ?? 60;
   const requiredRounds = options.consecutiveReadyRounds ?? 2;
   const delayMs = options.delayMs ?? 5_000;
   const fetchImpl = options.fetchImpl ?? fetch;
