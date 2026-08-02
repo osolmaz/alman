@@ -684,16 +684,50 @@ h1,
   overflow-wrap: break-word;
 }
 
+/*
+ * A tab strip sitting on the head's rule, as on a Wikipedia article. The active
+ * tab's underline overlaps that rule, which is what the negative margin is for.
+ */
 .article-actions {
-  padding-bottom: 0.4rem;
+  margin-bottom: -1px;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
-  justify-content: flex-end;
+  gap: 0 1.1rem;
+  align-items: flex-end;
 }
 
-.toggle-original,
-.toggle-differences,
+.article-view {
+  padding: 0.35rem 0 0.4rem;
+  color: var(--link);
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.article-view:hover:not([disabled]) {
+  border-bottom-color: var(--border);
+}
+
+.article-view[aria-pressed="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+  font-weight: 600;
+  cursor: default;
+}
+
+.article-view[disabled] {
+  color: var(--muted);
+  cursor: default;
+}
+
+.article-view[disabled][aria-pressed="true"] {
+  color: var(--muted);
+  border-bottom-color: var(--border);
+}
+
 .toggle-settings,
 .retry {
   min-height: 2rem;
@@ -708,23 +742,16 @@ h1,
   white-space: nowrap;
 }
 
-.toggle-original:hover:not([disabled]),
-.toggle-differences:hover:not([disabled]),
 .toggle-settings:hover,
 .retry:hover {
   background: var(--surface-progressive);
   border-color: var(--border-subtle);
 }
 
-.toggle-original[disabled],
-.toggle-differences[disabled] {
-  color: var(--muted);
-  cursor: default;
-  opacity: 0.65;
-}
-
+/* Pushed to the far right of the strip, where Wikipedia keeps its ⋯ menu. */
 .toggle-settings {
   display: none;
+  margin: 0 0 0.35rem auto;
 }
 
 /* Contents */

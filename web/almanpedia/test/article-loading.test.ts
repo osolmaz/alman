@@ -199,7 +199,7 @@ test("retained article initialization resumes when its replacement fails", async
 
   const firstRendering = renderArticle(shell, "Erster");
   await vi.waitFor(() => expect(shell.main.querySelector(".wiki-content")?.textContent).toContain("Der erste Artikel bleibt."));
-  expect(shell.main.querySelector(".toggle-original")?.hasAttribute("disabled")).toBe(true);
+  expect(shell.main.querySelector(".article-view")?.hasAttribute("disabled")).toBe(true);
 
   history.pushState(null, "", "/wiki/Zweiter");
   const replacementRendering = renderArticle(shell, "Zweiter");
@@ -211,7 +211,7 @@ test("retained article initialization resumes when its replacement fails", async
   await firstRendering;
   expect(domTranslator.create).toHaveBeenCalledOnce();
   expect(domTranslator.controller.start).toHaveBeenCalledOnce();
-  expect(shell.main.querySelector(".toggle-original")?.hasAttribute("disabled")).toBe(false);
+  expect(shell.main.querySelector(".article-view")?.hasAttribute("disabled")).toBe(false);
   expect(shell.status.querySelector(".article-status .progress")).not.toBeNull();
 });
 

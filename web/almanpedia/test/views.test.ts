@@ -105,3 +105,21 @@ test("the landing page opens on the figure under one text heading", async () => 
     .toEqual(["sr-only", "th-theater", "landing-intro", "shortcut-guide", "landing-feed-heading", "landing-feed wiki-content"]);
   expect(landing.querySelector(".landing-brand")).toBeNull();
 });
+
+test("an article offers its three views as a strip, with one of them current", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue(
+    new Response(PARSOID_STUB, { status: 200, headers: { "content-type": "text/html" } }),
+  ));
+  const root = document.createElement("div");
+  document.body.append(root);
+  const shell = renderShell(root, () => {});
+
+  await renderArticle(shell, "Sapir-Whorf-Hypothese");
+  const strip = shell.main.querySelector('[role="group"][aria-label="Ansicht"]')!;
+  const tabs = [...strip.querySelectorAll<HTMLButtonElement>(".article-view")];
+
+  expect(tabs.map((tab) => tab.textContent)).toEqual(["Alman", "Original", "Änderungen"]);
+  // Exactly one is current, and it is the translated reading by default.
+  expect(tabs.map((tab) => tab.getAttribute("aria-pressed"))).toEqual(["true", "false", "false"]);
+  expect(tabs.filter((tab) => tab.getAttribute("aria-pressed") === "true")).toHaveLength(1);
+});

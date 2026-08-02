@@ -551,17 +551,23 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   stopActiveTranslation();
 
   const heading = el("h1", { class: "article-title", lang: "de" }, [sourceTitle]);
-  const toggle = el(
-    "button",
-    { class: "toggle-original", type: "button", disabled: "", "aria-pressed": "false" },
-    ["Original anzeigen"],
-  );
-  const differenceToggle = el(
-    "button",
-    { class: "toggle-differences", type: "button", disabled: "", "aria-pressed": "false" },
-    ["Änderungen anzeigen"],
-  );
-  const actions = el("div", { class: "article-actions", translate: "no", lang: "de" }, [toggle, differenceToggle]);
+  /*
+   * The three views of one article as a tab strip on the rule under the title —
+   * the shape Wikipedia uses for Artikel/Diskussion and Lesen/Quelltext/
+   * Versionsgeschichte. Two toggle buttons said less than this: the states are
+   * mutually exclusive, so exactly one of them is current at any moment, and a
+   * strip shows which without being read.
+   */
+  const almanTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "true" }, ["Alman"]);
+  const originalTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "false" }, ["Original"]);
+  const differenceTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "false" }, ["Änderungen"]);
+  const actions = el("div", {
+    class: "article-actions",
+    role: "group",
+    "aria-label": "Ansicht",
+    translate: "no",
+    lang: "de",
+  }, [almanTab, originalTab, differenceTab]);
   const content = el("article", { class: "wiki-content", lang: "de" });
   content.append(fragment);
   const contents = createArticleContents(content, window.matchMedia?.("(max-width: 56rem)"));
@@ -624,8 +630,6 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     differenceContent?.remove();
     differenceContent = null;
     content.hidden = false;
-    differenceToggle.textContent = "Änderungen anzeigen";
-    differenceToggle.setAttribute("aria-pressed", "false");
     revealController?.setPaused(showingOriginal);
     syncContentLanguage();
   };
@@ -671,43 +675,41 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     revealController?.setPaused(true);
   };
 
-  toggle.addEventListener("click", () => {
+  type ArticleView = "alman" | "original" | "changes";
+  const viewTabs: Array<[ArticleView, HTMLButtonElement]> = [
+    ["alman", almanTab],
+    ["original", originalTab],
+    ["changes", differenceTab],
+  ];
+
+  /** Switch between the three views. Selecting the current one does nothing. */
+  function setView(next: ArticleView): void {
     if (!activeController) return;
-    showingOriginal = !showingOriginal;
-    if (showingDifferences) hideDifferences();
-    if (showingOriginal) {
+    const current: ArticleView = showingDifferences ? "changes" : showingOriginal ? "original" : "alman";
+    if (next === current) return;
+
+    if (current === "changes") hideDifferences();
+    if (next === "original") {
+      showingOriginal = true;
       revealController?.setPaused(true);
       activeController.restoreOriginals();
-    } else {
+    } else if (showingOriginal) {
+      showingOriginal = false;
       activeController.reapplyTranslations();
       revealController?.setPaused(false);
     }
+    if (next === "changes") {
+      showingDifferences = true;
+      revealController?.setPaused(true);
+      activeController.translateAll();
+      showDifferences();
+    }
+    for (const [view, tab] of viewTabs) tab.setAttribute("aria-pressed", String(view === next));
     syncContentLanguage();
     contents.refresh();
-    toggle.textContent = showingOriginal ? "Alman anzeigen" : "Original anzeigen";
-    toggle.setAttribute("aria-pressed", String(showingOriginal));
-  });
+  }
 
-  differenceToggle.addEventListener("click", () => {
-    if (!activeController) return;
-    if (showingDifferences) {
-      hideDifferences();
-      return;
-    }
-    if (showingOriginal) {
-      showingOriginal = false;
-      activeController.reapplyTranslations();
-      toggle.textContent = "Original anzeigen";
-      toggle.setAttribute("aria-pressed", "false");
-      syncContentLanguage();
-    }
-    showingDifferences = true;
-    revealController?.setPaused(true);
-    activeController.translateAll();
-    showDifferences();
-    differenceToggle.textContent = "Änderungen ausblenden";
-    differenceToggle.setAttribute("aria-pressed", "true");
-  });
+  for (const [view, tab] of viewTabs) tab.addEventListener("click", () => setView(view));
 
   async function startTranslation(): Promise<void> {
     try {
@@ -774,8 +776,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     activeController = controller;
     activeRevealController = revealController;
     if (shell.main.classList.contains("article-loading")) revealController.setPaused(true);
-    toggle.removeAttribute("disabled");
-    differenceToggle.removeAttribute("disabled");
+    for (const [, tab] of viewTabs) tab.removeAttribute("disabled");
     controller.start();
     controller.translateAll();
   }
