@@ -4,5 +4,5 @@
     "resolveJsonModule": true,
     "types": ["vite/client"]
   },
-  "include": ["src/**/*", "test/**/*", "vite.config.ts", "vitest.config.ts"]
+  "include": ["src/**/*", "test/**/*", "../scripts/audit-almanpedia-layout.ts", "playwright.config.ts", "vite.config.ts", "vitest.config.ts"]
 }

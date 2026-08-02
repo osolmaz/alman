@@ -2,9 +2,15 @@
 
 .wiki-content {
   min-width: 0;
+  container-name: wiki-article;
+  container-type: inline-size;
   overflow-wrap: break-word;
   font-size: var(--article-font-size);
   line-height: var(--article-line-height);
+}
+
+.wiki-content :where(div, section, aside, nav) {
+  max-width: 100%;
 }
 
 .wiki-content p {
@@ -78,23 +84,21 @@
   height: auto;
 }
 
-.wiki-content figure,
-.wiki-content .thumb {
+.wiki-content [data-wiki-component="figure"],
+.wiki-content [data-wiki-component="thumbnail"] {
+  width: fit-content;
   max-width: 100%;
   margin: 0.5rem 0 1rem;
 }
 
-.wiki-content figure[typeof~="mw:File/Thumb"],
-.wiki-content figure.mw-halign-right,
-.wiki-content .tright {
+.wiki-content :is([data-wiki-component="thumbnail"], [data-wiki-component="figure"])[data-wiki-float="right"] {
   float: right;
   clear: right;
   max-width: min(45%, 22rem);
   margin: 0.25rem 0 0.75rem 1.25rem;
 }
 
-.wiki-content figure.mw-halign-left,
-.wiki-content .tleft {
+.wiki-content :is([data-wiki-component="thumbnail"], [data-wiki-component="figure"])[data-wiki-float="left"] {
   float: left;
   clear: left;
   max-width: min(45%, 22rem);
@@ -119,49 +123,94 @@
 }
 
 .wiki-content table {
-  display: block;
   max-width: 100%;
   margin: 1rem 0;
-  overflow-x: auto;
   color: var(--ink);
   background: var(--surface-raised);
   border-collapse: collapse;
   font-size: 0.8em;
 }
 
-.wiki-content table.wikitable td,
-.wiki-content table.wikitable th,
-.wiki-content table.infobox td,
-.wiki-content table.infobox th {
+.wiki-content [data-wiki-layout="table-scroll"] {
+  max-width: 100%;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.wiki-content [data-wiki-layout="table-scroll"] > table {
+  max-width: none;
+  margin: 0;
+}
+
+.wiki-content [data-wiki-component="data-table"] td,
+.wiki-content [data-wiki-component="data-table"] th,
+.wiki-content [data-wiki-component="infobox"] td,
+.wiki-content [data-wiki-component="infobox"] th {
   padding: 0.25rem 0.5rem;
   vertical-align: top;
   border: 1px solid var(--border);
 }
 
-.wiki-content table.wikitable th,
-.wiki-content table.infobox th {
+.wiki-content [data-wiki-component="data-table"] th,
+.wiki-content [data-wiki-component="infobox"] th {
   background: var(--surface-subtle);
   font-weight: 600;
   text-align: left;
 }
 
-/*
- * An infobox declares its own width — Parsoid ships `style="width:270px"` — and
- * needs real table layout to honour it, because that is what wraps a cell's text
- * to the column. The scroll treatment above turns every table into a block box,
- * which leaves the cells at their min-content width and pushes half the infobox
- * out of sight behind `overflow-x`. Wide data tables still scroll; this does not.
- */
-.wiki-content .infobox,
-.wiki-content table.float-right {
-  display: table;
+/* Parsoid can give one transclusion wrapper and its table the same `infobox`
+   class. The adapter distinguishes them before CSS sees the fragment. */
+.wiki-content [data-wiki-layout="float-stack"] {
   float: right;
   clear: right;
-  width: auto;
+  width: max-content;
   max-width: min(50%, 24rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   margin: 0.25rem 0 1rem 1.25rem;
+}
+
+.wiki-content [data-wiki-layout="float-stack"] > [data-wiki-stack-item] {
+  float: none;
+  clear: none;
+  max-width: 100%;
+}
+
+.wiki-content [data-wiki-component="infobox"] {
+  display: table;
   overflow: visible;
   background: var(--surface-subtle);
+}
+
+.wiki-content [data-wiki-component="infobox"][data-wiki-float]:not([data-wiki-stack-item]),
+.wiki-content [data-wiki-component="linkbox"][data-wiki-float]:not([data-wiki-stack-item]) {
+  max-width: min(50%, 24rem);
+  margin: 0.25rem 0 1rem 1.25rem;
+}
+
+.wiki-content [data-wiki-float="right"]:not([data-wiki-stack-item]) {
+  float: right;
+  clear: right;
+}
+
+.wiki-content [data-wiki-float="left"]:not([data-wiki-stack-item]) {
+  float: left;
+  clear: left;
+  margin-right: 1.25rem;
+  margin-left: 0;
+}
+
+.wiki-content [data-wiki-clear="right"] {
+  clear: right;
+}
+
+.wiki-content [data-wiki-clear="left"] {
+  clear: left;
+}
+
+.wiki-content [data-wiki-clear="both"] {
+  clear: both;
 }
 
 .wiki-content .hatnote,
@@ -174,7 +223,7 @@
   font-size: 0.8em;
 }
 
-.wiki-content .gallery {
+.wiki-content [data-wiki-component="gallery"] {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
@@ -186,8 +235,7 @@
   max-width: 12rem;
 }
 
-.wiki-content ol.mw-references,
-.wiki-content .mw-references-wrap {
+.wiki-content [data-wiki-component="references"] {
   color: var(--muted);
   font-size: 0.75em;
 }
@@ -200,46 +248,48 @@
   display: none;
 }
 
-.wiki-content math,
-.wiki-content .mwe-math-element {
+.wiki-content [data-wiki-component="math"] {
   overflow-x: auto;
 }
 
 html[data-color-mode="dark"] .wiki-content table,
-html[data-color-mode="dark"] .wiki-content .infobox {
+html[data-color-mode="dark"] .wiki-content [data-wiki-component="infobox"] {
   color: var(--ink) !important;
   background: var(--surface-raised) !important;
 }
 
-html[data-color-mode="dark"] .wiki-content :is(table.wikitable, table.infobox) th {
+html[data-color-mode="dark"] .wiki-content :is([data-wiki-component="data-table"], [data-wiki-component="infobox"]) th {
   color: var(--ink) !important;
   background: var(--surface-subtle) !important;
 }
 
 @media (prefers-color-scheme: dark) {
   html[data-color-mode="auto"] .wiki-content table,
-  html[data-color-mode="auto"] .wiki-content .infobox {
+  html[data-color-mode="auto"] .wiki-content [data-wiki-component="infobox"] {
     color: var(--ink) !important;
     background: var(--surface-raised) !important;
   }
 
-  html[data-color-mode="auto"] .wiki-content :is(table.wikitable, table.infobox) th {
+  html[data-color-mode="auto"] .wiki-content :is([data-wiki-component="data-table"], [data-wiki-component="infobox"]) th {
     color: var(--ink) !important;
     background: var(--surface-subtle) !important;
   }
 }
 
-@media (max-width: 40rem) {
-  .wiki-content .infobox,
-  .wiki-content figure[typeof~="mw:File/Thumb"],
-  .wiki-content figure.mw-halign-right,
-  .wiki-content figure.mw-halign-left,
-  .wiki-content .tright,
-  .wiki-content .tleft {
+@container wiki-article (max-width: 42rem) {
+  .wiki-content [data-wiki-layout="float-stack"],
+  .wiki-content [data-wiki-component="infobox"],
+  .wiki-content [data-wiki-component="linkbox"],
+  .wiki-content [data-wiki-component="thumbnail"],
+  .wiki-content [data-wiki-component="figure"][data-wiki-float] {
     float: none !important;
     width: auto !important;
     max-width: 100% !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
+  }
+
+  .wiki-content [data-wiki-layout="float-stack"] {
+    align-items: stretch;
   }
 }

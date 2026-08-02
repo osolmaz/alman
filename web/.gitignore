@@ -6,3 +6,5 @@ dist/
 almanpedia/public/ort/
 extension/public/ort/
 almanpedia/public/model/
+almanpedia/test-results/
+almanpedia/playwright-report/

@@ -14,12 +14,15 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "vitest run",
     "test:model": "MODEL_IT=1 vitest run --project core",
+    "test:layout": "playwright test --config almanpedia/playwright.config.ts",
+    "audit:layout:pedia": "node --experimental-strip-types scripts/audit-almanpedia-layout.ts",
     "build": "npm run build --workspaces --if-present",
     "verify:deploy:pedia": "node --experimental-strip-types scripts/verify-almanpedia-deployment.ts",
     "dev:pedia": "npm run dev --workspace almanpedia --",
     "dev:ext": "npm run dev --workspace extension --"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "happy-dom": "^20.11.1",
     "jsdom": "^29.1.1",
     "typescript": "^7.0.2",

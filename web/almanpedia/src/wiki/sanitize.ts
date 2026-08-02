@@ -13,6 +13,10 @@ export function sanitizeParsoidBody(html: string): DocumentFragment {
   }
   return DOMPurify.sanitize(html, {
     RETURN_DOM_FRAGMENT: true,
+    // `typeof` is inert RDFa metadata. The layout adapter consumes the exact
+    // Parsoid tokens it understands and removes the attribute before rendering.
+    ADD_ATTR: ["typeof"],
+    ADD_URI_SAFE_ATTR: ["typeof"],
     FORBID_TAGS: ["style", "link", "meta", "iframe", "form", "input", "button", "select", "object", "embed", "video", "audio", "base"],
     FORBID_ATTR: ["srcdoc"],
   });
