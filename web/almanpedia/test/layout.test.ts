@@ -72,7 +72,9 @@ describe("normalizeParsoidLayout", () => {
   });
 
   test("wraps a data table that is a direct fragment child", () => {
-    const fragment = sanitizeParsoidBody(`<table><tbody><tr><td>Root table</td></tr></tbody></table>`);
+    const fragment = sanitizeParsoidBody(
+      `<table data-wiki-component="infobox" data-wiki-float="right"><tbody><tr><td>Root table</td></tr></tbody></table>`,
+    );
 
     normalizeParsoidLayout(fragment);
 
