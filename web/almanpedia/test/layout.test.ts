@@ -12,6 +12,7 @@ const LAYOUT_FIXTURE = `
   <p>First paragraph</p>
   <figure typeof="mw:File/Thumb"><a href="./Datei:Right.jpg"><img src="//upload.wikimedia.org/right.jpg"></a><figcaption>Right</figcaption></figure>
   <figure class="mw-halign-left" typeof="mw:File/Thumb"><img src="//upload.wikimedia.org/left.jpg"><figcaption>Left</figcaption></figure>
+  <div class="thumb tright"><div class="thumbinner"><img src="//upload.wikimedia.org/legacy.jpg"></div></div>
   <table class="infobox" style="width:270px"><tbody><tr><td>Standalone</td></tr></tbody></table>
   <table class="wikitable"><tbody><tr><td>Wide data</td></tr></tbody></table>
   <table class="navbox"><tbody><tr><td>Navigation data</td></tr></tbody></table>
@@ -50,6 +51,9 @@ describe("normalizeParsoidLayout", () => {
     expect(figures[0]?.dataset.wikiFloat).toBe("right");
     expect(figures[1]?.dataset.wikiComponent).toBe("thumbnail");
     expect(figures[1]?.dataset.wikiFloat).toBe("left");
+    const legacy = root.querySelector<HTMLElement>(".thumb")!;
+    expect(legacy.dataset.wikiComponent).toBe("thumbnail");
+    expect(legacy.dataset.wikiFloat).toBe("right");
     expect(root.querySelector("[typeof]")).toBeNull();
   });
 

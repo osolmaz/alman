@@ -103,6 +103,10 @@ function classifyKnownComponent(element: HTMLElement, types: Set<string>): void 
     element.setAttribute("data-wiki-component", "references");
   }
 
+  if (element.classList.contains("thumb")) {
+    element.setAttribute("data-wiki-component", "thumbnail");
+    if (!element.hasAttribute("data-wiki-float")) setFloat(element, "right");
+  }
   if (element instanceof HTMLElement && element.tagName === "FIGURE") classifyFigure(element, types);
 }
 
