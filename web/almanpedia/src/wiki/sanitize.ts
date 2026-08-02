@@ -18,6 +18,15 @@ export function sanitizeParsoidBody(html: string): DocumentFragment {
     ADD_ATTR: ["typeof"],
     ADD_URI_SAFE_ATTR: ["typeof"],
     FORBID_TAGS: ["style", "link", "meta", "iframe", "form", "input", "button", "select", "object", "embed", "video", "audio", "base"],
-    FORBID_ATTR: ["srcdoc"],
+    // Owned layout attributes must only be produced after sanitization. Parsoid
+    // content cannot opt itself into Almanpedia component styling.
+    FORBID_ATTR: [
+      "srcdoc",
+      "data-wiki-clear",
+      "data-wiki-component",
+      "data-wiki-float",
+      "data-wiki-layout",
+      "data-wiki-stack-item",
+    ],
   });
 }

@@ -96,6 +96,14 @@ describe("sanitizeParsoidBody", () => {
     expect(fragment.querySelector("figure")?.getAttribute("typeof")).toBe("mw:File/Thumb");
   });
 
+  test("foreign markup cannot claim Almanpedia layout attributes", () => {
+    const fragment = sanitizeParsoidBody(
+      `<div data-wiki-component="infobox" data-wiki-float="right" data-wiki-layout="float-stack" data-wiki-stack-item></div>`,
+    );
+    const element = fragment.querySelector("div")!;
+    expect([...element.attributes].filter(({ name }) => name.startsWith("data-wiki-"))).toHaveLength(0);
+  });
+
   test("scripts, handlers, and embeds never survive", () => {
     const fragment = sanitizeParsoidBody(
       `<p onclick="alert(1)">Text</p><script>alert(2)</script><iframe src="https://x"></iframe>` +
