@@ -661,26 +661,31 @@ h1,
   min-width: 0;
 }
 
+/*
+ * The title gets the whole measure and the view toggles sit on their own row under
+ * it. Sharing a row with them cost the title a third of its width, which broke
+ * German compounds mid-word; the obvious repairs each fail on their own, because
+ * flexbox cannot say "take the row only when the longest word will not fit
+ * beside the buttons" — letting the title shrink squeezes it again, and forbidding
+ * that overflows it into the appearance column.
+ */
 .article-head {
   margin-bottom: 0.75rem;
-  display: flex;
-  gap: 1rem;
-  align-items: flex-end;
-  justify-content: space-between;
   border-bottom: 1px solid var(--border);
 }
 
 .article-title {
-  min-width: 0;
-  margin: 0 0 0.25rem;
+  /* `break-word` rather than `anywhere`: break a compound only once it has the
+     whole measure and still does not fit. */
+  margin: 0 0 0.35rem;
   font-family: var(--font-serif);
   font-size: clamp(2rem, 4vw, 2.35rem);
   font-weight: 400;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .article-actions {
-  padding-bottom: 0.45rem;
+  padding-bottom: 0.4rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem;
