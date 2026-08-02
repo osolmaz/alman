@@ -86,8 +86,10 @@ bump that dependency without re-running this gate.
   build environment. The Pages custom domains are `almanpedia.org` and
   `www.almanpedia.org`. A proxied `de.almanpedia.org` CNAME and a Cloudflare
   Single Redirect send the German shortcut to `https://almanpedia.org` while
-  preserving the path and query string. The manual
-  The Vite build strips Vite's own `crossorigin` from the emitted script and
+  preserving the path and query string. Direct `/wiki/*` requests are proxied
+  to the SPA shell by `almanpedia/public/_redirects`. Keep the build free of a
+  top-level `404.html`, because its presence disables Cloudflare Pages' automatic
+  SPA fallback. The Vite build strips Vite's own `crossorigin` from the emitted script and
   stylesheet tags and disables the module-preload polyfill: everything is
   same-origin, the polyfill is inline and the CSP forbids inline scripts, and the
   attribute made browsers fetch assets in CORS mode. Pages answers a missing file

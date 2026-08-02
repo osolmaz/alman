@@ -1,0 +1,3 @@
+# Article routes must render the SPA shell. Keep this explicit even though Pages
+# also provides an SPA fallback while no top-level 404.html exists.
+/wiki/* / 200
