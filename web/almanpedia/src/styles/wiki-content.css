@@ -183,10 +183,28 @@
   background: var(--surface-subtle);
 }
 
-.wiki-content [data-wiki-component="infobox"][data-wiki-float]:not([data-wiki-stack-item]),
-.wiki-content [data-wiki-component="linkbox"][data-wiki-float]:not([data-wiki-stack-item]) {
+.wiki-content :is(
+  [data-wiki-component="infobox"],
+  [data-wiki-component="linkbox"],
+  [data-wiki-component="floated-table"]
+)[data-wiki-float]:not([data-wiki-stack-item]) {
   max-width: min(50%, 24rem);
+}
+
+.wiki-content :is(
+  [data-wiki-component="infobox"],
+  [data-wiki-component="linkbox"],
+  [data-wiki-component="floated-table"]
+)[data-wiki-float="right"]:not([data-wiki-stack-item]) {
   margin: 0.25rem 0 1rem 1.25rem;
+}
+
+.wiki-content :is(
+  [data-wiki-component="infobox"],
+  [data-wiki-component="linkbox"],
+  [data-wiki-component="floated-table"]
+)[data-wiki-float="left"]:not([data-wiki-stack-item]) {
+  margin: 0.25rem 1.25rem 1rem 0;
 }
 
 .wiki-content [data-wiki-float="right"]:not([data-wiki-stack-item]) {
@@ -280,6 +298,7 @@ html[data-color-mode="dark"] .wiki-content :is([data-wiki-component="data-table"
   .wiki-content [data-wiki-layout="float-stack"],
   .wiki-content [data-wiki-component="infobox"],
   .wiki-content [data-wiki-component="linkbox"],
+  .wiki-content [data-wiki-component="floated-table"],
   .wiki-content [data-wiki-component="thumbnail"],
   .wiki-content [data-wiki-component="figure"][data-wiki-float] {
     float: none !important;
