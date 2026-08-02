@@ -12,7 +12,7 @@ const WORDMARK_ALT = "ALMANPEDIA – Die freie Enzyklopädie, vereinfacht";
 
 function potatoImage(sizes: string): HTMLImageElement {
   return el("img", {
-    class: "brand-potato",
+    class: "brand-potato brand-art--color",
     src: POTATO_SRC,
     srcset: POTATO_SRCSET,
     sizes,
@@ -25,7 +25,7 @@ function potatoImage(sizes: string): HTMLImageElement {
 
 function wordmarkImage(): HTMLImageElement {
   return el("img", {
-    class: "brand-wordmark",
+    class: "brand-wordmark brand-art--monochrome",
     src: WORDMARK_SRC,
     alt: WORDMARK_ALT,
     width: "5477",

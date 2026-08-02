@@ -11,14 +11,26 @@ test("header brand combines the raster mark with the vector wordmark", () => {
 
   expect(brand.matches('a.brand-horizontal[href="/"][data-route]')).toBe(true);
   expect(potato.alt).toBe("");
+  expect(potato.classList.contains("brand-art--color")).toBe(true);
   expect(potato.getAttribute("srcset")).toContain("almanpedia-potato-96.png 96w");
   expect(potato.getAttribute("srcset")).toContain("almanpedia-potato.png 973w");
   expect(potato.getAttribute("sizes")).toBe("60px");
   expect(wordmark.getAttribute("src")).toBe("/brand/almanpedia-wordmark.svg");
+  expect(wordmark.classList.contains("brand-art--monochrome")).toBe(true);
   expect(wordmark.alt).toBe("ALMANPEDIA – Die freie Enzyklopädie, vereinfacht");
   expect(wordmark.width).toBe(5477);
   expect(wordmark.height).toBe(1305);
   expect(brand.querySelector(".brand-sub")).toBeNull();
+});
+
+test("theme filters are limited to monochrome brand artwork", () => {
+  const css = readFileSync(resolve(process.cwd(), "almanpedia/src/styles/base.css"), "utf8");
+
+  expect(css).toMatch(/\.brand-art--color\s*\{\s*filter: none;\s*\}/u);
+  expect(css).toMatch(
+    /\.brand-art--monochrome\s*\{\s*filter: var\(--brand-monochrome-filter\);\s*\}/u,
+  );
+  expect(css).not.toContain("--brand-filter");
 });
 
 test("wordmark uses official Linux Libertine small caps and outlined paths", () => {

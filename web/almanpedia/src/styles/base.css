@@ -16,7 +16,7 @@
   --on-progressive: #fff;
   --shadow: rgb(0 0 0 / 20%);
   --destructive: #b32424;
-  --brand-filter: none;
+  --brand-monochrome-filter: none;
   --article-font-size: 1rem;
   --article-line-height: 1.625;
   --font-serif: "Libertinus Serif", "Linux Libertine", Georgia, "Times New Roman", serif;
@@ -52,7 +52,7 @@ html[data-color-mode="dark"] {
   --border-current: #4d7458;
   --shadow: rgb(0 0 0 / 45%);
   --destructive: #ff7b7b;
-  --brand-filter: invert(1) brightness(1.12);
+  --brand-monochrome-filter: invert(1) brightness(1.12);
   color-scheme: dark;
 }
 
@@ -74,13 +74,23 @@ html[data-color-mode="dark"] {
     --border-current: #4d7458;
     --shadow: rgb(0 0 0 / 45%);
     --destructive: #ff7b7b;
-    --brand-filter: invert(1) brightness(1.12);
+    --brand-monochrome-filter: invert(1) brightness(1.12);
     color-scheme: dark;
   }
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Full-color artwork keeps its authored pixels in every theme. Only neutral
+   wordmarks receive the dark-mode treatment. */
+.brand-art--color {
+  filter: none;
+}
+
+.brand-art--monochrome {
+  filter: var(--brand-monochrome-filter);
 }
 
 html {
@@ -164,7 +174,6 @@ code {
   width: 100%;
   height: auto;
   display: block;
-  filter: var(--brand-filter);
 }
 
 .header-status {

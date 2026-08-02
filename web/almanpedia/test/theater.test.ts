@@ -33,6 +33,19 @@ function layerText(line: HTMLElement, layer: "de" | "al"): string {
   return (clone.textContent ?? "").replace(/\s+/gu, " ").trim();
 }
 
+test("full-color theater artwork stays original while wordmarks adapt to the theme", () => {
+  const { stage } = mount();
+  const emblem = stage.querySelector<HTMLElement>(".th-logo-emblem")!;
+  const wordmarks = [
+    ...stage.querySelectorAll<HTMLElement>(".th-logo-wordmark, .th-page-wordmark, .th-outro-wordmark"),
+  ];
+
+  expect(emblem.classList.contains("brand-art--color")).toBe(true);
+  expect(emblem.classList.contains("brand-art--monochrome")).toBe(false);
+  expect(wordmarks).toHaveLength(3);
+  expect(wordmarks.every((wordmark) => wordmark.classList.contains("brand-art--monochrome"))).toBe(true);
+});
+
 test("the demo article is the German Wikipedia lede on the Sapir-Whorf hypothesis", () => {
   const { stage } = mount();
   const lines = [...stage.querySelectorAll<HTMLElement>("[data-line]")];
