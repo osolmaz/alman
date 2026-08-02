@@ -6,6 +6,7 @@ const MODEL_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
 
 afterEach(() => {
   localStorage.clear();
+  sessionStorage.clear();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
   document.body.replaceChildren();
@@ -51,8 +52,9 @@ test("an article refuses on a browser the model has killed, and fetches nothing"
   vi.stubGlobal("fetch", fetchMock);
   const root = document.createElement("div");
   document.body.append(root);
-  // What a memory kill leaves behind: an attempt that pagehide never cleared.
-  localStorage.setItem("almanpedia:model-attempt:v1", String(Date.now()));
+  // What a memory kill leaves behind in the tab it killed: an attempt that
+  // pagehide never cleared.
+  sessionStorage.setItem("almanpedia:model-attempt:v2", String(Date.now()));
   const shell = renderShell(root, () => {});
 
   await renderArticle(shell, "Sapir-Whorf-Hypothese");
@@ -74,7 +76,7 @@ test("the landing page keeps the figure but refuses the feed on such a browser",
   vi.stubGlobal("fetch", fetchMock);
   const root = document.createElement("div");
   document.body.append(root);
-  localStorage.setItem("almanpedia:model-attempt:v1", String(Date.now()));
+  sessionStorage.setItem("almanpedia:model-attempt:v2", String(Date.now()));
   const shell = renderShell(root, () => {});
 
   await renderLanding(shell);

@@ -8,20 +8,20 @@
  * that before jetsam, so on an iPhone 14 Pro the browser terminated and reloaded
  * the document around twenty seconds in, and did it again on the reload.
  *
- * There is nothing to ask the browser about this: no API reports a memory budget,
- * and a device that looks capable can still be killed. So the only signal used
- * here is what actually happened. `markModelStarted` writes the attempt time
- * before the model loads. A normal departure — navigating away, backgrounding the
- * app, closing the tab — fires `pagehide` and clears it, as does finishing a
- * translation or failing at one cleanly. A browser terminating a tab for memory
- * fires nothing, so a marker still present on the next load means this browser
- * was killed rather than that someone left.
+ * No API reports a memory budget, so the only signal is what happened: an attempt
+ * is recorded before the model loads and cleared when a translation finishes, when
+ * one fails cleanly, and on `pagehide`. A browser terminating a tab for memory
+ * fires none of those, so an attempt still present on the next load is a kill.
  *
- * After that the page reads in Standard German and says so in one line. No device
- * guessing, no button, nothing to press: the cost of being wrong is one reload,
- * once, and the record expires so no browser is written off forever.
+ * The attempt lives in **session** storage, which is per tab and survives the
+ * reload a kill causes. It used to live in local storage, which is shared, so a
+ * second tab opened while the first was still translating read that tab's attempt
+ * as its own death and refused to work — on a desktop, where the model runs fine.
+ * A record that outlives the tab has to be earned: the durable one below is only
+ * written once a tab has actually come back from a kill.
  */
-const ATTEMPT_KEY = "almanpedia:model-attempt:v1";
+const ATTEMPT_KEY = "almanpedia:model-attempt:v2";
+const KILLED_KEY = "almanpedia:model-killed:v1";
 
 /** Long enough that a killed browser stops thrashing, short enough to retry. */
 const FORGET_AFTER_MS = 7 * 24 * 60 * 60 * 1000;
@@ -31,15 +31,33 @@ export interface AttemptStore {
   setItem(key: string, value: string): void;
 }
 
-export function markModelStarted(store: AttemptStore, now: number = Date.now()): void {
-  store.setItem(ATTEMPT_KEY, String(now));
+export interface ModelStores {
+  /** Per tab, survives a reload: where an attempt in flight is recorded. */
+  session: AttemptStore;
+  /** Per browser: where a kill is remembered once one has been observed. */
+  durable: AttemptStore;
 }
 
-export function markModelSettled(store: AttemptStore): void {
-  store.setItem(ATTEMPT_KEY, "");
+export function markModelStarted(stores: ModelStores, now: number = Date.now()): void {
+  stores.session.setItem(ATTEMPT_KEY, String(now));
 }
 
-export function modelKilledThisBrowser(store: AttemptStore, now: number = Date.now()): boolean {
-  const startedAt = Number(store.getItem(ATTEMPT_KEY));
-  return Number.isFinite(startedAt) && startedAt > 0 && now - startedAt < FORGET_AFTER_MS;
+export function markModelSettled(stores: ModelStores): void {
+  stores.session.setItem(ATTEMPT_KEY, "");
+}
+
+function within(value: string | null, now: number): boolean {
+  const at = Number(value);
+  return Number.isFinite(at) && at > 0 && now - at < FORGET_AFTER_MS;
+}
+
+/**
+ * Read once per document, before anything can clear it. An attempt this tab never
+ * finished means this tab was killed, which is also the only thing that writes the
+ * durable record.
+ */
+export function modelKilledThisBrowser(stores: ModelStores, now: number = Date.now()): boolean {
+  const killedThisTab = within(stores.session.getItem(ATTEMPT_KEY), now);
+  if (killedThisTab) stores.durable.setItem(KILLED_KEY, String(now));
+  return killedThisTab || within(stores.durable.getItem(KILLED_KEY), now);
 }

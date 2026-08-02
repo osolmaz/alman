@@ -1,7 +1,7 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://upload.wikimedia.org https://maps.wikimedia.org https://commons.wikimedia.org; connect-src 'self' https://de.wikipedia.org https://huggingface.co https://*.huggingface.co https://*.hf.co; font-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://upload.wikimedia.org https://maps.wikimedia.org https://commons.wikimedia.org; connect-src 'self' https://de.wikipedia.org https://huggingface.co https://*.huggingface.co https://*.hf.co https://cloudflareinsights.com; font-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

@@ -18,7 +18,7 @@ import {
   WIKIPEDIA_MAIN_PAGE_TITLE,
 } from "./homepage";
 import { createSearchBox } from "./search";
-import { markModelSettled, markModelStarted, modelKilledThisBrowser } from "./model-gate";
+import { markModelSettled, markModelStarted, modelKilledThisBrowser, type ModelStores } from "./model-gate";
 import { createTheater, type Theater } from "./theater";
 import { createTranslationRevealController, type TranslationRevealController } from "./reveal";
 import { applyReaderSettings, createReaderSettingsPanel, loadReaderSettings } from "./settings";
@@ -29,6 +29,8 @@ export interface AppShell {
   footer: HTMLElement;
   navigate: (path: string) => void;
   storage: Pick<Storage, "getItem" | "setItem">;
+  /** Where the model's attempt and kill records live; see `./model-gate`. */
+  stores: ModelStores;
   /**
    * Whether a previous document of this browser was killed by the model. Decided
    * once, when the document starts, because the record is about documents: a
@@ -111,15 +113,27 @@ function stopActiveTranslation(): void {
   stopActiveContents = null;
 }
 
+function memoryStorage(): Pick<Storage, "getItem" | "setItem"> {
+  const values = new Map<string, string>();
+  return {
+    getItem: (key: string) => values.get(key) ?? null,
+    setItem: (key: string, value: string) => void values.set(key, value),
+  };
+}
+
 function readerSettingsStorage(): Pick<Storage, "getItem" | "setItem"> {
   try {
     return window.localStorage;
   } catch {
-    const values = new Map<string, string>();
-    return {
-      getItem: (key: string) => values.get(key) ?? null,
-      setItem: (key: string, value: string) => void values.set(key, value),
-    };
+    return memoryStorage();
+  }
+}
+
+function modelStores(durable: Pick<Storage, "getItem" | "setItem">): ModelStores {
+  try {
+    return { session: window.sessionStorage, durable };
+  } catch {
+    return { session: memoryStorage(), durable };
   }
 }
 
@@ -149,12 +163,13 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
   root.replaceChildren(header, main, footer);
   // Read the record before anything can clear it, then clear it: this document is
   // running, whatever happened to the last one.
-  const modelUnsupported = modelKilledThisBrowser(storage);
-  markModelSettled(storage);
+  const stores = modelStores(storage);
+  const modelUnsupported = modelKilledThisBrowser(stores);
+  markModelSettled(stores);
   // A normal departure clears a fresh attempt; a browser killing the tab for
   // memory does not fire this, which is how the two are told apart.
-  window.addEventListener("pagehide", () => markModelSettled(storage));
-  return { main, status, footer, navigate, storage, modelUnsupported };
+  window.addEventListener("pagehide", () => markModelSettled(stores));
+  return { main, status, footer, navigate, storage, stores, modelUnsupported };
 }
 
 export async function renderLanding(shell: AppShell): Promise<void> {
@@ -232,7 +247,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
         }
       });
     } catch (error) {
-      markModelSettled(shell.storage);
+      markModelSettled(shell.stores);
       if (!feed.isConnected) return;
       progress.done();
       shell.status.append(el("span", { class: "status-error" }, [
@@ -281,7 +296,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
     controller.translateAll();
   }
 
-  markModelStarted(shell.storage);
+  markModelStarted(shell.stores);
   await startTranslation();
 }
 
@@ -708,7 +723,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
         }
       });
     } catch (error) {
-      markModelSettled(shell.storage);
+      markModelSettled(shell.stores);
       if (!articleColumn.isConnected) return;
       finishArticleRender(render);
       progress.done();
@@ -765,7 +780,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     controller.translateAll();
   }
 
-  markModelStarted(shell.storage);
+  markModelStarted(shell.stores);
   await startTranslation();
   finishArticleRender(render);
 }
