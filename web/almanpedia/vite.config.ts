@@ -8,8 +8,9 @@ import { defineConfig, type Plugin } from "vite";
  * stylesheet does not need it. Removing the attribute keeps the stylesheet on
  * the ordinary same-origin cache path and avoids a second cache variant.
  *
- * Missing assets now return a real 404 through `public/404.html`; this plugin is
- * only a request-mode simplification, not the cache-poisoning safeguard.
+ * Missing assets now return a real 404 through the narrow Pages Functions in
+ * `../functions/`; this plugin is only a request-mode simplification, not the
+ * cache-poisoning safeguard.
  */
 function sameOriginAssets(): Plugin {
   return {

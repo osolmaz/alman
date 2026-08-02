@@ -4,11 +4,12 @@ import { expect, test } from "vitest";
 
 const publicDirectory = resolve(process.cwd(), "almanpedia/public");
 
-test("article routes use the SPA while missing assets use the real 404", () => {
-  const notFound = readFileSync(resolve(publicDirectory, "404.html"), "utf8");
-  expect(existsSync(resolve(publicDirectory, "404.html"))).toBe(true);
-  expect(notFound).toContain('<html lang="de">');
-  expect(notFound).toContain("BESCHEID AP-404");
+test("article routes use the SPA while asset functions reject missing files", () => {
+  expect(existsSync(resolve(publicDirectory, "404.html"))).toBe(false);
+
+  const functionsDirectory = resolve(process.cwd(), "functions");
+  expect(existsSync(resolve(functionsDirectory, "assets/[[path]].ts"))).toBe(true);
+  expect(existsSync(resolve(functionsDirectory, "ort/[[path]].ts"))).toBe(true);
 
   const rules = readFileSync(resolve(publicDirectory, "_redirects"), "utf8")
     .split("\n")
