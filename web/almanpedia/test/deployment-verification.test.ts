@@ -83,8 +83,8 @@ test("deployment verification waits for safe probes before canonical asset reque
     "/assets/app.css",
     "/assets/app.js",
     "/assets/translate-worker-worker.js",
-    "/ort/ort-wasm-simd-threaded.asyncify.mjs",
-    "/ort/ort-wasm-simd-threaded.asyncify.wasm",
+    "/ort/g3/ort-wasm-simd-threaded.asyncify.mjs",
+    "/ort/g3/ort-wasm-simd-threaded.asyncify.wasm",
     "/reader-settings.js",
   ]);
   for (const { url } of canonicalAssets) {

@@ -1,9 +1,10 @@
 /**
  * Copies the ONNX Runtime WASM runtime (the exact build the model package
- * qualified with — hash parity is enforced by web/core tests) into public/ort/
- * so the translation worker can load it same-origin.
+ * qualified with — hash parity is enforced by web/core tests) into the current
+ * public/ort/<generation>/ directory so the translation worker can load it
+ * same-origin without reusing a retired cache URL.
  */
-import { copyFileSync, mkdirSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -14,10 +15,15 @@ const packageRoot = entry.slice(0, entry.lastIndexOf(`${sep}onnxruntime-web${sep
 const dist = join(packageRoot, "dist");
 
 const here = dirname(fileURLToPath(import.meta.url));
-const target = join(here, "..", "public", "ort");
+const assetGeneration = JSON.parse(
+  readFileSync(join(here, "..", "asset-generation.json"), "utf8"),
+).generation;
+const targetRoot = join(here, "..", "public", "ort");
+const target = join(targetRoot, assetGeneration);
+rmSync(targetRoot, { recursive: true, force: true });
 mkdirSync(target, { recursive: true });
 
 for (const file of ["ort-wasm-simd-threaded.asyncify.mjs", "ort-wasm-simd-threaded.asyncify.wasm"]) {
   copyFileSync(join(dist, file), join(target, file));
 }
-console.log("copied ORT WASM runtime to public/ort/");
+console.log(`copied ORT WASM runtime to public/ort/${assetGeneration}/`);
