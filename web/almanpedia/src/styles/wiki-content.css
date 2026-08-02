@@ -11,8 +11,14 @@
   margin: 0.5rem 0 1rem;
 }
 
+/*
+ * Section headings clear a left float only. Clearing both meant a tall infobox —
+ * they are routinely taller than a lede — pushed the next section below itself
+ * and left a screen of blank space, where Wikipedia flows the following sections
+ * alongside it.
+ */
 .wiki-content h2 {
-  clear: both;
+  clear: left;
   margin: 1.5rem 0 0.45rem;
   padding-bottom: 0.15rem;
   font-size: 1.55em;
@@ -20,7 +26,7 @@
 }
 
 .wiki-content h3 {
-  clear: both;
+  clear: left;
   margin: 1.25rem 0 0.35rem;
   font-size: 1.18em;
 }
@@ -139,13 +145,22 @@
   text-align: left;
 }
 
+/*
+ * An infobox declares its own width — Parsoid ships `style="width:270px"` — and
+ * needs real table layout to honour it, because that is what wraps a cell's text
+ * to the column. The scroll treatment above turns every table into a block box,
+ * which leaves the cells at their min-content width and pushes half the infobox
+ * out of sight behind `overflow-x`. Wide data tables still scroll; this does not.
+ */
 .wiki-content .infobox,
 .wiki-content table.float-right {
+  display: table;
   float: right;
   clear: right;
   width: auto;
   max-width: min(50%, 24rem);
   margin: 0.25rem 0 1rem 1.25rem;
+  overflow: visible;
   background: var(--surface-subtle);
 }
 

@@ -44,6 +44,12 @@ The article page follows the reading structure familiar from Wikipedia. It has a
 
 The landing page introduces Almanpedia as Alman AI's self-study reader for people learning German without memorizing noun genders. It links directly to the interactive introduction at `alman.ai`.
 
+## Wikipedia's own layout
+
+Parsoid ships an infobox as `<table class="wikitable infobox float-right" style="width:270px">`, and it needs real table layout to honour that width, because table layout is what wraps a cell's text to its column. The reader gives every table `display: block` with `overflow-x: auto` so wide data tables can scroll, and applying that to an infobox left its cells at their min-content width and hid half of it behind the scroll edge. Infoboxes and other floated tables therefore keep `display: table`.
+
+Section headings clear left floats only. Clearing both pushed every section below a floated infobox — routinely taller than a lede — and left a screen of blank space where Wikipedia flows the following sections alongside it.
+
 ## Loading the model
 
 Translating needs more memory than a phone gives a tab. Measured on this build with a headless Chromium in a cgroup: **722 MB peak** across the browser's processes and **313 MB steady in the renderer alone**, which is the process an iOS web content process corresponds to. A WKWebView inside a third-party app gets well under that before jetsam. On an iPhone 14 Pro the browser terminated and reloaded the document about twenty seconds in and did it again on the reload, which server logs recorded as three full document loads in twenty-eight seconds, each re-fetching every asset. Loading the model only when asked did not help: it loaded when asked and then took the tab down mid-inference.
