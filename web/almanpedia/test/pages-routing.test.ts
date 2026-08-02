@@ -19,4 +19,11 @@ test("article routes use the SPA while asset functions reject missing files", ()
 
   const headers = readFileSync(resolve(publicDirectory, "_headers"), "utf8");
   expect(headers).not.toMatch(/immutable|max-age=31536000|CDN-Cache-Control/iu);
+
+  const recoveryWorkflow = readFileSync(
+    resolve(process.cwd(), "../.github/workflows/deploy-almanpedia.yml"),
+    "utf8",
+  );
+  expect(recoveryWorkflow).toContain("workingDirectory: web");
+  expect(recoveryWorkflow).toContain("command: pages deploy almanpedia/dist --project-name=almanpedia");
 });
