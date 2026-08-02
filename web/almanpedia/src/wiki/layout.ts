@@ -132,7 +132,7 @@ function wrapScrollableTables(container: Element | DocumentFragment): void {
     if (
       table.dataset.wikiComponent === "infobox" ||
       table.hasAttribute("data-wiki-float") ||
-      table.parentElement?.closest('table, [data-wiki-layout="table-scroll"]') !== null
+      table.parentElement?.closest('table, [data-wiki-layout="table-scroll"]')
     ) {
       continue;
     }

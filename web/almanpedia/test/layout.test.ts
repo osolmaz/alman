@@ -71,6 +71,15 @@ describe("normalizeParsoidLayout", () => {
     expect(root.querySelector(".unknown-template")?.textContent).toBe("Unknown stays readable");
   });
 
+  test("wraps a data table that is a direct fragment child", () => {
+    const fragment = sanitizeParsoidBody(`<table><tbody><tr><td>Root table</td></tr></tbody></table>`);
+
+    normalizeParsoidLayout(fragment);
+
+    expect(fragment.firstElementChild?.getAttribute("data-wiki-layout")).toBe("table-scroll");
+    expect(fragment.querySelector("table")?.getAttribute("data-wiki-component")).toBe("data-table");
+  });
+
   test("is idempotent and preserves visible text", () => {
     const fragment = sanitizeParsoidBody(LAYOUT_FIXTURE);
     const originalText = fragment.textContent;
