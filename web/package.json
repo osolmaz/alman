@@ -15,6 +15,7 @@
     "test": "vitest run",
     "test:model": "MODEL_IT=1 vitest run --project core",
     "build": "npm run build --workspaces --if-present",
+    "verify:deploy:pedia": "node --experimental-strip-types scripts/verify-almanpedia-deployment.ts",
     "dev:pedia": "npm run dev --workspace almanpedia --",
     "dev:ext": "npm run dev --workspace extension --"
   },
