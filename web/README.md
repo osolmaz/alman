@@ -88,8 +88,10 @@ bump that dependency without re-running this gate.
   Single Redirect preserve the path and query string when sending the German
   shortcut to `https://almanpedia.org`. The explicit rule in
   `almanpedia/public/_redirects` proxies `/wiki/*` to the SPA shell. Keep the
-  top-level `404.html`: it makes missing assets return 404 instead of caching the
-  app HTML under a CSS, JavaScript, or WASM URL. Asset responses use Cloudflare
+  build free of a top-level `404.html`, so Cloudflare's SPA fallback continues to
+  serve direct article routes. The Pages Functions under `functions/assets/` and
+  `functions/ort/` turn an HTML fallback on a missing browser asset into an
+  uncacheable 404. Existing assets pass through unchanged and use Cloudflare
   Pages' default ETag revalidation rather than a custom immutable browser cache.
   Run `npm run verify:deploy:pedia` after Cloudflare finishes deploying. The
   verifier uses cache-busted probes until every asset has the correct MIME type,
