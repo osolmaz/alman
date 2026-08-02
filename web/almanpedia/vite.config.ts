@@ -27,10 +27,29 @@ function sameOriginAssets(): Plugin {
   };
 }
 
+/**
+ * Bumped to retire built asset URLs.
+ *
+ * A content hash cannot rescue a URL whose *cache entry* is wrong. Cloudflare
+ * answered a request for one of these files with `index.html` during a deploy and
+ * `_headers` marks `/assets/*` immutable for a year, so the URL is burnt while its
+ * content is fine and rebuilding produces the same name. Changing this changes
+ * every asset name, which is the only way to walk away from the entry without a
+ * cache purge. `_redirects` and `404.html` now stop it happening again.
+ */
+const CACHE_GENERATION = "g2";
+
 export default defineConfig({
   plugins: [sameOriginAssets()],
   build: {
     target: "es2022",
+    rollupOptions: {
+      output: {
+        assetFileNames: `assets/[name]-${CACHE_GENERATION}-[hash][extname]`,
+        chunkFileNames: `assets/[name]-${CACHE_GENERATION}-[hash].js`,
+        entryFileNames: `assets/[name]-${CACHE_GENERATION}-[hash].js`,
+      },
+    },
     // The polyfill is emitted as an inline script, which the Content-Security
     // Policy in public/_headers blocks outright. Every browser that can run this
     // bundle supports module preloading natively.
