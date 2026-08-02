@@ -1,8 +1,8 @@
 import { pathToFileURL } from "node:url";
-
+import assetGeneration from "../almanpedia/asset-generation.json" with { type: "json" };
 const ORT_ASSETS = [
-  "/ort/ort-wasm-simd-threaded.asyncify.mjs",
-  "/ort/ort-wasm-simd-threaded.asyncify.wasm",
+  `/ort/${assetGeneration.generation}/ort-wasm-simd-threaded.asyncify.mjs`,
+  `/ort/${assetGeneration.generation}/ort-wasm-simd-threaded.asyncify.wasm`,
 ];
 
 const DEFAULT_ARTICLE_PATH = "/wiki/Spanische_Niederlande";

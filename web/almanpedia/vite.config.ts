@@ -1,4 +1,5 @@
 import { defineConfig, type Plugin } from "vite";
+import assetGeneration from "./asset-generation.json";
 
 /**
  * Serve the bundle's own assets as same-origin requests.
@@ -28,7 +29,7 @@ function sameOriginAssets(): Plugin {
  * Normal safety comes from real asset 404s and Cloudflare Pages' default
  * revalidation policy, not from changing this value after every build.
  */
-const CACHE_GENERATION = "g2";
+const CACHE_GENERATION = assetGeneration.generation;
 
 export default defineConfig({
   plugins: [sameOriginAssets()],
@@ -48,5 +49,12 @@ export default defineConfig({
   },
   worker: {
     format: "es",
+    rollupOptions: {
+      output: {
+        assetFileNames: `assets/[name]-${CACHE_GENERATION}-[hash][extname]`,
+        chunkFileNames: `assets/[name]-${CACHE_GENERATION}-[hash].js`,
+        entryFileNames: `assets/[name]-${CACHE_GENERATION}-[hash].js`,
+      },
+    },
   },
 });

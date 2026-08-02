@@ -1,3 +1,4 @@
+import assetGeneration from "../asset-generation.json";
 import {
   MODEL_PACKAGE,
   TRANSLATION_RUNTIME_POLICY_REVISION,
@@ -19,7 +20,7 @@ export const germanWikipediaDetector = fixedDetector({ language: "de", confidenc
 export function getClient(): TranslationClient {
   client ??= createWorkerClient({
     createWorker: () => new Worker(new URL("./translate-worker.ts", import.meta.url), { type: "module" }),
-    wasmBaseUrl: new URL("/ort/", window.location.href).href,
+    wasmBaseUrl: new URL(`/ort/${assetGeneration.generation}/`, window.location.href).href,
     // Optional same-origin mirror of the model files (local dev, or serving
     // the package from Pages instead of the HF CDN).
     assetBaseUrl: (import.meta.env.VITE_MODEL_BASE_URL as string | undefined)
