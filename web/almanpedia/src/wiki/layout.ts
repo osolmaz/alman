@@ -88,6 +88,7 @@ function classifyFigure(figure: HTMLElement, types: Set<string>): void {
 function classifyKnownComponent(element: HTMLElement, types: Set<string>): void {
   if (element instanceof HTMLTableElement && element.classList.contains("infobox")) {
     element.setAttribute("data-wiki-component", "infobox");
+    if (!element.hasAttribute("data-wiki-float")) setFloat(element, "right");
   } else if (element.classList.contains("linkbox")) {
     element.setAttribute("data-wiki-component", "linkbox");
   } else if (element.classList.contains("navbox")) {

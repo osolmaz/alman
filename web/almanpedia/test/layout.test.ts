@@ -60,6 +60,7 @@ describe("normalizeParsoidLayout", () => {
     const scrolls = [...root.querySelectorAll<HTMLElement>('[data-wiki-layout="table-scroll"]')];
 
     expect(standalone?.style.width).toBe("270px");
+    expect(standalone?.dataset.wikiFloat).toBe("right");
     expect(scrolls).toHaveLength(2);
     expect(scrolls[0]?.firstElementChild?.getAttribute("data-wiki-component")).toBe("data-table");
     expect(scrolls[1]?.firstElementChild?.getAttribute("data-wiki-component")).toBe("navbox");
