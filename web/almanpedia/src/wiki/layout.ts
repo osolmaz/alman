@@ -93,6 +93,8 @@ function classifyKnownComponent(element: HTMLElement, types: Set<string>): void 
     element.setAttribute("data-wiki-component", "linkbox");
   } else if (element.classList.contains("navbox")) {
     element.setAttribute("data-wiki-component", "navbox");
+  } else if (element instanceof HTMLTableElement && element.hasAttribute("data-wiki-float")) {
+    element.setAttribute("data-wiki-component", "floated-table");
   } else if (element.classList.contains("gallery")) {
     element.setAttribute("data-wiki-component", "gallery");
   } else if (element.classList.contains("sisterproject")) {

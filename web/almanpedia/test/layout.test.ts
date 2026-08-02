@@ -14,6 +14,8 @@ const LAYOUT_FIXTURE = `
   <figure class="mw-halign-left" typeof="mw:File/Thumb"><img src="//upload.wikimedia.org/left.jpg"><figcaption>Left</figcaption></figure>
   <div class="thumb tright"><div class="thumbinner"><img src="//upload.wikimedia.org/legacy.jpg"></div></div>
   <table class="infobox" style="width:270px"><tbody><tr><td>Standalone</td></tr></tbody></table>
+  <table class="infobox float-left" style="width:270px"><tbody><tr><td>Left infobox</td></tr></tbody></table>
+  <table class="float-right" style="width:900px"><tbody><tr><td>Floated data</td></tr></tbody></table>
   <table class="wikitable"><tbody><tr><td>Wide data</td></tr></tbody></table>
   <table class="navbox"><tbody><tr><td>Navigation data</td></tr></tbody></table>
   <div class="unknown-template"><span>Unknown stays readable</span></div>
@@ -59,12 +61,18 @@ describe("normalizeParsoidLayout", () => {
 
   test("keeps standalone infoboxes distinct and wraps ordinary data tables once", () => {
     const root = host(prepareParsoidBody(LAYOUT_FIXTURE));
-    const standalone = [...root.querySelectorAll<HTMLTableElement>('table[data-wiki-component="infobox"]')]
-      .find((table) => !table.hasAttribute("data-wiki-stack-item"));
+    const standaloneInfoboxes = [...root.querySelectorAll<HTMLTableElement>('table[data-wiki-component="infobox"]')]
+      .filter((table) => !table.hasAttribute("data-wiki-stack-item"));
+    const standalone = standaloneInfoboxes.find((table) => table.dataset.wikiFloat === "right");
+    const leftInfobox = standaloneInfoboxes.find((table) => table.dataset.wikiFloat === "left");
+    const floatedTable = root.querySelector<HTMLTableElement>('[data-wiki-component="floated-table"]');
     const scrolls = [...root.querySelectorAll<HTMLElement>('[data-wiki-layout="table-scroll"]')];
 
     expect(standalone?.style.width).toBe("270px");
     expect(standalone?.dataset.wikiFloat).toBe("right");
+    expect(leftInfobox?.style.width).toBe("270px");
+    expect(floatedTable?.dataset.wikiFloat).toBe("right");
+    expect(floatedTable?.closest('[data-wiki-layout="table-scroll"]')).toBeNull();
     expect(scrolls).toHaveLength(2);
     expect(scrolls[0]?.firstElementChild?.getAttribute("data-wiki-component")).toBe("data-table");
     expect(scrolls[1]?.firstElementChild?.getAttribute("data-wiki-component")).toBe("navbox");
