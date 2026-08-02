@@ -5,8 +5,7 @@ import {
 } from "@alman/core";
 import { getEngine, initModel } from "../engine";
 import { ArticleNotFoundError, articleUrl, displayTitle, fetchArticleHtml, historyUrl } from "../wiki/api";
-import { rewriteArticleDom } from "../wiki/rewrite";
-import { sanitizeParsoidBody } from "../wiki/sanitize";
+import { prepareParsoidBody } from "../wiki/prepare";
 import { createHeaderBrand, createLandingHeading } from "./brand";
 import { createArticleContents } from "./contents";
 import { el, namespaceIds } from "./dom";
@@ -217,8 +216,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
   try {
     const page = await fetchArticleHtml(WIKIPEDIA_MAIN_PAGE_TITLE);
     if (!feed.isConnected) return;
-    const fragment = sanitizeParsoidBody(page.html);
-    rewriteArticleDom(fragment);
+    const fragment = prepareParsoidBody(page.html);
     const sections = extractWikipediaMainPageSections(fragment);
     feed.replaceChildren(...arrangeWikipediaMainPageSections(sections));
   } catch (error) {
@@ -535,8 +533,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
   const sourceDocumentTitle = `${sourceTitle} – Almanpedia`;
   let fragment: DocumentFragment;
   try {
-    fragment = sanitizeParsoidBody(article.html);
-    rewriteArticleDom(fragment);
+    fragment = prepareParsoidBody(article.html);
   } catch (error) {
     if (!isActiveArticleRender(render)) return;
     finishArticleRender(render);

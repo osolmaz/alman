@@ -91,6 +91,11 @@ describe("rewriteArticleDom", () => {
 });
 
 describe("sanitizeParsoidBody", () => {
+  test("retains inert Parsoid type metadata for the layout adapter", () => {
+    const fragment = sanitizeParsoidBody(`<figure typeof="mw:File/Thumb"><img src="//upload.wikimedia.org/x.jpg"></figure>`);
+    expect(fragment.querySelector("figure")?.getAttribute("typeof")).toBe("mw:File/Thumb");
+  });
+
   test("scripts, handlers, and embeds never survive", () => {
     const fragment = sanitizeParsoidBody(
       `<p onclick="alert(1)">Text</p><script>alert(2)</script><iframe src="https://x"></iframe>` +

@@ -59,6 +59,8 @@ cd web
 npm install
 npm run typecheck        # all packages
 npm test                 # unit + ported frozen safety suite
+npm run test:layout      # local Chromium geometry suite; not run in CI
+npm run audit:layout:pedia # local 10-page internal-link rendering audit
 npm run test:model       # real-model parity gate (needs ALMAN_MODEL_DIR)
 npm run dev:pedia        # almanpedia dev server
 npm run dev:ext          # extension dev (Chrome)
