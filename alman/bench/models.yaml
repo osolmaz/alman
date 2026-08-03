@@ -357,6 +357,39 @@ profiles:
       output_per_million_tokens: 0.28
       observed: 2026-07-17
 
+  deepseek-v4-flash-0731-max-endpoint:
+    label: DeepSeek V4 Flash 0731 max
+    platform: huggingface-inference-endpoint
+    model: openai-api/dsv4ep//repository
+    model_revision: 7872f01b1d1fe23eabc4c98b48bffcef5a386062
+    runtime:
+      engine: vllm
+      version: 0.26.0
+      commit: ffd46bfab2128bb84146050e98b51a617c6575ab
+      image: docker.io/vllm/vllm-openai@sha256:770fe65b2c73ee74a5c42165cf3433de4048cc2cd9c57a937ca4e35aba5aa87b
+      endpoint: osolmaz/deepseek-v4-flash-0731-alman
+      hardware: 2x Nvidia H200
+      quantization: FP8
+      region: aws-us-west-2
+      requested_backend: vLLM DeepSeek V4 with expert parallelism
+      observed_backend: pending smoke attestation
+      speculative_decoding: DSpark, 7 speculative tokens, greedy draft
+      reasoning_parser: deepseek_v4
+      tokenizer_mode: deepseek_v4
+      thinking: true
+    max_connections: 32
+    env:
+      DSV4EP_BASE_URL: https://yjjcnl4p9xy0x1wy.us-east-2.aws.endpoints.huggingface.cloud/v1
+      DSV4EP_API_KEY: ${HF_TOKEN}
+    generate:
+      reasoning_effort: max
+      max_tokens: 393216
+      temperature: 1.0
+      top_p: 0.95
+    pricing:
+      endpoint_per_hour_usd: 10.0
+      observed: 2026-08-03
+
   qwen3.6-35b-a3b:
     label: Qwen3.6 35B A3B
     platform: huggingface-inference-providers
@@ -505,6 +538,68 @@ profiles:
       uncached_input_per_million_tokens: 0.45
       cached_input_per_million_tokens: 0.10
       output_per_million_tokens: 1.20
+      observed: 2026-08-03
+
+  inkling-small-nvfp4-max-endpoint:
+    label: Inkling-Small NVFP4 max
+    platform: huggingface-inference-endpoint
+    model: openai-api/inklingsmallep//repository
+    model_revision: b6a99534467840620d411e4cd4ad5819b2610d9c
+    runtime:
+      engine: sglang
+      version: development commit b7252cc6b0c78b25ecea7ee5efa91a6ae37d0f19
+      image: docker.io/lmsysorg/sglang@sha256:b90c0d760a65bc4dbbe4520bea966c437cc40391dcb7cca2a74922985dc1abeb
+      endpoint: osolmaz/inkling-small-nvfp4-alman
+      hardware: 2x Nvidia RTX Pro 6000 Blackwell
+      quantization: NVFP4
+      region: aws-us-east-2
+      requested_backend: SGLang Inkling-Small with unified radix tree
+      observed_backend: pending smoke attestation
+      speculative_decoding: disabled
+      reasoning_parser: inkling
+      thinking: true
+    max_connections: 32
+    env:
+      INKLINGSMALLEP_BASE_URL: https://tnmvoo1kfl5n6ad4.us-east-2.aws.endpoints.huggingface.cloud/v1
+      INKLINGSMALLEP_API_KEY: ${HF_TOKEN}
+    generate:
+      reasoning_effort: max
+      max_tokens: 32768
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      endpoint_per_hour_usd: 5.5
+      observed: 2026-08-03
+
+  longcat-flash-lite-sparse-endpoint:
+    label: LongCat Flash Lite Sparse
+    platform: huggingface-inference-endpoint
+    model: openai-api/longcatep//repository
+    model_revision: bc076cbcc3a7ee14c813995dc4e1901ba9b9488a
+    runtime:
+      engine: sglang
+      version: 0.5.16 plus PR 32918 commit 44e69602f425d5e32ffa1dddd0dfbc185e0d9a23
+      image: docker.io/lmsysorg/sglang@sha256:984699c298a95b73c469b2191403ddc85fd780506e13c39c4afff3845e27bc6c
+      endpoint: osolmaz/longcat-flash-lite-sparse-alman
+      hardware: 1x Nvidia H200
+      quantization: BF16
+      region: aws-us-west-2
+      requested_backend: SGLang FA3 NSA prefill
+      observed_backend: pending smoke attestation
+      speculative_decoding: disabled
+      thinking: false
+    max_connections: 32
+    env:
+      LONGCATEP_BASE_URL: ${LONGCATEP_BASE_URL}
+      LONGCATEP_API_KEY: ${HF_TOKEN}
+    generate:
+      max_tokens: 32768
+      temperature: 0.7
+      top_p: 0.95
+      top_k: 4
+      repetition_penalty: 1.06
+    pricing:
+      endpoint_per_hour_usd: 5.0
       observed: 2026-08-03
 
   laguna-s-2.1:

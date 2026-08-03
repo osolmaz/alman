@@ -184,6 +184,25 @@ class TestRegistry:
         assert inkling_small.generate["max_tokens"] == 32768
         assert inkling_small.runtime["quantization"] == "FP8"
         assert inkling_small.max_connections == 32
+        deepseek_0731 = load_profile("deepseek-v4-flash-0731-max-endpoint")
+        assert deepseek_0731.platform == "huggingface-inference-endpoint"
+        assert deepseek_0731.model_revision == (
+            "7872f01b1d1fe23eabc4c98b48bffcef5a386062"
+        )
+        assert deepseek_0731.generate["reasoning_effort"] == "max"
+        assert deepseek_0731.runtime["speculative_decoding"].startswith("DSpark")
+        inkling_small_endpoint = load_profile(
+            "inkling-small-nvfp4-max-endpoint"
+        )
+        assert inkling_small_endpoint.runtime["quantization"] == "NVFP4"
+        assert inkling_small_endpoint.generate["reasoning_effort"] == "max"
+        assert inkling_small_endpoint.pricing["endpoint_per_hour_usd"] == 5.5
+        longcat = load_profile("longcat-flash-lite-sparse-endpoint")
+        assert longcat.model_revision == (
+            "bc076cbcc3a7ee14c813995dc4e1901ba9b9488a"
+        )
+        assert longcat.runtime["thinking"] is False
+        assert longcat.generate["repetition_penalty"] == 1.06
         kimi_k3 = load_profile("kimi-k3-max")
         assert kimi_k3.requested_model == "moonshotai/Kimi-K3:together"
         assert kimi_k3.generate["reasoning_effort"] == "max"
