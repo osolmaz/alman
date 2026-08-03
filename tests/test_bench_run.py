@@ -1,5 +1,7 @@
 """Tests for the standardized run pipeline: dataset, registry, exporter."""
 
+import argparse
+
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -8,7 +10,9 @@ import pytest
 
 from alman.bench.almanbench import ALMANBENCH_DIR, case_set_identity
 from alman.bench.export import _completion_parts, estimated_cost_usd, export_log
+from alman.bench.merge import merge_artifacts
 from alman.bench.registry import Profile, load_profile, load_registry
+from alman.bench.run import _parse_sample_range
 from alman.bench.scoring import split_thinking
 from alman.bench.task import (
     FORCED_FINAL_MAX_TOKENS,
@@ -93,6 +97,16 @@ class TestAlmanBenchDataset:
     def test_tiers_rejected_outside_almanbench(self):
         with pytest.raises(ValueError, match="only to dataset='almanbench'"):
             alman_bench(dataset="curated", tiers="curated")
+
+
+class TestSampleRange:
+    def test_parses_zero_based_end_exclusive_range(self):
+        assert _parse_sample_range("0:50") == (0, 50)
+
+    @pytest.mark.parametrize("value", ["50", "a:50", "-1:50", "50:50", "51:50"])
+    def test_rejects_invalid_ranges(self, value):
+        with pytest.raises(argparse.ArgumentTypeError, match="sample range"):
+            _parse_sample_range(value)
 
 
 class TestSplitThinking:
@@ -294,6 +308,35 @@ def mock_run(tmp_path_factory) -> tuple[Path, Path]:
     return Path(logs[0].location), out_dir
 
 
+@pytest.fixture(scope="module")
+def mock_batch_dirs(tmp_path_factory) -> list[Path]:
+    """Two finished range runs that cover the full public set."""
+    from inspect_ai import eval as inspect_eval
+
+    root = tmp_path_factory.mktemp("mock-batches")
+    batch_dirs = []
+    for start, end in ((0, 515), (515, 1029)):
+        batch_root = root / f"{start:04d}-{end:04d}"
+        logs = inspect_eval(
+            alman_bench(dataset="almanbench"),
+            model="mockllm/model",
+            limit=(start, end),
+            log_dir=str(batch_root / "logs"),
+            display="none",
+        )
+        assert logs[0].status == "success"
+        out_dir = batch_root / "artifacts"
+        export_log(
+            Path(logs[0].location),
+            MOCK_PROFILE,
+            out_dir,
+            allow_dirty=True,
+            max_connections=10,
+        )
+        batch_dirs.append(out_dir)
+    return batch_dirs
+
+
 class TestForcedFinal:
     def test_disables_chat_template_thinking(self):
         from inspect_ai.model import GenerateConfig
@@ -476,6 +519,15 @@ class TestExport:
         assert run_id.startswith("mock-almanbench-public-")
         assert run_id.endswith("Z")
 
+    def test_range_manifest_records_selection(self, mock_batch_dirs):
+        manifest = json.loads(
+            (mock_batch_dirs[0] / "manifest.json").read_text(encoding="utf-8")
+        )
+        assert manifest["sample_selection"] == {
+            "limit": [0, 515],
+            "tiers": None,
+        }
+
     def test_export_rejects_dirty_tree(self, mock_run, tmp_path, monkeypatch):
         import alman.bench.export as export_module
 
@@ -521,3 +573,48 @@ class TestExport:
         )
         with pytest.raises(ValueError, match="dataset='almanbench'"):
             export_log(Path(logs[0].location), MOCK_PROFILE, tmp_path / "out")
+
+
+class TestMerge:
+    def test_merges_ranges_into_one_full_result(self, mock_batch_dirs, tmp_path):
+        out_dir = tmp_path / "merged"
+        aggregate = merge_artifacts(
+            MOCK_PROFILE,
+            mock_batch_dirs,
+            out_dir,
+            allow_dirty=True,
+        )
+        assert aggregate["case_set_size"] == 1029
+        assert aggregate["results"]["acceptance"] == {
+            "correct": 0,
+            "total": 1029,
+            "rate": 0.0,
+            "stderr": 0.0,
+        }
+        assert aggregate["results"]["compliance"]["correct"] == 1029
+        assert set(aggregate["results"]["tiers"]) == {
+            "curated",
+            "guards",
+            "naturalistic",
+            "targeted",
+        }
+        rows = _read_jsonl(out_dir / "mock.samples.jsonl")
+        assert len(rows) == 1029
+        assert len({row["run_id"] for row in rows}) == 1
+        assert len({row["execution_id"] for row in rows}) == 2
+        manifest = json.loads((out_dir / "manifest.json").read_text())
+        assert manifest["batch_count"] == 2
+        assert len(manifest["execution_ids"]) == 2
+
+    def test_rejects_duplicate_ranges(self, mock_batch_dirs, tmp_path):
+        with pytest.raises(ValueError, match="duplicate sample ids"):
+            merge_artifacts(
+                MOCK_PROFILE,
+                [mock_batch_dirs[0], mock_batch_dirs[0]],
+                tmp_path / "duplicate",
+                allow_dirty=True,
+            )
+
+
+def _read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text().splitlines()]

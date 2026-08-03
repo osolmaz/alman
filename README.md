@@ -82,6 +82,7 @@ pricing for each named profile:
 ```bash
 uv run bench-run deepseek-v4-flash              # full 1,029-item public set
 uv run bench-run kimi-k2.7-code --limit 3       # smoke test
+uv run bench-run kimi-k2.7-code --sample-range 0:50
 uv run bench-run glm-5.2 --tiers guards,curated # tier subset
 ```
 
@@ -91,6 +92,18 @@ scores and estimated cost). Adding a model is one registry entry. Any
 OpenAI-compatible endpoint works, including Hugging Face Inference Providers
 (`openai-api/hf/<org>/<model>:<provider>` with `HF_TOKEN`) and dedicated
 Inference Endpoints or local servers via `<SERVICE>_BASE_URL`.
+
+Long paid runs can use zero-based, end-exclusive sample ranges. Each range
+writes a complete artifact set that can be uploaded as soon as it finishes.
+After the ranges cover all 1,029 cases, merge them into the single result used
+for publication:
+
+```bash
+uv run bench-merge <profile> <batch-dir>... --out <merged-dir>
+```
+
+The merger checks exact case coverage, duplicate samples, prompt identity,
+model configuration, and scoring revision before it writes the unified result.
 
 For ad-hoc runs, the task itself takes any model supported by Inspect as a
 drop-in parameter:

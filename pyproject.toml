@@ -36,4 +36,5 @@ packages = ["alman"]
 [project.scripts]
 build = "alman.build:main"
 bench-run = "alman.bench.run:main"
+bench-merge = "alman.bench.merge:main"
 bench-result = "alman.bench.results:main"

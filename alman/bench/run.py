@@ -6,6 +6,7 @@ and the exporter owns the stable artifact schema. Typical usage:
 
     uv run bench-run deepseek-v4-flash
     uv run bench-run kimi-k2.7-code --limit 3        # smoke test
+    uv run bench-run kimi-k2.7-code --sample-range 0:50
     uv run bench-run glm-5.2 --tiers guards,curated  # tier subset
 
 Artifacts land in ``<out>/<profile>/`` (default
@@ -29,6 +30,20 @@ from pathlib import Path
 from alman.bench.registry import load_profile
 
 
+def _parse_sample_range(value: str) -> tuple[int, int]:
+    """Parse a zero-based, end-exclusive sample range."""
+    try:
+        start_text, end_text = value.split(":", maxsplit=1)
+        start, end = int(start_text), int(end_text)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(
+            "sample range must be START:END with integer bounds"
+        ) from exc
+    if start < 0 or end <= start:
+        raise argparse.ArgumentTypeError("sample range must satisfy 0 <= START < END")
+    return start, end
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("profile", help="profile name from models.yaml")
@@ -38,12 +53,22 @@ def main() -> None:
         default=None,
         help="output root (default ~/scratch/almanbench-runs/<date>)",
     )
-    parser.add_argument("--limit", type=int, help="run only the first N samples")
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument("--limit", type=int, help="run only the first N samples")
+    selection.add_argument(
+        "--sample-range",
+        type=_parse_sample_range,
+        metavar="START:END",
+        help="run a zero-based, end-exclusive sample range",
+    )
     parser.add_argument("--tiers", help="comma-separated tier subset")
     parser.add_argument(
         "--retry",
         type=Path,
-        help="resume a failed run from its .eval log (ignores --limit/--tiers)",
+        help=(
+            "resume a failed run from its .eval log "
+            "(ignores --limit/--sample-range/--tiers)"
+        ),
     )
     parser.add_argument(
         "--max-connections", type=int, help="override the profile's concurrency"
@@ -146,12 +171,15 @@ def main() -> None:
         )
     else:
         task = alman_bench(dataset="almanbench", include_spec=True, tiers=args.tiers)
+        sample_limit = (
+            args.sample_range if args.sample_range is not None else args.limit
+        )
         logs = inspect_eval(
             task,
             model=profile.model,
             model_args=profile.model_args,
             log_dir=str(log_dir),
-            limit=args.limit,
+            limit=sample_limit,
             max_connections=args.max_connections or profile.max_connections,
             retry_on_error=3,
             **profile.generate,

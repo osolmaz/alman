@@ -225,8 +225,8 @@ def _logged_prompt_sha256(log: EvalLog) -> str:
     return hashes.pop()
 
 
-def _validate_case_coverage(log: EvalLog, rows: list[dict[str, Any]]) -> None:
-    """Check the logged cases against the canonical case set at HEAD.
+def validate_case_rows(rows: list[dict[str, Any]], *, require_full: bool) -> None:
+    """Check result rows against the canonical case set at HEAD.
 
     Every row must match the current references exactly (source, acceptance
     set, collection), so a retry that silently mixed reference revisions is
@@ -252,11 +252,14 @@ def _validate_case_coverage(log: EvalLog, rows: list[dict[str, Any]]) -> None:
                 "set; the references changed since the run (use the rescore "
                 "tooling, or rerun against the current set)"
             )
-    if log.eval.config.limit is not None or log.eval.task_args.get("tiers"):
-        return
-    if set(ids) != set(canonical):
+    if require_full and set(ids) != set(canonical):
         missing = sorted(set(canonical) - set(ids))[:5]
         raise ValueError(f"log does not cover the case set; missing={missing}")
+
+
+def _validate_case_coverage(log: EvalLog, rows: list[dict[str, Any]]) -> None:
+    require_full = log.eval.config.limit is None and not log.eval.task_args.get("tiers")
+    validate_case_rows(rows, require_full=require_full)
 
 
 def export_log(
@@ -491,6 +494,10 @@ def export_log(
         "prompt_sha256": prompt_sha256,
         "inspect_model": log.eval.model,
         "max_connections": effective_generate_config.get("max_connections"),
+        "sample_selection": {
+            "limit": log.eval.config.limit,
+            "tiers": log.eval.task_args.get("tiers"),
+        },
     }
     (out_dir / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",

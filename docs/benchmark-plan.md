@@ -503,6 +503,29 @@ entry (Inspect model string, provider env, generation config, pricing).
    which reloads the profile environment, re-registers the task, retries only
    the unfinished samples, and exports.
 
+   Long paid runs use zero-based, end-exclusive ranges of at most 50 cases so
+   completed output is recoverable throughout the run:
+
+   ```bash
+   uv run bench-run <profile> --sample-range 0:50 --out <batch-root>
+   hf upload osolmaz/almanbench-results \
+     <batch-root>/<profile> staging/<run>/0000-0050 \
+     --repo-type dataset --exclude "logs/**"
+   ```
+
+   Upload each finished range before starting the next one. Resume a failed
+   range from its Inspect log with `--retry`. Once the ranges cover the full
+   set, merge their standard artifact directories:
+
+   ```bash
+   uv run bench-merge <profile> <batch-dir>... --out <merged-dir>
+   ```
+
+   The merge rejects gaps, duplicates, prompt changes, model configuration
+   changes, and scoring revision changes. It preserves each row's physical
+   execution ID under one logical run ID. Publish that merged result and then
+   remove its temporary staging files from the results dataset.
+
 3. **Standard variants** (ad-hoc, through the task directly):
 
    ```bash
