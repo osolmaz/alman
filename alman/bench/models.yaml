@@ -374,6 +374,7 @@ profiles:
       requested_backend: vLLM DeepSeek V4 with expert parallelism
       observed_backend: FlashMLA sparse MLA with TileLang/DeepGEMM and DSpark
       smoke_status: invalid; FlashMLA sparse-prefill TMA assertion on 2x H200
+      retry_status: blocked; account quota is 2 H200 GPUs, DP+EP requires 4
       speculative_decoding: DSpark, 7 speculative tokens, greedy draft
       reasoning_parser: deepseek_v4
       tokenizer_mode: deepseek_v4
@@ -555,8 +556,8 @@ profiles:
       quantization: NVFP4
       region: aws-us-east-2
       requested_backend: SGLang Inkling-Small with unified radix tree
-      observed_backend: ModelOpt NVFP4 load and Triton attention during startup only
-      smoke_status: invalid; decode graph shared-memory overflow before serving
+      observed_backend: ModelOpt NVFP4, Triton attention, and eager execution during startup only
+      smoke_status: invalid; grouped-GEMM shared-memory overflow in eager execution
       speculative_decoding: disabled
       reasoning_parser: inkling
       thinking: true
@@ -588,7 +589,9 @@ profiles:
       region: aws-us-west-2
       requested_backend: SGLang DSA with FA3 prefill and decode
       observed_backend: DSA with FA3 prefill and decode
-      smoke_status: diagnostic pass; tokenizer-regex warning blocks publication
+      smoke_status: passed; 8 frozen cases and real request completed
+      tokenizer_fix: fix_mistral_regex=true in an ephemeral tokenizer copy
+      overlay_wheel_sha256: 915ec1ca191ec668486a852772419fd20ad207df9cee220e8e41d28ae4a2de3c
       speculative_decoding: disabled
       thinking: false
     max_connections: 32

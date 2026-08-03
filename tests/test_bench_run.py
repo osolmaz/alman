@@ -202,6 +202,10 @@ class TestRegistry:
             "bc076cbcc3a7ee14c813995dc4e1901ba9b9488a"
         )
         assert longcat.runtime["thinking"] is False
+        assert longcat.runtime["smoke_status"].startswith("passed;")
+        assert longcat.runtime["tokenizer_fix"] == (
+            "fix_mistral_regex=true in an ephemeral tokenizer copy"
+        )
         assert longcat.generate["extra_body"] == {
             "top_k": 4,
             "repetition_penalty": 1.06,
