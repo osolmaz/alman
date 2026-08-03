@@ -477,6 +477,36 @@ profiles:
       output_per_million_tokens: 4.05
       observed: 2026-07-19
 
+  inkling-small-max:
+    label: Inkling-Small max
+    platform: huggingface-inference-providers
+    model: openai-api/hf/thinkingmachines/Inkling-Small:deepinfra
+    model_revision: 8cc5877b44d343f88b92086aa1fb72897950f06a
+    runtime:
+      provider: deepinfra
+      provider_model_id: thinkingmachines/Inkling-Small
+      quantization: FP8
+      served_revision_pinned: false
+      context_length: 524288
+      requested_backend: DeepInfra managed inference
+      observed_backend: provider route and returned model ID only
+      speculative_decoding: provider managed and not disclosed
+      thinking: true
+    max_connections: 32
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      reasoning_effort: max
+      max_tokens: 32768
+      temperature: 1.0
+      top_p: 1.0
+    pricing:
+      uncached_input_per_million_tokens: 0.45
+      cached_input_per_million_tokens: 0.10
+      output_per_million_tokens: 1.20
+      observed: 2026-08-03
+
   laguna-s-2.1:
     label: Laguna S 2.1
     platform: huggingface-inference-endpoint

@@ -175,6 +175,15 @@ class TestRegistry:
         assert inkling.requested_model == "thinkingmachines/Inkling:together"
         assert inkling.generate["reasoning_effort"] == "max"
         assert inkling.max_connections == 64
+        inkling_small = load_profile("inkling-small-max")
+        assert (
+            inkling_small.requested_model
+            == "thinkingmachines/Inkling-Small:deepinfra"
+        )
+        assert inkling_small.generate["reasoning_effort"] == "max"
+        assert inkling_small.generate["max_tokens"] == 32768
+        assert inkling_small.runtime["quantization"] == "FP8"
+        assert inkling_small.max_connections == 32
         kimi_k3 = load_profile("kimi-k3-max")
         assert kimi_k3.requested_model == "moonshotai/Kimi-K3:together"
         assert kimi_k3.generate["reasoning_effort"] == "max"
