@@ -595,6 +595,7 @@ profiles:
       smoke_status: passed; 8 frozen cases and real request completed
       tokenizer_fix: fix_mistral_regex=true in an ephemeral tokenizer copy
       overlay_wheel_sha256: 915ec1ca191ec668486a852772419fd20ad207df9cee220e8e41d28ae4a2de3c
+      provenance: community-overlay-reproduction
       speculative_decoding: disabled
       thinking: false
     max_connections: 32

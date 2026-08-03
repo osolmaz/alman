@@ -229,6 +229,9 @@ class TestRegistry:
         assert longcat.runtime["tokenizer_fix"] == (
             "fix_mistral_regex=true in an ephemeral tokenizer copy"
         )
+        assert longcat.runtime["provenance"] == (
+            "community-overlay-reproduction"
+        )
         assert longcat.generate["extra_body"] == {
             "top_k": 4,
             "repetition_penalty": 1.06,
