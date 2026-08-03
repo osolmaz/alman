@@ -202,7 +202,10 @@ class TestRegistry:
             "bc076cbcc3a7ee14c813995dc4e1901ba9b9488a"
         )
         assert longcat.runtime["thinking"] is False
-        assert longcat.generate["repetition_penalty"] == 1.06
+        assert longcat.generate["extra_body"] == {
+            "top_k": 4,
+            "repetition_penalty": 1.06,
+        }
         kimi_k3 = load_profile("kimi-k3-max")
         assert kimi_k3.requested_model == "moonshotai/Kimi-K3:together"
         assert kimi_k3.generate["reasoning_effort"] == "max"
