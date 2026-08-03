@@ -549,7 +549,7 @@ profiles:
       engine: sglang
       version: development commit b7252cc6b0c78b25ecea7ee5efa91a6ae37d0f19
       image: docker.io/lmsysorg/sglang@sha256:b90c0d760a65bc4dbbe4520bea966c437cc40391dcb7cca2a74922985dc1abeb
-      endpoint: osolmaz/inkling-small-nvfp4-alman
+      endpoint: osolmaz/inkling-small-nvfp4-alman-c16
       hardware: 2x Nvidia RTX Pro 6000 Blackwell
       quantization: NVFP4
       region: aws-us-east-2
@@ -560,7 +560,7 @@ profiles:
       thinking: true
     max_connections: 32
     env:
-      INKLINGSMALLEP_BASE_URL: https://tnmvoo1kfl5n6ad4.us-east-2.aws.endpoints.huggingface.cloud/v1
+      INKLINGSMALLEP_BASE_URL: https://yonlvdyz9rqocjaq.us-east-2.aws.endpoints.huggingface.cloud/v1
       INKLINGSMALLEP_API_KEY: ${HF_TOKEN}
     generate:
       reasoning_effort: max
