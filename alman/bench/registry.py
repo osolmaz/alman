@@ -29,6 +29,7 @@ class Profile:
     label: str
     platform: str
     model: str
+    canonical_model: str | None = None
     model_revision: str | None = None
     runtime: dict[str, Any] = field(default_factory=dict)
     env: dict[str, str] = field(default_factory=dict)
@@ -40,6 +41,8 @@ class Profile:
     @property
     def requested_model(self) -> str:
         """The provider-facing model name, without Inspect routing prefixes."""
+        if self.canonical_model is not None:
+            return self.canonical_model
         parts = self.model.split("/")
         skip = 2 if parts[0] == "openai-api" else 1
         return "/".join(parts[skip:])
@@ -76,6 +79,7 @@ def load_registry(path: Path = REGISTRY_PATH) -> dict[str, Profile]:
             label=merged["label"],
             platform=merged["platform"],
             model=merged["model"],
+            canonical_model=merged.get("canonical_model"),
             model_revision=merged.get("model_revision"),
             runtime=merged.get("runtime", {}),
             env=merged.get("env", {}),

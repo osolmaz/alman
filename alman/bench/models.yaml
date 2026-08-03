@@ -361,6 +361,7 @@ profiles:
     label: DeepSeek V4 Flash 0731 max
     platform: huggingface-inference-endpoint
     model: openai-api/dsv4ep//repository
+    canonical_model: deepseek-ai/DeepSeek-V4-Flash-0731
     model_revision: 7872f01b1d1fe23eabc4c98b48bffcef5a386062
     runtime:
       engine: vllm
@@ -546,6 +547,7 @@ profiles:
     label: Inkling-Small NVFP4 max
     platform: huggingface-inference-endpoint
     model: openai-api/inklingsmallep//repository
+    canonical_model: thinkingmachines/Inkling-Small-NVFP4
     model_revision: b6a99534467840620d411e4cd4ad5819b2610d9c
     runtime:
       engine: sglang
@@ -578,6 +580,7 @@ profiles:
     label: LongCat Flash Lite Sparse
     platform: huggingface-inference-endpoint
     model: openai-api/longcatep//repository
+    canonical_model: meituan-longcat/LongCat-Flash-Lite-Sparse
     model_revision: bc076cbcc3a7ee14c813995dc4e1901ba9b9488a
     runtime:
       engine: sglang
