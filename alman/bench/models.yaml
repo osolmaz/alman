@@ -393,6 +393,28 @@ profiles:
       endpoint_per_hour_usd: 10.0
       observed: 2026-08-03
 
+  deepseek-v4-flash-0731-max:
+    label: DeepSeek V4 Flash 0731 max
+    platform: huggingface-inference-providers
+    model: openai-api/hf/deepseek-ai/DeepSeek-V4-Flash-0731:novita
+    canonical_model: deepseek-ai/DeepSeek-V4-Flash-0731
+    # Same route as the superseded deepseek-v4-flash preview run (Novita via
+    # the HF router). Sampling follows the model card's official evaluation
+    # configuration (max reasoning, temperature 1.0, top_p 0.95).
+    env:
+      HF_BASE_URL: https://router.huggingface.co/v1
+      HF_API_KEY: ${HF_TOKEN}
+    generate:
+      reasoning_effort: max
+      max_tokens: 16384
+      temperature: 1.0
+      top_p: 0.95
+    pricing:
+      uncached_input_per_million_tokens: 0.14
+      cached_input_per_million_tokens: 0.028
+      output_per_million_tokens: 0.28
+      observed: 2026-08-04
+
   qwen3.6-35b-a3b:
     label: Qwen3.6 35B A3B
     platform: huggingface-inference-providers
