@@ -397,7 +397,6 @@ profiles:
     label: DeepSeek V4 Flash 0731 max
     platform: huggingface-inference-providers
     model: openai-api/hf/deepseek-ai/DeepSeek-V4-Flash-0731:novita
-    canonical_model: deepseek-ai/DeepSeek-V4-Flash-0731
     # Same route as the superseded deepseek-v4-flash preview run (Novita via
     # the HF router). Sampling follows the model card's official evaluation
     # configuration (max reasoning, temperature 1.0, top_p 0.95).
