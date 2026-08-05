@@ -306,7 +306,7 @@
       }
     },
     {
-      "label": "DeepSeek V4 Flash",
+      "label": "DeepSeek V4 Flash 0422",
       "vendor": "deepseek",
       "route": "HF Inference Providers, Novita",
       "reasoning": "default",
