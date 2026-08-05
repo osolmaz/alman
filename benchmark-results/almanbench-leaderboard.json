@@ -306,6 +306,38 @@
       }
     },
     {
+      "label": "DeepSeek V4 Flash",
+      "vendor": "deepseek",
+      "route": "HF Inference Providers, Novita",
+      "reasoning": "default",
+      "acceptance": [
+        924,
+        1029
+      ],
+      "compliance": [
+        1028,
+        1029
+      ],
+      "tiers": {
+        "curated": [
+          88,
+          93
+        ],
+        "guards": [
+          106,
+          120
+        ],
+        "naturalistic": [
+          520,
+          600
+        ],
+        "targeted": [
+          210,
+          216
+        ]
+      }
+    },
+    {
       "label": "Inkling max",
       "vendor": "thinkingmachines",
       "route": "HF Inference Providers, Together",
