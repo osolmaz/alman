@@ -225,6 +225,44 @@ profiles:
       output_per_million_tokens: 3.2
       observed: 2026-07-25
 
+  qwen3.8-27b-medium:
+    label: Qwen3.8 27B medium
+    platform: huggingface-inference-endpoint
+    model: openai-api/qwen38/Qwen/Qwen3.8-27B
+    model_revision: 1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0
+    runtime:
+      engine: vllm
+      version: 0.27.1
+      image: vllm/vllm-openai:v0.27.1
+      endpoint: osolmaz/qwen38-27b-medium-almanbench
+      hardware: 1x Nvidia A100
+      quantization: BF16
+      region: aws-us-east-1
+      max_model_len: 262144
+      reasoning_parser: qwen3
+      speculative_decoding: MTP with 3 speculative tokens
+      thinking: true
+    max_connections: 8
+    env:
+      QWEN38_BASE_URL: https://qeodo6t4khj8t2zi.us-east-1.aws.endpoints.huggingface.cloud/v1
+      QWEN38_API_KEY: ${HF_TOKEN}
+    generate:
+      reasoning_effort: medium
+      max_tokens: 32768
+      temperature: 1.0
+      top_p: 0.95
+      presence_penalty: 0.0
+      extra_body:
+        top_k: 20
+        min_p: 0.0
+        repetition_penalty: 1.0
+        chat_template_kwargs:
+          enable_thinking: true
+          preserve_thinking: true
+    pricing:
+      endpoint_per_hour_usd: 2.5
+      observed: 2026-08-21
+
   gemma-4-26b-a4b-it:
     label: Gemma 4 26B A4B IT
     platform: huggingface-inference-providers

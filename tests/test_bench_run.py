@@ -253,6 +253,17 @@ class TestRegistry:
         qwen = load_profile("qwen3.6-27b")
         assert qwen.requested_model == "Qwen/Qwen3.6-27B:deepinfra"
         assert qwen.runtime["quantization"] == "FP8"
+        qwen38 = load_profile("qwen3.8-27b-medium")
+        assert qwen38.requested_model == "Qwen/Qwen3.8-27B"
+        assert qwen38.platform == "huggingface-inference-endpoint"
+        assert qwen38.runtime["quantization"] == "BF16"
+        assert qwen38.runtime["reasoning_parser"] == "qwen3"
+        assert qwen38.generate["reasoning_effort"] == "medium"
+        assert qwen38.generate["max_tokens"] == 32768
+        assert qwen38.generate["extra_body"]["chat_template_kwargs"] == {
+            "enable_thinking": True,
+            "preserve_thinking": True,
+        }
         gemma = load_profile("gemma-4-26b-a4b-it")
         assert gemma.generate["extra_body"]["chat_template_kwargs"] == {
             "enable_thinking": True
