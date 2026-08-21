@@ -240,7 +240,11 @@ profiles:
       region: aws-us-east-1
       max_model_len: 262144
       reasoning_parser: qwen3
-      speculative_decoding: MTP with 3 speculative tokens
+      requested_backend: vLLM 0.27.1 with Qwen3 reasoning parsing
+      observed_backend: vLLM OpenAI API completed real requests with separate reasoning and final content; kernel details are unavailable
+      requested_speculative_decoding: MTP with 3 speculative tokens
+      observed_speculative_decoding: not exposed by endpoint status or response metadata
+      smoke_status: passed; 32 benchmark cases and one direct request completed
       thinking: true
     max_connections: 8
     env:
