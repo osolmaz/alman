@@ -462,8 +462,8 @@ profiles:
     # Same Novita route as the V4 Flash runs. Sampling follows the model
     # card's recommended settings (temperature 1.0, top_p 0.95) and the
     # highest thinking budget the release defines ("max" maps to 100 of the
-    # 1-100 numeric effort range). The router advertises no cache-read price
-    # for this model, so input is costed as uncached.
+    # 1-100 numeric effort range). Novita prices the cache read at $0.006/M
+    # (read from the provider's model page on 2026-09-11).
     model: openai-api/hf/deepseek-ai/DeepSeek-V4.1-Flash:novita
     env:
       HF_BASE_URL: https://router.huggingface.co/v1
@@ -475,6 +475,7 @@ profiles:
       top_p: 0.95
     pricing:
       uncached_input_per_million_tokens: 0.30
+      cached_input_per_million_tokens: 0.006
       output_per_million_tokens: 1.20
       observed: 2026-09-11
 
