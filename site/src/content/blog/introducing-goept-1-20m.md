@@ -45,11 +45,11 @@ This gives the experiment a concrete job. I wanted to read real pages with the d
 
 ## Training on Hugging Face
 
-The project used [ML Claw](https://github.com/osolmaz/mlclaw), an OpenClaw deployment for Hugging Face, with Telegram as a conversational interface. I could discuss the next experiment with the agent rather than keep a terminal open for each step. The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets.
+The project used [ML Claw](https://github.com/osolmaz/mlclaw), an OpenClaw deployment for Hugging Face, with Telegram as a conversational interface. Telegram let me discuss the next experiment with the agent and check on work away from the terminal. The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets.
 
 The final selected run's execution record attributes that run to the maintainer session. Recovery and release work also required direct inspection. Telegram was a useful way to work on the project, but I would not describe the process as unattended from the first dataset row to the published model.
 
-There are two models in the training procedure. A larger **teacher** produces translations. A smaller **student** learns to reproduce those translations and becomes the model shipped to readers. This is sequence-level distillation. The student learns from the teacher's output text rather than its internal activations.
+There are two models in the training procedure. A larger **teacher** produces translations. A smaller **student** learns to reproduce those translations and becomes the model shipped to readers. This is sequence-level distillation. The student learns to predict the teacher's output text.
 
 ### Reviewed reference data
 
@@ -107,9 +107,9 @@ The complete qualified browser package is 58.14 MB, including its WASM runtime. 
 
 Larger models score higher on the [AlmanBench leaderboard](/almanbench/). This release puts a useful amount of task-specific behavior into a model that a web page can download and run without a model API. A claim to the best language model in the world will have to wait for a different blog post.
 
-## What the small experiment required
+## Cost and recovery
 
-The final student phase cost about **$29.04** in recorded compute. That includes preparation and short hardware profiles, recovery checks, failed work, the completed run, and export. Teacher work and target generation were separate upstream costs. The recorded program subtotal was about **$363.22**, including failed attempts. It is an estimate rather than a complete bill for all earlier research or LLM-assisted data work.
+The final student phase cost about **USD 29.04** in recorded compute. That includes preparation and short hardware profiles, recovery checks, failed work, the completed run, and export. Teacher work and target generation were separate upstream costs. The recorded program subtotal was about **USD 363.22**, including failed attempts. The subtotal is estimated. Earlier research and LLM-assisted data work are outside that accounting.
 
 Saving partial work mattered. The first student attempt failed because the scorer returned a field name that the runner did not expect. We corrected the adapter and restored the saved model and optimizer state, together with the random state and data position. The recovery resumed at step 9,746 instead of starting again.
 
