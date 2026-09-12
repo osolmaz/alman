@@ -16,7 +16,7 @@ The public browser package remains `osolmaz/GoePT-1-20M@5f8145012d666bc68b48bd0d
 
 The release report records 893/1029. On 12 September, a read-only comparison applied the current acceptance sets to the stored browser and native predictions. Both score 894/1029 and accept the same cases. The draft uses 894 consistently. No model was rerun or changed.
 
-The current site leaderboard does not include a unified GoePT entry. Before publishing this article, add that entry and align the public model card, result dataset, and site with the verified current score. Keep this PR in draft until those publication changes are ready. The existing 893 release report remains historical evidence, not the source for current model-to-model margins. No public dataset or model repository was changed during this article edit.
+The current site leaderboard does not include a unified GoePT entry. Before publishing this article, add that entry. Align the public model card and result dataset with the verified current score, and show the same score on the site. Keep this PR in draft until those publication changes are ready. The existing 893 release report remains historical evidence, not the source for current model-to-model margins. No public dataset or model repository was changed during this article edit.
 
 The article now focuses on DeepSeek-V4-Pro, the closest lower-scoring model on the current AlmanBench leaderboard. It makes no overall state-of-the-art claim. The leading larger models score higher, and the parameter counts of the closed models are not public.
 
@@ -35,6 +35,29 @@ The article was shortened at the author's request to use one comparator. DeepSee
 GoePT alone passes 95 cases and DeepSeek alone passes 79. The net difference is 16/1029, or 1.55491 percentage points. This is a small observed lead, treated as a practical tie rather than a stable quality advantage. The abstract says that GoePT scored above DeepSeek, and the results section explains this distinction. No production selection follows from the score.
 
 The recorded DeepSeek run used Novita with default reasoning settings. This does not establish a result against DeepSeek at maximum reasoning effort. DeepSeek's official model card at https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro reports 1.6 trillion total parameters and 49 billion active per token. Dividing by GoePT's 19943808 gives ratios of 80225.40 and 2456.90, rounded to about 80000 and 2460. The abstract uses the total-parameter ratio; the results section explains the active count.
+
+## Figures
+
+The article includes a vertical bar chart of adjacent model scores and a curve of the eight recorded checkpoint-selection scores. Both use white backgrounds to match the paper view. SVG files and PNG copies live under `site/public/assets/images/introducing-goept-1-20m/`. They were rendered with Matplotlib 3.10.8. The local renderer is `/home/onur/scratch/goept-announcement/render_figures.py`.
+
+Figure 1 selects the two leaderboard entries immediately above GoePT and the two immediately below it. The values are GPT-5.6 Terra xhigh 902, Kimi K2.7 Code 895, GoePT 894, DeepSeek V4 Pro 878, and Claude Sonnet 5 xhigh 858, all out of 1029. The axis starts at zero and ends at 100%. GoePT's red bar is an identity highlight, not a claim to the highest score. There are no error bars because these records do not establish repeat-run variability.
+
+The added comparator files are `v0.1/gpt-5.6-terra-xhigh/results.jsonl`, `v0.1/kimi-k2.7-code/results.jsonl`, and `v0.1/claude-sonnet-5-xhigh/results.jsonl` in `osolmaz/almanbench-results@decbac3dc6ef3437a775157610b30ef0fe4b612e`. Their 1029 source texts, IDs, and acceptance sets match the verified comparison. `alman.bench.scoring.is_accepted` reproduces every stored verdict.
+
+Figure 2 uses the `history` field of the native `run.json` cited above. It plots exact match on the 2953 checkpoint-selection pairs, not training loss or AlmanBench acceptance. The checked report provides eight observations; the old physical Job log returned no usable loss series. Lines connect observed points without smoothing or invented intermediate measurements. The line chart's vertical axis spans 60% to 80% so the later changes remain visible.
+
+| Passes | Step | Exact matches out of 2953 |
+| --- | --- | --- |
+| 0.25 | 19492 | 1999 |
+| 0.50 | 38984 | 2089 |
+| 0.75 | 58476 | 2143 |
+| 1.00 | 77968 | 2170 |
+| 1.25 | 97460 | 2207 |
+| 1.50 | 116952 | 2226 |
+| 1.75 | 136444 | 2244 |
+| 2.00 | 155936 | 2255 |
+
+The selected marker is fixed to the recorded step 136444. It is not recomputed from the highest chart value. The final checkpoint's eleven extra exact matches remain below the registered fifteen-case replacement threshold.
 
 ## Other checked models
 
