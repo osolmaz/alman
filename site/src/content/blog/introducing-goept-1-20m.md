@@ -19,13 +19,13 @@ Today I am introducing [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M)
 
 The model runs in the browser. Its quantized weights take about 33 MB, it needs no GPU, and the text being translated stays on the reader's device. It scored **893 out of 1,029 cases, or 86.8%, on AlmanBench**. You can use it now in [Almanpedia](https://almanpedia.org), our reader for German Wikipedia, or try the [standalone translator](/translate/).
 
-## A dialect for the gaps in my German
+## German with less inflection
 
-German is my third language. I can follow a conversation and still hesitate over the gender of a noun I have used for years. The hesitation spreads into the article and adjective endings that depend on it. I described this experience in [the first Alman announcement](/blog/out-of-stealth/).
+Alman keeps German vocabulary and much of its sentence structure while removing grammatical gender and most case inflection. Its specification gives speakers and translation models a consistent set of rules to apply.
 
-Alman formalizes the shortcuts I use when that knowledge runs out. It keeps German vocabulary and much of its sentence structure while removing grammatical gender and most case inflection. The rules are written down so that another speaker, or a translation model, can apply the same shortcuts consistently.
+Some of these rules formalize shortcuts I use myself as a non-native German speaker, as described in [the first Alman announcement](/blog/out-of-stealth/).
 
-In [Economic Burden of Language Complexity](/blog/economic-burden-of-language-complexity/), I argued that the time adults spend learning a language has consequences for their work and participation in society. The [article-frequency study](/blog/frequencies-german-definite-articles/) examined how German articles occur in written and spoken material. These posts explain the motivation for the project. They do not establish that learning Alman improves someone's German.
+[Economic Burden of Language Complexity](/blog/economic-burden-of-language-complexity/) discussed how the time adults spend learning a language affects their work and participation in society. The [article-frequency study](/blog/frequencies-german-definite-articles/) examined how German articles occur in written and spoken material. These posts explain the motivation for the project.
 
 The proposed use is a reading aid for L2 learners, people learning German as an additional language. A learner could read familiar subject matter with fewer inflected forms to resolve, then compare it with the German original. Whether that helps people learn faster is a question for a study with learners. The model's translation score cannot answer it.
 
