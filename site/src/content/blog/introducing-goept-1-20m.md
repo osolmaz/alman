@@ -18,6 +18,14 @@ Today I am introducing [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M)
 
 It scored **86.9% on AlmanBench**, just above DeepSeek-V4-Pro's **85.3%**, with about **1/80,000 as many parameters**. The model runs in the browser and keeps the text on your device. Try it in [Almanpedia](https://almanpedia.org), our reader for German Wikipedia, or the [standalone translator](/translate/).
 
+<figure id="figure-adjacent-scores">
+
+[![AlmanBench acceptance for GPT-5.6 Terra xhigh at 87.7%, Kimi K2.7 Code at 87.0%, GoePT-1-20M at 86.9%, DeepSeek V4 Pro at 85.3%, and Claude Sonnet 5 xhigh at 83.4%.](/assets/images/introducing-goept-1-20m/adjacent-model-scores.svg)](/assets/images/introducing-goept-1-20m/adjacent-model-scores.svg "Open figure 1 at full size")
+
+<figcaption>Figure 1. The two nearest scores above and below GoePT on the same 1,029 AlmanBench cases. Red marks GoePT, and the counts inside each bar show accepted cases. These are single-run results.</figcaption>
+
+</figure>
+
 ## German with less inflection
 
 Alman keeps German vocabulary and much of its sentence structure while removing grammatical gender and most case inflection. Its specification gives speakers and translation models a consistent set of rules to apply.
@@ -85,6 +93,14 @@ The training stream alternated one generated pair with one reviewed pair. This g
 The run completed two passes through the generated training data. With the repeated reference pairs, that amounted to 39,918,220 example presentations. We saved checkpoints and checked the 2,953 selection cases after every quarter pass.
 
 The selected checkpoint was step 136,444, after 1.75 passes and 34,928,442 presentations. The final checkpoint gained eleven exact matches on the selection set. That was below the registered fifteen-case threshold for choosing a later checkpoint, so we kept the earlier one. The student was not refitted afterward.
+
+<figure id="figure-checkpoint-selection">
+
+[![Eight checkpoint scores rise from 67.7% exact match at 0.25 passes to 76.4% at two passes. The selected checkpoint at 1.75 passes scores 76.0%.](/assets/images/introducing-goept-1-20m/checkpoint-selection.svg)](/assets/images/introducing-goept-1-20m/checkpoint-selection.svg "Open figure 2 at full size")
+
+<figcaption>Figure 2. Exact match on 2,953 checkpoint-selection pairs, measured every quarter pass. Red marks the selected checkpoint. The final checkpoint added eleven matches, below the fifteen-case threshold for replacing it.</figcaption>
+
+</figure>
 
 ## Results and browser export
 
