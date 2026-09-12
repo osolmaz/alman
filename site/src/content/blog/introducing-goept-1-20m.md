@@ -15,11 +15,9 @@ abstract: >-
   project built with Hugging Face training and storage infrastructure.
 ---
 
-Today I am introducing [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M), a language model with 20 million parameters and a rather specific concern about German grammar. It translates Standard German into [Alman](/), the simplified dialect I have been developing on this site.
+Today I am introducing [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M), a language model with 20 million parameters. It translates Standard German into [Alman](/), the simplified dialect I have been developing on this site.
 
 The model runs in the browser. Its quantized weights take about 33 MB, it needs no GPU, and the text being translated stays on the reader's device. It scored **893 out of 1,029 cases, or 86.8%, on AlmanBench**. You can use it now in [Almanpedia](https://almanpedia.org), our reader for German Wikipedia, or try the [standalone translator](/translate/).
-
-I have wanted to make a model announcement for a language I speak when I cannot remember a noun's gender. This is that announcement.
 
 ## A dialect for the gaps in my German
 
@@ -31,7 +29,7 @@ In [Economic Burden of Language Complexity](/blog/economic-burden-of-language-co
 
 The proposed use is a reading aid for L2 learners, people learning German as an additional language. A learner could read familiar subject matter with fewer inflected forms to resolve, then compare it with the German original. Whether that helps people learn faster is a question for a study with learners. The model's translation score cannot answer it.
 
-Alman is also a linguistic hobby that I take seriously enough to give it a specification and regression checks. Its first speaker already had plenty of opportunities to produce training examples by accident.
+Alman is also a linguistic hobby, with a specification and regression checks.
 
 ## Almanpedia
 
@@ -105,7 +103,7 @@ Quantization changed some outputs. It cost ten exact matches on the 3,512-row ev
 
 The complete qualified browser package is 58.14 MB, including its WASM runtime. The ONNX weights account for about 33 MB. In the recorded browser check, a 2,018-word page completed in 6.43 seconds. That is a measurement of one fixed page in Chromium, not a speed promise for every reader's device.
 
-Larger models score higher on the [AlmanBench leaderboard](/almanbench/). This release puts a useful amount of task-specific behavior into a model that a web page can download and run without a model API. A claim to the best language model in the world will have to wait for a different blog post.
+Larger models score higher on the [AlmanBench leaderboard](/almanbench/). This release puts a useful amount of task-specific behavior into a model that a web page can download and run without a model API.
 
 ## Cost and recovery
 
@@ -117,7 +115,7 @@ The 2,953 checkpoint-selection pairs were excluded from student gradients, but t
 
 For ML engineering, German-to-Alman translation is a toy problem with unusually explicit rules. It still required decisions about data quality, checkpoint selection, and how to recover from a failed job. Hugging Face provided a place to run the GPU work and keep the resulting files. An agent made those tools convenient to use, while the experiment still needed a specification and someone to decide what counted as a correct result.
 
-The same setup can support other small applications whose requirements are clear enough to check. This one happens to serve people who would like to read German with fewer article endings to worry about. I am among them.
+The same setup can support other small applications whose requirements are clear enough to check. This one happens to serve people who would like to read German with fewer article endings to worry about.
 
 ## Try it
 
