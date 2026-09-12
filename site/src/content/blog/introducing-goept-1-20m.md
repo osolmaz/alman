@@ -1,26 +1,17 @@
 ---
 title: "Introducing GoePT-1-20M"
 date: 2026-09-11
-description: "GoePT-1-20M outscored Qwen3.6-27B on AlmanBench with about 1/1,350 as many parameters. It runs in the browser and powers Almanpedia."
+description: "A 20-million-parameter German-to-Alman model that scored above DeepSeek-V4-Pro on AlmanBench and runs in the browser."
 paper: true
 abstract: >-
-  GoePT-1-20M is a 19.94-million-parameter model that translates Standard German
-  into Alman, a simplified German dialect. We trained a ByT5-Base teacher on
-  reviewed parallel sentences, used it to translate nearly ten million German
-  sentences, and trained a compact Marian student on those translations mixed
-  with the reviewed data. The int8 browser model passes 894 of 1,029 AlmanBench
-  cases (86.9%), exceeding Qwen3.6-27B by 5.1 percentage points and GPT-OSS-120B
-  by 18.0 points. Those models have about 1,350 and 5,900 times as many total
-  parameters, respectively. GoePT runs locally through WebAssembly with about
-  33 MB of quantized weights. Its main application is
-  Almanpedia, a Wikipedia reader intended to make German more approachable for
-  second-language learners. The experiment also documents a small, complete ML
-  project built with Hugging Face training and storage infrastructure.
+  GoePT-1-20M is a 20-million-parameter model that scored above DeepSeek-V4-Pro
+  on AlmanBench, using about 1/80,000 as many parameters. It translates German
+  into Alman entirely in the browser and powers Almanpedia.
 ---
 
 Today I am introducing [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M), a language model with 20 million parameters. It translates Standard German into [Alman](/), the simplified dialect I have been developing on this site.
 
-The model runs in the browser. Its quantized weights take about 33 MB, it needs no GPU, and the text being translated stays on the reader's device. It scored **894 out of 1,029 cases, or 86.9%, on AlmanBench**, ahead of Qwen3.6-27B's 81.8% and GPT-OSS-120B's 68.9%. These are general-purpose models with roughly **1,350× and 5,900× as many total parameters**, respectively. You can use it now in [Almanpedia](https://almanpedia.org), our reader for German Wikipedia, or try the [standalone translator](/translate/).
+It scored **86.9% on AlmanBench**, just above DeepSeek-V4-Pro's **85.3%**, with about **1/80,000 as many parameters**. The model runs in the browser and keeps the text on your device. Try it in [Almanpedia](https://almanpedia.org), our reader for German Wikipedia, or the [standalone translator](/translate/).
 
 ## German with less inflection
 
@@ -106,21 +97,13 @@ Quantization changed some outputs. It cost ten exact matches on the 3,512-row ev
 
 The complete qualified browser package is 58.14 MB, including its WASM runtime. The ONNX weights account for about 33 MB. In the recorded browser check, a 2,018-word page completed in 6.43 seconds. That is a measurement of one fixed page in Chromium, not a speed promise for every reader's device.
 
-### Comparison with larger models
+### Comparison with DeepSeek-V4-Pro
 
-On the same 1,029 source sentences and acceptance sets, GoePT-1-20M outscored two much larger general-purpose models. Qwen3.6-27B used thinking mode through DeepInfra. GPT-OSS-120B used high reasoning effort through Cerebras. Their [published run records](https://huggingface.co/datasets/osolmaz/almanbench-results) contain the outputs and inference settings.
+DeepSeek-V4-Pro is the closest lower-scoring model on the [AlmanBench leaderboard](/almanbench/). On the same 1,029 cases, GoePT passed 894 and DeepSeek passed 878, a difference of 16 cases or 1.6 percentage points. The [recorded DeepSeek run](https://huggingface.co/datasets/osolmaz/almanbench-results) used Novita with default reasoning settings.
 
-| Model | Total parameters | Size relative to GoePT | Accepted cases | Acceptance |
-| --- | --- | --- | --- | --- |
-| GoePT-1-20M, browser int8 | 19.94 million | 1× | 894/1,029 | 86.9% |
-| Qwen3.6-27B, thinking | 27 billion | ≈1,350× | 842/1,029 | 81.8% |
-| GPT-OSS-120B, high | 117 billion | ≈5,900× | 709/1,029 | 68.9% |
+[DeepSeek reports](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro) 1.6 trillion total parameters, about 80,000 times GoePT's 19.94 million. Its mixture-of-experts architecture activates 49 billion per token, still about 2,460 times GoePT's total.
 
-GoePT accepted **52 more cases than Qwen3.6-27B**, a **5.1-percentage-point** lead. Against GPT-OSS-120B, the difference was **185 cases**, or **18.0 points**. The parameter counts come from the publishers' model cards for [Qwen3.6-27B](https://huggingface.co/Qwen/Qwen3.6-27B) and [GPT-OSS-120B](https://huggingface.co/openai/gpt-oss-120b). GPT-OSS is a mixture-of-experts model with 5.1 billion active parameters per token, about 256 times GoePT's entire parameter count.
-
-The errors differ between models. GoePT passed 126 cases that Qwen missed, while Qwen passed 74 that GoePT missed. Against GPT-OSS, those counts were 238 and 53. These are observed scores from one run per model. Repeated runs would be needed to measure run-to-run variation.
-
-These results concern German-to-Alman translation under the specification. GoePT was trained for this task, while the larger models received the rules in their prompts. The leading models on the [AlmanBench leaderboard](/almanbench/) still score higher. GoePT's advantage is a higher score than the two models above in a package small enough to run in a web page.
+The score difference is small. GoePT passed 95 cases that DeepSeek missed, while DeepSeek passed 79 that GoePT missed. We treat this as a practical tie from one run per model. GoePT reaches that score in a browser-sized model trained specifically for this task.
 
 ## Cost and recovery
 
