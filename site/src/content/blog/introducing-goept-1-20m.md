@@ -14,15 +14,19 @@ abstract: >-
   to make German more approachable for second-language learners.
 ---
 
-[GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M) is a 20-million-parameter model for translating Standard German into [Alman](/). It runs entirely in the browser, keeps the text on the reader's device, and needs no GPU or model API.
+[GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M) is a 20-million-parameter model for translating Standard German into [Alman](/), a simplified German dialect. Alman keeps German vocabulary and much of its sentence structure while removing grammatical gender and most case inflection. The model runs entirely in the browser, keeps the text on the reader's device, and needs no GPU or model API.
 
-It scored **86.9% on AlmanBench**, just above DeepSeek-V4-Pro's **85.3%**, with about **80 thousand times fewer parameters**. The model is available in [Almanpedia](https://almanpedia.org), our reader for German Wikipedia, and the [standalone translator](/translate/).
+The intended use is a reading aid for people learning German as an additional language. [Almanpedia](https://almanpedia.org), the main application, uses GoePT to translate German Wikipedia and lets readers compare the result with the original. A [standalone translator](/translate/) accepts other texts.
+
+GoePT scored **86.9% on [AlmanBench](/almanbench/)**, a benchmark that checks translations against Alman's rules. This puts it just above DeepSeek-V4-Pro's **85.3%**, with about **80 thousand times fewer parameters**.
+
+The training work ran on Hugging Face infrastructure, using nearly ten million teacher-generated sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment for Hugging Face, provided a Telegram interface for discussing experiments and checking progress.
 
 ## Alman and Almanpedia
 
-Alman keeps German vocabulary and much of its sentence structure while removing grammatical gender and most case inflection. Its specification gives speakers and translation models a consistent set of rules to apply. Some of these rules formalize shortcuts I use myself as a non-native German speaker, as described in [the first Alman announcement](/blog/out-of-stealth/).
+The [Alman specification](/#spec) gives speakers and translation models a consistent set of rules to apply. Some of these rules formalize shortcuts I use myself as a non-native German speaker, as described in [the first Alman announcement](/blog/out-of-stealth/).
 
-The proposed use is a reading aid for L2 learners, people learning German as an additional language. A learner can read familiar subject matter with fewer inflected forms to resolve, then compare it with the German original.
+A learner can read familiar subject matter with fewer inflected forms to resolve, then compare it with the German original.
 
 [Economic Burden of Language Complexity](/blog/economic-burden-of-language-complexity/) discussed how the time adults spend learning a language affects their work and participation in society. The [article-frequency study](/blog/frequencies-german-definite-articles/) examined how German articles occur in written and spoken material. These posts explain the motivation for the project. Alman is also a linguistic hobby, with a specification and regression checks.
 
