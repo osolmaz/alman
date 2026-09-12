@@ -78,7 +78,7 @@ The proposed learning benefit remains untested. Whether reading Alman helps peop
 
 ## Training on Hugging Face
 
-The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets. The project used [ML Claw](https://github.com/osolmaz/mlclaw), an OpenClaw deployment for Hugging Face, with Telegram as a conversational interface for discussing experiments and checking progress away from the terminal.
+The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets. The project used [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment for Hugging Face, with Telegram as a conversational interface for discussing experiments and checking progress away from the terminal.
 
 The final selected run was executed from a maintainer session. Recovery and release work also required direct inspection.
 
@@ -140,7 +140,7 @@ The final student phase cost about **USD 29.04** in recorded compute. That inclu
 
 The first student attempt failed because the scorer returned a field name that the runner did not expect. We corrected the adapter and restored the saved model and optimizer state, together with the random state and data position. The recovery resumed at step 9,746 instead of starting again.
 
-German-to-Alman translation is a toy problem with unusually explicit rules. It still required decisions about data quality, checkpoint selection, and recovery from failed jobs. Hugging Face supplied the GPU jobs and durable storage. ML Claw made those tools accessible through conversation, while the specification gave the work a result that could be checked.
+German-to-Alman translation is a toy problem with unusually explicit rules. It still required decisions about data quality, checkpoint selection, and recovery from failed jobs. Hugging Face supplied the GPU jobs and durable storage. [ML Claw](https://github.com/huggingface/mlclaw) made those tools accessible through conversation, while the specification gave the work a result that could be checked.
 
 The same setup can support other small ML applications with clear requirements. Here it produced a local reading tool for people learning German.
 
