@@ -36,6 +36,14 @@ GoePT alone passes 95 cases and DeepSeek alone passes 79. The net difference is 
 
 The recorded DeepSeek run used Novita with default reasoning settings. This does not establish a result against DeepSeek at maximum reasoning effort. DeepSeek's official model card at https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro reports 1.6 trillion total parameters and 49 billion active per token. Dividing by GoePT's 19943808 gives ratios of 80225.40 and 2456.90, rounded to about 80000 and 2460. The abstract uses the total-parameter ratio; the results section explains the active count.
 
+## Article structure
+
+The structure follows the official [SmolLM2-135M-Instruct model card](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct), inspected on 12 September. Its substantive order is model summary and usage, eval results, limitations, training details, then license and citation. The usage section includes browser inference through Transformers.js. The article uses that section order rather than the card's header artwork.
+
+The [Distil-Whisper distil-large-v3 card](https://huggingface.co/distil-whisper/distil-large-v3) was a second reference for a compact task-specific distilled model. It separates usage and integrations from model details, then describes its evals and intended use before the data and training method. It closes with results and reproduction instructions.
+
+The announcement adapts these structures into an introduction, Alman and Almanpedia, results, limitations, training on Hugging Face, and availability. The score chart follows the benchmark definition and comparison inside Results. The checkpoint curve follows the selection method inside Training. The learning application is explained before either figure. All recorded model and training facts are retained, while export details remain outside the abstract.
+
 ## Figures
 
 The article includes a vertical bar chart of adjacent model scores and a curve of the eight recorded checkpoint-selection scores. Both use white backgrounds to match the paper view. SVG files and PNG copies live under `site/public/assets/images/introducing-goept-1-20m/`. They were rendered with Matplotlib 3.10.8. The local renderer is `/home/onur/scratch/goept-announcement/render_figures.py`.
