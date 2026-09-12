@@ -18,7 +18,7 @@ The release report records 893/1029. On 12 September, a read-only comparison app
 
 The current site leaderboard does not include a unified GoePT entry. Before publishing this article, add that entry and align the public model card, result dataset, and site with the verified current score. Keep this PR in draft until those publication changes are ready. The existing 893 release report remains historical evidence, not the source for current model-to-model margins. No public dataset or model repository was changed during this article edit.
 
-The article compares named models on AlmanBench. It makes no overall state-of-the-art claim. The leading larger models score higher, and the parameter counts of the closed models are not public.
+The article now focuses on DeepSeek-V4-Pro, the closest lower-scoring model on the current AlmanBench leaderboard. It makes no overall state-of-the-art claim. The leading larger models score higher, and the parameter counts of the closed models are not public.
 
 The reviewed references contain LLM-generated translations. The third review pass used `gpt-5.6-luna` at `xhigh`. Do not call this entirely human-authored data. The 2953 selection rows were excluded from student gradients but included in the teacher refit.
 
@@ -28,7 +28,17 @@ The proposed learning benefit is untested. AlmanBench measures translation behav
 
 The $29.04 student phase and $363.22 program subtotal are recorded compute estimates. The subtotal is not an audited lifetime cost for the project. Canceled-job charges and earlier data work prevent that claim.
 
-## Larger-model comparison
+## Closest-score comparison
+
+The article was shortened at the author's request to use one comparator. DeepSeek-V4-Pro has the closest score below GoePT among current leaderboard entries. Its `v0.1/deepseek-v4-pro/results.jsonl` and manifest are in the same result-dataset revision recorded below. All 1029 IDs, source texts, and acceptance sets match the verified comparison. The repository's `alman.bench.scoring.is_accepted` reproduces all 878 DeepSeek successes and GoePT's 894. This includes the scorer's standard typography and whitespace normalization while preserving case.
+
+GoePT alone passes 95 cases and DeepSeek alone passes 79. The net difference is 16/1029, or 1.55491 percentage points. This is a small observed lead, treated as a practical tie rather than a stable quality advantage. The abstract says that GoePT scored above DeepSeek, and the results section explains this distinction. No production selection follows from the score.
+
+The recorded DeepSeek run used Novita with default reasoning settings. This does not establish a result against DeepSeek at maximum reasoning effort. DeepSeek's official model card at https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro reports 1.6 trillion total parameters and 49 billion active per token. Dividing by GoePT's 19943808 gives ratios of 80225.40 and 2456.90, rounded to about 80000 and 2460. The abstract uses the total-parameter ratio; the results section explains the active count.
+
+## Other checked models
+
+The comparisons below were verified during drafting. They are no longer included in the article, which now uses the closest lower-scoring model.
 
 The browser outputs come from `osolmaz/alman-student-spm16k-base-10m-h50-onnx@c0bef56c31411c98a200906f934bcccd6a0ea857/evaluation/almanbench-browser.jsonl`. The file SHA-256 is `4eddbed0a81c89cf39a0ef42a43a27665efbd84c78a9b59382bb321c91c2c16f`. Native outputs come from `osolmaz/alman-student-spm16k-base-10m-h50@bcee1d732feb89667d6678814f71773c43b5fb89/evaluation/almanbench-predictions.jsonl`.
 
