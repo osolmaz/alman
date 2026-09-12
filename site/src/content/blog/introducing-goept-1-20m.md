@@ -6,7 +6,7 @@ paper: true
 abstract: >-
   GoePT-1-20M is a 20-million-parameter model that translates Standard German
   into Alman, a simplified German dialect. It scored above DeepSeek-V4-Pro
-  on AlmanBench, using about 1/80,000 as many parameters. The model was trained
+  on AlmanBench, using about 80 thousand times fewer parameters. The model was trained
   on Hugging Face infrastructure with nearly ten million teacher-generated
   sentence pairs mixed with reviewed translations. ML Claw, an OpenClaw
   deployment, provided a Telegram interface for the project. GoePT runs
@@ -16,7 +16,7 @@ abstract: >-
 
 [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M) is a 20-million-parameter model for translating Standard German into [Alman](/). It runs entirely in the browser, keeps the text on the reader's device, and needs no GPU or model API.
 
-It scored **86.9% on AlmanBench**, just above DeepSeek-V4-Pro's **85.3%**, with about **1/80,000 as many parameters**. The model is available in [Almanpedia](https://almanpedia.org), our reader for German Wikipedia, and the [standalone translator](/translate/).
+It scored **86.9% on AlmanBench**, just above DeepSeek-V4-Pro's **85.3%**, with about **80 thousand times fewer parameters**. The model is available in [Almanpedia](https://almanpedia.org), our reader for German Wikipedia, and the [standalone translator](/translate/).
 
 ## Alman and Almanpedia
 
