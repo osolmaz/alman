@@ -9,7 +9,7 @@ abstract: >-
   on AlmanBench, using about 80 thousand times fewer parameters. The model was trained
   on Hugging Face infrastructure with nearly ten million teacher-generated
   sentence pairs mixed with reviewed translations. ML Claw, an OpenClaw
-  deployment, provided a Telegram interface for the project. GoePT runs
+  deployment on Hugging Face, provided a Telegram interface for the project. GoePT runs
   entirely in the browser and powers Almanpedia, a Wikipedia reader intended
   to make German more approachable for second-language learners.
 ---
@@ -20,7 +20,7 @@ The intended use is a reading aid for people learning German as an additional la
 
 GoePT scored **86.9% on [AlmanBench](/almanbench/)**, a benchmark that checks translations against Alman's rules. This puts it just above DeepSeek-V4-Pro's **85.3%**, with about **80 thousand times fewer parameters**.
 
-The training work ran on Hugging Face infrastructure, using nearly ten million teacher-generated sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment for Hugging Face, provided a Telegram interface for discussing experiments and checking progress.
+The training work ran on Hugging Face infrastructure, using nearly ten million teacher-generated sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face, provided a Telegram interface for discussing experiments and checking progress.
 
 ## Alman and Almanpedia
 
@@ -82,7 +82,7 @@ The proposed learning benefit remains untested. Whether reading Alman helps peop
 
 ## Training on Hugging Face
 
-The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets. The project used [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment for Hugging Face, with Telegram as a conversational interface for discussing experiments and checking progress away from the terminal.
+The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets. The project used [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face, with Telegram as a conversational interface for discussing experiments and checking progress away from the terminal.
 
 The final selected run was executed from a maintainer session. Recovery and release work also required direct inspection.
 
