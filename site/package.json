@@ -16,7 +16,7 @@
     "@fontsource/ibm-plex-sans": "^5.2.8",
     "@resvg/resvg-js": "^2.6.2",
     "astro": "^7.0.7",
-    "astro-paper-view": "https://codeload.github.com/osolmaz/astro-paper-view/tar.gz/01c7c243abfe6a4c69b55fc626dd634b16bfb7c2",
+    "astro-paper-view": "https://codeload.github.com/osolmaz/astro-paper-view/tar.gz/8ee232e658ab4be9cff47657bdd4f354c738b0ff",
     "katex": "^0.16.21",
     "rehype-katex": "^7.0.1",
     "remark-custom-heading-id": "^2.0.0",
