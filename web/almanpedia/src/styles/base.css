@@ -141,7 +141,7 @@ code {
   min-height: 4.75rem;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(17rem, auto) minmax(18rem, 31.25rem) minmax(10rem, 1fr);
+  grid-template-columns: minmax(17rem, auto) minmax(18rem, 31.25rem) minmax(10rem, 1fr) auto;
   gap: 1.5rem;
   align-items: center;
 }
@@ -201,6 +201,44 @@ code {
   color: var(--muted);
   font-size: 0.78rem;
   text-align: right;
+}
+
+/*
+ * The language switch. Two codes in one small pill, the one in force filled in,
+ * set in the mono face the figure's tags use. It sits at the end of the header so
+ * it is there on every page, and it is quiet enough not to compete with the
+ * search beside it.
+ */
+.locale-switch {
+  display: inline-flex;
+  overflow: hidden;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 2px;
+}
+
+.locale-option {
+  min-width: 2.4rem;
+  padding: 0.3rem 0.5rem;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
+
+.locale-option:hover {
+  color: var(--link);
+  background: var(--surface-progressive);
+}
+
+.locale-option[aria-pressed="true"] {
+  color: var(--paper);
+  background: var(--ink);
+  cursor: default;
 }
 
 /* Search */
@@ -1100,7 +1138,20 @@ html[data-change-effects="on"] [data-alman-reveal][data-alman-change] {
     gap: 0.75rem 1rem;
   }
 
+  /* The switch rides beside the brand; the search and the progress line go under both. */
+  .locale-switch {
+    grid-row: 1;
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .search-box {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
   .header-status {
+    grid-row: 3;
     grid-column: 1 / -1;
     justify-content: flex-start;
   }
@@ -1176,12 +1227,18 @@ html[data-change-effects="on"] [data-alman-reveal][data-alman-change] {
 
 @media (max-width: 40rem) {
   .header-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr auto;
+  }
+
+  /* The switch stays on the brand's line: it is the one control worth keeping there. */
+  .locale-switch {
+    grid-row: 1;
+    grid-column: 2;
   }
 
   .search-box,
   .header-status {
-    grid-column: 1;
+    grid-column: 1 / -1;
   }
 
   .site-main {

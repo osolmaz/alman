@@ -1,3 +1,4 @@
+import { uiText } from "../i18n";
 import { el } from "./dom";
 
 export interface ArticleContents {
@@ -17,7 +18,7 @@ function ensureHeadingId(heading: HTMLHeadingElement, index: number, reservedIds
     reservedIds.add(heading.id);
     return heading.id;
   }
-  const base = heading.textContent?.trim().replaceAll(/\s+/gu, "_") || `Abschnitt_${index + 1}`;
+  const base = heading.textContent?.trim().replaceAll(/\s+/gu, "_") || uiText().contents.section(index + 1);
   let candidate = base;
   let suffix = 2;
   while (reservedIds.has(candidate) || heading.ownerDocument.getElementById(candidate)) {
@@ -30,12 +31,13 @@ function ensureHeadingId(heading: HTMLHeadingElement, index: number, reservedIds
 }
 
 export function createArticleContents(article: Element, narrowQuery?: ResponsiveContentsQuery): ArticleContents {
+  const t = uiText();
   const list = el("ol", { class: "contents-list" });
   const details = el("details", { class: "contents-details" }, [
-    el("summary", { class: "contents-heading" }, ["Inhalt"]),
+    el("summary", { class: "contents-heading" }, [t.contents.heading]),
     list,
   ]);
-  const element = el("nav", { class: "article-contents", "aria-label": "Inhaltsverzeichnis" }, [details]);
+  const element = el("nav", { class: "article-contents", "aria-label": t.contents.label }, [details]);
 
   const setResponsiveState = (narrow: boolean) => {
     details.open = !narrow;
@@ -57,7 +59,7 @@ export function createArticleContents(article: Element, narrowQuery?: Responsive
       ...headings.map((heading, index) => {
         const id = ensureHeadingId(heading, index, reservedIds);
         return el("li", { class: `contents-level-${heading.tagName === "H3" ? "3" : "2"}` }, [
-          el("a", { href: `#${encodeURIComponent(id)}` }, [heading.textContent?.trim() || `Abschnitt ${index + 1}`]),
+          el("a", { href: `#${encodeURIComponent(id)}` }, [heading.textContent?.trim() || t.contents.section(index + 1)]),
         ]);
       }),
     );

@@ -1,3 +1,4 @@
+import { uiText } from "../i18n";
 import { el } from "./dom";
 
 export const READER_SETTINGS_STORAGE_KEY = "almanpedia:reader-settings:v1";
@@ -120,24 +121,25 @@ export function createReaderSettingsPanel(
 } {
   let settings = loadReaderSettings(storage);
   applyReaderSettings(root, settings);
+  const t = uiText();
 
   const text = choiceGroup(
-    "Text",
+    t.settings.textGroup,
     "text-size",
     [
-      ["small", "Klein"],
-      ["standard", "Standard"],
-      ["large", "Groß"],
+      ["small", t.settings.textSmall],
+      ["standard", t.settings.textStandard],
+      ["large", t.settings.textLarge],
     ] as const,
     settings.textSize,
   );
   const color = choiceGroup(
-    "Farbe",
+    t.settings.colorGroup,
     "color-mode",
     [
-      ["auto", "Automatisch"],
-      ["light", "Hell"],
-      ["dark", "Dunkel"],
+      ["auto", t.settings.colorAuto],
+      ["light", t.settings.colorLight],
+      ["dark", t.settings.colorDark],
     ] as const,
     settings.colorMode,
   );
@@ -160,18 +162,18 @@ export function createReaderSettingsPanel(
     input.addEventListener("change", update);
   }
 
-  const close = el("button", { class: "reader-settings-close", type: "button" }, ["Verbergen"]);
+  const close = el("button", { class: "reader-settings-close", type: "button" }, [t.settings.close]);
   const element = el("section", { class: "reader-settings", "data-expanded": "false" }, [
-    el("div", { class: "reader-settings-header" }, [el("h2", {}, ["Erscheinungsbild"]), close]),
+    el("div", { class: "reader-settings-header" }, [el("h2", {}, [t.settings.panelTitle]), close]),
     el("div", { class: "reader-settings-body" }, [
       text.element,
       color.element,
       el("fieldset", { class: "reader-setting-group" }, [
-        el("legend", {}, ["Übersetzung"]),
-        checkboxRow("Leuchteffekt beim Übersetzen", wave),
-        checkboxRow("Geänderte Wörter animieren", changes),
+        el("legend", {}, [t.settings.translationGroup]),
+        checkboxRow(t.settings.translationWave, wave),
+        checkboxRow(t.settings.changeEffects, changes),
       ]),
-      el("p", { class: "reader-settings-note" }, ["Die Auswahl wird in diesem Browser gespeichert."]),
+      el("p", { class: "reader-settings-note" }, [t.settings.note]),
     ]),
   ]);
 

@@ -24,6 +24,7 @@
  * staying snappy while the pacing slows down.
  */
 
+import { uiText } from "../i18n";
 import { el } from "./dom";
 
 export type Cue = { t: number; fn: () => void };
@@ -108,7 +109,7 @@ export function createScene(options: SceneOptions): Scene {
     playing = on;
     last = 0;
     root.dataset.paused = String(!on);
-    options.toggle?.setAttribute("aria-label", on ? "Pause" : "Abspielen");
+    options.toggle?.setAttribute("aria-label", on ? uiText().theater.pause : uiText().theater.play);
   }
 
   function setRate(index: number): void {
@@ -117,7 +118,7 @@ export function createScene(options: SceneOptions): Scene {
     stage.style.setProperty("--rate", String(rate));
     if (options.rate) {
       options.rate.textContent = `${rate}×`;
-      options.rate.setAttribute("aria-label", `Geschwindigkeit ${rate}×, klicken zum Wechseln`);
+      options.rate.setAttribute("aria-label", uiText().theater.speed(rate));
     }
   }
 
@@ -183,7 +184,8 @@ export function createTransport(
   rate: HTMLButtonElement;
   markCurrent: (ms: number) => void;
 } {
-  const toggle = el("button", { type: "button", class: "th-play", "aria-label": "Abspielen" });
+  const t = uiText();
+  const toggle = el("button", { type: "button", class: "th-play", "aria-label": t.theater.play });
   const seek = el("input", {
     type: "range",
     class: "th-seek",
@@ -191,7 +193,7 @@ export function createTransport(
     max: "1000",
     step: "1",
     value: "0",
-    "aria-label": "Durch die Szene fahren",
+    "aria-label": t.theater.seek,
   });
   const rate = el("button", { type: "button", class: "th-rate" }, ["1×"]);
 
@@ -203,7 +205,7 @@ export function createTransport(
 
   const element = el("div", { class: "th-transport" }, [
     el("div", { class: "th-bar" }, [toggle, seek, rate]),
-    el("div", { class: "th-chapters", "aria-label": "Kapitel" }, marks),
+    el("div", { class: "th-chapters", "aria-label": t.theater.chapterMarks }, marks),
   ]);
 
   const markCurrent = (ms: number) => {

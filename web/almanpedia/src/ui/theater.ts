@@ -13,9 +13,15 @@
  * here has to obey. The article text is the real lede of the German Wikipedia
  * article on the Sapir-Whorf hypothesis, and its Alman side is recorded from the
  * shipped model rather than written by hand — see ARTICLE_LINES.
+ *
+ * The narration and the controls follow the interface language; the material the
+ * figure is about — the article, the example phrases, the forms quoted inside a
+ * note — stays German in both locales. Cues name their caption rather than
+ * carrying it, so the words come from `../i18n` at the moment the cue runs.
  */
+import { uiText, type CaptionKey, type CardNoteKey, type ChapterKey } from "../i18n";
 import { el } from "./dom";
-import { createScene, createTransport, type Chapter, type Cue } from "./scene";
+import { createScene, createTransport, type Cue } from "./scene";
 
 export const DEMO_ARTICLE_TITLE = "Sapir-Whorf-Hypothese";
 export const DEMO_ARTICLE_PATH = `/wiki/${DEMO_ARTICLE_TITLE}`;
@@ -154,49 +160,50 @@ type CardPiece = string | Swap | Ending;
 interface RuleCard {
   rule: string;
   pieces: CardPiece[];
-  note: string;
+  /** The line under the card, named here and worded in `../i18n`. */
+  note: CardNoteKey;
 }
 
 const RULE_CARDS: RuleCard[] = [
   {
     rule: "§10",
     pieces: [swap("die", "die"), " ", { stem: "Lehrer", drop: "in" }],
-    note: "Die Suffix -in fällt weg. Ein Form für alle Person.",
+    note: "suffixIn",
   },
   {
     rule: "§4a",
     pieces: ["ein ", { stem: "gut", drop: "er", add: "e" }, " Mann"],
-    note: "Jede Adjektivendung wird -e.",
+    note: "adjectiveEnding",
   },
   {
     rule: "§1b",
     pieces: [swap("des", "der"), " ", { stem: "Hund", drop: "es" }],
-    note: "In die Genitiv bleibt der, die Endung fällt weg.",
+    note: "genitive",
   },
   {
     rule: "§3a",
     pieces: ["mit ", swap("den", "die"), " ", { stem: "Kinder", drop: "n" }],
-    note: "Kein Dativ-n in die Plural.",
+    note: "dativePlural",
   },
   {
     rule: "§1f",
     pieces: [swap("ins", "in die"), " Kino"],
-    note: "Verschmelzungen wie „ins“ werden aufgelöst.",
+    note: "contraction",
   },
   {
     rule: "§3f",
     pieces: [swap("die", "die"), " ", { stem: "Computer", add: "s" }],
-    note: "Ein -s hilft, wenn Singular und Plural gleich sind.",
+    note: "pluralS",
   },
 ];
 
-const CHAPTERS: Chapter[] = [
-  { t: 0, label: "Start" },
-  { t: 7_000, label: "Adresse" },
-  { t: 16_000, label: "Artikel" },
-  { t: 34_500, label: "Ein Artikel" },
-  { t: 48_000, label: "Beispiele" },
-  { t: 60_500, label: "Endungen" },
+const CHAPTERS: Array<{ t: number; key: ChapterKey }> = [
+  { t: 0, key: "start" },
+  { t: 7_000, key: "address" },
+  { t: 16_000, key: "article" },
+  { t: 34_500, key: "oneArticle" },
+  { t: 48_000, key: "examples" },
+  { t: 60_500, key: "endings" },
 ];
 
 interface Counter {
@@ -245,7 +252,7 @@ function ruleCard(card: RuleCard, order: Counter): HTMLElement {
   return el("div", { class: "th-card", "data-card": "", "data-state": "de" }, [
     el("span", { class: "th-card-rule" }, [card.rule]),
     phrase,
-    el("p", { class: "th-card-note" }, [card.note]),
+    el("p", { class: "th-card-note", lang: uiText().htmlLang }, [uiText().theater.cardNotes[card.note]]),
   ]);
 }
 
@@ -308,7 +315,7 @@ function buildStage(): HTMLElement {
       el("span", { class: "th-load", "data-load": "", "data-state": "idle" }),
     ]),
     el("div", { class: "th-viewport" }, [
-      el("div", { class: "th-page", "data-page": "", "data-lang": "de", "data-site": "wikipedia" }, [
+      el("div", { class: "th-page", "data-page": "", "data-lang": "de", "data-site": "wikipedia", lang: "de" }, [
         el("div", { class: "th-page-head" }, [
           // Both mastheads share one cell, so swapping sites cannot move the
           // article text under them.
@@ -330,7 +337,7 @@ function buildStage(): HTMLElement {
     ]),
   ]);
 
-  const unify = el("div", { class: "th-panel th-panel-unify", "data-unify": "", "data-state": "spread" }, [
+  const unify = el("div", { class: "th-panel th-panel-unify", "data-unify": "", "data-state": "spread", lang: "de" }, [
     el("div", { class: "th-chips" }, [
       ...ARTICLE_FORMS.map((value, index) => {
         const chip = el("span", { class: "th-chip", "data-form": "" }, [value]);
@@ -343,12 +350,12 @@ function buildStage(): HTMLElement {
     el("p", { class: "th-chips-legend" }, ["Nominativ · Akkusativ · Dativ"]),
   ]);
 
-  const rows = el("div", { class: "th-panel th-panel-rows", "data-rows": "" },
+  const rows = el("div", { class: "th-panel th-panel-rows", "data-rows": "", lang: "de" },
     PHRASE_ROWS.map((row, index) =>
       el("p", { class: "th-row", "data-row": String(index) }, renderPieces(row, rowOrder)),
     ));
 
-  const cards = el("div", { class: "th-panel th-panel-cards", "data-cards": "" },
+  const cards = el("div", { class: "th-panel th-panel-cards", "data-cards": "", lang: "de" },
     RULE_CARDS.map((card) => ruleCard(card, { count: 0 })));
 
   // Not a control: a focusable link inside an aria-hidden stage would be a trap,
@@ -370,7 +377,7 @@ function buildStage(): HTMLElement {
     rows,
     cards,
     outro,
-    el("p", { class: "th-caption", "data-caption": "" }),
+    el("p", { class: "th-caption", "data-caption": "", lang: uiText().htmlLang }),
   ]);
 }
 
@@ -415,8 +422,8 @@ export function createTheater(): Theater {
   const act = (value: string) => (stage.dataset.act = value);
   const show = (element: HTMLElement) => element.classList.add("is-in");
   const hide = (element: HTMLElement) => element.classList.remove("is-in");
-  const say = (text: string) => {
-    caption.textContent = text;
+  const say = (key: CaptionKey) => {
+    caption.textContent = uiText().theater.captions[key];
     caption.classList.add("is-in");
   };
   const setSwaps = (scope: Element | HTMLElement[], state: string) => {
@@ -508,21 +515,21 @@ export function createTheater(): Theater {
       fn: () => {
         act("1");
         show(logo);
-        say("Almanpedia liest die deutschsprachige Wikipedia in Alman.");
+        say("readWikipedia");
       },
     },
     {
       t: 1_200,
       fn: () => {
         boot.dataset.state = "loading";
-        say("Die Modell lädt ein Mal in die Browser: rund 34 MB.");
+        say("modelDownload");
       },
     },
     {
       t: 4_600,
       fn: () => {
         boot.dataset.state = "ready";
-        say("Bereit. Kein Artikeltext verlässt diese Browser.");
+        say("ready");
       },
     },
     { t: 6_400, fn: () => { hide(logo); boot.dataset.state = "ready"; } },
@@ -538,21 +545,21 @@ export function createTheater(): Theater {
         omnibox.dataset.stage = "start";
         page.dataset.site = "wikipedia";
         show(page);
-        say("Ein Artikel der deutschsprachige Wikipedia.");
+        say("articleFromWikipedia");
       },
     },
     {
       t: 9_200,
       fn: () => {
         omnibox.dataset.stage = "select";
-        say("Vier Buchstaben markieren: „wiki“.");
+        say("markWiki");
       },
     },
     {
       t: 11_000,
       fn: () => {
         omnibox.dataset.stage = "type";
-        say("„alman“ tippen.");
+        say("typeAlman");
       },
     },
     { t: 13_600, fn: () => show(enter) },
@@ -565,7 +572,7 @@ export function createTheater(): Theater {
         hide(page);
         omnibox.dataset.stage = "alias";
         load.dataset.state = "loading";
-        say("de.almanpedia.org führt auf die gleiche Pfad.");
+        say("alias");
       },
     },
     // Act 3 — the head reads a line, and each word turns over as it is passed.
@@ -581,7 +588,7 @@ export function createTheater(): Theater {
         load.dataset.state = "done";
         page.dataset.site = "almanpedia";
         show(page);
-        say("Die gleiche Artikel, jetzt in Almanpedia.");
+        say("sameArticle");
       },
     },
     // Line by line, without a pause to speak of between the lines: the band
@@ -596,10 +603,10 @@ export function createTheater(): Theater {
         { t: at + 3_750, fn: () => setSwaps(lineSwaps[index]!, "al") },
       ];
     }),
-    { t: 18_400, fn: () => say("Die Text steht noch in Standarddeutsch.") },
-    { t: 21_600, fn: () => say("Die Übersetzung liest die Artikel Zeile für Zeile.") },
-    { t: 24_800, fn: () => say("Jede Stelle zittert kurz und wechselt dann.") },
-    { t: 28_000, fn: () => say("Artikel, Endungen und Pronomen in ein Durchgang.") },
+    { t: 18_400, fn: () => say("stillStandard") },
+    { t: 21_600, fn: () => say("lineByLine") },
+    { t: 24_800, fn: () => say("shake") },
+    { t: 28_000, fn: () => say("onePass") },
     // The sweep is over when the last line turns over, so the act closes right
     // behind it: one caption for the finished page, and the next act follows
     // two and a half seconds later. The nouns are left to act 5, which says the
@@ -610,7 +617,7 @@ export function createTheater(): Theater {
         scanTo(lines.length);
         page.dataset.lang = "al";
         pageLang.textContent = "de-AL";
-        say("Fertig. Diese Absatz steht jetzt in Alman.");
+        say("done");
       },
     },
 
@@ -622,7 +629,7 @@ export function createTheater(): Theater {
         hide(browser);
         show(unify);
         unify.dataset.state = "spread";
-        say("Standarddeutsch hat fünf Formen für ein Artikel.");
+        say("fiveForms");
       },
     },
     { t: 36_500, fn: () => (unify.dataset.state = "gather") },
@@ -631,14 +638,14 @@ export function createTheater(): Theater {
       t: 39_900,
       fn: () => {
         unify.dataset.state = "merged";
-        say("In Alman bleibt ein Form übrig.");
+        say("oneFormLeft");
       },
     },
     {
       t: 43_500,
       fn: () => {
         unify.dataset.state = "genitive";
-        say("Ein Ausnahme: in die Genitiv steht der, wie in „die Haus der Mann“.");
+        say("genitiveException");
       },
     },
     { t: 47_500, fn: () => { hide(unify); unify.dataset.state = "genitive"; } },
@@ -649,7 +656,7 @@ export function createTheater(): Theater {
       fn: () => {
         act("5");
         show(rows);
-        say("Drei Substantive, drei Genus in Standarddeutsch.");
+        say("threeGenders");
       },
     },
     { t: 49_700, fn: () => show(rowElements[0]!) },
@@ -660,10 +667,10 @@ export function createTheater(): Theater {
       t: 54_700,
       fn: () => {
         setSwaps(rows, "al");
-        say("die Mann, die Frau, die Kind.");
+        say("threePhrases");
       },
     },
-    { t: 57_700, fn: () => say("Die Substantiv bleibt, wie es war.") },
+    { t: 57_700, fn: () => say("nounUnchanged") },
     { t: 60_300, fn: () => hide(rows) },
 
     // Act 6 — the ending rules, one card at a time.
@@ -672,7 +679,7 @@ export function createTheater(): Theater {
       fn: () => {
         act("6");
         show(cards);
-        say("Die Endungen folgen wenige Regeln.");
+        say("endingsRules");
       },
     },
     ...cardElements.flatMap((card, index): Cue[] => {
@@ -690,14 +697,14 @@ export function createTheater(): Theater {
     }),
     {
       t: 80_000,
-      fn: () => say("Ein Artikel, ein Adjektivendung, kein Genusregeln."),
+      fn: () => say("oneRuleSet"),
     },
     {
       t: 83_000,
       fn: () => {
         hide(cards);
         show(outro);
-        say("Jede Artikel der deutschsprachige Wikipedia, lokal vereinfacht.");
+        say("everyArticle");
       },
     },
   ];
@@ -719,7 +726,11 @@ export function createTheater(): Theater {
     caption.textContent = "";
   }
 
-  const transport = createTransport(CHAPTERS, SCENE_DURATION_MS, (ms) => scene?.seekTo(ms));
+  const transport = createTransport(
+    CHAPTERS.map((chapter) => ({ t: chapter.t, label: uiText().theater.chapters[chapter.key] })),
+    SCENE_DURATION_MS,
+    (ms) => scene?.seekTo(ms),
+  );
   const element = el("div", { class: "th-theater", "data-theater": "" }, [
     el("div", { class: "th-stagewrap" }, [stage]),
     transport.element,

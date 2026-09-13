@@ -1,3 +1,5 @@
+import { DEFAULT_LOCALE, LOCALE_QUERY_KEY, currentLocale } from "./i18n";
+
 export type Route = { kind: "landing" } | { kind: "article"; title: string; hash?: string };
 
 function decodeHash(hash: string): string | undefined {
@@ -29,9 +31,20 @@ export function parseRoute(pathname: string, hash = ""): Route {
 export type RenderRoute = (route: Route) => void;
 
 export function startRouter(render: RenderRoute): { navigate: (path: string) => void } {
+  /**
+   * The address keeps the language the page is being read in, so a copied link
+   * opens the same page in the same language. German is the default, so it stays
+   * out of the address rather than naming itself on every link.
+   */
+  function localize(url: URL): string {
+    if (currentLocale() === DEFAULT_LOCALE) url.searchParams.delete(LOCALE_QUERY_KEY);
+    else url.searchParams.set(LOCALE_QUERY_KEY, currentLocale());
+    return url.pathname + url.search + url.hash;
+  }
+
   function navigate(path: string): void {
     const url = new URL(path, window.location.href);
-    history.pushState(null, "", path);
+    history.pushState(null, "", localize(url));
     render(parseRoute(url.pathname, url.hash));
   }
 

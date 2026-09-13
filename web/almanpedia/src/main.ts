@@ -3,11 +3,16 @@ import "@fontsource/ibm-plex-mono/latin-400.css";
 import "./styles/base.css";
 import "./styles/theater.css";
 import "./styles/wiki-content.css";
+import { applyLocale } from "./i18n";
 import { startRouter } from "./router";
 import { renderArticle, renderLanding, renderShell } from "./ui/views";
 
 const root = document.getElementById("app");
 if (!root) throw new Error("missing #app mount point");
+
+// Before anything reads a message, so the first render is already in the right
+// language and the document declares it.
+applyLocale();
 
 let navigateFn: (path: string) => void = () => {};
 const shell = renderShell(root, (path) => navigateFn(path));

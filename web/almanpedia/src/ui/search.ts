@@ -1,11 +1,13 @@
+import { uiText } from "../i18n";
 import { searchSuggestions } from "../wiki/api";
 import { el } from "./dom";
 
 export function createSearchBox(navigate: (path: string) => void): HTMLElement {
+  const t = uiText();
   const input = el("input", {
     type: "search",
-    placeholder: "Artikel suchen …",
-    "aria-label": "Artikel suchen",
+    placeholder: t.search.placeholder,
+    "aria-label": t.search.label,
     autocomplete: "off",
   });
   const list = el("ul", { class: "search-suggestions", hidden: "" });

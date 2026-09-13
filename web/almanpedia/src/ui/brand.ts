@@ -1,3 +1,4 @@
+import { uiText } from "../i18n";
 import { el } from "./dom";
 
 const POTATO_SRC = "/brand/almanpedia-potato-192.png";
@@ -8,7 +9,6 @@ const POTATO_SRCSET = [
   "/brand/almanpedia-potato.png 973w",
 ].join(", ");
 const WORDMARK_SRC = "/brand/almanpedia-wordmark.svg";
-const WORDMARK_ALT = "ALMANPEDIA – Die freie Enzyklopädie, vereinfacht";
 
 function potatoImage(sizes: string): HTMLImageElement {
   return el("img", {
@@ -27,7 +27,7 @@ function wordmarkImage(): HTMLImageElement {
   return el("img", {
     class: "brand-wordmark brand-art--monochrome",
     src: WORDMARK_SRC,
-    alt: WORDMARK_ALT,
+    alt: uiText().brandWordmarkAlt,
     width: "5477",
     height: "1305",
   });
@@ -47,5 +47,5 @@ export function createHeaderBrand(): HTMLAnchorElement {
  * its title here instead of repeating the mark above the figure.
  */
 export function createLandingHeading(): HTMLHeadingElement {
-  return el("h1", { class: "sr-only" }, [WORDMARK_ALT.replace(" – ", " — ")]);
+  return el("h1", { class: "sr-only" }, [uiText().brandWordmarkAlt.replace(" – ", " — ")]);
 }

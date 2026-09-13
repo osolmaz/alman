@@ -37,6 +37,32 @@ export function namespaceIds(
   return firstId;
 }
 
+/**
+ * A run of interface text, or one of the things that sits inside a run: a link,
+ * external or one the router handles, or a code span. Messages are written as
+ * runs so a translated sentence keeps its links in the place the language wants
+ * them, rather than in the place German wanted them.
+ */
+export type TextPart =
+  | string
+  | { readonly href: string; readonly text: string; readonly external?: boolean }
+  | { readonly code: string };
+
+/** Build the children of a paragraph or a footer line from its runs. */
+export function textRuns(parts: readonly TextPart[]): Array<Node | string> {
+  return parts.map((part) => {
+    if (typeof part === "string") return document.createTextNode(part);
+    if ("code" in part) return el("code", {}, [part.code]);
+    return el(
+      "a",
+      part.external
+        ? { href: part.href, target: "_blank", rel: "noopener" }
+        : { href: part.href, "data-route": "" },
+      [part.text],
+    );
+  });
+}
+
 /** Tiny element builder; text content only, never HTML strings. */
 export function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,

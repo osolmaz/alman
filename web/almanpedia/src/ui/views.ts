@@ -4,11 +4,12 @@ import {
   type DomTranslatorController,
 } from "@alman/core";
 import { getEngine, initModel } from "../engine";
+import { browserStorage, uiText } from "../i18n";
 import { ArticleNotFoundError, articleUrl, displayTitle, fetchArticleHtml, historyUrl } from "../wiki/api";
 import { prepareParsoidBody } from "../wiki/prepare";
 import { createHeaderBrand, createLandingHeading } from "./brand";
 import { createArticleContents } from "./contents";
-import { el, namespaceIds } from "./dom";
+import { el, namespaceIds, textRuns } from "./dom";
 import {
   arrangeWikipediaMainPageSections,
   createLandingIntroduction,
@@ -16,6 +17,7 @@ import {
   extractWikipediaMainPageSections,
   WIKIPEDIA_MAIN_PAGE_TITLE,
 } from "./homepage";
+import { createLocaleSwitch } from "./locale-switch";
 import { createSearchBox } from "./search";
 import { markModelSettled, markModelStarted, modelKilledThisBrowser, type ModelStores } from "./model-gate";
 import { createTheater, type Theater } from "./theater";
@@ -51,24 +53,20 @@ const MODEL_REPOSITORY_URL = "https://huggingface.co/osolmaz/GoePT-1-20M";
  * the two things that do work — a desktop browser, and the original article.
  */
 function createUnsupportedNotice(title?: string): HTMLElement {
-  return el("section", { class: "unsupported", lang: "de" }, [
-    el("p", { class: "form-tag" }, ["BESCHEID AP-507"]),
-    el("h1", {}, ["Diese Browser hat kein Speicher für die Übersetzung"]),
-    el("p", {}, [
-      "Almanpedia übersetzt jede Artikel lokal in die Browser. Die Modell braucht mehr Speicher, "
-        + "als diese Browser ein Seite gibt, und die Browser hat die Seite deshalb neu geladen.",
-    ]),
-    el("p", {}, ["Bitte öffnen Sie almanpedia.org auf ein Computer. Auf diese Telefon läuft die Übersetzung nicht."]),
-    el("p", { class: "unsupported-note" }, [
-      "Almanpedia zeigt kein unübersetzte Artikel: dafür gibt es die deutschsprachige Wikipedia selbst.",
-    ]),
+  const t = uiText();
+  return el("section", { class: "unsupported", lang: t.htmlLang }, [
+    el("p", { class: "form-tag" }, [t.unsupported.tag]),
+    el("h1", {}, [t.unsupported.heading]),
+    el("p", {}, [t.unsupported.body]),
+    el("p", {}, [t.unsupported.advice]),
+    el("p", { class: "unsupported-note" }, [t.unsupported.note]),
     el("nav", { class: "unsupported-links" }, [
       ...(title
         ? [el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, [
-            `„${displayTitle(title)}“ bei die deutschsprachige Wikipedia lesen`,
+            t.unsupported.readWikipedia(displayTitle(title)),
           ])]
         : []),
-      el("a", { href: "https://alman.ai/", target: "_blank", rel: "noopener" }, ["Was ist Alman?"]),
+      el("a", { href: "https://alman.ai/", target: "_blank", rel: "noopener" }, [t.unsupported.whatIsAlman]),
     ]),
   ]);
 }
@@ -112,52 +110,21 @@ function stopActiveTranslation(): void {
   stopActiveContents = null;
 }
 
-function memoryStorage(): Pick<Storage, "getItem" | "setItem"> {
-  const values = new Map<string, string>();
-  return {
-    getItem: (key: string) => values.get(key) ?? null,
-    setItem: (key: string, value: string) => void values.set(key, value),
-  };
-}
-
-function readerSettingsStorage(): Pick<Storage, "getItem" | "setItem"> {
-  try {
-    return window.localStorage;
-  } catch {
-    return memoryStorage();
-  }
-}
-
 function modelStores(durable: Pick<Storage, "getItem" | "setItem">): ModelStores {
-  try {
-    return { session: window.sessionStorage, durable };
-  } catch {
-    return { session: memoryStorage(), durable };
-  }
+  return { session: browserStorage("session"), durable };
 }
 
 export function renderShell(root: HTMLElement, navigate: (path: string) => void): AppShell {
-  const storage = readerSettingsStorage();
+  const t = uiText();
+  const storage = browserStorage();
   applyReaderSettings(document.documentElement, loadReaderSettings(storage));
   const status = el("div", { class: "header-status", role: "status" });
   const header = el("header", { class: "site-header" }, [
-    el("div", { class: "header-inner" }, [createHeaderBrand(), createSearchBox(navigate), status]),
+    el("div", { class: "header-inner" }, [createHeaderBrand(), createSearchBox(navigate), status, createLocaleSwitch()]),
   ]);
   const main = el("main", { class: "site-main" });
   const footer = el("footer", { class: "site-footer" }, [
-    el("div", { class: "footer-inner" }, [
-      el("span", {}, ["Inhalte aus der "]),
-      el("a", { href: "https://de.wikipedia.org", target: "_blank", rel: "noopener" }, ["deutschsprachigen Wikipedia"]),
-      el("span", {}, [", Text lizenziert unter "]),
-      el("a", { href: "https://creativecommons.org/licenses/by-sa/4.0/deed.de", target: "_blank", rel: "noopener" }, [
-        "CC BY-SA 4.0",
-      ]),
-      el("span", {}, [". Übersetzung nach "]),
-      el("a", { href: "https://alman.ai", target: "_blank", rel: "noopener" }, ["Alman"]),
-      el("span", {}, [" durch "]),
-      el("a", { href: MODEL_REPOSITORY_URL, target: "_blank", rel: "noopener" }, ["GoePT-1-20M"]),
-      el("span", {}, [", lokal im Browser. Ein Projekt von alman.ai."]),
-    ]),
+    el("div", { class: "footer-inner" }, textRuns(t.footer)),
   ]);
   root.replaceChildren(header, main, footer);
   // Read the record before anything can clear it, then clear it: this document is
@@ -171,16 +138,26 @@ export function renderShell(root: HTMLElement, navigate: (path: string) => void)
   return { main, status, footer, navigate, storage, stores, modelUnsupported };
 }
 
+/**
+ * The description travels with the title: a page served in English should not
+ * describe itself in German to anything that reads the head without running it.
+ */
+function setMetaDescription(text: string): void {
+  document.querySelector('meta[name="description"]')?.setAttribute("content", text);
+}
+
 export async function renderLanding(shell: AppShell): Promise<void> {
   cancelActiveArticleRender();
   stopActiveTranslation();
+  const t = uiText();
   const unsupported = shell.modelUnsupported;
   shell.footer.hidden = false;
   shell.main.removeAttribute("aria-busy");
-  document.title = "Almanpedia — Die freie Enzyklopädie, vereinfacht";
+  document.title = t.documentTitle;
+  setMetaDescription(t.documentDescription);
   const progress = progressBar();
   const feed = el("div", { class: "landing-feed wiki-content", lang: "de" }, [
-    el("p", { class: "loading" }, ["Inhalte der deutschsprachigen Wikipedia werden geladen …"]),
+    el("p", { class: "loading" }, [t.landing.feedLoading]),
   ]);
   shell.main.className = "site-main landing-page";
   shell.status.replaceChildren(progress.element);
@@ -198,8 +175,8 @@ export async function renderLanding(shell: AppShell): Promise<void> {
       // the reader cannot run; the feed does not, and is not offered untranslated.
       ...(unsupported ? [createUnsupportedNotice()] : [
         el("div", { class: "landing-feed-heading" }, [
-          el("h2", {}, ["Aktuell in die deutschsprachige Wikipedia"]),
-          el("a", { href: articleUrl(WIKIPEDIA_MAIN_PAGE_TITLE), target: "_blank", rel: "noopener" }, ["Originale Hauptseite"]),
+          el("h2", {}, [t.landing.feedHeading]),
+          el("a", { href: articleUrl(WIKIPEDIA_MAIN_PAGE_TITLE), target: "_blank", rel: "noopener" }, [t.landing.feedOriginal]),
         ]),
         feed,
       ]),
@@ -222,9 +199,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
   } catch (error) {
     if (!feed.isConnected) return;
     progress.done();
-    feed.replaceChildren(el("p", { class: "landing-feed-error" }, [
-      "Die aktuelle Wikipedia-Hauptseite konnte nicht geladen werden. Bitte versuchen Sie es später erneut.",
-    ]));
+    feed.replaceChildren(el("p", { class: "landing-feed-error" }, [t.landing.feedError]));
     console.error("Wikipedia main page fetch failed", error);
     return;
   }
@@ -236,21 +211,17 @@ export async function renderLanding(shell: AppShell): Promise<void> {
       await initModel((assetProgress: AssetProgress) => {
         if (!feed.isConnected) return;
         if (assetProgress.phase === "download") {
-          progress.set(
-            assetProgress.overallLoaded / assetProgress.overallTotal,
-            `MODELL WIRD GELADEN: ${Math.round((assetProgress.overallLoaded / assetProgress.overallTotal) * 100)} %`,
-          );
+          const percent = Math.round((assetProgress.overallLoaded / assetProgress.overallTotal) * 100);
+          progress.set(assetProgress.overallLoaded / assetProgress.overallTotal, t.progress.loadingModel(percent));
         } else {
-          progress.set(1, "MODELL WIRD VORBEREITET …");
+          progress.set(1, t.progress.preparingModel);
         }
       });
     } catch (error) {
       markModelSettled(shell.stores);
       if (!feed.isConnected) return;
       progress.done();
-      shell.status.append(el("span", { class: "status-error" }, [
-        "Übersetzung nicht verfügbar. Die deutschsprachige Hauptseite bleibt sichtbar.",
-      ]));
+      shell.status.append(el("span", { class: "status-error" }, [t.reader.translationUnavailableMainPage]));
       console.error("model init failed", error);
       return;
     }
@@ -275,7 +246,7 @@ export async function renderLanding(shell: AppShell): Promise<void> {
           return;
         }
         const done = stats.totalBlocks - stats.pendingBlocks;
-        progress.set(done / stats.totalBlocks, `HAUPTSEITE WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
+        progress.set(done / stats.totalBlocks, t.progress.translatingMainPage(Math.round((done / stats.totalBlocks) * 100)));
       },
       onBlockState: (event) => revealController?.handleBlockState(event),
     });
@@ -299,17 +270,15 @@ export async function renderLanding(shell: AppShell): Promise<void> {
 }
 
 export function createArticleAttribution(title: string): HTMLElement {
-  return el("div", { class: "attribution", translate: "no", lang: "de" }, [
-    el("span", {}, ["Quelle: "]),
-    el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, [`„${displayTitle(title)}“ (de.wikipedia.org)`]),
-    el("span", {}, [", "]),
-    el("a", { href: historyUrl(title), target: "_blank", rel: "noopener" }, ["Autorinnen und Autoren"]),
-    el("span", {}, [
-      ". Text: CC BY-SA 4.0. Die maschinelle Alman-Fassung steht als Bearbeitung unter derselben Lizenz. " +
-        "Automatisch übersetzt durch ",
-    ]),
+  const t = uiText();
+  return el("div", { class: "attribution", translate: "no", lang: t.htmlLang }, [
+    el("span", {}, [t.attribution.source]),
+    el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, [t.attribution.sourceLink(displayTitle(title))]),
+    el("span", {}, [t.attribution.separator]),
+    el("a", { href: historyUrl(title), target: "_blank", rel: "noopener" }, [t.attribution.authors]),
+    el("span", {}, [t.attribution.license]),
     el("a", { href: MODEL_REPOSITORY_URL, target: "_blank", rel: "noopener" }, ["GoePT-1-20M"]),
-    el("span", {}, ["; Fehler vorbehalten. Ein Projekt von "]),
+    el("span", {}, [t.attribution.errors]),
     el("a", { href: "https://alman.ai/", target: "_blank", rel: "noopener" }, ["alman.ai"]),
     el("span", {}, ["."]),
   ]);
@@ -388,13 +357,14 @@ function createArticleLoadingSkeleton(title: string): HTMLElement {
 }
 
 function createSlowArticleNotice(title: string, onRetry: () => void): HTMLElement {
-  const retry = el("button", { type: "button", class: "retry" }, ["Erneut versuchen"]);
+  const t = uiText();
+  const retry = el("button", { type: "button", class: "retry" }, [t.reader.retry]);
   retry.addEventListener("click", onRetry);
   return el("section", { class: "article-loading-notice", hidden: "", "aria-live": "polite" }, [
-    el("p", {}, ["Das Laden dauert länger als üblich."]),
+    el("p", {}, [t.reader.slowLoad]),
     el("div", { class: "article-loading-notice-actions" }, [
       retry,
-      el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, ["Original bei Wikipedia öffnen"]),
+      el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, [t.reader.openOriginal]),
     ]),
   ]);
 }
@@ -411,7 +381,7 @@ function beginArticleLoading(
   const previousDocumentTitle = retainedLayout?.dataset.articleDocumentTitle ?? document.title;
   const retainedStatus = retainedLayout ? articleRuntimeByLayout.get(retainedLayout)?.status : undefined;
   const progress = progressBar();
-  progress.indeterminate(`„${displayTitle(title)}“ WIRD GELADEN …`);
+  progress.indeterminate(uiText().progress.loadingArticle(displayTitle(title)));
   shell.status.replaceChildren(progress.element);
   shell.footer.hidden = true;
   shell.main.className = "site-main article-page article-loading";
@@ -447,7 +417,7 @@ function beginArticleLoading(
     retainedLayout,
     commit() {
       clearLoadingState();
-      progress.indeterminate("ÜBERSETZUNG WIRD VORBEREITET …");
+      progress.indeterminate(uiText().progress.preparingTranslation);
     },
     restore() {
       clearLoadingState();
@@ -465,16 +435,17 @@ function showRetainedArticleError(
   hash: string | undefined,
   error: unknown,
 ): void {
-  const retry = el("button", { type: "button", class: "retry" }, ["Erneut versuchen"]);
+  const t = uiText();
+  const retry = el("button", { type: "button", class: "retry" }, [t.reader.retry]);
   retry.addEventListener("click", () => void renderArticle(shell, title, hash));
   const message = error instanceof ArticleNotFoundError
-    ? `„${displayTitle(title)}“ wurde nicht gefunden. Der vorige Artikel bleibt geöffnet.`
-    : `„${displayTitle(title)}“ konnte nicht geladen werden. Der vorige Artikel bleibt geöffnet.`;
+    ? t.reader.retainedNotFound(displayTitle(title))
+    : t.reader.retainedLoadFailed(displayTitle(title));
   shell.main.prepend(el("section", { class: "article-loading-error", role: "alert" }, [
     el("p", {}, [message]),
     el("div", { class: "article-loading-notice-actions" }, [
       retry,
-      el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, ["Original bei Wikipedia öffnen"]),
+      el("a", { href: articleUrl(title), target: "_blank", rel: "noopener" }, [t.reader.openOriginal]),
     ]),
   ]));
 }
@@ -555,15 +526,16 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
    * mutually exclusive, so exactly one of them is current at any moment, and a
    * strip shows which without being read.
    */
-  const almanTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "true" }, ["Alman"]);
-  const originalTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "false" }, ["Original"]);
-  const differenceTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "false" }, ["Änderungen"]);
+  const t = uiText();
+  const almanTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "true" }, [t.reader.tabAlman]);
+  const originalTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "false" }, [t.reader.tabOriginal]);
+  const differenceTab = el("button", { class: "article-view", type: "button", disabled: "", "aria-pressed": "false" }, [t.reader.tabChanges]);
   const actions = el("div", {
     class: "article-actions",
     role: "group",
-    "aria-label": "Ansicht",
+    "aria-label": t.reader.viewLabel,
     translate: "no",
-    lang: "de",
+    lang: t.htmlLang,
   }, [almanTab, originalTab, differenceTab]);
   const content = el("article", { class: "wiki-content", lang: "de" });
   content.append(fragment);
@@ -574,7 +546,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     class: "toggle-settings",
     type: "button",
     "aria-expanded": "false",
-  }, ["Erscheinungsbild"]);
+  }, [t.settings.panelTitle]);
   settingsToggle.addEventListener("click", () => {
     settings.setExpanded(!settings.expanded());
     if (settings.expanded()) settings.element.scrollIntoView({ block: "nearest" });
@@ -637,9 +609,9 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
     clone.classList.add("wiki-difference");
     clone.setAttribute("translate", "no");
     clone.prepend(el("p", { class: "difference-legend" }, [
-      el("span", { class: "difference-legend-removed" }, ["Durchgestrichen: deutsches Original."]),
+      el("span", { class: "difference-legend-removed" }, [t.reader.differenceRemoved]),
       " ",
-      el("span", { class: "difference-legend-added" }, ["Blau: Alman-Fassung."]),
+      el("span", { class: "difference-legend-added" }, [t.reader.differenceAdded]),
     ]));
     clone.removeAttribute("hidden");
     clone.setAttribute("lang", inferenceComplete ? "de-AL" : "de");
@@ -726,7 +698,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
       if (!articleColumn.isConnected) return;
       finishArticleRender(render);
       progress.done();
-      articleStatus.append(el("span", { class: "status-error" }, ["Übersetzung nicht verfügbar — Original wird angezeigt."]));
+      articleStatus.append(el("span", { class: "status-error" }, [t.reader.translationUnavailableArticle]));
       console.error("model init failed", error);
       return;
     }
@@ -753,7 +725,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
           progress.done();
           return;
         }
-        progress.set(done / stats.totalBlocks, `ARTIKEL WIRD ÜBERSETZT: ${Math.round((done / stats.totalBlocks) * 100)} %`);
+        progress.set(done / stats.totalBlocks, t.progress.translatingArticle(Math.round((done / stats.totalBlocks) * 100)));
       },
       onBlockState: (event) => {
         revealController?.handleBlockState(event);
@@ -784,6 +756,7 @@ export async function renderArticle(shell: AppShell, title: string, hash?: strin
 }
 
 function renderArticleError(shell: AppShell, title: string, error: unknown, hash?: string): void {
+  const t = uiText();
   shell.main.className = "site-main";
   shell.main.removeAttribute("aria-busy");
   shell.status.replaceChildren();
@@ -791,14 +764,14 @@ function renderArticleError(shell: AppShell, title: string, error: unknown, hash
   if (error instanceof ArticleNotFoundError) {
     shell.main.replaceChildren(
       el("section", { class: "error-view" }, [
-        el("p", { class: "form-tag" }, ["BESCHEID AP-404"]),
-        el("h1", {}, ["Artikel nicht vorhanden"]),
-        el("p", {}, [`Ein Artikel mit der Bezeichnung „${displayTitle(title)}“ ist nicht verzeichnet.`]),
+        el("p", { class: "form-tag" }, [t.reader.notFoundTag]),
+        el("h1", {}, [t.reader.notFoundHeading]),
+        el("p", {}, [t.reader.notFoundBody(displayTitle(title))]),
         el("p", {}, [
           el("a", { href: `https://de.wikipedia.org/w/index.php?search=${encodeURIComponent(displayTitle(title))}`, target: "_blank", rel: "noopener" }, [
-            "In der Wikipedia suchen",
+            t.reader.notFoundSearch,
           ]),
-          el("span", {}, [" oder oben die Almanpedia-Suche benutzen."]),
+          el("span", {}, [t.reader.notFoundSearchHint]),
         ]),
       ]),
     );
@@ -806,12 +779,12 @@ function renderArticleError(shell: AppShell, title: string, error: unknown, hash
   }
   shell.main.replaceChildren(
     el("section", { class: "error-view" }, [
-      el("p", { class: "form-tag" }, ["STÖRUNGSMELDUNG"]),
-      el("h1", {}, ["Artikel konnte nicht geladen werden"]),
-      el("p", {}, ["Die Verbindung zur Wikipedia ist fehlgeschlagen. Bitte versuchen Sie es erneut."]),
+      el("p", { class: "form-tag" }, [t.reader.failureTag]),
+      el("h1", {}, [t.reader.loadFailedHeading]),
+      el("p", {}, [t.reader.loadFailedBody]),
       el("p", {}, [
         (() => {
-          const retry = el("button", { type: "button", class: "retry" }, ["Erneut versuchen"]);
+          const retry = el("button", { type: "button", class: "retry" }, [t.reader.retry]);
           retry.addEventListener("click", () => void renderArticle(shell, title, hash));
           return retry;
         })(),
