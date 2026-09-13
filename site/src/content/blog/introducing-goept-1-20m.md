@@ -101,12 +101,6 @@ GoePT produced:
 
 The working hypothesis is that the synthetic training pairs overrepresent *von die* and teach the student to remove endings too freely. This still needs a corpus audit. A goal for the next iteration is to correct that distribution and add targeted checks for proper names and foreign words, so that simplification removes grammatical endings without damaging the words themselves.
 
-## Limitations
-
-GoePT was trained for German-to-Alman translation under a written specification. Its score does not establish a general capability advantage over larger models, and the leading models on AlmanBench still score higher. Benchmark acceptance and reference exact match also measure different things. Neither is a direct percentage of fluent or useful sentences.
-
-The proposed learning benefit remains untested. Whether reading Alman helps people learn German faster requires a study with learners. Translation scores cannot answer that question. Almanpedia keeps the original text available so readers can compare the two.
-
 ## Training on Hugging Face
 
 The author directed the training run from a phone through Telegram, using [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face. The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets.
