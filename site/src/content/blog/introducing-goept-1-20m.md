@@ -74,6 +74,26 @@ We checked the browser export against the native model on all three eval sets.
 
 Quantization changed some outputs. It cost ten exact matches on the 3,512-row eval and gained two on the 3,204-row eval. That does not establish a quality advantage for either runtime. Native and browser inference accepted the same 894 AlmanBench cases.
 
+### Reading quality
+
+In informal use of Almanpedia, most translations look correct. The most noticeable weakness is overcorrection around proper names and foreign words. GoePT also shows a strong preference for *von die* where retaining *der* would preserve the original construction and read more naturally.
+
+The opening of the [Odysseus article](https://almanpedia.org/wiki/Odysseus) provides an example. This sentence appears in the [German original](https://de.wikipedia.org/wiki/Odysseus).
+
+<blockquote lang="de">
+<p>Er war der Sohn des Laërtes (in weniger verbreiteten Versionen des Sisyphos) und der Antikleia sowie der Bruder der Ktimene.</p>
+</blockquote>
+
+The observed Alman output was:
+
+<blockquote lang="de-AL">
+<p>Er war die Sohn von die Laërt (in weniger verbreitete Versionen von die Sisyphos) und die Antikleia sowie die Bruder von die Ktimene</p>
+</blockquote>
+
+*Laërtes* becomes *Laërt*, removing part of the name. The final *-es* belongs to the name and should remain. The repeated *von die* is a separate issue. Both genitive constructions are allowed by the [specification](/#spec), which prefers retaining *der* when translating an existing genitive. Here, forms such as *die Sohn der Laërtes* and *die Bruder der Ktimene* would preserve that construction.
+
+The working hypothesis is that the synthetic training pairs overrepresent *von die* and teach the student to remove endings too freely. This still needs a corpus audit. A goal for the next iteration is to correct that distribution and add targeted checks for proper names and foreign words, so that simplification removes grammatical endings without damaging the words themselves.
+
 ## Limitations
 
 GoePT was trained for German-to-Alman translation under a written specification. Its score does not establish a general capability advantage over larger models, and the leading models on AlmanBench still score higher. Benchmark acceptance and reference exact match also measure different things. Neither is a direct percentage of fluent or useful sentences.

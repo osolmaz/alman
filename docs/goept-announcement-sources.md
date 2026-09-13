@@ -46,6 +46,14 @@ The saved `teacher/run.json` belongs to the earlier three-epoch diagnostic `teac
 
 The job API's whole-second running counters differ from timestamp subtraction by less than one second per job. No material mismatch was found with the final student record. The local filtered evidence is `/home/onur/scratch/goept-announcement/hardware-job-history.json`; it omits job commands, environment variables, and credentials.
 
+## Qualitative reading example
+
+On 13 September 2026, the author supplied the German opening and an observed Almanpedia translation from https://almanpedia.org/wiki/Odysseus. The article quotes the second sentence of each as supplied, including the model's `Laërt` and the missing final period in its output. This example was not independently rerun.
+
+The assessment that most translations look correct is the author's informal reading impression. The reported preference is for `von die` over retained `der`, as the supplied output shows. Section 1d allows both forms and prefers retaining `der` for an existing genitive. The casebook confirms that both belong in acceptance sets. The article therefore separates that preference from the erroneous removal of the lexical ending in `Laërtes`.
+
+The proposed link to the synthetic training distribution is a working hypothesis. No frequency audit or causal test was performed for this edit. Correcting the distribution and adding checks for names and foreign words are goals for the next iteration. No specification rule, acceptance set, or model artifact was changed.
+
 ## Publication boundaries
 
 The release report records 893/1029. On 12 September, a read-only comparison applied the current acceptance sets to the stored browser and native predictions. Both score 894/1029 and accept the same cases. The draft uses 894 consistently. No model was rerun or changed.
