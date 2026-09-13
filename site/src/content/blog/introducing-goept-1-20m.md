@@ -6,7 +6,7 @@ paper: true
 abstract: >-
   GoePT-1-20M is a 20-million-parameter model that translates Standard German
   into Alman, a simplified German dialect. It scored above DeepSeek-V4-Pro,
-  Claude Sonnet 5, Qwen3.6-27B, and GPT-OSS-120B on AlmanBench, with about
+  Claude Sonnet 5, and Qwen3.8-27B on AlmanBench, with about
   80 thousand times fewer parameters than DeepSeek-V4-Pro. The model was trained
   on Hugging Face infrastructure with nearly ten million teacher-generated
   sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw
@@ -61,7 +61,7 @@ GoePT passed **894 of 1,029 cases**. DeepSeek-V4-Pro, the closest lower-scoring 
 
 The score difference is small. GoePT passed 95 cases that DeepSeek missed, while DeepSeek passed 79 that GoePT missed. We treat this as a practical tie from one run per model. GoePT reaches that score in a browser-sized model trained specifically for this task.
 
-GoePT also scored above Claude Sonnet 5 at **858/1,029 (83.4%)**, Qwen3.6-27B at **842/1,029 (81.8%)**, and GPT-OSS-120B at **709/1,029 (68.9%)**. Their recorded runs used xhigh reasoning, thinking mode, and high reasoning, respectively.
+GoePT also scored above Claude Sonnet 5 at **858/1,029 (83.4%)** and Qwen3.8-27B at **857/1,029 (83.3%)**. Their recorded runs used xhigh and medium reasoning, respectively.
 
 ### Browser performance
 
