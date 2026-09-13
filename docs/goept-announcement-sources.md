@@ -111,7 +111,9 @@ The selected marker is fixed to the recorded step 136444. It is not recomputed f
 
 ## Other checked models
 
-The comparisons below were verified during drafting. They are no longer included in the article, which now uses the closest lower-scoring model.
+The article names Claude Sonnet 5, Qwen3.6-27B, and GPT-OSS-120B alongside DeepSeek-V4-Pro. Their scores are 858/1029 (83.4%), 842/1029 (81.8%), and 709/1029 (68.9%). GoePT's corresponding leads are 36, 52, and 185 cases, or 3.5, 5.1, and 18.0 percentage points. The abstract's 80-thousand-times parameter comparison applies only to DeepSeek-V4-Pro.
+
+A fresh check with `alman.bench.scoring.is_accepted` reproduced every stored verdict for all four comparators. Their IDs, source texts, and acceptance sets match. Sonnet's collection labels differ for 89 curated rows, using `curated` instead of individual collection names. This metadata difference does not affect acceptance scoring. Sonnet's recorded reasoning effort is xhigh; its result file is cited under Figures.
 
 The browser outputs come from `osolmaz/alman-student-spm16k-base-10m-h50-onnx@c0bef56c31411c98a200906f934bcccd6a0ea857/evaluation/almanbench-browser.jsonl`. The file SHA-256 is `4eddbed0a81c89cf39a0ef42a43a27665efbd84c78a9b59382bb321c91c2c16f`. Native outputs come from `osolmaz/alman-student-spm16k-base-10m-h50@bcee1d732feb89667d6678814f71773c43b5fb89/evaluation/almanbench-predictions.jsonl`.
 
