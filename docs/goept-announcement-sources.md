@@ -32,7 +32,7 @@ The research repository and detailed Hub reports are private, as verified throug
 
 Read-only Hugging Face job history and individual job records were checked on 13 September 2026. The `h200` hardware option lists one NVIDIA H200 with 141 GB of GPU memory. All teacher and student training jobs below used that option. The eight generation workers were separate single-GPU jobs.
 
-The article describes the final teacher as six epochs on about 60000 reviewed pairs. The exact count remains 59022 and is stated in Reference data. The teacher-search and restart history is retained in these notes rather than in the announcement. The teacher duration shown in the article is the final model's 9264 seconds. The full program cost still includes the earlier search. Student selection and independent eval boundaries remain explicit.
+The article describes the final teacher as six epochs on about 60000 reviewed pairs. The exact count remains 59022 and is stated in Reference data. The teacher-search and restart history is retained in these notes rather than in the announcement. The teacher duration shown in the article is the final model's 9264 seconds. The historical program estimate includes the earlier search. The article's cost estimate now covers only the three main stages whose durations it reports. Student selection and independent eval boundaries remain explicit.
 
 | Stage | Job | Running seconds | Rounded time |
 | --- | --- | ---: | --- |
@@ -64,6 +64,29 @@ The saved `teacher/run.json` belongs to the earlier three-epoch diagnostic `teac
 
 The job API's whole-second running counters differ from timestamp subtraction by less than one second per job. No material mismatch was found with the final student record. The local filtered evidence is `/home/onur/scratch/goept-announcement/hardware-job-history.json`; it omits job commands, environment variables, and credentials.
 
+## Training workflow and cost estimate
+
+On 13 September 2026, the author requested the remark about being able to *vibe* machine learning from dataset creation through autoresearch to final training. He identified ML Intern as the inspiration for ML Claw. The official [ML Intern README](https://github.com/huggingface/ml-intern/blob/main/README.md), checked at revision `b0d6752723d17ef2ea7a54f5aeb63abebba99e47`, links its new mode in Hugging Chat. The article assigns no release date.
+
+The author supplied the account of creating [hf-job-control](https://github.com/osolmaz/hf-job-control) after difficulties controlling jobs. Its README documents checkpoint-aware lifecycle control and resume from verified saved state. The research record separately documents a pause-resume check against an uninterrupted reference.
+
+The architecture and hyperparameter note describes the agent-led process. It does not claim that each setting received an independent search. The journals document tokenizer and model-capacity comparisons, along with mixture and batch-size experiments. Some final settings carried over from earlier runs. Further improvements remain future work without a new training commitment.
+
+The [Hugging Face Jobs pricing page](https://huggingface.co/docs/hub/jobs-pricing#gpu) and `hf jobs hardware --format json` both list one H200 with 141 GB GPU memory at USD 5 per hour. Both were checked on 13 September 2026. The calculation uses the provider's whole-second running counters recorded above.
+
+| Stage | H200 running seconds | H200-hours | Cost at USD 5/hour |
+| --- | ---: | ---: | ---: |
+| Final teacher fine-tune | 9264 | 2.573333 | USD 12.866667 |
+| Completed target-generation fleet | 70334 | 19.537222 | USD 97.686111 |
+| Main student training jobs | 19389 | 5.385833 | USD 26.929167 |
+| Total | 98987 | 27.496389 | USD 137.481944 |
+
+The article rounds this subtotal to 27.50 H200-hours and about USD 137. The student row retains all 19389 seconds from both main jobs, including the failed attempt. No running time was removed to fit the single-run narrative.
+
+This is a prorated list-price estimate for those stages. The pricing page says Jobs are billed by the minute while Starting or Running. Starting charges and any billing-rounding differences are not reconstructed here, and no invoice was obtained. Separate preparation and export jobs and earlier experiments are outside this subtotal. Storage and agent or LLM API costs are also excluded.
+
+The earlier USD 29.04 student-phase estimate included all additional student work, including evals and export. The broader USD 363.22 program estimate also included teacher search and generation pilots alongside canceled work. Those estimates remain in `alman-research/docs/2026-07-26-base-student-final-record.md`. They cover different work from the new subtotal and are not audited lifetime project costs. The article now gives one estimate that can be calculated from its reported hardware and durations.
+
 ## Qualitative translation example
 
 On 13 September 2026, the author supplied the German opening and an observed Almanpedia translation from https://almanpedia.org/wiki/Odysseus. The article quotes the second sentence of each as supplied, including the model's `Laërt` and the missing final period in its output. This example was not independently rerun.
@@ -82,11 +105,11 @@ The article now focuses on DeepSeek-V4-Pro, the closest lower-scoring model on t
 
 The reviewed references contain LLM-generated translations. The third review pass used `gpt-5.6-luna` at `xhigh`. Do not call this entirely human-authored data. The 2953 selection rows were excluded from student gradients but included in the teacher refit.
 
-On 13 September 2026, the author confirmed that he directed this training run from his phone through Telegram and requested that the announcement describe it as one run. The article uses that account of how he directed the work. The final training record separately identifies direct execution from a maintainer session and an archived ML Claw bundle. Those execution details remain here with the full job history. The article does not claim an uninterrupted physical job. Its 5-hour-23-minute student duration remains the sum of the two main jobs, and its compute totals are unchanged.
+On 13 September 2026, the author confirmed that he directed this training run from his phone through Telegram and requested that the announcement describe it as one run. The article uses that account of how he directed the work. The final training record separately identifies direct execution from a maintainer session and an archived ML Claw bundle. Those execution details remain here with the full job history. The article does not claim an uninterrupted physical job. Its 5-hour-23-minute student duration remains the sum of the two main jobs. The main-stage cost estimate includes all of that running time.
 
 The proposed learning benefit is untested. AlmanBench measures translation behavior, not learner outcomes. The article links the author's earlier arguments without treating them as a learner study.
 
-The $29.04 student phase and $363.22 program subtotal are recorded compute estimates. The subtotal is not an audited lifetime cost for the project. Canceled-job charges and earlier data work prevent that claim.
+The cost section reports a list-price estimate for the named main stages. The broader historical compute estimates and their different scopes are preserved under Training workflow and cost estimate above.
 
 ## Closest-score comparison
 
