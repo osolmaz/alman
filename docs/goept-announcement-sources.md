@@ -32,7 +32,9 @@ The research repository and detailed Hub reports are private, as verified throug
 
 Read-only Hugging Face job history and individual job records were checked on 13 September 2026. The `h200` hardware option lists one NVIDIA H200 with 141 GB of GPU memory. All teacher and student training jobs below used that option. The eight generation workers were separate single-GPU jobs.
 
-| Stage | Job | Running seconds | Rounded time in the article |
+The article describes the final teacher as six epochs on about 60000 reviewed pairs. The exact count remains 59022 and is stated in Reference data. The teacher-search and restart history is retained in these notes rather than in the announcement. The teacher duration shown in the article is the final model's 9264 seconds. The full program cost still includes the earlier search. Student selection and independent eval boundaries remain explicit.
+
+| Stage | Job | Running seconds | Rounded time |
 | --- | --- | ---: | --- |
 | Teacher duration search | [6a631c9a7ef3c08464967217](https://huggingface.co/jobs/osolmaz/6a631c9a7ef3c08464967217) | 31,868 | 8 hours 51 minutes |
 | Final six-epoch teacher fine-tune | [6a63a9d77ef3c08464967b0d](https://huggingface.co/jobs/osolmaz/6a63a9d77ef3c08464967b0d) | 9,264 | 2 hours 34 minutes |
@@ -110,7 +112,9 @@ Figure 1 selects the two leaderboard entries immediately above GoePT and the two
 
 The added comparator files are `v0.1/gpt-5.6-terra-xhigh/results.jsonl`, `v0.1/kimi-k2.7-code/results.jsonl`, and `v0.1/claude-sonnet-5-xhigh/results.jsonl` in `osolmaz/almanbench-results@decbac3dc6ef3437a775157610b30ef0fe4b612e`. Their 1029 source texts, IDs, and acceptance sets match the verified comparison. `alman.bench.scoring.is_accepted` reproduces every stored verdict.
 
-Figure 2 uses the `history` field of the native `run.json` cited above. It plots exact match on the 2953 checkpoint-selection pairs, not training loss or AlmanBench acceptance. The checked report provides eight observations; the old physical Job log returned no usable loss series. Lines connect observed points without smoothing or invented intermediate measurements. The line chart's vertical axis spans 60% to 80% so the later changes remain visible.
+Figure 2 uses the `history` field of the native `run.json` cited above. It plots exact match on the 2953 checkpoint-selection pairs, not training loss or AlmanBench acceptance. The checked report provides eight observations. Lines connect observed points without smoothing or invented intermediate measurements. The line chart's vertical axis spans 60% to 80% so the later changes remain visible.
+
+A later read-only check recovered 16 training-loss samples from historical versions of the run-status files in `osolmaz/alman-research-data`, covering steps 9746 through 155936. The old physical Job logs returned no entries. The saved runner with SHA-256 `1aef117cd9a37bdc5cd8ec75e71cf3cda2b66b83ff11d1be8536173e98c47a28` publishes the latest batch loss at each midpoint and quarter-pass boundary. These are sparse batch-loss samples, not averages over the intervening steps. The extracted values and exact source revisions are in `/home/onur/scratch/goept-announcement/loss-record-audit/training-loss-samples.csv`. They have not yet been added to the article's figures.
 
 | Passes | Step | Exact matches out of 2953 |
 | --- | --- | --- |

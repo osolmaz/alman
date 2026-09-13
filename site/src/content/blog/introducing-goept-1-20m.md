@@ -111,17 +111,15 @@ The proposed learning benefit remains untested. Whether reading Alman helps peop
 
 The author directed the training run from a phone through Telegram, using [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face. The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets.
 
-The training times below come from Hugging Face job records. They include setup, evals, and checkpoint uploads, but exclude time when no job was running.
+Reported durations are active Hugging Face job time, including setup, evals, and checkpoint uploads.
 
 The training method was sequence-level distillation. A larger **teacher** produced translations, and a smaller **student** learned to reproduce them. The student became the model shipped to readers.
 
 ### Reference data
 
-We began with 66,000 German–Alman sentence pairs in the corrected v0.3 dataset. Sources include literature and everyday sentences, with modern material from Wikipedia and other openly licensed collections. There are also informal and rule-targeted examples. The translations underwent three review passes against the Alman specification.
+We began with 66,000 German–Alman sentence pairs. Sources include literature and everyday sentences, with modern material from Wikipedia and other openly licensed collections. There are also informal and rule-targeted examples. The translations were drafted with LLM assistance and reviewed in three passes against the Alman specification.
 
-The references and their review used LLM assistance. They were not 66,000 independently human-translated sentences. The review records preserve corrections and unresolved defects in the German sources.
-
-We reserved separate eval sets of 3,512 and 3,204 rows and excluded 262 training rows that overlapped AlmanBench. That left 59,022 approved pairs. Of these, 2,953 were set aside for checkpoint selection, leaving 56,069 for teacher search and student training.
+We reserved separate eval sets of 3,512 and 3,204 rows and excluded 262 training rows that overlapped AlmanBench. That left 59,022 reviewed training pairs. The teacher used all of them. The student used 56,069, with the remaining 2,953 reserved for checkpoint selection.
 
 ### Autoresearch experiments
 
@@ -141,9 +139,9 @@ A later 250,000-pair pilot used the final ByT5-Base teacher to compare greedy de
 
 ### Teacher and generated pairs
 
-We fine-tuned pretrained ByT5-Base, approximately 582 million parameters, on the reviewed pairs. The duration search selected six epochs. A fresh fine-tune then used all 59,022 approved pairs for that duration to produce the teacher.
+We fine-tuned ByT5-Base, a 582-million-parameter model, for six epochs on about 60,000 reviewed sentence pairs to produce the teacher.
 
-Both teacher jobs used one **NVIDIA H200 with 141 GB of GPU memory**. AdamW used a batch size of eight and a peak learning rate of 0.0001. Weights and optimizer state stayed in FP32, with BF16 computation. The duration search ran for **8 hours 51 minutes**. The final six-epoch fine-tune ran for **2 hours 34 minutes**.
+Training took **2 hours 34 minutes** on one **NVIDIA H200 with 141 GB of GPU memory**. We used AdamW with a batch size of eight and a peak learning rate of 0.0001. Weights and optimizer state stayed in FP32, with BF16 computation.
 
 The teacher translated 9,999,555 German sentences from `coral-nlp/german-commons`. The source mix covers Wikipedia and discussion pages, newspaper comments, legal documents, public tenders, news, and political speeches. Overlaps with the protected eval sources were removed before generation.
 
@@ -168,13 +166,13 @@ The training stream alternated one generated pair with one reviewed pair. This g
 | Schedule | 5% linear warmup, then cosine decay |
 | Precision | FP32 weights and optimizer state, BF16 computation |
 
-The student training run used **5 hours 23 minutes of H200 job time**. This covers the full two-pass search, which continued beyond the checkpoint selected for release.
+The full two-pass student training run used **5 hours 23 minutes of H200 job time**.
 
 ### Checkpoint selection
 
 The run completed two passes through the generated training data. With the repeated reference pairs, that amounted to 39,918,220 example presentations. We saved checkpoints and checked the 2,953 selection cases after every quarter pass.
 
-The selected checkpoint was step 136,444, after 1.75 passes and 34,928,442 presentations. The final checkpoint gained eleven exact matches on the selection set. That was below the registered fifteen-case threshold for choosing a later checkpoint, so we kept the earlier one. The student was not refitted afterward.
+The selected checkpoint was step 136,444, after 1.75 passes and 34,928,442 presentations. The final checkpoint gained eleven exact matches on the selection set, below the fifteen-case threshold for choosing a later checkpoint, so we kept the earlier one.
 
 <figure id="figure-checkpoint-selection">
 
@@ -184,11 +182,11 @@ The selected checkpoint was step 136,444, after 1.75 passes and 34,928,442 prese
 
 </figure>
 
-The 2,953 checkpoint-selection pairs were excluded from student gradients, but the teacher refit had seen them. The separate eval sets stayed out of both models' training. We opened the 3,204-row held-out eval after fixing the browser candidate and did not use its result to select another model.
+The teacher had seen the student's checkpoint-selection pairs. Both separate eval sets stayed out of teacher and student training. The 3,204-row held-out eval was used only after the browser model was selected.
 
 ### Cost
 
-The final student phase cost about **USD 29.04** in recorded compute, including preparation, hardware profiling, training, and export. Teacher work and target generation were separate upstream costs. The recorded program subtotal was about **USD 363.22**. The subtotal is estimated. Earlier research and LLM-assisted data work are outside that accounting.
+The final student phase cost about **USD 29.04** in recorded compute, including preparation, hardware profiling, training, and export. Including teacher work and target generation, the recorded program subtotal was approximately **USD 363.22**. Earlier research and LLM-assisted data work are outside that accounting.
 
 German-to-Alman translation is a toy problem with unusually explicit rules. Hugging Face supplied the GPU jobs and durable storage. [ML Claw](https://github.com/huggingface/mlclaw) made those tools accessible through conversation, while the specification gave the work a result that could be checked.
 
