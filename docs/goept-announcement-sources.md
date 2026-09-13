@@ -10,7 +10,7 @@ The teacher refit report is `osolmaz/alman-byt5-base-teacher@33277762ccbf14a858e
 
 On 11 September, the bucket inventory contained all 204 consecutive chunks under `osolmaz/jobs-artifacts/202607250833-edge-duck/outputs/`. Their combined size was 6471392748 bytes, matching the corpus report. The downloaded final chunk contained 21699 rows. Its SHA-256 matched `cf3662c8d0d6389b99b05d591ebbad3830dfda432fd63e4a1dc931d20976b905`. This was a sample verification, not a new audit of every corpus row.
 
-The public browser package remains `osolmaz/GoePT-1-20M@5f8145012d666bc68b48bd0d89d47847fc950d90`. The browser package's `browser.json` records its file sizes and browser qualification. Its README incorrectly labels the 79.28% result as native. The final release report records native 2538/3204 and browser 2540/3204. The article follows the report.
+The original public browser package is `osolmaz/GoePT-1-20M@5f8145012d666bc68b48bd0d89d47847fc950d90`. Its `browser.json` records file sizes and browser checks. The original README mislabeled the 79.28% result as native. The final release report records native 2538/3204 and browser 2540/3204. The article and current model card follow that report.
 
 ## Autoresearch records
 
@@ -99,7 +99,13 @@ The proposed link to the synthetic training distribution is a working hypothesis
 
 The release report records 893/1029. On 12 September, a read-only comparison applied the current acceptance sets to the stored browser and native predictions. Both score 894/1029 and accept the same cases. The draft uses 894 consistently. No model was rerun or changed.
 
-The current site leaderboard does not include a unified GoePT entry. Before publishing this article, add that entry. Align the public model card and result dataset with the verified current score, and show the same score on the site. Keep this PR in draft until those publication changes are ready. The existing 893 release report remains historical evidence, not the source for current model-to-model margins. No public dataset or model repository was changed during this article edit.
+On 13 September 2026, the author authorized merging and deployment. The site now includes one highlighted GoePT entry at 894/1029, linked to the model and English announcement. No German or Alman announcement translation was added.
+
+The public model metadata is `osolmaz/GoePT-1-20M@92aea8a3d71b0c11cbc3655cdda5971cbd1d525d`. Changes were limited to the README and quality metrics in `browser.json` and `export.json`. All model and runtime files remain unchanged. The current result publication is `osolmaz/almanbench-results@7323d117121eaa413c975ee66071f23e762af193`, with 1029 GoePT rows under `v0.1/goept-1-20m/`. The benchmark dataset README was updated at `osolmaz/almanbench@63c339c2b3c4182231c58fd906eebdb7c50b3be4`; its benchmark data did not change.
+
+Publication checks reproduced 894 accepted and 1026 lint-clean browser outputs. Every case ID and source text matches the current references, and all rows pass the existing schema. The tier counts are curated 75/93, guards 113/120, naturalistic 497/600, and targeted 209/216. The native outputs accept the same cases. Reference-dependent chrF and normalized similarity were also recalculated. Existing models' individual publication files are byte-identical. The combined Parquet table contains 32928 rows for 32 model profiles.
+
+GoePT's source predictions did not record per-sentence timing or token usage. Publication uses null timestamps and the existing exporter's zero-for-unrecorded integer token fields, with that convention explained in the result README. The row artifact URL identifies the original browser predictions. Scoring used the clean Alman revision `33099bd73b37945b424aefdcade0087bb7118d48`. The original 893 report remains internal historical evidence.
 
 The article now focuses on DeepSeek-V4-Pro, the closest lower-scoring model on the current AlmanBench leaderboard. It makes no overall state-of-the-art claim. The leading larger models score higher, and the parameter counts of the closed models are not public.
 
