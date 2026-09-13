@@ -82,6 +82,80 @@ async function mount(page: Page, width: number): Promise<void> {
   await page.addStyleTag({ path: resolve(process.cwd(), "almanpedia/src/styles/wiki-content.css") });
 }
 
+/*
+ * The article act, reduced to the parts this suite measures: the figure's stage,
+ * the browser inside it, one line with three words that change length, and one
+ * ending card. The last line of the article and the card each carry a single
+ * space with white-space: pre, which is the width of one word space in their own
+ * type, and the reference every measured gap is compared against.
+ */
+const SWAP_FIXTURE = `
+<div class="th-theater">
+  <div class="th-stagewrap">
+    <div class="th-stage">
+      <div class="th-browser" data-browser style="width: 40rem">
+        <div class="th-page" data-page>
+          <p class="th-line">Die Hypothese ist
+            <span class="th-swap" data-swap data-state="de"><span class="th-swap-de">eine</span><span class="th-swap-al">ein</span></span>
+            <span class="th-next">Annahme</span> aus
+            <span class="th-swap" data-swap data-state="de"><span class="th-swap-de">der</span><span class="th-swap-al">von die</span></span>
+            <span class="th-next">Sprachwissenschaft</span>, auf
+            <span class="th-swap" data-swap data-state="de"><span class="th-swap-de">seinen</span><span class="th-swap-al">sein</span></span>
+            <span class="th-next">Lehrer</span>.</p>
+          <p class="th-line"><span class="th-ref" style="white-space: pre"> </span></p>
+          <div class="th-card" data-card data-state="de">
+            <span class="th-card-rule">§4a</span>
+            <p class="th-card-phrase">ein <span class="th-word">gut<span class="th-ending"><span class="th-drop">er</span><span class="th-add">e</span></span></span> Mann<span class="th-ref" style="white-space: pre"> </span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+/** Mount the figure's own stylesheet, with the markup the article act builds. */
+async function mountTheater(page: Page): Promise<void> {
+  await page.setViewportSize({ width: 900, height: 700 });
+  await page.setContent(`<style>${FRAME_CSS}</style>${SWAP_FIXTURE}`);
+  await page.addStyleTag({ path: resolve(process.cwd(), "almanpedia/src/styles/theater.css") });
+}
+
+/**
+ * Write the one number the figure's stylesheet cannot work out for itself: how much
+ * wider the second spelling of a cell is than the first. This mirrors the figure's
+ * own measurement, which lives in TypeScript the browser suite cannot import; the
+ * rest of the mechanism, the pull and its timing, is the shipped stylesheet.
+ */
+async function measureSlack(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    const textWidth = (node: Element | null) => {
+      if (!node) return 0;
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      return range.getBoundingClientRect().width;
+    };
+    const write = (element: Element, first: Element | null, second: Element | null) => {
+      (element as HTMLElement).style.setProperty("--spell-slack", `${textWidth(second) - textWidth(first)}px`);
+    };
+    for (const swap of document.querySelectorAll(".th-swap")) write(swap, swap.firstElementChild, swap.lastElementChild);
+    for (const ending of document.querySelectorAll(".th-ending")) {
+      write(ending, ending.querySelector(".th-drop"), ending.querySelector(".th-add"));
+    }
+  });
+}
+
+/** Turn every changed word and card to one state, and wait for the pull to settle. */
+async function setSpelling(page: Page, state: "de" | "al"): Promise<void> {
+  await page.locator(".th-swap, .th-card").evaluateAll((elements, value) => {
+    for (const element of elements) (element as HTMLElement).dataset.state = value;
+  }, state);
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll(".th-swap, .th-ending")].every((node) =>
+      node.getAnimations().every((animation) => animation.playState !== "running"),
+    ),
+  );
+}
+
 async function box(page: Page, selector: string) {
   const value = await page.locator(selector).boundingBox();
   expect(value, `${selector} should have layout`).not.toBeNull();
@@ -163,4 +237,96 @@ test("phone columns stack components in order and contain wide content", async (
   const tableWidths = await scroller.evaluate((element) => ({ client: element.clientWidth, scroll: element.scrollWidth }));
   expect(tableWidths.scroll).toBeGreaterThan(tableWidths.client);
   await expectNoPageOverflow(page);
+});
+
+test("a word that changes length keeps the ordinary space around it", async ({ page }) => {
+  await mountTheater(page);
+  await measureSlack(page);
+
+  /*
+   * The gap is measured between the letters, not between the boxes: the cell holds
+   * both spellings and is as wide as the longer of the two, so the width the word on
+   * screen does not need has to be pulled back out of the line.
+   */
+  const measure = () => page.evaluate(() => {
+    const textRect = (node: Node) => {
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      return range.getBoundingClientRect();
+    };
+    const space = textRect(document.querySelector(".th-ref")!).width;
+    const line = document.querySelector(".th-line")!;
+
+    return {
+      space,
+      /* A line that re-wraps at either spelling would change its own height. */
+      lineHeight: line.getBoundingClientRect().height,
+      rows: [...document.querySelectorAll(".th-swap")].map((swap) => {
+        const state = (swap as HTMLElement).dataset.state;
+        const shown = swap.querySelector(state === "de" ? ".th-swap-de" : ".th-swap-al")!;
+        const next = swap.nextElementSibling!;
+        return {
+          pair: `${shown.textContent} ${next.textContent}`,
+          gap: textRect(next).left - textRect(shown).right,
+        };
+      }),
+    };
+  });
+
+  let height = 0;
+  for (const state of ["de", "al"] as const) {
+    await setSpelling(page, state);
+
+    const measured = await measure();
+    expect(measured.rows.length).toBeGreaterThan(0);
+    expect(measured.space, "the fixture needs a space to compare against").toBeGreaterThan(0);
+    if (height === 0) height = measured.lineHeight;
+    expect(measured.lineHeight, `the line re-wrapped in the ${state} state`).toBeCloseTo(height, 0);
+
+    for (const row of measured.rows) {
+      /* A cell that keeps the room of the longer spelling leaves 5 to 26px here.
+         Sub-pixel rounding leaves under 1px. */
+      expect(Math.abs(row.gap - measured.space), `${row.pair} in the ${state} state`).toBeLessThan(1.5);
+    }
+  }
+});
+
+test("an ending that falls away keeps the ordinary space around it", async ({ page }) => {
+  await mountTheater(page);
+  await measureSlack(page);
+
+  const measure = () => page.evaluate(() => {
+    const textRect = (node: Node) => {
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      return range.getBoundingClientRect();
+    };
+    const card = document.querySelector(".th-card")!;
+    const word = card.querySelector(".th-word")!;
+    const ending = word.querySelector(".th-ending")!;
+    const state = (card as HTMLElement).dataset.state;
+    const shown = ending.querySelector(state === "de" ? ".th-drop" : ".th-add");
+    const stem = textRect(word.firstChild!);
+
+    /* The word after this one starts past the space that separates them. */
+    const after = word.nextSibling as Text;
+    const nextRange = document.createRange();
+    nextRange.setStart(after, 1);
+    nextRange.setEnd(after, after.textContent!.length);
+
+    return {
+      pair: `gut${shown?.textContent ?? ""} Mann`,
+      space: textRect(card.querySelector(".th-ref")!).width,
+      /* The last letter on the card is the stem's, or the ending's when it is there. */
+      gap: nextRange.getBoundingClientRect().left - (shown ? Math.max(stem.right, textRect(shown).right) : stem.right),
+    };
+  });
+
+  for (const state of ["de", "al"] as const) {
+    await setSpelling(page, state);
+
+    const measured = await measure();
+    expect(measured.space, "the fixture needs a space to compare against").toBeGreaterThan(0);
+    expect(Math.abs(measured.gap - measured.space), `${measured.pair} in the ${state} state`).toBeLessThan(1.5);
+  }
 });

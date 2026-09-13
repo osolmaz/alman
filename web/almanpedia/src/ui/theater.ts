@@ -206,7 +206,7 @@ interface Counter {
 /**
  * Acts without a reading head stagger their turnover by position in the list, so
  * each one reads as a wave rather than one flash. In the article act the sweep
- * does the timing instead; see `measureSweepPositions`.
+ * does the timing instead; see `measureText`.
  */
 function swapElement(value: Swap, order: Counter): HTMLElement {
   const element = el("span", {
@@ -231,10 +231,9 @@ function endingElement(ending: Ending): HTMLElement {
     ...(ending.drop ? [el("span", { class: "th-drop" }, [ending.drop])] : []),
     ...(ending.add ? [el("span", { class: "th-add" }, [ending.add])] : []),
   ];
-  // The ending gets a cell of its own, wide enough for either spelling and never
-  // resized, so nothing in the phrase moves when the letters fall away or arrive.
-  // Where an ending only falls away, the reserved space ends up as trailing
-  // whitespace in a left-aligned phrase, which is invisible.
+  // The card shows one ending at a time and the cell is as wide as that one, so
+  // a suffix that falls away leaves no room behind it and the phrase settles with
+  // the ordinary space after the stem.
   return el("span", { class: "th-word" }, [ending.stem, el("span", { class: "th-ending" }, parts)]);
 }
 
@@ -436,17 +435,28 @@ export function createTheater(): Theater {
   };
 
   /**
-   * Record where each article sits across its line, as a fraction, so its
-   * turnover can wait until the sweep has actually reached it. The sweep is one
-   * band travelling left to right across the whole line box, so the fraction is
+   * Where each changed word sits across its line, as a fraction, so its turnover
+   * can wait until the sweep has actually reached it. The sweep is one band
+   * travelling left to right across the whole line box, so the fraction is
    * horizontal position only — a word on a wrapped second row changes when the
    * band passes its column, not when reading order gets to it.
    *
-   * This is the one measurement in the figure. It is safe because the boxes never
-   * resize: both spellings of a word share one cell. It runs again once the
-   * webfonts are in and whenever the page changes width.
+   * The width a word gives up when it changes is measured here too, because the
+   * cell that holds both spellings cannot report it: a grid item is stretched to
+   * the width of the cell it shares, so the two spellings are measured through a
+   * range instead. Without that width the stylesheet has no way to pull the spare
+   * room back out of the line, and a shortened word keeps a double space after it.
+   * The cards that show an ending rule are measured with the article, hidden acts
+   * included, because the pull has to be right the moment one of them is shown.
+   *
+   * These are the only measurements in the figure, and they run again once the
+   * webfonts are in and whenever the page changes width. They are taken before the
+   * line turns over, while every word still carries its German spelling, so a word
+   * that comes back shorter sits a little left of where the band will meet it. In
+   * the demo article the largest of those shifts is 2.4% of the line, or 68ms of
+   * the band's 2.8s travel, against a shake of 400ms.
    */
-  function measureSweepPositions(): void {
+  function measureText(): void {
     for (const line of lines) {
       const box = line.getBoundingClientRect();
       if (box.width <= 0) continue;
@@ -456,6 +466,32 @@ export function createTheater(): Theater {
         swap.style.setProperty("--sweep-at", Math.min(Math.max(at, 0), 1).toFixed(3));
       }
     }
+    for (const swap of stage.querySelectorAll<HTMLElement>(".th-swap")) {
+      setSlack(swap, swap.firstElementChild, swap.lastElementChild);
+    }
+    for (const ending of stage.querySelectorAll<HTMLElement>(".th-ending")) {
+      setSlack(ending, ending.querySelector(".th-drop"), ending.querySelector(".th-add"));
+    }
+  }
+
+  /**
+   * How much wider the second spelling is than the first, in layout pixels, written
+   * to the element as `--spell-slack`. A spelling that is shaking carries a scale,
+   * and a range reports the box it has been scaled to, so the scale comes back out
+   * again.
+   */
+  function setSlack(element: HTMLElement, first: Element | null, second: Element | null): void {
+    const width = (node: Element | null) => {
+      if (!node) return 0;
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const measured = range.getBoundingClientRect().width;
+      const transform = getComputedStyle(node).transform;
+      if (!transform.startsWith("matrix(")) return measured;
+      const scale = Number(transform.slice("matrix(".length).split(",")[0]);
+      return scale > 0 ? measured / scale : measured;
+    };
+    element.style.setProperty("--spell-slack", `${(width(second) - width(first)).toFixed(2)}px`);
   }
 
   /**
@@ -698,10 +734,10 @@ export function createTheater(): Theater {
     start() {
       if (scene) return;
       running = true;
-      measureSweepPositions();
-      void document.fonts?.ready.then(measureSweepPositions);
+      measureText();
+      void document.fonts?.ready.then(measureText);
       if (typeof ResizeObserver === "function") {
-        resize = new ResizeObserver(() => measureSweepPositions());
+        resize = new ResizeObserver(() => measureText());
         resize.observe(page);
       }
       scene = createScene({

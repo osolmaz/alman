@@ -447,20 +447,36 @@ html[data-color-mode="dark"] .th-theater {
 /* ---------- The word that changes ---------- */
 
 /*
- * Both spellings occupy one cell, so the box is always as wide as the longer of
- * the two and nothing in the sentence moves when the word turns over. Sizing the
- * box to whichever spelling is showing would be tighter to read, but every
- * turnover would then shift the words after it and re-wrap the line, which reads
- * as the whole paragraph twitching. The two spellings differ by at most two
- * characters here, and the slack is centred, so it costs a little tracking.
+ * Both spellings share the cell, so it is as wide as the longer of the two and a
+ * word that is shaking or arriving never reaches into the words after it. The
+ * width the spelling on screen does not need is then pulled back out of the line
+ * with a negative margin, measured per word. Without that every shortened word sat
+ * in the middle of a sentence with a double space after it. The pull moves over
+ * the same 520ms as the burst that removes the other spelling, so a line settles
+ * into its final measure under the motion rather than after it.
  */
 .th-swap {
   display: inline-grid;
   position: relative;
-  /* Slack from the longer spelling lands after the word, where it merges with
-     the following space instead of leaving the shorter one adrift. */
+  /* The spelling on screen starts where the cell does, so the space after the word
+     is the same on both sides of the turnover. */
   text-align: left;
   white-space: pre;
+  transition: margin-inline-end calc(520ms / var(--rate)) ease-out;
+}
+
+/*
+ * --spell-slack is how much wider the Alman spelling is, written by `measureText`.
+ * Only a settled state pulls the spare width back out of the line, and only inwards:
+ * the cell is never narrower than the spelling on screen. While a word is shaking,
+ * both spellings have to fit, so nothing is pulled.
+ */
+.th-swap[data-state="de"] {
+  margin-inline-end: min(0px, calc(-1 * var(--spell-slack, 0px)));
+}
+
+.th-swap[data-state="al"] {
+  margin-inline-end: min(0px, var(--spell-slack, 0px));
 }
 
 .th-swap > span {
@@ -797,23 +813,39 @@ html[data-color-mode="dark"] .th-theater {
   white-space: pre;
 }
 
-/* The ending's own cell: one width for either spelling, in every state. */
+/*
+ * The ending's own cell, sized to the ending the card is showing: a suffix that
+ * falls away leaves no room behind it, so "die Lehrerin" settles as "die Lehrer"
+ * with the ordinary space after the word. The pull is the same measured one a
+ * changed word uses, and it runs for as long as the ending takes to leave.
+ */
 .th-ending {
   display: inline-grid;
   text-align: left;
   white-space: pre;
+  transition: margin-inline-end calc(520ms / var(--rate)) ease-out;
 }
 
 .th-ending > span {
   grid-area: 1 / 1;
 }
 
+/* Only the ending on the card keeps its room. */
+.th-card[data-state="de"] .th-ending {
+  margin-inline-end: min(0px, calc(-1 * var(--spell-slack, 0px)));
+}
+
+.th-card[data-state="al"] .th-ending {
+  margin-inline-end: min(0px, var(--spell-slack, 0px));
+}
+
 /*
- * An ending that falls away or arrives. Only opacity and transform move: a
- * collapsing width would re-wrap the phrase, and an inline-block with clipped
- * overflow both takes its baseline from the bottom margin edge — printing the
- * ending as a superscript — and inflates the line box, which grew the card by a
- * line and shifted its whole row.
+ * An ending that falls away or arrives. Only opacity and transform move on the
+ * letters themselves: an inline-block with clipped overflow takes its baseline
+ * from the bottom margin edge, which printed the ending as a superscript, and it
+ * also inflates the line box, which grew the card by a line and shifted its whole
+ * row. The cell gives up its width at the same moment the ending starts to leave,
+ * so the phrase settles without a gap where the suffix used to be.
  */
 .th-drop,
 .th-add {
