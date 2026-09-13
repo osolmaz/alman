@@ -10,7 +10,9 @@ abstract: >-
   80 thousand times fewer parameters than DeepSeek-V4-Pro. The model was trained
   on Hugging Face infrastructure with ten million teacher-generated
   sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw
-  deployment on Hugging Face, provided a Telegram interface for the project. GoePT runs
+  deployment on Hugging Face, made it possible to train the model end to end
+  entirely on Hugging Face infrastructure, including an autoresearch loop, while
+  the author drove the agent through the messaging app Telegram. GoePT runs
   entirely in the browser and powers Almanpedia, a Wikipedia reader intended
   to make German more approachable for second-language learners.
 ---
