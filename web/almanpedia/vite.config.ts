@@ -33,6 +33,16 @@ const CACHE_GENERATION = assetGeneration.generation;
 
 export default defineConfig({
   plugins: [sameOriginAssets()],
+  server: {
+    /*
+     * The dev server is reachable from another machine on the tailnet, where this
+     * app is served under a MagicDNS name and a phone or a laptop opens it as
+     * `https://<host>.<tailnet>.ts.net`. `--host` binds the socket but does not
+     * answer for that name: Vite refuses a Host header it was not told about, which
+     * is the DNS-rebinding guard, so the tailnet domain is allowed here.
+     */
+    allowedHosts: [".ts.net"],
+  },
   build: {
     target: "es2022",
     rollupOptions: {
