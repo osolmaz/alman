@@ -12,6 +12,40 @@ On 11 September, the bucket inventory contained all 204 consecutive chunks under
 
 The public browser package remains `osolmaz/GoePT-1-20M@5f8145012d666bc68b48bd0d89d47847fc950d90`. The browser package's `browser.json` records its file sizes and browser qualification. Its README incorrectly labels the 79.28% result as native. The final release report records native 2538/3204 and browser 2540/3204. The article follows the report.
 
+## Training hardware and time
+
+Read-only Hugging Face job history and individual job records were checked on 13 September 2026. The `h200` hardware option lists one NVIDIA H200 with 141 GB of GPU memory. All teacher and student training jobs below used that option. The eight generation workers were separate single-GPU jobs.
+
+| Stage | Job | Running seconds | Rounded time in the article |
+| --- | --- | ---: | --- |
+| Teacher duration search | [6a631c9a7ef3c08464967217](https://huggingface.co/jobs/osolmaz/6a631c9a7ef3c08464967217) | 31,868 | 8 hours 51 minutes |
+| Final six-epoch teacher fine-tune | [6a63a9d77ef3c08464967b0d](https://huggingface.co/jobs/osolmaz/6a63a9d77ef3c08464967b0d) | 9,264 | 2 hours 34 minutes |
+| Failed student attempt | [6a64e7577ef3c0846496879d](https://huggingface.co/jobs/osolmaz/6a64e7577ef3c0846496879d) | 3,311 | 55 minutes |
+| Completed student recovery job | [6a657edddb23d7a7ec1cd99f](https://huggingface.co/jobs/osolmaz/6a657edddb23d7a7ec1cd99f) | 16,078 | 4 hours 28 minutes |
+
+The two main student jobs total 19,389 running seconds, or 5 hours 23 minutes. This includes the failed attempt and the full two-pass search through step 155,936. It is not a measured time to the selected step-136,444 checkpoint. Preparation and recovery canaries are separate jobs. The overnight gap between the failed attempt and recovery is excluded.
+
+The completed generation fleet contains these eight jobs, all with `h200` hardware and the `COMPLETED` state.
+
+| Generation job | Running seconds |
+| --- | ---: |
+| `6a64766bdb23d7a7ec1cbd38` | 9,135 |
+| `6a647680db23d7a7ec1cbd3c` | 8,888 |
+| `6a6476957ef3c0846496834b` | 8,912 |
+| `6a6476abdb23d7a7ec1cbd3f` | 8,604 |
+| `6a6476c07ef3c0846496834f` | 8,764 |
+| `6a6476d5db23d7a7ec1cbd45` | 8,768 |
+| `6a6476eadb23d7a7ec1cbd47` | 8,589 |
+| `6a6477007ef3c08464968357` | 8,674 |
+
+The fleet ran from 25 July 2026 at 08:40:18.795 UTC to 11:12:34.555 UTC, a span of 9,135.760 seconds, rounded to 2 hours 32 minutes. Summed running time is 70,334 seconds, or 19.5372 H200-hours. This agrees with the final research record's 19.537 H200-hours. The article separates elapsed fleet time from total GPU-hours.
+
+The teacher fine-tune is logical run `202607241758-river-mink`. Its `refit.json` at model revision `33277762ccbf14a858e301d862a16193f3a58239` records batch size 8, peak learning rate 0.0001, six epochs, and 44,268 steps. It also records FP32 parameters and optimizer state with BF16 computation. Its worker timer is 9,141.8278 seconds, shorter than the provider's 9,264 running seconds. The article uses the provider's job-duration measure consistently.
+
+The saved `teacher/run.json` belongs to the earlier three-epoch diagnostic `teacher-base-full-v1`, whose worker timer is 4,262.7228 seconds. That is a different checkpoint and duration, so it is not used as the production teacher's training time. The article also excludes short hardware profiles from full-run timing claims. Those profiles use different workloads and omit checkpoint and full-set scoring overhead.
+
+The job API's whole-second running counters differ from timestamp subtraction by less than one second per job. No material mismatch was found with the final student record. The local filtered evidence is `/home/onur/scratch/goept-announcement/hardware-job-history.json`; it omits job commands, environment variables, and credentials.
+
 ## Publication boundaries
 
 The release report records 893/1029. On 12 September, a read-only comparison applied the current acceptance sets to the stored browser and native predictions. Both score 894/1029 and accept the same cases. The draft uses 894 consistently. No model was rerun or changed.
