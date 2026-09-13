@@ -21,7 +21,7 @@ abstract: >-
 
 [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M) is a 20-million-parameter model for translating Standard German into [Alman](/), a simplified German dialect. Alman keeps German vocabulary and much of its sentence structure while removing grammatical gender and most case inflection. The model runs entirely in the browser, keeps the text on the reader's device, and needs no GPU or model API.
 
-The intended use is a reading aid for people learning German as an additional language. [Almanpedia](https://almanpedia.org), the main application, uses GoePT to translate German Wikipedia and lets readers compare the result with the original. A [standalone translator](/translate/) accepts other texts.
+The intended use is a reading aid for people learning German as an additional language. [Almanpedia](https://almanpedia.org), the main application, uses GoePT to translate German Wikipedia and lets readers compare the result with the original. You can also try the model on your own text in the [online translator](https://alman.ai/translate/).
 
 GoePT scored **86.9% on [AlmanBench](/almanbench/)**, a benchmark that checks translations against Alman's rules. This puts it just above DeepSeek-V4-Pro's **85.3%**, with about **80 thousand times fewer parameters**.
 
@@ -81,17 +81,17 @@ We checked the browser export against the native model on all three eval sets.
 
 Quantization changed some outputs. It cost ten exact matches on the 3,512-row eval and gained two on the 3,204-row eval. That does not establish a quality advantage for either runtime. Native and browser inference accepted the same 894 AlmanBench cases.
 
-### Reading quality
+### Translation quality
 
-In informal use of Almanpedia, most translations look correct. The most noticeable weakness is overcorrection around proper names and foreign words. GoePT also shows a strong preference for *von die* where retaining *der* would preserve the original construction and read more naturally.
+In informal use, most of GoePT's translations look correct. The most noticeable weakness is overcorrection around proper names and foreign words. GoePT also shows a strong preference for *von die* where retaining *der* would preserve the original construction and read more naturally.
 
-The opening of the [Odysseus article](https://almanpedia.org/wiki/Odysseus) provides an example. This sentence appears in the [German original](https://de.wikipedia.org/wiki/Odysseus).
+One example comes from GoePT's translation of the [Odysseus article](https://almanpedia.org/wiki/Odysseus). The [German original](https://de.wikipedia.org/wiki/Odysseus) reads:
 
 <blockquote lang="de">
 <p>Er war der Sohn des Laërtes (in weniger verbreiteten Versionen des Sisyphos) und der Antikleia sowie der Bruder der Ktimene.</p>
 </blockquote>
 
-The observed Alman output was:
+GoePT produced:
 
 <blockquote lang="de-AL">
 <p>Er war die Sohn von die Laërt (in weniger verbreitete Versionen von die Sisyphos) und die Antikleia sowie die Bruder von die Ktimene</p>
@@ -200,6 +200,6 @@ The same setup can support other small ML applications with clear requirements. 
 
 ## Availability
 
-Open [Almanpedia](https://almanpedia.org) to read an article, or paste a sentence into the [translator](/translate/). The [GoePT-1-20M repository](https://huggingface.co/osolmaz/GoePT-1-20M) contains the browser package. Its [release manifest](https://huggingface.co/osolmaz/GoePT-1-20M/blob/main/browser.json) records the file checksums and browser checks.
+Open [Almanpedia](https://almanpedia.org) to read an article, or paste a sentence into the [translator](https://alman.ai/translate/). The [GoePT-1-20M repository](https://huggingface.co/osolmaz/GoePT-1-20M) contains the browser package. Its [release manifest](https://huggingface.co/osolmaz/GoePT-1-20M/blob/main/browser.json) records the file checksums and browser checks.
 
 If a translation looks wrong, compare it with the [Alman specification](/#spec) and [send an example](https://github.com/osolmaz/alman/issues). A short source sentence and the model's output are enough to begin.
