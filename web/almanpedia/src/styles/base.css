@@ -208,9 +208,15 @@ code {
  * set in the mono face the figure's tags use. It sits at the end of the header so
  * it is there on every page, and it is quiet enough not to compete with the
  * search beside it.
+ *
+ * `justify-self: end` keeps the pill the width of its two codes. The header's last
+ * track is `auto` and the search and the progress line take the width before it
+ * does, so a stretched pill would run on past the codes and the second one would
+ * look filled.
  */
 .locale-switch {
   display: inline-flex;
+  justify-self: end;
   overflow: hidden;
   background: var(--surface-subtle);
   border: 1px solid var(--border-subtle);
@@ -1142,7 +1148,6 @@ html[data-change-effects="on"] [data-alman-reveal][data-alman-change] {
   .locale-switch {
     grid-row: 1;
     grid-column: 2;
-    justify-self: end;
   }
 
   .search-box {

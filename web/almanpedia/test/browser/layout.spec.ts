@@ -120,6 +120,33 @@ async function mountTheater(page: Page): Promise<void> {
   await page.addStyleTag({ path: resolve(process.cwd(), "almanpedia/src/styles/theater.css") });
 }
 
+/*
+ * The header, reduced to the parts this suite measures: the brand, the search box,
+ * the status line and the language switch, in the grid the shell mounts them in.
+ */
+const HEADER_FIXTURE = `
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand brand-horizontal" href="/">
+      <img class="brand-potato" width="973" height="717" alt="">
+      <img class="brand-wordmark" width="5477" height="1305" alt="Almanpedia">
+    </a>
+    <div class="search-box"><input type="search" placeholder="Search articles …" aria-label="Search"></div>
+    <div class="header-status" role="status"></div>
+    <div class="locale-switch" role="group" aria-label="Language">
+      <button class="locale-option" aria-pressed="true">DE</button>
+      <button class="locale-option" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>`;
+
+/** Mount the shell's header with the stylesheet that places it. */
+async function mountHeader(page: Page, width: number): Promise<void> {
+  await page.setViewportSize({ width, height: 800 });
+  await page.setContent(`<style>${FRAME_CSS}</style>${HEADER_FIXTURE}`);
+  await page.addStyleTag({ path: resolve(process.cwd(), "almanpedia/src/styles/base.css") });
+}
+
 /**
  * Write the one number the figure's stylesheet cannot work out for itself: how much
  * wider the second spelling of a cell is than the first. This mirrors the figure's
@@ -328,5 +355,41 @@ test("an ending that falls away keeps the ordinary space around it", async ({ pa
     const measured = await measure();
     expect(measured.space, "the fixture needs a space to compare against").toBeGreaterThan(0);
     expect(Math.abs(measured.gap - measured.space), `${measured.pair} in the ${state} state`).toBeLessThan(1.5);
+  }
+});
+
+test("the language switch stays the width of its two codes", async ({ page }) => {
+  const measure = () => page.evaluate(() => {
+    const inner = document.querySelector(".header-inner")!.getBoundingClientRect();
+    const pill = document.querySelector(".locale-switch")!.getBoundingClientRect();
+    const codes = [...document.querySelectorAll(".locale-option")].map((b) => b.getBoundingClientRect());
+    return {
+      innerLeft: inner.left,
+      innerRight: inner.right,
+      pillWidth: pill.width,
+      pillLeft: pill.left,
+      pillRight: pill.right,
+      codesWidth: codes.reduce((sum, box) => sum + box.width, 0),
+      lastCodeRight: codes.at(-1)!.right,
+    };
+  });
+
+  /* The header's last track is `auto` and the tracks before it take the width, so a
+     pill that filled its track would run on past its two codes. The pill is the two
+     codes plus its own 1px border on either side. */
+  for (const width of [1440, 1000]) {
+    await mountHeader(page, width);
+    const measured = await measure();
+    expect(Math.abs(measured.pillWidth - measured.codesWidth - 2), `the pill at ${width}px`).toBeLessThan(1.5);
+    expect(Math.abs(measured.pillRight - measured.lastCodeRight), `the last code at ${width}px`).toBeLessThan(2);
+  }
+
+  /* On a phone the switch shares the brand's line, and it stays inside it. */
+  for (const width of [390, 320]) {
+    await mountHeader(page, width);
+    const measured = await measure();
+    expect(measured.pillLeft, `the pill at ${width}px`).toBeGreaterThanOrEqual(measured.innerLeft);
+    expect(measured.pillRight, `the pill at ${width}px`).toBeLessThanOrEqual(measured.innerRight + 0.5);
+    expect(Math.abs(measured.pillWidth - measured.codesWidth - 2), `the pill at ${width}px`).toBeLessThan(1.5);
   }
 });
