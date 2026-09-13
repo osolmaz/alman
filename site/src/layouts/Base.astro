@@ -7,6 +7,7 @@ import "@fontsource/ibm-plex-sans/600.css";
 import "@fontsource/ibm-plex-mono/400.css";
 import "katex/dist/katex.min.css";
 import "../styles/global.css";
+import PaperViewHead from "astro-paper-view/PaperViewHead.astro";
 import {
   langCodes,
   localeHome,
@@ -33,6 +34,8 @@ interface Props {
   datePublished?: Date;
   dateModified?: Date;
   author?: string;
+  paperAvailable?: boolean;
+  paperDefault?: boolean;
 }
 
 const {
@@ -46,6 +49,8 @@ const {
   datePublished,
   dateModified,
   author,
+  paperAvailable = false,
+  paperDefault = false,
 } = Astro.props;
 const pageTitle = title ? `${title} | Alman Institut` : "Alman Institut";
 const currentPath = Astro.url.pathname;
@@ -105,6 +110,7 @@ const switcherTarget = (loc: Locale): string =>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {paperAvailable && <PaperViewHead defaultPaper={paperDefault} />}
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={title ?? "Alman Institut"} />

@@ -15,6 +15,8 @@ const blog = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     description: z.string().optional(),
+    paper: z.boolean().optional(),
+    abstract: z.string().optional(),
   }),
 });
 
