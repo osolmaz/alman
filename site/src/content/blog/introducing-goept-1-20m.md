@@ -86,6 +86,8 @@ The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub
 
 The final selected run was executed from a maintainer session. Recovery and release work also required direct inspection.
 
+The training times below come from Hugging Face job records. They include setup, evals, and checkpoint uploads, but exclude queue time and gaps between jobs.
+
 The training method was sequence-level distillation. A larger **teacher** produced translations, and a smaller **student** learned to reproduce them. The student became the model shipped to readers.
 
 ### Reference data
@@ -100,9 +102,11 @@ We reserved separate eval sets of 3,512 and 3,204 rows and excluded 262 training
 
 We fine-tuned pretrained ByT5-Base, approximately 582 million parameters, on the reviewed pairs. The duration search selected six epochs. A fresh fine-tune then used all 59,022 approved pairs for that duration to produce the teacher.
 
+Both teacher jobs used one **NVIDIA H200 with 141 GB of GPU memory**. AdamW used a batch size of eight and a peak learning rate of 0.0001. Weights and optimizer state stayed in FP32, with BF16 computation. The duration search ran for **8 hours 51 minutes**. The final six-epoch fine-tune ran for **2 hours 34 minutes**.
+
 The teacher translated 9,999,555 German sentences from `coral-nlp/german-commons`. The source mix covers Wikipedia and discussion pages, newspaper comments, legal documents, public tenders, news, and political speeches. Overlaps with the protected eval sources were removed before generation.
 
-Eight H200 workers generated the translations with greedy decoding and a batch size of 1,024. They saved 204 output chunks to Hugging Face Storage Buckets. A merge checked row ordering and source alignment as well as the checksums. Generation produced about 6.47 GB of paired text. A 20,000-row synthetic holdout left 9,979,555 generated pairs for training.
+Eight H200 workers generated the translations with greedy decoding and a batch size of 1,024. They saved 204 output chunks to Hugging Face Storage Buckets. A merge checked row ordering and source alignment as well as the checksums. Generation produced about 6.47 GB of paired text. From the first worker's start to the last worker's finish, it took **2 hours 32 minutes**. The eight workers used **19.54 H200-hours** in total. A 20,000-row synthetic holdout left 9,979,555 generated pairs for training.
 
 ### Student
 
@@ -112,6 +116,7 @@ The training stream alternated one generated pair with one reviewed pair. This g
 
 | Training setting | Value |
 | --- | --- |
+| Hardware | One NVIDIA H200, 141 GB GPU memory |
 | Optimizer | AdamW |
 | Peak learning rate | 0.0003 |
 | Batch size | 256 |
@@ -121,6 +126,8 @@ The training stream alternated one generated pair with one reviewed pair. This g
 | Gradient norm limit | 1.0 |
 | Schedule | 5% linear warmup, then cosine decay |
 | Precision | FP32 weights and optimizer state, BF16 computation |
+
+The completed recovery job ran for **4 hours 28 minutes**. Including the earlier failed attempt of 55 minutes, the two main student jobs used **5 hours 23 minutes** of running time on one H200 at a time. This covers the full two-pass search, which continued beyond the checkpoint selected for release.
 
 ### Checkpoint selection
 
