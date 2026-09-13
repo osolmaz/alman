@@ -5,8 +5,8 @@ description: "A 20-million-parameter German-to-Alman model that scored above Dee
 paper: true
 abstract: >-
   GoePT-1-20M is a 20-million-parameter model that translates Standard German
-  into Alman, a simplified German dialect. It scored above DeepSeek-V4-Pro,
-  Claude Sonnet 5, and Qwen3.8-27B on AlmanBench, with about
+  into Alman, a simplified German dialect. It scored above models such as
+  DeepSeek-V4-Pro, Claude Sonnet 5, and Qwen3.8-27B on AlmanBench, with about
   80 thousand times fewer parameters than DeepSeek-V4-Pro. The model was trained
   on Hugging Face infrastructure with nearly ten million teacher-generated
   sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw
