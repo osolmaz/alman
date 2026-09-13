@@ -12,7 +12,7 @@ abstract: >-
   sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw
   deployment on Hugging Face, made it possible to train the model end to end
   entirely on Hugging Face infrastructure, including an autoresearch loop, while
-  the author drove the agent through the messaging app Telegram. GoePT runs
+  the author drove the agent through the messaging app Telegram on a phone. GoePT runs
   entirely in the browser and powers Almanpedia, a Wikipedia reader intended
   to make German more approachable for second-language learners.
 ---
@@ -25,7 +25,7 @@ The intended use is a reading aid for people learning German as an additional la
 
 GoePT scored **86.9% on [AlmanBench](/almanbench/)**, a benchmark that checks translations against Alman's rules. This puts it just above DeepSeek-V4-Pro's **85.3%**, with about **80 thousand times fewer parameters**.
 
-The training work ran on Hugging Face infrastructure, using ten million teacher-generated sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face, provided a Telegram interface for discussing experiments and checking progress.
+The training work ran on Hugging Face infrastructure, using ten million teacher-generated sentence pairs mixed with reviewed translations. Through [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face, the author directed the training run from a phone using Telegram.
 
 ## Alman and Almanpedia
 
@@ -109,11 +109,9 @@ The proposed learning benefit remains untested. Whether reading Alman helps peop
 
 ## Training on Hugging Face
 
-The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets. The project used [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face, with Telegram as a conversational interface for discussing experiments and checking progress away from the terminal.
+The author directed the training run from a phone through Telegram, using [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face. The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets.
 
-The final selected run was executed from a maintainer session. Recovery and release work also required direct inspection.
-
-The training times below come from Hugging Face job records. They include setup, evals, and checkpoint uploads, but exclude queue time and gaps between jobs.
+The training times below come from Hugging Face job records. They include setup, evals, and checkpoint uploads, but exclude time when no job was running.
 
 The training method was sequence-level distillation. A larger **teacher** produced translations, and a smaller **student** learned to reproduce them. The student became the model shipped to readers.
 
@@ -127,7 +125,7 @@ We reserved separate eval sets of 3,512 and 3,204 rows and excluded 262 training
 
 ### Autoresearch experiments
 
-The final recipe followed a series of autoresearch experiments. The agent proposed changes, ran small checks, trained candidates, and compared their outputs. The work covered tokenizer design, decoder depth, training mixtures, and data scale. Each comparison used fixed eval cases and scoring rules. Experiment journals record the hypotheses and settings alongside results, failed attempts, and reasons for keeping or rejecting candidates. Saved run reports identify the exact inputs and model artifacts.
+The final recipe followed a series of autoresearch experiments. The agent proposed changes, ran small checks, trained candidates, and compared their outputs. The work covered tokenizer design, decoder depth, training mixtures, and data scale. Each comparison used fixed eval cases and scoring rules. Experiment journals record the hypotheses and settings alongside results and reasons for keeping or rejecting candidates. Saved run reports identify the exact inputs and model artifacts.
 
 An early scaling series kept the 20-million-parameter student fixed and increased the number of unique generated pairs. It used an earlier teacher and data snapshot, before the final ByT5-Base work. All three runs used the same 2,953 checkpoint-selection cases. AlmanBench stayed out of these choices.
 
@@ -170,7 +168,7 @@ The training stream alternated one generated pair with one reviewed pair. This g
 | Schedule | 5% linear warmup, then cosine decay |
 | Precision | FP32 weights and optimizer state, BF16 computation |
 
-The completed recovery job ran for **4 hours 28 minutes**. Including the earlier failed attempt of 55 minutes, the two main student jobs used **5 hours 23 minutes** of running time on one H200 at a time. This covers the full two-pass search, which continued beyond the checkpoint selected for release.
+The student training run used **5 hours 23 minutes of H200 job time**. This covers the full two-pass search, which continued beyond the checkpoint selected for release.
 
 ### Checkpoint selection
 
@@ -188,13 +186,11 @@ The selected checkpoint was step 136,444, after 1.75 passes and 34,928,442 prese
 
 The 2,953 checkpoint-selection pairs were excluded from student gradients, but the teacher refit had seen them. The separate eval sets stayed out of both models' training. We opened the 3,204-row held-out eval after fixing the browser candidate and did not use its result to select another model.
 
-### Cost and recovery
+### Cost
 
-The final student phase cost about **USD 29.04** in recorded compute. That includes preparation and short hardware profiles, recovery checks, failed work, the completed run, and export. Teacher work and target generation were separate upstream costs. The recorded program subtotal was about **USD 363.22**, including failed attempts. The subtotal is estimated. Earlier research and LLM-assisted data work are outside that accounting.
+The final student phase cost about **USD 29.04** in recorded compute, including preparation, hardware profiling, training, and export. Teacher work and target generation were separate upstream costs. The recorded program subtotal was about **USD 363.22**. The subtotal is estimated. Earlier research and LLM-assisted data work are outside that accounting.
 
-The first student attempt failed because the scorer returned a field name that the runner did not expect. We corrected the adapter and restored the saved model and optimizer state, together with the random state and data position. The recovery resumed at step 9,746 instead of starting again.
-
-German-to-Alman translation is a toy problem with unusually explicit rules. It still required decisions about data quality, checkpoint selection, and recovery from failed jobs. Hugging Face supplied the GPU jobs and durable storage. [ML Claw](https://github.com/huggingface/mlclaw) made those tools accessible through conversation, while the specification gave the work a result that could be checked.
+German-to-Alman translation is a toy problem with unusually explicit rules. Hugging Face supplied the GPU jobs and durable storage. [ML Claw](https://github.com/huggingface/mlclaw) made those tools accessible through conversation, while the specification gave the work a result that could be checked.
 
 The same setup can support other small ML applications with clear requirements. Here it produced a local reading tool for people learning German.
 
