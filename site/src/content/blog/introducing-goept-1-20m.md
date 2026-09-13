@@ -8,7 +8,7 @@ abstract: >-
   into Alman, a simplified German dialect. It scored above DeepSeek-V4-Pro
   on AlmanBench, using about 80 thousand times fewer parameters. The model was trained
   on Hugging Face infrastructure with nearly ten million teacher-generated
-  sentence pairs mixed with reviewed translations. ML Claw, an OpenClaw
+  sentence pairs mixed with reviewed translations. [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw
   deployment on Hugging Face, provided a Telegram interface for the project. GoePT runs
   entirely in the browser and powers Almanpedia, a Wikipedia reader intended
   to make German more approachable for second-language learners.

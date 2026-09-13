@@ -3,10 +3,14 @@
 // the requested locale, the English original is shown with a notice
 // (the `fallback` flag), instead of redirecting the reader elsewhere.
 import { render, type CollectionEntry } from "astro:content";
+import { createMarkdownProcessor } from "@astrojs/markdown-remark";
+import { markdownConfig } from "../../markdown.config.mjs";
 import Base from "../layouts/Base.astro";
 import AlmanDiff from "./AlmanDiff.astro";
+import PaperView from "astro-paper-view/PaperView.astro";
+import PaperViewToggle from "astro-paper-view/PaperViewToggle.astro";
 import { formatPostDate, translatedPost } from "../i18n/blog";
-import { translationsFor, ui, type Locale } from "../i18n/ui";
+import { langCodes, translationsFor, ui, type Locale } from "../i18n/ui";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -20,6 +24,13 @@ interface Props {
 const { post, slug, locale, fallback = false } = Astro.props;
 const { Content } = await render(post);
 const t = ui[locale];
+const paperAvailable = post.data.paper !== undefined;
+const paperDefault = post.data.paper === true;
+let abstractHtml: string | undefined;
+if (post.data.abstract) {
+  const processor = await createMarkdownProcessor(markdownConfig);
+  abstractHtml = (await processor.render(post.data.abstract)).code;
+}
 
 // On Alman posts with a structurally parallel German translation, offer
 // the diff view against Standard German (same toggle as the About page
@@ -36,6 +47,8 @@ const germanSibling =
   ogType="article"
   datePublished={post.data.date}
   author="Onur Solmaz"
+  paperAvailable={paperAvailable}
+  paperDefault={paperDefault}
 >
   <article lang={fallback ? "en" : undefined}>
     {fallback && <p class="i18n-notice" lang={locale === "al" ? "de-AL" : "de"}>{t["blog.untranslated"]}</p>}
@@ -45,19 +58,48 @@ const germanSibling =
         {formatPostDate(post.data.date, locale)}
       </time>
     </p>
-    {
-      germanSibling ? (
-        <AlmanDiff german={germanSibling.body ?? ""} alman={post.body ?? ""}>
+    {paperAvailable && <PaperViewToggle class="paper-toggle" />}
+    {abstractHtml && <div class="post-abstract" set:html={abstractHtml} />}
+    <div id="blog-post-content">
+      {
+        germanSibling ? (
+          <AlmanDiff german={germanSibling.body ?? ""} alman={post.body ?? ""}>
+            <Content />
+          </AlmanDiff>
+        ) : (
           <Content />
-        </AlmanDiff>
-      ) : (
-        <Content />
-      )
-    }
+        )
+      }
+    </div>
   </article>
+  {paperAvailable && <PaperView
+    title={post.data.title}
+    author="Onur Solmaz"
+    date={post.data.date}
+    contentId="blog-post-content"
+    headerSelector="body > .site-header"
+    defaultPaper={paperDefault}
+    lang={fallback ? "en" : langCodes[locale]}
+  >
+    <Fragment slot="abstract" set:html={abstractHtml} />
+  </PaperView>}
 </Base>
 
 <style>
+  .post-abstract {
+    border-left: 2px solid var(--ink);
+    padding-left: 1.25rem;
+    margin: 2rem 0;
+  }
+  :global(.paper-toggle) {
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    padding: 0.45rem 0.8rem;
+    cursor: pointer;
+  }
+  :global(.paper-viewer) { --paper-header-background: var(--paper); }
   /* The ruled h2 look belongs to the spec document; in blog posts the
      lines read as section separators, so drop them. */
   article :global(h2) {
