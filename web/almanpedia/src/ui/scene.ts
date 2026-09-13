@@ -36,7 +36,11 @@ export interface SceneOptions {
   root: HTMLElement;
   /** Reset between seeks. Gets `.is-seeking` while a jump is applied. */
   stage: HTMLElement;
-  /** Cues in ascending time order. */
+  /**
+   * Cues, in any order: the clock sorts them by time and walks the sorted list.
+   * Array order is not load-bearing, so a caption can be written next to the
+   * lines it belongs to.
+   */
   cues: Cue[];
   durationMs: number;
   /** Put the scene back to time zero. See rule 2 above. */
@@ -49,7 +53,11 @@ export interface SceneOptions {
   rates?: number[];
   /** Reported on every painted frame, for chapter and elapsed-time displays. */
   onTime?: (ms: number) => void;
-  /** Fraction of the stage on screen before it starts playing by itself. */
+  /**
+   * Fraction of the stage on screen before it starts playing by itself. `0`
+   * starts the clock at once instead of waiting for a measurement, which is what
+   * a figure already on screen when the page loads wants.
+   */
   autoplayAt?: number;
   /** Frame source; injectable so tests can drive the clock themselves. */
   raf?: (callback: (now: number) => void) => void;
@@ -64,7 +72,8 @@ export interface Scene {
 }
 
 export function createScene(options: SceneOptions): Scene {
-  const { root, stage, cues, durationMs, reset } = options;
+  const { root, stage, durationMs, reset } = options;
+  const cues = [...options.cues].sort((a, b) => a.t - b.t);
   const rates = options.rates?.length ? options.rates : [1, 1.5, 2, 0.5];
   const seekMax = Number(options.seek?.max) || 1000;
 
@@ -142,8 +151,11 @@ export function createScene(options: SceneOptions): Scene {
   setPlaying(false);
   schedule();
 
-  // Hold at the first frame until the scene is actually worth watching.
-  if (typeof IntersectionObserver === "function") {
+  // Hold at the first frame until the scene is actually worth watching — unless
+  // the caller asked to start at once, for a figure that is on screen already.
+  if (options.autoplayAt === 0) {
+    setPlaying(true);
+  } else if (typeof IntersectionObserver === "function") {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {

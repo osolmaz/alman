@@ -8,11 +8,13 @@
 /*
  * The landing page figure. Every duration is divided by --rate, which the scene
  * clock writes to the stage, so the speed control slows the motion and the cues
- * together instead of leaving snappy transitions under a slow timeline.
+ * together instead of leaving snappy transitions under a slow timeline. The
+ * value here is the figure's default until the clock takes over; see RATES in
+ * ./ui/theater.ts.
  */
 
 .th-theater {
-  --rate: 1;
+  --rate: 2;
   --amp: 1;
   --hum-speed: 190ms;
   /* One sweep across one line. The turnover delays below divide it. */

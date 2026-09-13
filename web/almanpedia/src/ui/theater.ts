@@ -3,8 +3,8 @@
  *
  * Act 1  the brand appears while the model loads, then clears the stage
  * Act 2  four letters of a real Wikipedia address change, and the page opens
- * Act 3  a reading head sweeps the article; each article form turns over as the
- *        head passes it, then what is left shakes and turns over together
+ * Act 3  a reading head sweeps the article from its first line; each article
+ *        form turns over as the head passes it
  * Act 4  the five definite article forms of Standard German converge on die
  * Act 5  three noun phrases take the same article
  * Act 6  the ending rules, one card at a time
@@ -22,10 +22,18 @@ export const DEMO_ARTICLE_PATH = `/wiki/${DEMO_ARTICLE_TITLE}`;
 /**
  * Long, deliberately. Every caption is a sentence a visitor has to be able to
  * finish reading before the next one replaces it, and the article act has to
- * read four sentences at a pace a learner can follow. The speed control goes to
- * 2× and the chapter markers skip, for anyone who would rather not wait.
+ * read four sentences at a pace a learner can follow. The figure opens at 2×,
+ * which halves the wall-clock wait, and the chapter markers skip for anyone who
+ * would rather not sit through it at all.
  */
-export const SCENE_DURATION_MS = 101_000;
+export const SCENE_DURATION_MS = 87_500;
+
+/**
+ * Playback speeds, cycled by the transport button. 2× is the default the figure
+ * opens on: the scene is long, and a visitor who wants the slower reading can
+ * step down to 1.5×, 1× or 0.5×.
+ */
+const RATES = [2, 1.5, 1, 0.5];
 
 const WORDMARK_SRC = "/brand/almanpedia-wordmark.svg";
 /**
@@ -185,10 +193,10 @@ const RULE_CARDS: RuleCard[] = [
 const CHAPTERS: Chapter[] = [
   { t: 0, label: "Start" },
   { t: 7_000, label: "Adresse" },
-  { t: 23_000, label: "Artikel" },
-  { t: 48_000, label: "Ein Artikel" },
-  { t: 61_500, label: "Beispiele" },
-  { t: 74_000, label: "Endungen" },
+  { t: 16_000, label: "Artikel" },
+  { t: 34_500, label: "Ein Artikel" },
+  { t: 48_000, label: "Beispiele" },
+  { t: 60_500, label: "Endungen" },
 ];
 
 interface Counter {
@@ -452,8 +460,8 @@ export function createTheater(): Theater {
 
   /**
    * Cue times leave room to read. No caption is replaced inside 2.4 seconds, the
-   * reading head spends four seconds on a line, and the shaking runs long enough
-   * to be understood as waiting rather than as an error.
+   * reading head is idle for a second between lines at most, and the shaking runs
+   * long enough to be understood as waiting rather than as an error.
    */
   const cues: Cue[] = [
     // Act 1 — the brand, and the one-time model download. This one sits at zero
@@ -524,9 +532,15 @@ export function createTheater(): Theater {
         say("de.almanpedia.org führt auf die gleiche Pfad.");
       },
     },
+    // Act 3 — the head reads a line, and each word turns over as it is passed.
+    // The act opens on the moment the article lands under Almanpedia, with the
+    // head already on the first line in that same frame: the page never sits
+    // still under a caption waiting for the reading to begin. This cue is the
+    // tail of the address act and the start of this one.
     {
       t: 16_000,
       fn: () => {
+        act("3");
         omnibox.dataset.stage = "final";
         load.dataset.state = "done";
         page.dataset.site = "almanpedia";
@@ -534,28 +548,28 @@ export function createTheater(): Theater {
         say("Die gleiche Artikel, jetzt in Almanpedia.");
       },
     },
-    { t: 20_200, fn: () => say("Die Text steht noch in Standarddeutsch.") },
-
-    // Act 3 — the head reads a line, and each word turns over as it is passed.
-    {
-      t: 23_000,
-      fn: () => {
-        act("3");
-        say("Die Übersetzung liest die Artikel Zeile für Zeile.");
-      },
-    },
+    // Line by line, without a pause to speak of between the lines: the band
+    // takes 2.8s of the 3.8s a line gets, the words it passed turn over at 3.75s,
+    // and the next line's band is on screen 50ms later. The narration between the
+    // lines is listed after the sweep it belongs to and sorted into it by the
+    // clock, one caption every three seconds or so.
     ...lines.flatMap((_, index): Cue[] => {
-      const at = 24_000 + index * 4_000;
+      const at = 16_000 + index * 3_800;
       return [
         { t: at, fn: () => { scanTo(index); setSwaps(lineSwaps[index]!, "poof"); } },
-        { t: at + 3_700, fn: () => setSwaps(lineSwaps[index]!, "al") },
+        { t: at + 3_750, fn: () => setSwaps(lineSwaps[index]!, "al") },
       ];
     }),
-    { t: 26_600, fn: () => say("Jede Stelle zittert kurz und wechselt dann.") },
-    { t: 31_000, fn: () => say("Artikel, Endungen und Pronomen in ein Durchgang.") },
-    { t: 35_500, fn: () => say("Die Substantive bleiben unverändert.") },
+    { t: 18_400, fn: () => say("Die Text steht noch in Standarddeutsch.") },
+    { t: 21_600, fn: () => say("Die Übersetzung liest die Artikel Zeile für Zeile.") },
+    { t: 24_800, fn: () => say("Jede Stelle zittert kurz und wechselt dann.") },
+    { t: 28_000, fn: () => say("Artikel, Endungen und Pronomen in ein Durchgang.") },
+    // The sweep is over when the last line turns over, so the act closes right
+    // behind it: one caption for the finished page, and the next act follows
+    // two and a half seconds later. The nouns are left to act 5, which says the
+    // same thing about them with examples on screen.
     {
-      t: 40_000,
+      t: 31_800,
       fn: () => {
         scanTo(lines.length);
         page.dataset.lang = "al";
@@ -563,17 +577,10 @@ export function createTheater(): Theater {
         say("Fertig. Diese Absatz steht jetzt in Alman.");
       },
     },
-    {
-      t: 44_000,
-      fn: () => {
-        scanTo(-1);
-        say("Kein Wort ist verschwunden. Nur die Endungen sind weg.");
-      },
-    },
 
     // Act 4 — five forms, one article.
     {
-      t: 48_000,
+      t: 34_500,
       fn: () => {
         act("4");
         hide(browser);
@@ -582,50 +589,50 @@ export function createTheater(): Theater {
         say("Standarddeutsch hat fünf Formen für ein Artikel.");
       },
     },
-    { t: 50_000, fn: () => (unify.dataset.state = "gather") },
-    { t: 52_000, fn: () => (unify.dataset.state = "merge") },
+    { t: 36_500, fn: () => (unify.dataset.state = "gather") },
+    { t: 38_500, fn: () => (unify.dataset.state = "merge") },
     {
-      t: 53_400,
+      t: 39_900,
       fn: () => {
         unify.dataset.state = "merged";
         say("In Alman bleibt ein Form übrig.");
       },
     },
     {
-      t: 57_000,
+      t: 43_500,
       fn: () => {
         unify.dataset.state = "genitive";
         say("Ein Ausnahme: in die Genitiv steht der, wie in „die Haus der Mann“.");
       },
     },
-    { t: 61_000, fn: () => { hide(unify); unify.dataset.state = "genitive"; } },
+    { t: 47_500, fn: () => { hide(unify); unify.dataset.state = "genitive"; } },
 
     // Act 5 — the same article in front of three nouns.
     {
-      t: 61_500,
+      t: 48_000,
       fn: () => {
         act("5");
         show(rows);
         say("Drei Substantive, drei Genus in Standarddeutsch.");
       },
     },
-    { t: 63_200, fn: () => show(rowElements[0]!) },
-    { t: 64_200, fn: () => show(rowElements[1]!) },
-    { t: 65_200, fn: () => show(rowElements[2]!) },
-    { t: 66_800, fn: () => setSwaps(rows, "poof") },
+    { t: 49_700, fn: () => show(rowElements[0]!) },
+    { t: 50_700, fn: () => show(rowElements[1]!) },
+    { t: 51_700, fn: () => show(rowElements[2]!) },
+    { t: 53_300, fn: () => setSwaps(rows, "poof") },
     {
-      t: 68_200,
+      t: 54_700,
       fn: () => {
         setSwaps(rows, "al");
         say("die Mann, die Frau, die Kind.");
       },
     },
-    { t: 71_200, fn: () => say("Die Substantiv bleibt, wie es war.") },
-    { t: 73_800, fn: () => hide(rows) },
+    { t: 57_700, fn: () => say("Die Substantiv bleibt, wie es war.") },
+    { t: 60_300, fn: () => hide(rows) },
 
     // Act 6 — the ending rules, one card at a time.
     {
-      t: 74_000,
+      t: 60_500,
       fn: () => {
         act("6");
         show(cards);
@@ -633,7 +640,7 @@ export function createTheater(): Theater {
       },
     },
     ...cardElements.flatMap((card, index): Cue[] => {
-      const at = 75_500 + index * 3_000;
+      const at = 62_000 + index * 3_000;
       return [
         { t: at, fn: () => show(card) },
         {
@@ -646,11 +653,11 @@ export function createTheater(): Theater {
       ];
     }),
     {
-      t: 93_500,
+      t: 80_000,
       fn: () => say("Ein Artikel, ein Adjektivendung, kein Genusregeln."),
     },
     {
-      t: 96_500,
+      t: 83_000,
       fn: () => {
         hide(cards);
         show(outro);
@@ -703,6 +710,10 @@ export function createTheater(): Theater {
         cues,
         durationMs: SCENE_DURATION_MS,
         reset,
+        rates: RATES,
+        // The figure is the first thing on the landing page, so it starts with
+        // the page rather than waiting to be scrolled into view.
+        autoplayAt: 0,
         toggle: transport.toggle,
         seek: transport.seek,
         rate: transport.rate,

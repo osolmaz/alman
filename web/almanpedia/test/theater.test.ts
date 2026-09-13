@@ -141,14 +141,47 @@ test("the address act shows the article the whole way, on Wikipedia then here", 
   expect(page().dataset.lang).toBe("de");
 });
 
+test("the article act opens with the head already on the first line", () => {
+  const { theater, stage } = mount();
+  const caption = () => stage.querySelector<HTMLElement>("[data-caption]")!.textContent;
+  const scan = () => stage.querySelector<HTMLElement>('[data-line="0"]')!.dataset.scan;
+
+  // The Almanpedia page and the sweep arrive together: the caption that says the
+  // text is still Standard German comes from the reading, not before it.
+  theater.seekTo(15_900);
+  expect(stage.dataset.act).toBe("2");
+  expect(scan()).toBe("none");
+
+  theater.seekTo(16_000);
+  expect(stage.dataset.act).toBe("3");
+  expect(scan()).toBe("active");
+  expect(caption()).toBe("Die gleiche Artikel, jetzt in Almanpedia.");
+
+  theater.seekTo(19_000);
+  expect(caption()).toBe("Die Text steht noch in Standarddeutsch.");
+});
+
+test("the figure starts itself at 2× as soon as it is mounted", () => {
+  const { theater } = mount();
+  const rate = theater.element.querySelector<HTMLButtonElement>(".th-rate")!;
+
+  // No waiting for the stage to be scrolled into view: the figure is what the
+  // landing page opens on.
+  expect(theater.element.dataset.paused).toBe("false");
+  expect(rate.textContent).toBe("2×");
+
+  rate.click();
+  expect(rate.textContent).toBe("1.5×");
+});
+
 test("the reading head marks the lines it has passed and leaves the rest alone", () => {
   const { theater, stage } = mount();
   const scans = () => [...stage.querySelectorAll<HTMLElement>("[data-line]")].map((line) => line.dataset.scan);
 
-  theater.seekTo(25_000);
+  theater.seekTo(17_000);
   expect(scans()).toEqual(["active", "none", "none", "none"]);
 
-  theater.seekTo(33_000);
+  theater.seekTo(27_000);
   expect(scans()).toEqual(["read", "read", "active", "none"]);
 
   theater.seekTo(41_000);
@@ -160,8 +193,9 @@ test("every word in a line turns over as the head crosses it, none before", () =
   const line = (index: number) =>
     [...stage.querySelectorAll<HTMLElement>(`[data-line="${index}"] [data-swap]`)].map((swap) => swap.dataset.state);
 
-  // The head starts line 0 at 24s and settles it at 27.7s; line 1 starts at 28s.
-  theater.seekTo(28_500);
+  // The head starts line 0 with the act at 16s and settles it at 19.75s; line 1
+  // starts at 19.8s.
+  theater.seekTo(22_000);
   expect(new Set(line(0))).toEqual(new Set(["al"]));
   expect(new Set(line(1))).toEqual(new Set(["poof"]));
   // Nothing further down has been touched: no line waits for a later phase.
@@ -172,18 +206,78 @@ test("every word in a line turns over as the head crosses it, none before", () =
   for (const index of [0, 1, 2, 3]) expect(new Set(line(index))).toEqual(new Set(["al"]));
 });
 
+test("the sweep captions land between the lines they describe", () => {
+  const { theater, stage } = mount();
+  const caption = () => stage.querySelector<HTMLElement>("[data-caption]")!.textContent;
+
+  // Each caption is between the start of a line and its settle, so the shake it
+  // describes is the one on screen.
+  theater.seekTo(18_400);
+  expect(caption()).toBe("Die Text steht noch in Standarddeutsch.");
+  theater.seekTo(21_600);
+  expect(caption()).toBe("Die Übersetzung liest die Artikel Zeile für Zeile.");
+  theater.seekTo(24_800);
+  expect(caption()).toBe("Jede Stelle zittert kurz und wechselt dann.");
+  theater.seekTo(28_000);
+  expect(caption()).toBe("Artikel, Endungen und Pronomen in ein Durchgang.");
+  theater.seekTo(31_800);
+  expect(caption()).toBe("Fertig. Diese Absatz steht jetzt in Alman.");
+});
+
+test("the article act narrates itself one caption at a time", () => {
+  const { theater, stage } = mount();
+  const caption = stage.querySelector<HTMLElement>("[data-caption]")!;
+  const seen: string[] = [];
+
+  for (let t = 16_000; t <= 33_000; t += 100) {
+    theater.seekTo(t);
+    const text = caption.textContent?.trim() ?? "";
+    if (text && seen.at(-1) !== text) seen.push(text);
+  }
+
+  // Nothing is skipped and nothing flashes past: the page, then the sweep, one
+  // caption at a time to the end of the act.
+  expect(seen).toEqual([
+    "Die gleiche Artikel, jetzt in Almanpedia.",
+    "Die Text steht noch in Standarddeutsch.",
+    "Die Übersetzung liest die Artikel Zeile für Zeile.",
+    "Jede Stelle zittert kurz und wechselt dann.",
+    "Artikel, Endungen und Pronomen in ein Durchgang.",
+    "Fertig. Diese Absatz steht jetzt in Alman.",
+  ]);
+});
+
+test("the sweep runs from line to line without a gap", () => {
+  const { theater, stage } = mount();
+  const line = (index: number) => stage.querySelector<HTMLElement>(`[data-line="${index}"]`)!;
+  const settled = (index: number) => [...line(index).querySelectorAll<HTMLElement>("[data-swap]")]
+    .every((swap) => swap.dataset.state === "al");
+
+  // Line 0 turns over at 19.75s and line 1's band is on screen at 19.8s: the
+  // reading never stops between paragraphs for more than the settle itself.
+  theater.seekTo(19_800);
+  expect(settled(0)).toBe(true);
+  expect(line(1).dataset.scan).toBe("active");
+
+  theater.seekTo(27_400);
+  expect(settled(2)).toBe(true);
+  expect(line(3).dataset.scan).toBe("active");
+});
+
 test("the page reaches de-AL only once the last word has settled", () => {
   const { theater, stage } = mount();
   const lang = () => stage.querySelector<HTMLElement>("[data-page]")?.dataset.lang;
 
   // Mid-sweep the page is part German, so the badge still says de.
+  theater.seekTo(28_000);
+  expect(lang()).toBe("de");
+
+  // Every word has turned over, and the badge still waits for the act to close.
+  theater.seekTo(31_500);
+  expect(new Set(swapStates(stage, "[data-page]"))).toEqual(new Set(["al"]));
+  expect(lang()).toBe("de");
+
   theater.seekTo(33_000);
-  expect(lang()).toBe("de");
-
-  theater.seekTo(39_000);
-  expect(lang()).toBe("de");
-
-  theater.seekTo(41_000);
   expect(new Set(swapStates(stage, "[data-page]"))).toEqual(new Set(["al"]));
   expect(lang()).toBe("al");
   expect(stage.querySelector("[data-page-lang]")?.textContent).toBe("de-AL");

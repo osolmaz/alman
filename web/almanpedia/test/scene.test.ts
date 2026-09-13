@@ -46,6 +46,53 @@ test("cues fire once each as the clock passes them", () => {
   expect(state.value).toBe("b");
 });
 
+test("cues written out of order still fire in time order", () => {
+  const root = document.createElement("div");
+  const stage = document.createElement("div");
+  root.append(stage);
+  const fired: number[] = [];
+  const scene = createScene({
+    root,
+    stage,
+    durationMs: 2_000,
+    reset: () => {},
+    // A caption is often written next to the lines it belongs to, which puts it
+    // after them in the array and before them on the clock.
+    cues: [
+      { t: 500, fn: () => { fired.push(500); } },
+      { t: 200, fn: () => { fired.push(200); } },
+      { t: 900, fn: () => { fired.push(900); } },
+    ],
+  });
+
+  scene.tick(600);
+  expect(fired).toEqual([200, 500]);
+  scene.tick(400);
+  expect(fired).toEqual([200, 500, 900]);
+});
+
+test("the clock starts on its own when the caller asks it not to wait", () => {
+  const waitingRoot = document.createElement("div");
+  const waitingStage = document.createElement("div");
+  waitingRoot.append(waitingStage);
+  createScene({ root: waitingRoot, stage: waitingStage, cues: [], durationMs: 1_000, reset: () => {} });
+
+  const immediateRoot = document.createElement("div");
+  const immediateStage = document.createElement("div");
+  immediateRoot.append(immediateStage);
+  createScene({
+    root: immediateRoot,
+    stage: immediateStage,
+    cues: [],
+    durationMs: 1_000,
+    reset: () => {},
+    autoplayAt: 0,
+  });
+
+  expect(waitingRoot.dataset.paused).toBe("true");
+  expect(immediateRoot.dataset.paused).toBe("false");
+});
+
 test("seeking replays the prefix from a reset, so a target time has one state", () => {
   const { state, scene } = harness();
 
