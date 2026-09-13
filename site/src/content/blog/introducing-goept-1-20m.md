@@ -123,6 +123,22 @@ The references and their review used LLM assistance. They were not 66,000 indepe
 
 We reserved separate eval sets of 3,512 and 3,204 rows and excluded 262 training rows that overlapped AlmanBench. That left 59,022 approved pairs. Of these, 2,953 were set aside for checkpoint selection, leaving 56,069 for teacher search and student training.
 
+### Autoresearch experiments
+
+The final recipe followed a series of autoresearch experiments. The agent proposed changes, ran small checks, trained candidates, and compared their outputs. The work covered tokenizer design, decoder depth, training mixtures, and data scale. Each comparison used fixed eval cases and scoring rules. Experiment journals record the hypotheses and settings alongside results, failed attempts, and reasons for keeping or rejecting candidates. Saved run reports identify the exact inputs and model artifacts.
+
+An early scaling series kept the 20-million-parameter student fixed and increased the number of unique generated pairs. It used an earlier teacher and data snapshot, before the final ByT5-Base work. All three runs used the same 2,953 checkpoint-selection cases. AlmanBench stayed out of these choices.
+
+| Generated training pairs | Exact matches out of 2,953 |
+| --- | ---: |
+| 250,000 | 1,774 |
+| 500,000 | 1,889 |
+| 980,000 | 1,937 |
+
+More data improved the score, with smaller gains at the upper end. A larger, 25.8-million-parameter student reached 2,014 matches, another 77 cases. Its complete browser package occupied 66.05 MB, and the fixed page took 7.71 seconds. Both exceeded the 60 MB and seven-second limits, so the larger student was not used for release.
+
+A later 250,000-pair pilot used the final ByT5-Base teacher to compare greedy decoding with beam search of width four. Students trained on these targets reached 2,048 and 2,060 exact matches out of 2,953, respectively. The twelve-case gain was only 0.4 percentage points, with one student run per method. The slowest beam-search worker took 87 minutes, compared with 62 for greedy decoding. After reviewing that cost and the uncertain quality gain, we kept greedy decoding for the full corpus.
+
 ### Teacher and generated pairs
 
 We fine-tuned pretrained ByT5-Base, approximately 582 million parameters, on the reviewed pairs. The duration search selected six epochs. A fresh fine-tune then used all 59,022 approved pairs for that duration to produce the teacher.
