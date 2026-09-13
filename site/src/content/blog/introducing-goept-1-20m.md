@@ -17,6 +17,8 @@ abstract: >-
   to make German more approachable for second-language learners.
 ---
 
+*This post is AI-assisted. AI tools helped draft the prose from the experiment records, and the author reviewed and edited the result.*
+
 [GoePT-1-20M](https://huggingface.co/osolmaz/GoePT-1-20M) is a 20-million-parameter model for translating Standard German into [Alman](/), a simplified German dialect. Alman keeps German vocabulary and much of its sentence structure while removing grammatical gender and most case inflection. The model runs entirely in the browser, keeps the text on the reader's device, and needs no GPU or model API.
 
 The intended use is a reading aid for people learning German as an additional language. [Almanpedia](https://almanpedia.org), the main application, uses GoePT to translate German Wikipedia and lets readers compare the result with the original. A [standalone translator](/translate/) accepts other texts.
