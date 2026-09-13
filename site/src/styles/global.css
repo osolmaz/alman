@@ -221,6 +221,34 @@ td.mono {
   font-weight: 600;
 }
 
+.lb-goept td {
+  background: #f7eee8;
+}
+
+.lb-goept td:first-child {
+  box-shadow: inset 3px 0 #a43a2d;
+}
+
+.lb-goept .lb-model {
+  font-weight: 600;
+}
+
+.lb-goept .lb-bar-fill {
+  background: #a43a2d;
+}
+
+.lb-goept-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin: 0.25rem 0 0 1.6rem;
+  font-size: 0.75rem;
+}
+
+.lb-goept-details a {
+  text-decoration: underline;
+}
+
 .lb-chart .lb-bar-col {
   width: 62%;
 }

@@ -4,8 +4,8 @@
   "version": "v0.1",
   "caseSetSize": 1029,
   "caseSetId": "sha256:9024c3088a8321d7e621d30bee8ccd8401dd4a2655bcdd66f5ad1b448576ebc4",
-  "scoringRevision": "e4fd52124d92e6a5d6cf1288608299361152e996",
-  "evaluated": "2026-09-11",
+  "scoringRevision": "33099bd73b37945b424aefdcade0087bb7118d48",
+  "evaluated": "2026-09-13",
   "dataset": "https://huggingface.co/datasets/osolmaz/almanbench",
   "results": "https://huggingface.co/datasets/osolmaz/almanbench-results",
   "annotations": {
@@ -494,6 +494,39 @@
         ],
         "targeted": [
           205,
+          216
+        ]
+      }
+    },
+    {
+      "label": "GoePT-1-20M",
+      "vendor": "alman",
+      "route": "Browser, ONNX Runtime Web, single-threaded WASM",
+      "modelUrl": "https://huggingface.co/osolmaz/GoePT-1-20M",
+      "reasoning": "none",
+      "acceptance": [
+        894,
+        1029
+      ],
+      "compliance": [
+        1026,
+        1029
+      ],
+      "tiers": {
+        "curated": [
+          75,
+          93
+        ],
+        "guards": [
+          113,
+          120
+        ],
+        "naturalistic": [
+          497,
+          600
+        ],
+        "targeted": [
+          209,
           216
         ]
       }
