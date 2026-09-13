@@ -27,6 +27,8 @@ GoePT scored **86.9% on [AlmanBench](/almanbench/)**, a benchmark that checks tr
 
 The training work ran on Hugging Face infrastructure, using ten million teacher-generated sentence pairs mixed with reviewed translations. Through [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face, the author directed the training run from a phone using Telegram.
 
+The goal of this side project was to show that you can *vibe* machine learning now, including dataset creation, autoresearch, and the final training run. Hat tip to [ML Intern](https://github.com/huggingface/ml-intern), which inspired ML Claw and is now available in [Hugging Chat](https://huggingface.co/chat/).
+
 ## Alman and Almanpedia
 
 The [Alman specification](/#spec) gives speakers and translation models a consistent set of rules to apply. Some of these rules formalize shortcuts I use myself as a non-native German speaker, as described in [the first Alman announcement](/blog/out-of-stealth/).
@@ -105,6 +107,8 @@ The working hypothesis is that the synthetic training pairs overrepresent *von d
 
 The author directed the training run from a phone through Telegram, using [ML Claw](https://github.com/huggingface/mlclaw), an OpenClaw deployment on Hugging Face. The GPU work ran as Hugging Face Jobs, with datasets and checkpoints kept in Hub repositories and Storage Buckets.
 
+I ran into problems pausing and resuming jobs and making sure runs finished with their outputs saved. I built [hf-job-control](https://github.com/osolmaz/hf-job-control) to control the training jobs better. The library lets workers save their state at safe checkpoints, resume from saved progress, and finish a run cleanly.
+
 Reported durations are active Hugging Face job time, including setup, evals, and checkpoint uploads.
 
 The training method was sequence-level distillation. A larger **teacher** produced translations, and a smaller **student** learned to reproduce them. The student became the model shipped to readers.
@@ -160,6 +164,8 @@ The training stream alternated one generated pair with one reviewed pair. This g
 | Schedule | 5% linear warmup, then cosine decay |
 | Precision | FP32 weights and optimizer state, BF16 computation |
 
+The agent proposed this architecture and these hyperparameters through the autoresearch work, with some settings carried over from earlier runs. A more experienced ML engineer may spot poor choices that I did not know to question. There is probably still room to improve the recipe, which I consider future work.
+
 The full two-pass student training run used **5 hours 23 minutes of H200 job time**.
 
 ### Checkpoint selection
@@ -180,7 +186,9 @@ The teacher had seen the student's checkpoint-selection pairs. Both separate eva
 
 ### Cost
 
-The final student phase cost about **USD 29.04** in recorded compute, including preparation, hardware profiling, training, and export. Including teacher work and target generation, the recorded program subtotal was approximately **USD 363.22**. Earlier research and LLM-assisted data work are outside that accounting.
+At Hugging Face's [published rate of USD 5 per H200-hour](https://huggingface.co/docs/hub/jobs-pricing#gpu), the teacher fine-tune, target generation, and student training reported above amount to **about USD 137**. They used **27.50 H200-hours** in total.
+
+This is a list-price estimate from recorded job time. It excludes the earlier experiments, separate preparation and export jobs, storage, and agent and LLM API costs. It is not the total project cost or a provider invoice.
 
 German-to-Alman translation is a toy problem with unusually explicit rules. Hugging Face supplied the GPU jobs and durable storage. [ML Claw](https://github.com/huggingface/mlclaw) made those tools accessible through conversation, while the specification gave the work a result that could be checked.
 
