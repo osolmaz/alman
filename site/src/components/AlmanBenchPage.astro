@@ -103,7 +103,7 @@ const bibtex = almanBenchBibtex;
     <tbody>
       {
         lb.entries.map((entry, index) => (
-          <tr>
+          <tr class:list={{ "lb-goept": entry.label === "GoePT-1-20M" }}>
             <td class="num mono">{index + 1}</td>
             <td class={index === 0 ? "lb-best" : undefined}>
               {"modelUrl" in entry ? (
@@ -116,7 +116,7 @@ const bibtex = almanBenchBibtex;
                 >
                   <img
                     class="lb-logo"
-                    src={`/assets/icons/models/${entry.vendor}.svg`}
+                    src={entry.vendor === "alman" ? "/assets/brand/alman_institut_logo.svg" : `/assets/icons/models/${entry.vendor}.svg`}
                     alt=""
                     aria-hidden="true"
                   />
@@ -132,6 +132,12 @@ const bibtex = almanBenchBibtex;
                   />
                   {modelLabel(entry)}
                 </span>
+              )}
+              {entry.label === "GoePT-1-20M" && (
+                <div class="lb-goept-details">
+                  <span>20M · Browser</span>
+                  <a href="/blog/introducing-goept-1-20m/">Announcement</a>
+                </div>
               )}
             </td>
             <td class="lb-bar-col">
@@ -191,7 +197,7 @@ const bibtex = almanBenchBibtex;
     <tbody>
       {
         lb.entries.map((entry) => (
-          <tr>
+          <tr class:list={{ "lb-goept": entry.label === "GoePT-1-20M" }}>
             <td>
               <span class="lb-model" tabindex="0" data-tip={runTip(entry)}>
                 {modelLabel(entry)}
